@@ -18,6 +18,7 @@ namespace Logic.Unit
 
         public UnitData UnitData { get; }
         private readonly List<Buff> buffs = new();
+        public IReadOnlyList<Buff> ActiveBuffs => buffs;
 
         public int CurrentHealth { get; set; }
         public bool IsDead => CurrentHealth <= 0;

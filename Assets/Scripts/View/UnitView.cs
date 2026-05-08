@@ -9,16 +9,34 @@ namespace View
         
         private Animator animator;
         private SpriteRenderer spriteRenderer;
+        private UnitBuffsViewManager buffsView;
 
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
         private static readonly int AttackType = Animator.StringToHash("attackType");
 
-        public void Initialize(UnitModel modelToInitialize)
+        public void Initialize(UnitModel modelToInitialize, UnitBuffsViewManager buffsViewManager)
         {
             model = modelToInitialize;
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             transform.position = modelToInitialize.WorldPosition;
+            buffsView = buffsViewManager;
+
+            ApplyBuffGlows();
+        }
+        private void ApplyBuffGlows()
+        {
+            if (model.ActiveBuffs == null || buffsView == null) return;
+
+            foreach (var buff in model.ActiveBuffs)
+            {
+                var prefab = buffsView.GetPrefabForBuff(buff);
+                if (prefab != null)
+                {
+                    var glow = Instantiate(prefab, transform); 
+                    glow.transform.localPosition = prefab.transform.localPosition; 
+                }
+            }
         }
 
         public void SetPosition(Vector3 worldPos)

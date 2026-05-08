@@ -7,6 +7,7 @@ namespace View
     public class UnitViewManager : MonoBehaviour
     {
         [SerializeField] private Transform unitsParent;
+        [SerializeField] private UnitBuffsViewManager buffView;
 
         private UnitSystem unitSystem;
 
@@ -39,7 +40,7 @@ namespace View
             var go = Instantiate(prefab, model.WorldPosition, Quaternion.identity, unitsParent);
 
             var view = go.GetComponent<UnitView>();
-            view.Initialize(model);
+            view.Initialize(model, buffView);
 
             views.Add(model, view);
         }
