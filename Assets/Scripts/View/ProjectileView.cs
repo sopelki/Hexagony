@@ -5,6 +5,9 @@ namespace View
 {
     public class ProjectileView : MonoBehaviour
     {
+        [SerializeField]
+        private SpriteRenderer spriteRenderer;
+
         private ProjectileModel model;
         private Vector3 lastVisualPosition;
 
@@ -25,6 +28,9 @@ namespace View
             var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
             var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
             currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
+
+            if (!spriteRenderer)
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         private void Update()
@@ -34,11 +40,13 @@ namespace View
 
             var t = model.TravelProgress;
             var groundPosition = Vector3.Lerp(model.StartPosition, model.TargetPoint, t);
-
+            float yForSorting;
+            
             if (model.Data.isHoming)
             {
                 transform.position = model.Position;
                 RotateTowards(model.Target?.WorldPosition ?? model.Position);
+                yForSorting = model.Position.y;
             }
             else
             {
@@ -48,9 +56,12 @@ namespace View
                 transform.position = currentVisualPosition;
 
                 ApplyRotation(currentVisualPosition);
-
                 lastVisualPosition = currentVisualPosition;
+                
+                yForSorting = groundPosition.y;
             }
+            
+            spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 0 : 2;
         }
 
         private void ApplyRotation(Vector3 currentPos)

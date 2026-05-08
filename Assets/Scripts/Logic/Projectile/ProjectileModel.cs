@@ -11,6 +11,8 @@ namespace Logic.Projectile
         public Vector3 StartPosition;
         public float TravelProgress;
 
+        public float TowerBaseY { get; private set; }
+
         public MonsterModel Target;
         public ProjectileData Data;
 
@@ -26,6 +28,8 @@ namespace Logic.Projectile
             Position = spawnPoint;
             Target = target;
             Data = data;
+
+            TowerBaseY = spawnPoint.y;
 
             TargetPoint = interceptPoint;
             Direction = (TargetPoint - spawnPoint).normalized;

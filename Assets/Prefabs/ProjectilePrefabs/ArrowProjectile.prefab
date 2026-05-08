@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737cf0b00de447ca83dd3af521ce293a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.ProjectileView
+  spriteRenderer: {fileID: 8752826488452287383}
   maxArcHeight: 2
   referenceDistance: 10
   minArcHeightFactor: 0.1
@@ -93,9 +94,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1007650763
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: 1841721055
+  m_SortingLayer: 3
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6502604993155047502, guid: e45df6508f439474184748d99009d4c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
