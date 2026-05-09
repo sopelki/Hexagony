@@ -3,13 +3,14 @@ using UnityEngine;
 using Logic.Unit;
 using Interfaces;
 using UnityEngine.Tilemaps;
+using View;
 
 namespace Logic.Monster
 {
     public class MonsterSpawner : ITickable
     {
         private readonly List<Vector2Int> spawnHexes;
-        private readonly Vector2Int castleHex;
+        private readonly CastleView castleView;
 
         private readonly Field.Field field;
         private readonly MonsterSystem monsterSystem;
@@ -22,7 +23,7 @@ namespace Logic.Monster
 
         public MonsterSpawner(
             List<Vector2Int> spawnHexes,
-            Vector2Int castleHex,
+            CastleView castleView,
             Field.Field field,
             MonsterSystem monsterSystem,
             UnitSystem unitSystem,
@@ -30,7 +31,7 @@ namespace Logic.Monster
             Tilemap tilemap)
         {
             this.spawnHexes = spawnHexes;
-            this.castleHex = castleHex;
+            this.castleView = castleView;
             this.field = field;
             this.monsterSystem = monsterSystem;
             this.unitSystem = unitSystem;
@@ -74,13 +75,14 @@ namespace Logic.Monster
             var movement = new HexMoveToTargetStrategy(
                 monster,
                 field,
-                castleHex,
+                castleView.WallHexes,
                 tilemap
             );
 
             var attack = new MonsterAttackStrategy(
                 monster,
-                unitSystem
+                unitSystem,
+                castleView
             );
             
             monster.SetStrategies(movement, attack);

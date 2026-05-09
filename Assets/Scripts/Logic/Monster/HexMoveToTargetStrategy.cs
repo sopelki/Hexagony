@@ -11,7 +11,7 @@ namespace Logic.Monster
     {
         private readonly MonsterModel monster;
         private readonly Field.Field field;
-        private readonly Vector2Int targetHex;
+        private readonly List<Vector2Int> targetHexes;
         private readonly Tilemap tilemap;
         private readonly HexAStarPathfinder pathfinder;
 
@@ -26,12 +26,12 @@ namespace Logic.Monster
         public HexMoveToTargetStrategy(
             MonsterModel monster,
             Field.Field field,
-            Vector2Int targetHex,
+            List<Vector2Int> targetHexes,
             Tilemap tilemap)
         {
             this.monster = monster;
             this.field = field;
-            this.targetHex = targetHex;
+            this.targetHexes = targetHexes;
             this.tilemap = tilemap;
 
             pathfinder = new HexAStarPathfinder(field);
@@ -44,7 +44,7 @@ namespace Logic.Monster
 
         public void Tick()
         {
-            if (monster.CurrentHex == targetHex)
+            if (targetHexes.Contains(monster.CurrentHex))
                 return;
 
             repathTimer -= Core.TickManager.Instance.tickInterval;
@@ -63,13 +63,33 @@ namespace Logic.Monster
 
         private void BuildPath()
         {
-            var goal = GetRandomizedGoal(targetHex);
+            var closestWallHex = GetClosestWallHex();
+            var goal = GetRandomizedGoal(closestWallHex);
 
             currentPath = pathfinder.FindPath(monster.CurrentHex, goal);
             pathIndex = 1;
 
             if (currentPath is not { Count: > 1 })
                 currentPath = null;
+        }
+        
+        private Vector2Int GetClosestWallHex()
+        {
+            if (targetHexes == null || targetHexes.Count == 0) return monster.CurrentHex;
+
+            var closest = targetHexes[0];
+            var minDist = Vector2Int.Distance(monster.CurrentHex, closest);
+
+            foreach (var hex in targetHexes)
+            {
+                var d = Vector2Int.Distance(monster.CurrentHex, hex);
+                if (d < minDist)
+                {
+                    minDist = d;
+                    closest = hex;
+                }
+            }
+            return closest;
         }
 
         private void MoveAlongPath()

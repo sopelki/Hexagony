@@ -25,6 +25,7 @@ namespace Core
         [Header("Scene References")]
         [SerializeField]
         private CastleUI castleUI;
+        [SerializeField] private CastleView castleView;
         [SerializeField]
         private TickManager tickManager;
         [SerializeField]
@@ -33,6 +34,7 @@ namespace Core
         private ProjectileViewManager projectileViewManager;
         [SerializeField]
         private CameraSetup cameraSetup;
+        [SerializeField] private MenuScripts.GameOverMenu gameOverMenu;
 
         [Header("Unit Settings")]
         [SerializeField]
@@ -75,7 +77,7 @@ namespace Core
             new Vector2Int(-21, 2),
         };
 
-        private static readonly Vector2Int castleHex = new(-30, 20);
+        // private static readonly Vector2Int castleHex = new(-30, 20);
 
         private void Awake()
         {
@@ -89,6 +91,15 @@ namespace Core
 
             cameraSetup.FitToGrid();
 
+            castleModel = new CastleModel(startHp, startGold, startFood);
+            
+            if (castleUI != null)
+                castleUI.Initialize(castleModel);
+            if (castleView != null)
+                castleView.Initialize(castleModel, tilemap, field);
+            if (gameOverMenu != null)
+                gameOverMenu.Initialize(castleModel);
+            
             monsterSystem = new MonsterSystem();
             projectileSystem = new ProjectileSystem(monsterSystem);
             unitSystem = new UnitSystem(
@@ -100,16 +111,14 @@ namespace Core
 
             monsterSpawner = new MonsterSpawner(
                 spawnHexes,
-                castleHex,
+                castleView,
                 field,
                 monsterSystem,
                 unitSystem,
                 availableMonsters,
                 tilemap
             );
-
-
-            castleModel = new CastleModel(startHp, startGold, startFood);
+            
             castleSystem = new CastleSystem(
                 castleModel,
                 unitSystem,
@@ -151,9 +160,6 @@ namespace Core
 
             if (monsterViewManager != null)
                 monsterViewManager.Initialize(monsterSystem);
-
-            if (castleUI != null)
-                castleUI.Initialize(castleModel);
 
             if (projectileViewManager != null)
                 projectileViewManager.Initialize(projectileSystem);
