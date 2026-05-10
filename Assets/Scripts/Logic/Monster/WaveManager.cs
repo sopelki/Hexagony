@@ -5,12 +5,13 @@ namespace Logic.Monster
 {
     public class WaveManager : ITickable
     {
+        public event System.Action OnGameWon;
+
         private readonly MonsterSpawner spawner;
         private readonly MonsterSystem monsterSystem;
 
         private bool waitingForNextWave;
         private bool isDelaying;
-
         private float delayTimer;
         private readonly float delayBetweenWaves;
 
@@ -19,6 +20,8 @@ namespace Logic.Monster
             this.spawner = spawner;
             this.monsterSystem = monsterSystem;
             this.delayBetweenWaves = delayBetweenWaves;
+
+            this.spawner.OnWaveSpawnCompleted += OnWaveFinishedSpawning;
         }
 
         public void Tick()
@@ -26,8 +29,17 @@ namespace Logic.Monster
             if (waitingForNextWave && monsterSystem.GetAllMonsters().Count == 0)
             {
                 waitingForNextWave = false;
+
+                if (spawner.IsLastWave)
+                {
+                    Debug.Log("WaveManager: All enemies cleared on the last wave. Game Won!");
+                    OnGameWon?.Invoke();
+                    return;
+                }
+
                 isDelaying = true;
                 delayTimer = delayBetweenWaves;
+                Debug.Log($"WaveManager: Wave cleared. Delaying for {delayBetweenWaves}s...");
             }
 
             if (isDelaying)
@@ -38,15 +50,12 @@ namespace Logic.Monster
                 {
                     isDelaying = false;
                     spawner.StartNextWave();
-                    Debug.Log("Starting new wave");
                 }
             }
         }
 
-        public void OnWaveFinishedSpawning()
-        {
-            waitingForNextWave = true;
-            Debug.Log("Wave finished");
-        }
+        private void OnWaveFinishedSpawning() => waitingForNextWave = true;
+
+        public void StartFirstWave() => spawner.StartNextWave();
     }
 }

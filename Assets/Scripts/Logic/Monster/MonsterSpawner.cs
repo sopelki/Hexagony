@@ -10,12 +10,16 @@ namespace Logic.Monster
     {
         public event System.Action OnWaveSpawnCompleted;
 
+        public bool IsLastWave => currentWaveIndex == waves.Count - 1;
+        // Может понадобиться потом
+        public bool IsWaveFullySpawned => 
+            CurrentWave != null && spawnedInCurrentWave >= CurrentWave.totalMonsters;
+
         private readonly List<Vector2Int> spawnHexes;
         private readonly Field.Field field;
         private readonly MonsterSystem monsterSystem;
         private readonly UnitSystem unitSystem;
         private readonly Tilemap tilemap;
-
         private readonly List<WaveData> waves;
 
         private int currentWaveIndex = -1;
@@ -50,7 +54,7 @@ namespace Logic.Monster
 
             if (currentWaveIndex >= waves.Count)
             {
-                Debug.Log("All waves completed");
+                Debug.Log("MonsterSpawner: No more waves to start.");
                 return;
             }
 
@@ -58,18 +62,16 @@ namespace Logic.Monster
             spawnTimer = 0f;
             waveSpawnFinished = false;
 
-            Debug.Log($"Wave {currentWaveIndex + 1} started");
+            Debug.Log($"MonsterSpawner: Wave {currentWaveIndex + 1} started.");
         }
 
         public void Tick()
         {
-            if (CurrentWave == null)
+            if (CurrentWave == null || waveSpawnFinished)
                 return;
 
             if (spawnedInCurrentWave >= CurrentWave.totalMonsters)
             {
-                if (waveSpawnFinished)
-                    return;
                 waveSpawnFinished = true;
                 OnWaveSpawnCompleted?.Invoke();
                 return;
@@ -89,11 +91,9 @@ namespace Logic.Monster
             var hex = spawnHexes[Random.Range(0, spawnHexes.Count)];
             var hexObj = field.GetHex(hex);
 
-            if (hexObj == null)
-                return;
+            if (hexObj == null) return;
 
             var world = tilemap.GetCellCenterWorld(hexObj.offset);
-
             var data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
 
             var monster = new MonsterModel(
@@ -105,18 +105,11 @@ namespace Logic.Monster
                 wave.speedMultiplier
             );
 
-            var movement = new HexMoveToTargetStrategy(
-                monster,
-                field,
-                tilemap
-            );
-
+            var movement = new HexMoveToTargetStrategy(monster, field, tilemap);
             var attack = new MonsterAttackStrategy(monster, unitSystem);
-
             monster.SetStrategies(movement, attack);
 
             monsterSystem.AddMonster(monster);
-
             spawnedInCurrentWave++;
         }
     }
