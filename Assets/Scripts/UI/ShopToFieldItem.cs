@@ -34,11 +34,11 @@ namespace UI
         private GameObject ghost;
         private RectTransform ghostRect;
 
-        [Header("Animation")]
+        [Header("Animation Settings")]
         [SerializeField]
-        private float hoverScaleMultiplier = 0.8f;
+        private float startScaleMultiplier = 0.75f;
         [SerializeField]
-        private float scaleSpeed = 30f;
+        private float scaleSpeed = 15f;
 
         private float targetScale = 1f;
         private float currentScale = 1f;
@@ -62,8 +62,13 @@ namespace UI
             if (prefabRenderer == null) return;
 
             CreateGhost(prefabRenderer);
-            targetScale = 1f;
-            currentScale = 1f;
+
+            currentScale = startScaleMultiplier;
+            targetScale = startScaleMultiplier;
+
+            if (ghostRect != null)
+                ghostRect.localScale = new Vector3(currentScale, currentScale, 1f);
+
             UpdateGhostPosition(eventData);
         }
 
@@ -75,6 +80,9 @@ namespace UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (ghost != null)
+                Destroy(ghost);
+            
             var cam = Camera.main;
             if (cam == null || mapViewport == null || fieldTilemap == null)
                 return;
@@ -100,16 +108,13 @@ namespace UI
 
             if (towerSystem.TryPlaceTower(towerData, closestSlotPos, spawnPos))
                 Debug.Log("Tower placement request sent successfully");
-
-            if (ghost != null)
-                Destroy(ghost);
-
-            targetScale = 1f;
+            
+            targetScale = startScaleMultiplier;
         }
 
         private void Update()
         {
-            if (ghostRect != null)
+            if (ghostRect)
             {
                 currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
                 ghostRect.localScale = new Vector3(currentScale, currentScale, 1f);
@@ -176,7 +181,7 @@ namespace UI
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     mapViewport, eventData.position, eventData.pressEventCamera, out var local))
             {
-                targetScale = 1f;
+                targetScale = startScaleMultiplier;
                 return;
             }
 
@@ -187,7 +192,7 @@ namespace UI
             var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
             var cellPos = fieldTilemap.WorldToCell(worldPos);
 
-            targetScale = FindNearestSlotTile(cellPos, 2, out _) ? hoverScaleMultiplier : 1f;
+            targetScale = FindNearestSlotTile(cellPos, 2, out _) ? 1f : startScaleMultiplier;
         }
 
 

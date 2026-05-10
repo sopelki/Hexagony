@@ -89,6 +89,8 @@ MonoBehaviour:
   ghostAlpha: 0.7
   ghostOffset: {x: 0, y: 0}
   towerData: {fileID: 0}
+  startScaleMultiplier: 0.75
+  scaleSpeed: 15
 --- !u!222 &899378862108174943
 CanvasRenderer:
   m_ObjectHideFlags: 0
