@@ -8,17 +8,12 @@ namespace View
         private MonsterModel model;
         private Vector3 previousPosition;
         
-        [SerializeField] private SpriteRenderer spriteRenderer;
+        // [SerializeField] private SpriteRenderer spriteRenderer;
 
-        [Header("Direction Sprites")]
-        [SerializeField] private Sprite up;
-        [SerializeField] private Sprite down;
-        [SerializeField] private Sprite left;
-        [SerializeField] private Sprite right;
-        [SerializeField] private Sprite upLeft;
-        [SerializeField] private Sprite upRight;
-        [SerializeField] private Sprite downLeft;
-        [SerializeField] private Sprite downRight;
+        [SerializeField] private Animator animator;
+        private Vector2 targetDirection;
+        private Vector2 currentSmoothDirection;
+        [SerializeField] private float smoothingSpeed = 10f;
 
 
         public void Initialize(MonsterModel model)
@@ -30,41 +25,98 @@ namespace View
         
         public void UpdateView()
         {
-            Vector3 currentPosition = model.WorldPosition;
-            Vector3 direction = currentPosition - previousPosition;
+            var currentPosition = model.WorldPosition;
+            var direction = currentPosition - previousPosition;
 
             transform.position = currentPosition;
 
             if (direction.sqrMagnitude > 0.0001f)
             {
-                UpdateDirection(direction);
+                // UpdateDirection(direction);
+                targetDirection = new Vector2(direction.x, direction.y).normalized;
                 previousPosition = currentPosition;
             }
+            // else 
+            // {
+            //     // Если монстр стоит, можно занулить параметры, 
+            //     // чтобы он перешел в Idle (если ты его добавишь)
+            //     animator.SetFloat("MoveX", 0);
+            //     animator.SetFloat("MoveY", 0);
+            // }
         }
         
-        private void UpdateDirection(Vector3 direction)
+        private void Update()
         {
-            direction.Normalize();
+            if (animator == null) return;
 
-            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            // Плавно перетекаем из текущего направления в целевое
+            currentSmoothDirection = Vector2.Lerp(
+                currentSmoothDirection, 
+                targetDirection, 
+                Time.deltaTime * smoothingSpeed
+            );
 
-            if (angle >= -22.5f && angle < 22.5f)
-                spriteRenderer.sprite = right;
-            else if (angle >= 22.5f && angle < 67.5f)
-                spriteRenderer.sprite = upRight;
-            else if (angle >= 67.5f && angle < 112.5f)
-                spriteRenderer.sprite = up;
-            else if (angle >= 112.5f && angle < 157.5f)
-                spriteRenderer.sprite = upLeft;
-            else if (angle >= 157.5f || angle < -157.5f)
-                spriteRenderer.sprite = left;
-            else if (angle >= -157.5f && angle < -112.5f)
-                spriteRenderer.sprite = downLeft;
-            else if (angle >= -112.5f && angle < -67.5f)
-                spriteRenderer.sprite = down;
-            else
-                spriteRenderer.sprite = downRight;
+            // Отправляем в аниматор уже сглаженные значения
+            animator.SetFloat("MoveX", currentSmoothDirection.x);
+            animator.SetFloat("MoveY", currentSmoothDirection.y);
         }
+        
+        // private void UpdateDirection(Vector3 direction)
+        // {
+        //     direction.Normalize();
+        //     animator.SetFloat("MoveX", direction.x, 0.1f, Time.deltaTime);
+        //     animator.SetFloat("MoveY", direction.y, 0.1f, Time.deltaTime);
+        // }
+        
+        // private void Update()
+        // {
+        //     if (currentFrames == null || currentFrames.Length == 0) return;
+        //     
+        //     timer += Time.deltaTime;
+        //
+        //     if (timer >= animationData.ticksPerFrame)
+        //     {
+        //         timer = 0;
+        //         currentFrameIndex = (currentFrameIndex + 1) % currentFrames.Length;
+        //         spriteRenderer.sprite = currentFrames[currentFrameIndex];
+        //         Debug.Log($"Смена кадра: {currentFrameIndex} у объекта {gameObject.name}");
+        //     }
+        // }
+        //
+        // private void UpdateDirection(Vector3 direction)
+        // {
+        //     direction.Normalize();
+        //     var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //
+        //     Sprite[] nextFrames;
+        //     
+        //     if (angle >= -22.5f && angle < 22.5f)
+        //         nextFrames = animationData.right;
+        //     else if (angle >= 22.5f && angle < 67.5f)
+        //         nextFrames = animationData.upRight;
+        //     else if (angle >= 67.5f && angle < 112.5f)
+        //         nextFrames = animationData.up;
+        //     else if (angle >= 112.5f && angle < 157.5f)
+        //         nextFrames = animationData.upLeft;
+        //     else if (angle >= 157.5f || angle < -157.5f)
+        //         nextFrames = animationData.left;
+        //     else if (angle >= -157.5f && angle < -112.5f)
+        //         nextFrames = animationData.downLeft;
+        //     else if (angle >= -112.5f && angle < -67.5f)
+        //         nextFrames = animationData.down;
+        //     else
+        //         nextFrames = animationData.downRight;
+        //     
+        //     if (currentFrames != nextFrames)
+        //     {
+        //         currentFrames = nextFrames;
+        //         currentFrameIndex = 0;
+        //         timer = 0; 
+        //         
+        //         if (currentFrames != null && currentFrames.Length > 0)
+        //             spriteRenderer.sprite = currentFrames[0];
+        //     }
+        // }
         
     }
 }

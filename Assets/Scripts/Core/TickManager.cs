@@ -12,17 +12,7 @@ namespace Core
 
         public event Action OnTick;
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        private void Awake() => Instance = this;
 
         private void Update()
         {
@@ -33,6 +23,13 @@ namespace Core
                 timer -= tickInterval;
                 OnTick?.Invoke();
             }
+        }
+
+        private void OnDestroy()
+        {
+            OnTick = null;
+            if (Instance == this)
+                Instance = null;
         }
     }
 }

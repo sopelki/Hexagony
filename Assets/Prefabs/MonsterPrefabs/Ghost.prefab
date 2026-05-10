@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7797692221199786663}
   - component: {fileID: 4890090599472735865}
   - component: {fileID: 8257020693626264374}
+  - component: {fileID: 6741280003670567019}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1977738689
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1760256145, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
@@ -104,12 +105,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28538e8cd9b7421e90625fe1a3c6c9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.MonsterView
-  spriteRenderer: {fileID: 4890090599472735865}
-  up: {fileID: 764227179, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  down: {fileID: 1760256145, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  left: {fileID: 2472402255921378900, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  right: {fileID: 760553947181242177, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  upLeft: {fileID: -954971847, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  upRight: {fileID: 1844066853, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  downLeft: {fileID: 6498456521321614045, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
-  downRight: {fileID: 359346799990673045, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
+  animator: {fileID: 6741280003670567019}
+--- !u!95 &6741280003670567019
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346667050510532105}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 2cdcf6a598e1341468fe91c060cebee8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using Logic.Monster;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace View
 {
@@ -17,6 +19,9 @@ namespace View
 
             system.OnMonsterCreated += HandleCreated;
             system.OnMonsterDied += HandleDied;
+
+            if (TickManager.Instance != null)
+                TickManager.Instance.OnTick += HandleTick;
         }
 
         private void HandleCreated(MonsterModel model)
@@ -35,6 +40,14 @@ namespace View
 
             views.Add(model, view);
         }
+        
+        private void HandleTick()
+        {
+            foreach (var pair in views)
+            {
+                pair.Value.UpdateView();
+            }
+        }
 
         private void HandleDied(MonsterModel model)
         {
@@ -44,13 +57,17 @@ namespace View
             Destroy(view.gameObject);
             views.Remove(model);
         }
-
-        private void Update()
+        
+        private void OnDestroy()
         {
-            foreach (var pair in views)
+            if (system != null)
             {
-                pair.Value.UpdateView();
+                system.OnMonsterCreated -= HandleCreated;
+                system.OnMonsterDied -= HandleDied;
             }
+
+            if (TickManager.Instance != null)
+                TickManager.Instance.OnTick -= HandleTick;
         }
     }
 }
