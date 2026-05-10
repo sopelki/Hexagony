@@ -7,12 +7,10 @@ namespace View
 {
     public class CastleView : MonoBehaviour
     {
-        [Header("Настройки стены замка")]
-        // Список координат гексов, которые образуют стену
+        [Header("Castle wall settings")]
         [SerializeField] private List<Vector2Int> castleHexes = new();
 
-        // Храним мировые позиции для расчетов урона (чтобы не пересчитывать каждый кадр)
-        public List<Vector3> WallWorldPositions { get; private set; } = new();
+        public List<Vector3> WallWorldPositions { get; } = new();
         public List<Vector2Int> WallHexes => castleHexes;
         public CastleModel Model { get; private set; }
         public Field.Field Field { get; private set; }
@@ -23,14 +21,12 @@ namespace View
             Field = field;
             WallWorldPositions.Clear();
             
-            Debug.Log($"<color=blue>VIEW:</color> Начинаю поиск гексов для замка. В списке в инспекторе: {castleHexes.Count} шт.");
-            
             foreach (var logicalHex in castleHexes)
             {
                 var hexObj = Field.GetHex(logicalHex);
                 if (hexObj != null)
                 {
-                    Vector3 worldPos = tilemap.GetCellCenterWorld(hexObj.offset);
+                    var worldPos = tilemap.GetCellCenterWorld(hexObj.offset);
                     worldPos.z = -0.1f; 
                     WallWorldPositions.Add(worldPos);
                 }
@@ -41,7 +37,7 @@ namespace View
             
         }
 
-        // Полезный метод: найти ближайшую точку замка к монстру
+        // найти ближайшую точку замка к монстру
         // public Vector3 GetClosestWallPoint(Vector3 monsterPos)
         // {
         //     var closest = WallWorldPositions[0];
@@ -67,9 +63,7 @@ namespace View
             if (WallWorldPositions != null)
             {
                 foreach (var pos in WallWorldPositions)
-                {
                     Gizmos.DrawSphere(pos, 0.3f);
-                }
             }
         }
     }

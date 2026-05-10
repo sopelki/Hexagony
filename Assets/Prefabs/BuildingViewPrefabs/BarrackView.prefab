@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 490840398418805999}
   - component: {fileID: 7493385250270705991}
   - component: {fileID: 8416625169382378121}
+  - component: {fileID: 5357790113254356312}
   m_Layer: 0
   m_Name: BarrackView
   m_TagString: Untagged
@@ -75,3 +76,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5357790113254356312
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984174178962830700}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0

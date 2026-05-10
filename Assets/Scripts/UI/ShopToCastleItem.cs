@@ -1,5 +1,4 @@
 using Logic.Castle;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,13 +10,11 @@ namespace UI
         [SerializeField] private Canvas canvas;
         [SerializeField] private GameObject inventoryItemPrefab;
         [SerializeField] private BuildingData buildingData;
-        // [SerializeField] private GameObject iconInInventory;
 
         private Image sourceImage;
 
         private void Awake()
         {
-            // sourceImage = iconInInventory.GetComponent<Image>();
             sourceImage = buildingData.viewPrefab.GetComponentInChildren<Image>();
             if (canvas == null) 
                 canvas = GetComponentInParent<Canvas>();
