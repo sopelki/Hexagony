@@ -120,7 +120,7 @@ namespace Core
             if (castleView != null)
                 castleView.Initialize(castleModel, tilemap, field);
             else 
-                Debug.LogWarning("GameInitializer: Замок не найден сразу после генерации. Возможно, его нет в JSON или ObjectMappings.");
+                Debug.LogWarning("GameInitializer: No castle found in objects. Check level JSON or ObjectMappings.");
             
             if (gameOverMenu != null)
                 gameOverMenu.Initialize(castleModel);
@@ -156,7 +156,7 @@ namespace Core
             monsterSystem.OnMonsterDied += monster => 
             {
                 castleSystem.AddGold(monster.Data.goldReward);
-                Debug.Log($"Монстр убит! Получено золота: {monster.Data.goldReward}. Баланс: {castleModel.Gold}");
+                Debug.Log($"Monster is killed. Gold received: {monster.Data.goldReward}. Balance: {castleModel.Gold}");
             };
         }
 
