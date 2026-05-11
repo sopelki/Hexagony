@@ -34,7 +34,7 @@ namespace Core
         [SerializeField]
         private CameraSetup cameraSetup;
         [SerializeField]
-        private MenuScripts.GameOverMenu gameOverMenu;
+        private MenuScripts.EndGameMenu endGameMenu;
 
         [Header("Unit Settings")]
         [SerializeField]
@@ -113,8 +113,8 @@ namespace Core
             else
                 Debug.LogWarning("GameInitializer: No castle found in objects. Check level JSON or ObjectMappings.");
 
-            if (gameOverMenu != null)
-                gameOverMenu.Initialize(castleModel);
+            if (endGameMenu != null)
+                endGameMenu.Initialize(castleModel);
 
             monsterSpawner = new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap);
             waveManager = new WaveManager(monsterSpawner, monsterSystem, wavesDelay);

@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Logic.Castle;
+using UnityEngine.EventSystems;
 
 namespace MenuScripts
 {
-    public class GameOverMenu : MonoBehaviour
+    public class EndGameMenu : MonoBehaviour
     {
         public GameObject gameOverPanel;
 
@@ -27,6 +29,10 @@ namespace MenuScripts
 
         public void OpenGameOver()
         {
+            FindObjectsByType<MonoBehaviour>()
+                .Where(mb => mb is IBeginDragHandler or IEndDragHandler or IDragHandler)
+                .ToList()
+                .ForEach(mb => mb.enabled = false);
             gameOverPanel.SetActive(true);
             Time.timeScale = 0f;
         }
