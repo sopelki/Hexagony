@@ -91,7 +91,7 @@ MonoBehaviour:
   enableSnapping: 1
   searchRadius: 3
   detectionDistance: 50
-  snapSpeed: 18
+  snapSpeed: 25
   towerData: {fileID: 0}
   startScaleMultiplier: 0.6
   scaleSpeed: 10

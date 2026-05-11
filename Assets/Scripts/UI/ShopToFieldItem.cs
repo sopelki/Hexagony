@@ -67,10 +67,9 @@ namespace UI
         private Vector2 targetGhostPosition;
         private Vector2 currentGhostPosition;
 
-        public void Construct(TowerSystem system)
-        {
-            towerSystem = system;
-        }
+        private bool isSnapping;
+
+        public void Construct(TowerSystem system) => towerSystem = system;
 
         private void Awake()
         {
@@ -92,8 +91,8 @@ namespace UI
 
             currentScale = startScaleMultiplier;
             targetScale = startScaleMultiplier;
-
             targetColor = normalColor;
+            isSnapping = false;
 
             ghostRect.localScale = Vector3.one * currentScale;
 
@@ -143,11 +142,17 @@ namespace UI
         {
             if (!ghostRect) return;
 
-            currentGhostPosition = Vector2.Lerp(
-                currentGhostPosition,
-                targetGhostPosition,
-                Time.deltaTime * snapSpeed
-            );
+            if (isSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.deltaTime * snapSpeed
+                );
+            }
+            else
+                currentGhostPosition = targetGhostPosition;
+
             ghostRect.localPosition = currentGhostPosition;
 
             currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
@@ -213,9 +218,15 @@ namespace UI
             var basePosition = localPoint + ghostOffset;
 
             if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
+            {
                 targetGhostPosition = snapPosition;
+                isSnapping = true;
+            }
             else
+            {
                 targetGhostPosition = basePosition;
+                isSnapping = false;
+            }
 
             CheckPlacementValidity(eventData);
         }
@@ -294,7 +305,6 @@ namespace UI
             }
         }
 
-
         private bool TryFindValidSlot(PointerEventData eventData, Vector3Int centerCell, out Vector3Int validSlot)
         {
             validSlot = Vector3Int.zero;
@@ -333,7 +343,6 @@ namespace UI
                 return false;
 
             var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
-
             var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
 
             var slotLocalInViewport = new Vector2(
