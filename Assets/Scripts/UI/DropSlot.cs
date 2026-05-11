@@ -59,7 +59,6 @@ namespace UI
                 return;
 
             var existingItem = GetStoredItem();
-
             var isValid = CanPlaceItem(draggingItem, existingItem);
 
             if (isValid)
@@ -80,15 +79,15 @@ namespace UI
             if (draggingItem != null)
             {
                 draggingItem.SetDraggingScale(1.0f);
-                draggingItem.SetValidationState(true);
+                draggingItem.SetValidationState(false);
             }
         }
-        
+
         private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
         {
             if (draggingItem.IsFromShop)
                 return existingItem == null;
-
+            
             return true;
         }
 

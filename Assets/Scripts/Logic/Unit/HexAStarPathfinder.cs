@@ -153,8 +153,8 @@ namespace Logic.Unit
                     
                     // --- СБАЛАНСИРОВАННАЯ СТОИМОСТЬ ---
                     // Стоимость = База + Случайный шум
-                    int moveCost = BASE_MOVE_COST + randomGenerator.Next(0, RANDOM_COST_RANGE + 1);
-                    int tentativeGScore = gScore[current] + moveCost;
+                    var moveCost = BASE_MOVE_COST + randomGenerator.Next(0, RANDOM_COST_RANGE + 1);
+                    var tentativeGScore = gScore[current] + moveCost;
 
                     if (tentativeGScore < gScore.GetValueOrDefault(nCoord, int.MaxValue))
                     {
@@ -162,7 +162,7 @@ namespace Logic.Unit
                         gScore[nCoord] = tentativeGScore;
                         
                         // Эвристику тоже умножаем на базу, чтобы она была сопоставима с G-score
-                        int heuristic = HexagonMath.Distance(nCoord, goal) * BASE_MOVE_COST;
+                        var heuristic = HexagonMath.Distance(nCoord, goal) * BASE_MOVE_COST;
                         float fScore = tentativeGScore + heuristic;
                         
                         openSet.Enqueue(nCoord, fScore);

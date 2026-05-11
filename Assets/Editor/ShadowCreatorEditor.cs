@@ -11,7 +11,7 @@ namespace Editor
         {
             DrawDefaultInspector();
 
-            ShadowCreator creator = (ShadowCreator)target;
+            var creator = (ShadowCreator)target;
 
             GUILayout.Space(10);
 

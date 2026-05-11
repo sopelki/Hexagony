@@ -50,34 +50,27 @@ namespace UI
             targetScale = originalScale;
 
             originalColor = itemImage.color;
-
             normalDraggingColor = new Color(
                 originalColor.r,
                 originalColor.g,
                 originalColor.b,
                 draggingAlpha
             );
-
             invalidColor = new Color(1f, 0.6f, 0.6f, draggingAlpha);
-
             targetColor = originalColor;
         }
 
-
         public void SetDraggingScale(float multiplier) => targetScale = originalScale * multiplier;
-
 
         public void SetValidationState(bool isValid) => targetColor = isValid ? normalDraggingColor : invalidColor;
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = false;
-            targetColor = normalDraggingColor;
+            targetColor = invalidColor;
 
-            if (IsFromShop)
-                return;
-
-            CaptureState();
+            if (!IsFromShop)
+                CaptureState();
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -138,9 +131,6 @@ namespace UI
             transform.SetParent(dragHandler.MainCanvas.transform);
         }
 
-        private void ReturnToStart()
-        {
-            transform.SetParent(OriginalParent);
-        }
+        private void ReturnToStart() => transform.SetParent(OriginalParent);
     }
 }
