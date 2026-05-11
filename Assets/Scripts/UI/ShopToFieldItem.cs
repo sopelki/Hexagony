@@ -39,6 +39,9 @@ namespace UI
         [SerializeField]
         private float snapSpeed = 20f;
 
+        [SerializeField]
+        private float unSnapSpeed = 15f;
+
         [Header("Logic")]
         [SerializeField]
         private TowerData towerData;
@@ -68,6 +71,7 @@ namespace UI
         private Vector2 currentGhostPosition;
 
         private bool isSnapping;
+        private bool wasSnapping;
 
         public void Construct(TowerSystem system) => towerSystem = system;
 
@@ -93,6 +97,7 @@ namespace UI
             targetScale = startScaleMultiplier;
             targetColor = normalColor;
             isSnapping = false;
+            wasSnapping = false;
 
             ghostRect.localScale = Vector3.one * currentScale;
 
@@ -149,6 +154,18 @@ namespace UI
                     targetGhostPosition,
                     Time.deltaTime * snapSpeed
                 );
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.deltaTime * unSnapSpeed
+                );
+
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
+                    wasSnapping = false;
             }
             else
                 currentGhostPosition = targetGhostPosition;
