@@ -4,11 +4,13 @@ using Logic.Castle;
 using Logic.Monster;
 using Logic.Projectile;
 using Logic.Tower;
+using Logic.Trap;
 using Logic.Unit;
 using View;
 using UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using View.View;
 
 namespace Core
 {
@@ -61,6 +63,9 @@ namespace Core
         [Header("Panel Settings")]
         [SerializeField]
         private GameObject winPanel;
+        
+        [Header("Trap Settings")]
+        [SerializeField] private TrapViewManager trapViewManager;
 
         private MonsterSystem monsterSystem;
         private MonsterSpawner monsterSpawner;
@@ -73,6 +78,8 @@ namespace Core
         private ProjectileSystem projectileSystem;
         private Field.Field field;
         private WaveManager waveManager;
+        private TrapSystem trapSystem;
+        private TrapsModel trapsModel;
 
         private static readonly List<Vector2Int> spawnHexes = new()
         {
@@ -116,7 +123,9 @@ namespace Core
             if (gameOverMenu != null)
                 gameOverMenu.Initialize(castleModel);
 
-            monsterSpawner = new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap);
+            trapsModel = new TrapsModel();
+            trapSystem = new TrapSystem(monsterSystem, trapsModel);
+            monsterSpawner = new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap, trapSystem);
             waveManager = new WaveManager(monsterSpawner, monsterSystem, wavesDelay);
             waveManager.OnGameWon += HandleGameWon;
 
@@ -132,7 +141,6 @@ namespace Core
             tickManager.OnTick += monsterSystem.Tick;
             tickManager.OnTick += monsterSpawner.Tick;
             tickManager.OnTick += projectileSystem.Tick;
-            tickManager.OnTick += monsterSpawner.Tick;
             tickManager.OnTick += waveManager.Tick;
 
             unitSystem.OnUnitDied += _ =>
@@ -161,14 +169,21 @@ namespace Core
 
             if (projectileViewManager != null)
                 projectileViewManager.Initialize(projectileSystem);
+            
+            if (trapViewManager != null)
+                trapViewManager.Initialize(trapsModel, field, tilemap);
 
-            var shopItems = FindObjectsByType<ShopToFieldItem>();
+            var shopItems = FindObjectsByType<ShopToFieldTowerItem>();
             foreach (var item in shopItems)
                 item.Construct(towerSystem);
 
             var slots = FindObjectsByType<DropSlot>();
             foreach (var slot in slots)
                 slot.Construct(castleSystem);
+            
+            var trapShopItems = FindObjectsByType<ShopToFieldTrapItem>();
+            foreach (var item in trapShopItems)
+                item.Construct(trapSystem, field);
 
             waveManager.StartFirstWave();
         }

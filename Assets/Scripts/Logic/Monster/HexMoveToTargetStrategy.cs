@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 using System.Linq;
 using Logic.Castle;
+using Logic.Trap;
 using Logic.Unit;
 
 namespace Logic.Monster
@@ -15,6 +16,7 @@ namespace Logic.Monster
         // private readonly List<Vector2Int> targetHexes;
         private readonly Tilemap tilemap;
         private readonly HexAStarPathfinder pathfinder;
+        private readonly TrapSystem trapSystem;
 
         private List<Vector2Int> currentPath;
         private int pathIndex;
@@ -27,11 +29,13 @@ namespace Logic.Monster
         public HexMoveToTargetStrategy(
             MonsterModel monster,
             Field.Field field,
-            Tilemap tilemap)
+            Tilemap tilemap,
+            TrapSystem trapSystem)
         {
             this.monster = monster;
             this.field = field;
             this.tilemap = tilemap;
+            this.trapSystem = trapSystem;
 
             pathfinder = new HexAStarPathfinder(field);
 
@@ -121,7 +125,13 @@ namespace Logic.Monster
             if (directionVector.magnitude <= maxStep)
             {
                 monster.Move(directionVector / maxStep);
+                var previousHex = monster.CurrentHex;
+
                 monster.SetHex(nextHex);
+
+                trapSystem.OnMonsterExitedCell(previousHex, monster);
+                trapSystem.OnMonsterEnteredCell(nextHex, monster);
+
                 pathIndex++;
             }
             else

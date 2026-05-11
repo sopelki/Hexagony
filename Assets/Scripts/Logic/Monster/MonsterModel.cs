@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using Interfaces;
 
 namespace Logic.Monster
@@ -10,19 +11,23 @@ namespace Logic.Monster
         public Vector3 WorldPosition { get; private set; }
         public Vector2Int CurrentHex { get; private set; }
         public Vector3 CurrentVelocity { get; private set; }
+        public MonsterDebuffSystem DebuffSystem { get; }
 
         public bool IsDead => currentHealth <= 0;
 
         public readonly MonsterData Data;
 
         public int MaxHealth { get; }
-        public int Damage { get; }
-        public float MoveSpeed { get; }
+        public int Damage => baseDamage;
+        public float MoveSpeed =>
+            DebuffSystem.ModifyMoveSpeed(baseMoveSpeed);
         public float AttackRadius { get; }
         public float AttackCooldown { get; }
         public int GoldReward { get; }
 
         private int currentHealth;
+        private float baseMoveSpeed;
+        private readonly int baseDamage;
 
         private IMovementStrategy movementStrategy;
         private IAttackStrategy attackStrategy;
@@ -35,19 +40,18 @@ namespace Logic.Monster
             float damageMultiplier,
             float speedMultiplier)
         {
-            Data = data;
-
             WorldPosition = startWorldPos;
             CurrentHex = startHex;
             Data = data;
 
             MaxHealth = Mathf.RoundToInt(data.maxHealth * healthMultiplier);
-            Damage = Mathf.RoundToInt(data.damage * damageMultiplier);
-            MoveSpeed = data.moveSpeed * speedMultiplier;
+            baseDamage = Mathf.RoundToInt(data.damage * damageMultiplier);
+            baseMoveSpeed = data.moveSpeed * speedMultiplier;
 
             AttackRadius = data.attackRadius;
             AttackCooldown = data.attackCooldown;
             GoldReward = data.goldReward;
+            DebuffSystem = new MonsterDebuffSystem(this);
 
             currentHealth = MaxHealth;
         }
@@ -62,6 +66,7 @@ namespace Logic.Monster
 
             CurrentVelocity = Vector3.zero;
             
+            DebuffSystem.Tick(TickManager.Instance.tickInterval);
             attackStrategy?.Tick();
 
             if (attackStrategy?.IsAttacking == true)
@@ -72,7 +77,7 @@ namespace Logic.Monster
 
         public void Move(Vector3 direction)
         {
-            var step = Core.TickManager.Instance.tickInterval;
+            var step = TickManager.Instance.tickInterval;
 
             WorldPosition += direction * (MoveSpeed * step);
             CurrentVelocity = direction * MoveSpeed;

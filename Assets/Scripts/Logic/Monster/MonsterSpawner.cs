@@ -2,6 +2,7 @@
 using UnityEngine;
 using Logic.Unit;
 using Interfaces;
+using Logic.Trap;
 using UnityEngine.Tilemaps;
 
 namespace Logic.Monster
@@ -21,6 +22,7 @@ namespace Logic.Monster
         private readonly UnitSystem unitSystem;
         private readonly Tilemap tilemap;
         private readonly List<WaveData> waves;
+        private readonly TrapSystem trapSystem;
 
         private int currentWaveIndex = -1;
         private int spawnedInCurrentWave;
@@ -38,7 +40,8 @@ namespace Logic.Monster
             MonsterSystem monsterSystem,
             UnitSystem unitSystem,
             List<WaveData> waves,
-            Tilemap tilemap)
+            Tilemap tilemap,
+            TrapSystem trapSystem)
         {
             this.spawnHexes = spawnHexes;
             this.field = field;
@@ -46,6 +49,7 @@ namespace Logic.Monster
             this.unitSystem = unitSystem;
             this.waves = waves;
             this.tilemap = tilemap;
+            this.trapSystem = trapSystem;
         }
 
         public void StartNextWave()
@@ -105,7 +109,7 @@ namespace Logic.Monster
                 wave.speedMultiplier
             );
 
-            var movement = new HexMoveToTargetStrategy(monster, field, tilemap);
+            var movement = new HexMoveToTargetStrategy(monster, field, tilemap, trapSystem);
             var attack = new MonsterAttackStrategy(monster, unitSystem);
             monster.SetStrategies(movement, attack);
 

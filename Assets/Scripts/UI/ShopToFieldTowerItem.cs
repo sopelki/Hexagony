@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class ShopToFieldItem : MonoBehaviour,
+    public class ShopToFieldTowerItem : MonoBehaviour,
         IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("UI & Scene")]
