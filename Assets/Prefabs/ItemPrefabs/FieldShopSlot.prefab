@@ -88,9 +88,13 @@ MonoBehaviour:
   slotTile: {fileID: 11400000, guid: 7b7b59e8a9176ba47913fef81288eec8, type: 2}
   ghostAlpha: 0.7
   ghostOffset: {x: 0, y: 0}
+  enableSnapping: 1
+  snapDistance: 100
+  snapSpeed: 15
   towerData: {fileID: 0}
-  startScaleMultiplier: 0.75
-  scaleSpeed: 15
+  startScaleMultiplier: 0.6
+  scaleSpeed: 8
+  colorLerpSpeed: 5
 --- !u!222 &899378862108174943
 CanvasRenderer:
   m_ObjectHideFlags: 0

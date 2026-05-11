@@ -26,6 +26,14 @@ namespace UI
         [SerializeField]
         private Vector2 ghostOffset = Vector2.zero;
 
+        [Header("Snapping")]
+        [SerializeField]
+        private bool enableSnapping = true;
+        [SerializeField]
+        private float snapDistance = 50f;
+        [SerializeField]
+        private float snapSpeed = 20f;
+
         [Header("Logic")]
         [SerializeField]
         private TowerData towerData;
@@ -50,6 +58,10 @@ namespace UI
         private Color normalColor;
         private Color invalidColor;
         private Color targetColor;
+
+        private Vector2 targetGhostPosition;
+        private Vector2 currentGhostPosition;
+        private Vector3Int? currentSnappedCell;
 
         public void Construct(TowerSystem system)
         {
@@ -82,6 +94,8 @@ namespace UI
             ghostRect.localScale = Vector3.one * currentScale;
 
             UpdateGhostPosition(eventData);
+            currentGhostPosition = targetGhostPosition;
+            ghostRect.localPosition = currentGhostPosition;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -94,6 +108,8 @@ namespace UI
         {
             if (ghost != null)
                 Destroy(ghost);
+
+            currentSnappedCell = null;
 
             var cam = Camera.main;
             if (cam == null || mapViewport == null || fieldTilemap == null)
@@ -124,6 +140,13 @@ namespace UI
         private void Update()
         {
             if (!ghostRect) return;
+
+            currentGhostPosition = Vector2.Lerp(
+                currentGhostPosition,
+                targetGhostPosition,
+                Time.deltaTime * snapSpeed
+            );
+            ghostRect.localPosition = currentGhostPosition;
 
             currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
             ghostRect.localScale = Vector3.one * currentScale;
@@ -185,9 +208,71 @@ namespace UI
                 eventData.pressEventCamera,
                 out var localPoint);
 
-            ghostRect.localPosition = localPoint + ghostOffset;
+            var basePosition = localPoint + ghostOffset;
+
+            if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
+                targetGhostPosition = snapPosition;
+            else
+            {
+                targetGhostPosition = basePosition;
+                currentSnappedCell = null;
+            }
 
             CheckPlacementValidity(eventData);
+        }
+
+        private bool TryGetSnapPosition(PointerEventData eventData, Vector2 basePosition, out Vector2 snapPosition)
+        {
+            snapPosition = basePosition;
+
+            var cam = Camera.main;
+            if (!cam || !mapViewport || !fieldTilemap)
+                return false;
+
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
+                return false;
+
+            var u = local.x / mapViewport.rect.width + 0.5f;
+            var v = local.y / mapViewport.rect.height + 0.5f;
+
+            var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
+            var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
+            var cellPos = fieldTilemap.WorldToCell(worldPos);
+
+            if (!FindNearestSlotTile(cellPos, 2, out var slotPos))
+                return false;
+
+            var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotPos);
+
+            var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
+
+            var slotLocalInViewport = new Vector2(
+                (slotViewport.x - 0.5f) * mapViewport.rect.width,
+                (slotViewport.y - 0.5f) * mapViewport.rect.height
+            );
+
+            var canvasScaleFactor = canvas.scaleFactor;
+            var slotScreenPos = eventData.pressEventCamera 
+                ? RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, mapViewport.TransformPoint(slotLocalInViewport))
+                : RectTransformUtility.WorldToScreenPoint(null, mapViewport.TransformPoint(slotLocalInViewport));
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)canvas.transform,
+                slotScreenPos,
+                eventData.pressEventCamera,
+                out var slotCanvasLocal);
+
+            var distance = Vector2.Distance(basePosition, slotCanvasLocal + ghostOffset);
+
+            if (distance < snapDistance)
+            {
+                snapPosition = slotCanvasLocal + ghostOffset;
+                currentSnappedCell = slotPos;
+                return true;
+            }
+
+            return false;
         }
 
         private void CheckPlacementValidity(PointerEventData eventData)
