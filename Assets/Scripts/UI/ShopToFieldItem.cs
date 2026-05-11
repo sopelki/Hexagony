@@ -61,7 +61,6 @@ namespace UI
 
         private Vector2 targetGhostPosition;
         private Vector2 currentGhostPosition;
-        private Vector3Int? currentSnappedCell;
 
         public void Construct(TowerSystem system)
         {
@@ -108,8 +107,6 @@ namespace UI
         {
             if (ghost != null)
                 Destroy(ghost);
-
-            currentSnappedCell = null;
 
             var cam = Camera.main;
             if (cam == null || mapViewport == null || fieldTilemap == null)
@@ -213,10 +210,7 @@ namespace UI
             if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
                 targetGhostPosition = snapPosition;
             else
-            {
                 targetGhostPosition = basePosition;
-                currentSnappedCell = null;
-            }
 
             CheckPlacementValidity(eventData);
         }
@@ -243,8 +237,10 @@ namespace UI
             if (!FindNearestSlotTile(cellPos, 2, out var slotPos))
                 return false;
 
-            var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotPos);
+            if (towerSystem.IsCellOccupied(slotPos))
+                return false;
 
+            var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotPos);
             var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
 
             var slotLocalInViewport = new Vector2(
@@ -252,9 +248,9 @@ namespace UI
                 (slotViewport.y - 0.5f) * mapViewport.rect.height
             );
 
-            var canvasScaleFactor = canvas.scaleFactor;
-            var slotScreenPos = eventData.pressEventCamera 
-                ? RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, mapViewport.TransformPoint(slotLocalInViewport))
+            var slotScreenPos = eventData.pressEventCamera
+                ? RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
+                    mapViewport.TransformPoint(slotLocalInViewport))
                 : RectTransformUtility.WorldToScreenPoint(null, mapViewport.TransformPoint(slotLocalInViewport));
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -268,7 +264,6 @@ namespace UI
             if (distance < snapDistance)
             {
                 snapPosition = slotCanvasLocal + ghostOffset;
-                currentSnappedCell = slotPos;
                 return true;
             }
 
