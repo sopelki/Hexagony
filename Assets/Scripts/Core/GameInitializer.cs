@@ -58,10 +58,6 @@ namespace Core
         [SerializeField]
         private float wavesDelay = 5f;
 
-        [Header("Panel Settings")]
-        [SerializeField]
-        private GameObject winPanel;
-
         private MonsterSystem monsterSystem;
         private MonsterSpawner monsterSpawner;
         private CastleModel castleModel;
@@ -118,7 +114,7 @@ namespace Core
 
             monsterSpawner = new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap);
             waveManager = new WaveManager(monsterSpawner, monsterSystem, wavesDelay);
-            waveManager.OnGameWon += HandleGameWon;
+            waveManager.OnGameWon += endGameMenu.OpenWinMenu;
 
             towersModel = new TowersModel();
             towerSystem = new TowerSystem(castleSystem, towersModel, monsterSystem, projectileSystem);
@@ -171,12 +167,6 @@ namespace Core
                 slot.Construct(castleSystem);
 
             waveManager.StartFirstWave();
-        }
-
-        private void HandleGameWon()
-        {
-            Time.timeScale = 0f;
-            winPanel.SetActive(true);
         }
     }
 }

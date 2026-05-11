@@ -5,16 +5,16 @@ namespace Logic.Unit
 {
     public class PriorityQueue<T>
     {
-        private readonly SortedDictionary<float, Queue<T>> _queues = new();
+        private readonly SortedDictionary<float, Queue<T>> queues = new();
 
         public int Count { get; private set; }
 
         public void Enqueue(T item, float priority)
         {
-            if (!_queues.TryGetValue(priority, out var queue))
+            if (!queues.TryGetValue(priority, out var queue))
             {
                 queue = new Queue<T>();
-                _queues.Add(priority, queue);
+                queues.Add(priority, queue);
             }
             queue.Enqueue(item);
             Count++;
@@ -22,10 +22,10 @@ namespace Logic.Unit
 
         public T Dequeue()
         {
-            var first = _queues.First();
+            var first = queues.First();
             var item = first.Value.Dequeue();
             if (first.Value.Count == 0)
-                _queues.Remove(first.Key);
+                queues.Remove(first.Key);
             Count--;
             return item;
         }

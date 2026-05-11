@@ -1,15 +1,19 @@
-﻿using Logic.Castle;
+﻿using System;
+using Logic.Castle;
 using TMPro;
 using UnityEngine;
 
 namespace UI
 {
-    public class CastleUI: MonoBehaviour
+    public class CastleUI : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI hpText;
-        [SerializeField] private TextMeshProUGUI goldText;
-        [SerializeField] private TextMeshProUGUI foodText;
-        
+        [SerializeField]
+        private TextMeshProUGUI hpText;
+        [SerializeField]
+        private TextMeshProUGUI goldText;
+        [SerializeField]
+        private TextMeshProUGUI foodText;
+
         private CastleModel model;
 
         public void Initialize(CastleModel castleModel)
@@ -18,18 +22,18 @@ namespace UI
             model.OnChanged += UpdateUI;
             UpdateUI();
         }
-        
+
         private void OnDestroy()
         {
-            if (model != null) 
+            if (model != null)
                 model.OnChanged -= UpdateUI;
         }
-        
+
         private void UpdateUI()
         {
-            hpText.text = "HP: " + model.Hp;
-            goldText.text = "Gold: " + model.Gold;
-            foodText.text = "Food: " + model.Food;
+            hpText.text = Math.Max(0, model.Hp).ToString();
+            goldText.text = model.Gold.ToString();
+            foodText.text = model.Food.ToString();
         }
     }
 }

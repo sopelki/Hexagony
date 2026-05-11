@@ -20440,14 +20440,6 @@
     "savedObjects": [
         {
             "position": {
-                "x": -10,
-                "y": 20,
-                "z": 0
-            },
-            "objectId": "Tree 1"
-        },
-        {
-            "position": {
                 "x": 15,
                 "y": 2,
                 "z": 0

@@ -30,7 +30,7 @@ namespace Logic.Castle
             Field.Field field,
             Tilemap tilemap)
         {
-            this.Model = model;
+            Model = model;
             this.unitSystem = unitSystem;
             this.unitData = unitData;
             this.field = field;
