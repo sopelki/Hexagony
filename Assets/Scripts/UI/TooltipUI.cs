@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class TooltipUI : MonoBehaviour
     {
         public static TooltipUI Instance;
@@ -20,26 +21,45 @@ namespace UI
         private TextMeshProUGUI priceText;
         [SerializeField]
         private TextMeshProUGUI statsText;
+
+        [Header("Positioning")]
         [SerializeField]
-        private int offsetX;
+        private int offsetX = 20;
         [SerializeField]
-        private int offsetY;
+        private int offsetY = -20;
+
+        [Header("Animation Settings")]
+        [SerializeField]
+        private float fadeInSpeed = 15f;
+        [SerializeField]
+        private float fadeOutSpeed = 10f;
+        [SerializeField]
+        private float targetTransparency = 0.7f;
+        [SerializeField]
+        private Vector3 startScale = new(0.8f, 0.8f, 1f);
 
         private RectTransform rectTransform;
         private Canvas canvas;
+        private CanvasGroup canvasGroup;
+
+        private bool isVisible;
+        private float targetAlpha;
+        private Vector3 targetScale;
 
         private void Awake()
         {
             Instance = this;
             rectTransform = GetComponent<RectTransform>();
+            canvasGroup = GetComponent<CanvasGroup>();
             canvas = GetComponentInParent<Canvas>().rootCanvas;
-            Hide();
+
+            canvasGroup.alpha = 0;
+            rectTransform.localScale = startScale;
+            panel.SetActive(false);
         }
 
         public void Show(TooltipContent content)
         {
-            panel.SetActive(true);
-
             titleText.text = content.Title;
             descriptionText.text = content.Description;
             statsText.text = content.SpecialInfo;
@@ -54,15 +74,40 @@ namespace UI
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
 
+            panel.SetActive(true);
+            isVisible = true;
+            targetAlpha = targetTransparency;
+            targetScale = Vector3.one;
+
             UpdatePosition();
         }
 
-        public void Hide() => panel.SetActive(false);
+        public void Hide()
+        {
+            isVisible = false;
+            targetAlpha = 0f;
+            targetScale = startScale;
+        }
 
         private void Update()
         {
+            Animate();
+
             if (panel.activeSelf)
                 UpdatePosition();
+        }
+
+        private void Animate()
+        {
+            var currentSpeed = isVisible ? fadeInSpeed : fadeOutSpeed;
+
+            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, targetAlpha, Time.unscaledDeltaTime * currentSpeed);
+
+            rectTransform.localScale =
+                Vector3.Lerp(rectTransform.localScale, targetScale, Time.unscaledDeltaTime * currentSpeed);
+
+            if (!isVisible && canvasGroup.alpha < 0.01f)
+                panel.SetActive(false);
         }
 
         private void UpdatePosition()
@@ -75,14 +120,11 @@ namespace UI
                 canvas.worldCamera,
                 out var localPoint);
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
-
             var panelWidth = rectTransform.rect.width;
             var panelHeight = rectTransform.rect.height;
 
             float finalOffsetX = offsetX;
             float finalOffsetY = offsetY;
-
 
             if (mousePos.x + panelWidth + offsetX > Screen.width)
                 finalOffsetX = -panelWidth - offsetX;

@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Logic.Castle;
-using UnityEngine.EventSystems;
+using Misc;
 
 namespace MenuScripts
 {
@@ -46,10 +45,8 @@ namespace MenuScripts
 
         private static void OpenMenu(GameObject menu)
         {
-            FindObjectsByType<MonoBehaviour>()
-                .Where(mb => mb is IBeginDragHandler or IEndDragHandler or IDragHandler)
-                .ToList()
-                .ForEach(mb => mb.enabled = false);
+            UIBlocker.BlockAll();
+    
             menu.SetActive(true);
             Time.timeScale = 0f;
         }

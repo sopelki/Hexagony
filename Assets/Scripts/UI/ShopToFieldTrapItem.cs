@@ -1,6 +1,4 @@
 ﻿using Logic.Trap;
-using Field;
-using HexagonScripts;
 using Logic.Trap.Logic.Trap;
 using UnityEngine;
 using UnityEngine.EventSystems;

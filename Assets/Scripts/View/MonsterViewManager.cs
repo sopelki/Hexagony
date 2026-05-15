@@ -2,7 +2,6 @@
 using Core;
 using UnityEngine;
 using Logic.Monster;
-using UnityEngine.Rendering.VirtualTexturing;
 
 namespace View
 {

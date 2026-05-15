@@ -1,26 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Misc;
 
 namespace MenuScripts
 {
     public class PauseMenu : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject pausePanel;
+        [SerializeField] private GameObject pausePanel;
 
         public void OpenPause()
         {
-            if (pausePanel == null)
-                pausePanel = gameObject;
-
+            UIBlocker.BlockAll();
+            
+            if (pausePanel == null) pausePanel = gameObject;
             pausePanel.SetActive(true);
             Time.timeScale = 0f;
         }
 
         public void ResumeGame()
         {
-            if (pausePanel != null)
-                pausePanel.SetActive(false);
+            UIBlocker.UnblockAll();
+            
+            if (pausePanel != null) pausePanel.SetActive(false);
             Time.timeScale = 1f;
         }
 

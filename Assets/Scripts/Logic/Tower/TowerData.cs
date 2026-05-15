@@ -26,10 +26,10 @@ namespace Logic.Tower
             // #AB47BC - Фиолетовый (Цели)
 
             var stats =
-                $"<color=#EF5350>Урон: {projectileData.damage}</color>\n" +
-                $"<color=#AB47BC>Целей: {targetsCount}</color>\n" +
-                $"<color=#FFA726>Скорость: {fireRate}</color>\n" +
-                $"<color=#26C6DA>Дальность: {range}</color>";
+                $"Урон: <color=#EF5350>{projectileData.damage}</color>\n" +
+                $"Целей: <color=#AB47BC>{targetsCount}</color>\n" +
+                $"Скорость: <color=#FFA726>{fireRate}</color>\n" +
+                $"Дальность: <color=#26C6DA>{range}</color>";
 
             return new TooltipContent
             {
