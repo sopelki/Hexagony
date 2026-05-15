@@ -2,6 +2,7 @@ using Interfaces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -31,7 +32,7 @@ namespace UI
         {
             Instance = this;
             rectTransform = GetComponent<RectTransform>();
-            canvas = GetComponentInParent<Canvas>();
+            canvas = GetComponentInParent<Canvas>().rootCanvas;
             Hide();
         }
 
@@ -43,6 +44,8 @@ namespace UI
             descriptionText.text = content.Description;
             priceText.text = content.Cost;
             statsText.text = content.SpecialInfo;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
 
             UpdatePosition();
         }
@@ -58,13 +61,29 @@ namespace UI
         private void UpdatePosition()
         {
             var mousePos = Mouse.current.position.ReadValue();
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
                 mousePos,
                 canvas.worldCamera,
                 out var localPoint);
 
-            rectTransform.localPosition = localPoint + new Vector2(offsetX, offsetY);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+
+            var panelWidth = rectTransform.rect.width;
+            var panelHeight = rectTransform.rect.height;
+
+            float finalOffsetX = offsetX;
+            float finalOffsetY = offsetY;
+
+
+            if (mousePos.x + panelWidth + offsetX > Screen.width)
+                finalOffsetX = -panelWidth - offsetX;
+
+            if (mousePos.y - panelHeight + offsetY < 0)
+                finalOffsetY = panelHeight - offsetY;
+
+            rectTransform.anchoredPosition = localPoint + new Vector2(finalOffsetX, finalOffsetY);
         }
     }
 }

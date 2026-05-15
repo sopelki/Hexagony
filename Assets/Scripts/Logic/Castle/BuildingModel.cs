@@ -2,7 +2,7 @@
 {
     public class BuildingModel
     {
-        public BuildingData Data { get; private set; }
+        public BuildingData Data { get; }
         public int Level { get; private set; }
 
         public BuildingModel(BuildingData data)

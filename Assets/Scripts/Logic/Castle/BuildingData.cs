@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using Misc;
 using UnityEngine;
 
 namespace Logic.Castle
@@ -10,18 +11,25 @@ namespace Logic.Castle
         public int baseProduction;
         public int baseCost;
         public GameObject viewPrefab;
+        [TextArea]
         public string description;
 
+        [Header("Localisation")]
+        [SerializeField]
+        private string effectLabel = "Производство ресурсов";
 
-        // TODO: допилить инфу
         public TooltipContent GetTooltipContent()
         {
+            // #FFD700 - Золотой
+            // #FFEE58 - Светло-желтый
+            // #66BB6A - Зеленый
+
             return new TooltipContent
             {
-                Title = type.ToString(),
-                Description = description,
-                Cost = $"Цена: {baseCost}",
-                SpecialInfo = $"Скорость производства ***: {baseProduction}"
+                Title = $"<color=#FFD700><b>{type.GetRussianName()}</b></color>",
+                Description = $"<color=#BDBDBD>{description}</color>",
+                Cost = $"<color=#FFEE58>Цена: {baseCost} золота</color>",
+                SpecialInfo = $"<color=#66BB6A>{effectLabel}: +{baseProduction}</color>"
             };
         }
     }
