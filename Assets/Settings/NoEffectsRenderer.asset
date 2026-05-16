@@ -32,7 +32,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f14f2e8a8a4e4b9b1b7d7a9f6b3c11, type: 3}
   m_Name: PSXRendererFeature
   m_EditorClassIdentifier: Retro.PSXEffects.Runtime::Retro.PSXEffects.PSXRendererFeature
-  m_Active: 1
+  m_Active: 0
   settings:
     renderPassEvent: 550
     psxColorDepth: 5
@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11145981673336645838492a2d98e247, type: 3}
-  m_Name: Renderer2D
+  m_Name: NoEffectsRenderer
   m_EditorClassIdentifier: 
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
@@ -69,9 +69,9 @@ MonoBehaviour:
   - {fileID: -3032411254372567658}
   - {fileID: 1822610512943261145}
   - {fileID: 4879558530717255889}
-  - {fileID: -2536271145950807744}
   - {fileID: 2634734218947782728}
-  m_RendererFeatureMap: 96f539d207b6ead5d925e0db9a364b19d1082174a1acb7434079879bd45acddc48e8f20dd0749024
+  - {fileID: -2536271145950807744}
+  m_RendererFeatureMap: 96f539d207b6ead5d925e0db9a364b19d1082174a1acb74348e8f20dd07490244079879bd45acddc
   m_UseNativeRenderPass: 0
   m_LayerMask:
     serializedVersion: 2
@@ -134,25 +134,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b, type: 3}
   m_Name: CRTRendererFeature
   m_EditorClassIdentifier: Retro.PSXEffects.Runtime::Retro.PSXEffects.CRTRendererFeature
-  m_Active: 1
+  m_Active: 0
   settings:
     renderPassEvent: 550
     pixelSize: 1
-    scanlineIntensity: 0.25
+    scanlineIntensity: 0.15
     scanlineCount: 256
-    curvature: 0.03
+    curvature: 0
     chromaticAberration: 0
-    vignette: 0.15
-    brightness: 1.5
-    phosphorIntensity: 0.1
-    flickerIntensity: 0.1
+    vignette: 0.084
+    brightness: 1.417
+    phosphorIntensity: 0
+    flickerIntensity: 0
     rollingScanlineIntensity: 0
     rollingScanlineSpeed: 0.5
-    glowIntensity: 0.1
+    glowIntensity: 0
     glowSpread: 3
-    noiseIntensity: 0.001
-    colorBleedIntensity: 0
-    interlacingIntensity: 0
+    noiseIntensity: 0
+    colorBleedIntensity: 0.605
+    interlacingIntensity: 0.079
 --- !u!114 &4879558530717255889
 MonoBehaviour:
   m_ObjectHideFlags: 0
