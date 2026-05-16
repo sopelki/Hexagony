@@ -144,7 +144,7 @@ MonoBehaviour:
     chromaticAberration: 0
     vignette: 0.15
     brightness: 1.5
-    phosphorIntensity: 0.1
+    phosphorIntensity: 0.05
     flickerIntensity: 0.1
     rollingScanlineIntensity: 0
     rollingScanlineSpeed: 0.5
