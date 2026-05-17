@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d02e4f21fc9fe6e4abd5e2f0ec68db86
+guid: 35c09e87da8b3784db41c173b5ae9f7b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5919700827477176439
-    second: BlackSmithIcon_0
+      213: -4790209341967303251
+    second: BlackSmithIcon (2)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlackSmithIcon_0
+      name: BlackSmithIcon (2)_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 770fc56e980072250800000000000000
-      internalID: 5919700827477176439
+      spriteID: dadf74cabf1c58db0800000000000000
+      internalID: -4790209341967303251
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5721a5bea1416564d8fb91e561e49319
+    spriteID: e069316fea325a54e8648643dd3bb562
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BlackSmithIcon_0: 5919700827477176439
+      BlackSmithIcon (2)_0: -4790209341967303251
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
