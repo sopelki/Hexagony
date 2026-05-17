@@ -31,9 +31,9 @@ namespace UI
 
         private void UpdateUI()
         {
-            hpText.text = Math.Max(0, model.Hp).ToString();
-            goldText.text = model.Gold.ToString();
-            foodText.text = model.Food.ToString();
+            hpText.text = $"<color=#479E4C>{Math.Max(0, model.Hp)}</color>";
+            goldText.text = $"<color=#FFEE58>{model.Gold}</color>";
+            foodText.text = $"<color=#CD7F32>{model.Food}</color>";     
         }
     }
 }

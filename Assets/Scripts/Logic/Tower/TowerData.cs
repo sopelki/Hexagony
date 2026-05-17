@@ -20,11 +20,6 @@ namespace Logic.Tower
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
-            // #EF5350 - Красный (Урон)
-            // #26C6DA - Голубой (Дальность)
-            // #FFA726 - Оранжевый (Скорость)
-            // #AB47BC - Фиолетовый (Цели)
-
             var stats =
                 $"Урон: <color=#EF5350>{projectileData.damage}</color>\n" +
                 $"Целей: <color=#AB47BC>{targetsCount}</color>\n" +
@@ -35,7 +30,7 @@ namespace Logic.Tower
             {
                 Title = $"<color=#FFD700><b>{type.GetRussianName()}</b></color>",
                 Description = $"<color=#BDBDBD>{description}</color>",
-                Cost = $"<color=#FFEE58>Цена: {baseCost} золота</color>",
+                Cost = $"Цена: <color=#FFEE58>{baseCost} золота</color>",
                 SpecialInfo = stats
             };
         }

@@ -59,7 +59,7 @@ namespace Logic.Trap
             {
                 Title = $"<color=#FFD700><b>{trapType.GetRussianName()}</b></color>",
                 Description = $"<color=#BDBDBD>{description}</color>",
-                Cost = $"<color=#FFEE58>Цена: {baseCost} золота</color>",
+                Cost = $"Цена: <color=#FFEE58>{baseCost} золота</color>",
                 SpecialInfo = stats
             };
         }
