@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fa8ac19041467f92f2e013c85b3bbc, type: 3}
   m_Name: SlowTrapData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Trap.Logic.Trap.TrapData
-  trapType: 0
-  baseCost: 0
+  trapType: 1
+  baseCost: 50
   viewPrefab: {fileID: 4790872506747466711, guid: 01a68525d64fc3c4f82c28513b0831bd, type: 3}
   tickInterval: 0
   tickDamage: 0

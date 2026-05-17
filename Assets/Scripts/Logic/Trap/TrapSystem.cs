@@ -35,8 +35,8 @@ namespace Logic.Trap
             return new List<Vector2Int>
             {
                 centerHex,
-                centerHex + new Vector2Int(1, 0),
-                centerHex + new Vector2Int(0, 1)
+                centerHex + new Vector2Int(0, -1),
+                centerHex + new Vector2Int(1, -1)
             };
         }
 
@@ -64,6 +64,12 @@ namespace Logic.Trap
         {
             if (!CanPlaceTrap(data, hex))
                 return false;
+            
+            var occupied = GetTrapOccupiedHexes(hex);
+            
+            Debug.Log($"Placing trap at center AXIAL: {hex}");
+            foreach (var h in occupied)
+                Debug.Log($"Trap occupies AXIAL: {h}");
 
             if (castleSystem.TrySpendGold(data.baseCost))
             {

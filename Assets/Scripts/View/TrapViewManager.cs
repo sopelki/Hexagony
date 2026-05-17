@@ -1,4 +1,6 @@
-﻿namespace View
+﻿using System.Linq;
+
+namespace View
 {
     using UnityEngine;
     using Logic.Trap;
@@ -32,34 +34,30 @@
 
             private void HandleTrapAdded(TrapModel trap)
             {
-                // var hexObj = field.GetHex(trap.Hex);
-                // if (hexObj == null)
-                //     return;
+                // var sumPos = Vector3.zero;
+                // foreach (var h in trap.Hexes)
+                // {
+                //     var hexObj = field.GetHex(h);
+                //     sumPos += tilemap.GetCellCenterWorld(hexObj.offset);
+                // }
+                // var centerPos = sumPos / trap.Hexes.Count;
+                // centerPos.z = -0.1f;
                 //
-                // var worldPos = tilemap.GetCellCenterWorld(hexObj.offset);
-                //
-                // // worldPos.z = -0.1f;   // ✅ очень важно
-                //
-                // var viewGo = Instantiate(trap.Data.viewPrefab, worldPos, Quaternion.identity);
+                // var viewGo = Instantiate(trap.Data.viewPrefab, centerPos, Quaternion.identity);
                 // var view = viewGo.GetComponent<TrapView>();
-                //
+                // var prefabRenderer = trap.Data.viewPrefab.GetComponentInChildren<SpriteRenderer>();
+                // if (prefabRenderer != null)
+                // {
+                //     view.Initialize(prefabRenderer.sprite);
+                // }
                 // views.Add(trap, view);
-                var sumPos = Vector3.zero;
-                foreach (var h in trap.Hexes)
-                {
-                    var hexObj = field.GetHex(h);
-                    sumPos += tilemap.GetCellCenterWorld(hexObj.offset);
-                }
-                var centerPos = sumPos / trap.Hexes.Count;
-                centerPos.z = -0.1f;
-
-                var viewGo = Instantiate(trap.Data.viewPrefab, centerPos, Quaternion.identity);
+                
+                var pos = trap.Hexes.Select(h => tilemap.GetCellCenterWorld(field.GetHex(h).offset)).ToList();
+                var finalPos = new Vector3(pos.Average(p => p.x), pos.Min(p => p.y) - tilemap.cellSize.y * 0.5f, -0.1f);
+                var viewGo = Instantiate(trap.Data.viewPrefab, finalPos, Quaternion.identity);
                 var view = viewGo.GetComponent<TrapView>();
-                var prefabRenderer = trap.Data.viewPrefab.GetComponentInChildren<SpriteRenderer>();
-                if (prefabRenderer != null)
-                {
-                    view.Initialize(prefabRenderer.sprite);
-                }
+                view.Initialize(trap.Data.viewPrefab.GetComponentInChildren<SpriteRenderer>().sprite);
+                
                 views.Add(trap, view);
             }
         }

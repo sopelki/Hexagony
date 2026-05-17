@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fa8ac19041467f92f2e013c85b3bbc, type: 3}
   m_Name: BearTrap
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Trap.Logic.Trap.TrapData
-  trapType: 0
+  trapType: 2
   baseCost: 50
   viewPrefab: {fileID: 4790872506747466711, guid: f1dd9bce1c3bc394e8c21d915b9616b8, type: 3}
   tickInterval: 0.4

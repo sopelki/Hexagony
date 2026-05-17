@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 5d2cf2cb0fb89bd4ab75c0980c1c5680
+guid: b3df45b1a01a2bf49ba80f932d745b18
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7912549542613383710
-    second: kap1_0
+      213: -1531226287962684850
+    second: dam1.2_0
+  - first:
+      213: 2223319468126090615
+    second: dam1.2_1
+  - first:
+      213: 5499460777224176442
+    second: dam1.2_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +54,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kap1_0
+      name: dam1.2_0
       rect:
         serializedVersion: 2
-        x: 16
+        x: 0
         y: 0
-        width: 32
-        height: 36
+        width: 31
+        height: 35
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e1a7623f2e50fcd60800000000000000
-      internalID: 7912549542613383710
+      spriteID: e428e3bcdcdffbae0800000000000000
+      internalID: -1531226287962684850
       vertices: []
       indices: 
       edges: []
@@ -138,7 +144,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4cebb478e8425e945a5ffefddd780d8e
+    spriteID: 121151916dfc7654bb2c92561637d456
     internalID: 0
     vertices: []
     indices: 
@@ -148,9 +154,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":31.0,"y":35.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      kap1_0: 7912549542613383710
+      dam1.2_0: -1531226287962684850
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
