@@ -9,11 +9,17 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI waveText;
         [SerializeField]
+        private TextMeshProUGUI shadowText;
+        [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
         private float displayDuration = 3f;
         [SerializeField]
         private float fadeDuration = 0.5f;
+        [SerializeField]
+        private float shadowOpacity = 0.72f;
+        [SerializeField]
+        private float targetOpacity = 0.75f;
 
         private Coroutine displayCoroutine;
 
@@ -21,7 +27,10 @@ namespace UI
         {
             if (canvasGroup == null)
                 canvasGroup = GetComponent<CanvasGroup>();
-            
+
+            if (shadowText != null)
+                shadowText.color = new Color(0, 0, 0, shadowOpacity);
+
             canvasGroup.alpha = 0;
         }
 
@@ -35,13 +44,17 @@ namespace UI
 
         private IEnumerator DisplayWaveCoroutine(int waveNumber)
         {
-            waveText.text = $"Началась волна {waveNumber}";
+            var text = $"Началась волна {waveNumber}";
+            waveText.text = text;
 
-            yield return FadeCanvasGroup(0, 1, fadeDuration);
+            if (shadowText)
+                shadowText.text = text;
+
+            yield return FadeCanvasGroup(0, targetOpacity, fadeDuration);
 
             yield return new WaitForSeconds(displayDuration);
 
-            yield return FadeCanvasGroup(1, 0, fadeDuration);
+            yield return FadeCanvasGroup(targetOpacity, 0, fadeDuration);
         }
 
         private IEnumerator FadeCanvasGroup(float startAlpha, float endAlpha, float duration)

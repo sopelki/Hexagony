@@ -60,6 +60,11 @@ namespace Logic.Monster
 
         private void OnWaveFinishedSpawning() => waitingForNextWave = true;
 
-        public void StartFirstWave() => spawner.StartNextWave();
+        public void StartFirstWave()
+        {
+            currentWaveNumber = 1;
+            OnWaveStarting?.Invoke(currentWaveNumber);
+            spawner.StartNextWave();
+        }
     }
 }
