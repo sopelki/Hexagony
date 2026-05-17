@@ -1,0 +1,10 @@
+{
+  "name": "com.astrobotiq.crt-filter",
+  "version": "1.0.0",
+  "displayName": "CRT Filter for URP",
+  "description": "Advanced CRT post-processing for Unity 6 Render Graph.",
+  "unity": "6000.0",
+  "author": {
+    "name": "Astrobotiq"
+  }
+}
