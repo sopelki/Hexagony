@@ -15,12 +15,24 @@ MonoBehaviour:
   m_Active: 1
   settings:
     renderPassEvent: 550
-    psxColorDepth: 5
-    psxDitherIntensity: 0.8
+    psxColorDepth: 6
+    psxDitherIntensity: 0.5
     psxPosterization: 0.64
     psxResolutionScale: 1
-    psxSaturationBoost: 1.05
+    psxSaturationBoost: 1.1
     psxDarkening: 0
+    colorBleedIntensity: 0.1
+    chromaticShift: 0
+    verticalBlur: 0.5
+    vhsTracking: 0
+    signalNoise: 0.002
+    colorTemperature: 0.2
+    pixelPerfectSnapping: 0.5
+    paletteReduction: 0
+    lcdGhosting: 0.3
+    pixelGridIntensity: 0
+    pixelGridSize: 1.5
+    gameBoyMode: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +108,7 @@ MonoBehaviour:
     renderPassEvent: 550
     pixelSize: 1
     scanlineIntensity: 0.2
-    scanlineCount: 192
+    scanlineCount: 256
     curvature: 0.025
     chromaticAberration: 0
     vignette: 0.059
