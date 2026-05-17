@@ -60,7 +60,7 @@ Material:
     - _Red: 1
     - _RedOffset: -0.001
     - _ScanlinesStrength: 0
-    - _ScreenBend: 8
+    - _ScreenBend: 7.23
     - _ScreenOverscan: 0
     - _Shadowlines: 0
     - _ShadowlinesAlpha: 0.3

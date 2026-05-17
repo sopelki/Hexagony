@@ -148,83 +148,80 @@ Shader "Retro/CRTEffectURP"
                 float2 screenSize = _ScreenParams.xy;
                 float2 uv = input.texcoord;
 
-                // Apply screen curvature
-                float2 curvedUV = curveUV(uv);
+                float2 pixelUV = pixelate(uv, screenSize);
 
-                // Check if we're outside the screen after curvature
-                if (curvedUV.x < 0 || curvedUV.x > 1 || curvedUV.y < 0 || curvedUV.y > 1)
+                float2 curvedPixelUV = curveUV(pixelUV);
+                float2 curvedUV = curveUV(uv); // Для эффектов
+
+                if (curvedPixelUV.x < 0 || curvedPixelUV.x > 1 || 
+                    curvedPixelUV.y < 0 || curvedPixelUV.y > 1)
                     return half4(0, 0, 0, 1);
 
-                // Pixelate
-                float2 pixelUV = pixelate(curvedUV, screenSize);
-
-                // Base color with chromatic aberration
                 float3 col;
                 if (_ChromaticAberration > 0.0001)
                 {
                     float2 chromaOffset = float2(_ChromaticAberration, 0);
-                    col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, pixelate(curvedUV + chromaOffset, screenSize)).r;
-                    col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, pixelUV).g;
-                    col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, pixelate(curvedUV - chromaOffset, screenSize)).b;
+                    col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
+                            curveUV(pixelate(uv + chromaOffset, screenSize))).r;
+                    col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
+                            curvedPixelUV).g;
+                    col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
+                            curveUV(pixelate(uv - chromaOffset, screenSize))).b;
                 }
                 else
                 {
-                    col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, pixelUV).rgb;
+                    col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, curvedPixelUV).rgb;
                 }
 
-                // Color bleed
+                
                 if (_ColorBleedIntensity > 0.0001)
                 {
-                    float3 bleed = colorBleed(pixelUV, screenSize);
-                    col = lerp(col, bleed, _ColorBleedIntensity);
+                    float2 texelSize = 1.0 / screenSize;
+                    float bleedAmount = _ColorBleedIntensity * _PixelSize;
+                    
+                    float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
+                            curveUV(pixelate(uv + float2(texelSize.x * bleedAmount, 0), screenSize))).r;
+                    float g = col.g;
+                    float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
+                            curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0), screenSize))).b;
+                    
+                    col = lerp(col, float3(r, g, b), _ColorBleedIntensity);
                 }
 
-                // Glow
                 if (_GlowIntensity > 0.0001)
                 {
-                    float3 glow = sampleGlow(pixelUV, screenSize);
+                    float3 glow = sampleGlow(curvedPixelUV, screenSize);
                     col += glow * _GlowIntensity;
                 }
 
-                // RGB Phosphor mask
                 if (_PhosphorIntensity > 0.0001)
                 {
-                    col *= phosphorMask(curvedUV, screenSize);
+                    col *= phosphorMask(uv, screenSize);
                 }
 
-                // Scanlines
                 if (_ScanlineIntensity > 0.0001)
                 {
-                    float scanline = sin(curvedUV.y * _ScanlineCount * 3.14159) * 0.5 + 0.5;
+                    float scanline = sin(uv.y * _ScanlineCount * 3.14159) * 0.5 + 0.5;
                     scanline = pow(scanline, 0.5);
                     col *= 1.0 - (_ScanlineIntensity * (1.0 - scanline));
                 }
 
-                // Rolling scanline
                 if (_RollingScanlineIntensity > 0.0001)
                 {
-                    col *= rollingScanline(curvedUV);
+                    col *= rollingScanline(uv);
                 }
 
-                // Interlacing
                 if (_InterlacingIntensity > 0.0001)
                 {
-                    col *= interlacing(curvedUV, screenSize);
+                    col *= interlacing(uv, screenSize); // НЕ curvedUV
                 }
 
-                // Static noise
                 if (_NoiseIntensity > 0.0001)
-                {
                     col += staticNoise(curvedUV) - (_NoiseIntensity * 0.5);
-                }
 
-                // Screen flicker
                 if (_FlickerIntensity > 0.0001)
-                {
                     col *= flicker();
-                }
 
-                // Vignette
                 if (_Vignette > 0.0001)
                 {
                     float2 vignetteUV = uv * (1.0 - uv.yx);
@@ -233,7 +230,6 @@ Shader "Retro/CRTEffectURP"
                     col *= vignetteVal;
                 }
 
-                // Brightness
                 col *= _Brightness;
 
                 return half4(col, 1);
