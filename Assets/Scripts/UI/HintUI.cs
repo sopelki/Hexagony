@@ -53,7 +53,9 @@ namespace UI
             if (fadeCoroutine != null)
                 StopCoroutine(fadeCoroutine);
 
-            fadeCoroutine = StartCoroutine(FadeOut());
+            canvasGroup.alpha = 0;
+            hintText.text = "";
+            shadowText.text = "";
         }
 
         private IEnumerator ShowAndHideHintCycle()
@@ -91,6 +93,8 @@ namespace UI
             }
 
             canvasGroup.alpha = 0;
+            hintText.text = "";
+            shadowText.text = "";
         }
     }
 }

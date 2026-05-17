@@ -14,13 +14,17 @@ namespace Core
         private readonly TrapSystem trapSystem;
         private readonly CastleSystem castleSystem;
         private readonly HintUI hintUI;
-        
+
         private bool gameStarted;
+        private bool waitingToStart;
         private float timeSinceStart;
         private float timeSinceLastHint;
+        private float timeSinceObjectPlaced;
         private bool hintCycleStarted;
+
         private const float HintStartDelay = 5f;
         private const float HintCycleInterval = 20f;
+        private const float StartGameDelay = 2f;
 
         public GameFlowManager(
             WaveManager waveManager,
@@ -41,13 +45,16 @@ namespace Core
             towerSystem.OnFirstTowerPlaced += OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced += OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced += OnFirstObjectPlaced;
-            
+
             timeSinceStart = 0f;
             timeSinceLastHint = 0f;
+            timeSinceObjectPlaced = 0f;
             hintCycleStarted = false;
-            
+            gameStarted = false;
+            waitingToStart = false;
+
             TickManager.Instance.OnTick += Tick;
-            
+
             Debug.Log("GameFlowManager: Waiting for player action...");
         }
 
@@ -59,7 +66,17 @@ namespace Core
             var deltaTime = TickManager.Instance.tickInterval;
             timeSinceStart += deltaTime;
             timeSinceLastHint += deltaTime;
-            
+
+            if (waitingToStart)
+            {
+                timeSinceObjectPlaced += deltaTime;
+
+                if (timeSinceObjectPlaced >= StartGameDelay)
+                    StartTheGame();
+
+                return;
+            }
+
             if (!hintCycleStarted && timeSinceStart >= HintStartDelay)
             {
                 hintCycleStarted = true;
@@ -68,7 +85,7 @@ namespace Core
                 timeSinceLastHint = -hintUI.displayDuration;
                 Debug.Log("Hint cycle started");
             }
-            
+
             if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
             {
                 if (hintUI != null)
@@ -80,9 +97,20 @@ namespace Core
 
         private void OnFirstObjectPlaced()
         {
-            if (gameStarted)
+            if (gameStarted || waitingToStart)
                 return;
 
+            waitingToStart = true;
+            timeSinceObjectPlaced = 0f;
+
+            if (hintUI != null)
+                hintUI.HideHint();
+
+            Debug.Log($"First object placed. Starting game in {StartGameDelay}s...");
+        }
+
+        private void StartTheGame()
+        {
             gameStarted = true;
 
             TickManager.Instance.OnTick -= Tick;
@@ -91,11 +119,8 @@ namespace Core
             trapSystem.OnFirstTrapPlaced -= OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced -= OnFirstObjectPlaced;
 
-            if (hintUI != null)
-                hintUI.HideHint();
-
             waveManager.StartGame();
-            
+
             Debug.Log("GameFlowManager: Game started.");
         }
     }
