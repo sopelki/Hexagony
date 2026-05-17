@@ -68,6 +68,37 @@ namespace Logic.Castle
             SpawnUnitsFromBarracks();
         }
 
+
+        public bool TrySpendGold(int price)
+        {
+            if (Model.Gold < price)
+                return false;
+
+            Model.Gold -= price;
+            Model.Changed();
+            return true;
+        }
+
+        public void AddGold(int amount)
+        {
+            Model.Gold += amount;
+            Model.Changed();
+        }
+
+
+        public bool TryBuyBuilding(BuildingData data)
+        {
+            if (!TrySpendGold(data.baseCost))
+                return false;
+
+            var instance = new BuildingModel(data);
+            Model.Buildings.Add(instance);
+
+            ApplyBuff(data);
+
+            return true;
+        }
+
         private void SpawnUnitsFromBarracks()
         {
             var barracksCount = Model.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
@@ -113,24 +144,17 @@ namespace Logic.Castle
                 Model.Changed();
         }
 
-
-        public bool TryBuyBuilding(BuildingData data)
+        private void ApplyBuff(BuildingData data)
         {
-            if (!TrySpendGold(data.baseCost))
-                return false;
-
-            var instance = new BuildingModel(data);
-            Model.Buildings.Add(instance);
-
             switch (data.type)
             {
                 case BuildingType.Blacksmith:
-                    unitSystem.AddBuff(new AttackPercentBuff());
-                    Debug.Log("Blacksmith built: new units will get +25% health.");
+                    unitSystem.AddBuff(new AttackPercentBuff(data.buffValue));
+                    Debug.Log($"Blacksmith built: units get +{data.buffValue * 100}% attack.");
                     break;
                 case BuildingType.Hospital:
-                    unitSystem.AddBuff(new HealthPercentBuff());
-                    Debug.Log("Hospital built: new units will get +25% health.");
+                    unitSystem.AddBuff(new HealthPercentBuff(data.buffValue));
+                    Debug.Log($"Hospital built: units get +{data.buffValue * 100}% health.");
                     break;
                 case BuildingType.Farm:
                 case BuildingType.Barracks:
@@ -138,24 +162,6 @@ namespace Logic.Castle
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            return true;
-        }
-
-        public bool TrySpendGold(int price)
-        {
-            if (Model.Gold < price)
-                return false;
-
-            Model.Gold -= price;
-            Model.Changed();
-            return true;
-        }
-
-        public void AddGold(int amount)
-        {
-            Model.Gold += amount;
-            Model.Changed();
         }
     }
 }

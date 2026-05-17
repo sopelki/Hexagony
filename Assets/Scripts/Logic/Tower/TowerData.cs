@@ -28,7 +28,7 @@ namespace Logic.Tower
             var stats =
                 $"Урон: <color=#EF5350>{projectileData.damage}</color>\n" +
                 $"Целей: <color=#AB47BC>{targetsCount}</color>\n" +
-                $"Скорость: <color=#FFA726>{fireRate}</color>\n" +
+                $"Скорость: <color=#FFA726>{fireRate}с</color>\n" +
                 $"Дальность: <color=#26C6DA>{range}</color>";
 
             return new TooltipContent

@@ -10,6 +10,11 @@ namespace Logic.Castle
         public BuildingType type;
         public int baseProduction;
         public int baseCost;
+
+        [Header("Buff Settings")]
+        [Range(0f, 1f)]
+        public float buffValue = 0.25f;
+
         public GameObject viewPrefab;
 
         [TextArea]
@@ -19,7 +24,7 @@ namespace Logic.Castle
         [SerializeField]
         private string effectLabel = "Производство ресурсов";
 
-        [Tooltip("Replaces SpecialInfo field in filled")]
+        [Tooltip("Если заполнено, заменяет блок характеристик полностью")]
         [TextArea(2, 5)]
         [SerializeField]
         private string customSpecialInfo;
@@ -30,10 +35,15 @@ namespace Logic.Castle
                 ? string.Empty
                 : $"Цена: <color=#FFEE58>{baseCost} золота</color>";
 
-
-            var stats = !string.IsNullOrWhiteSpace(customSpecialInfo)
-                ? customSpecialInfo
-                : $"{effectLabel}: <color=#66BB6A>+{baseProduction}</color>";
+            string stats;
+            if (!string.IsNullOrWhiteSpace(customSpecialInfo))
+                stats = customSpecialInfo;
+            else
+            {
+                stats = type is BuildingType.Blacksmith or BuildingType.Hospital
+                    ? $"{effectLabel}: <color=#66BB6A>+{buffValue * 100f}%</color>"
+                    : $"{effectLabel}: <color=#66BB6A>+{baseProduction}</color>";
+            }
 
             return new TooltipContent
             {

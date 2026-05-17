@@ -1,5 +1,4 @@
 ﻿using Logic.Trap;
-using Logic.Trap.Logic.Trap;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
