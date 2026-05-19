@@ -276,6 +276,13 @@ namespace UI
             var cam = Camera.main;
             if (!cam || !mapViewport || !fieldTilemap)
                 return;
+            
+            if (!towerSystem.CanAffordTower(towerData))
+            {
+                targetScale = startScaleMultiplier;
+                targetColor = ghostInvalidColor; 
+                return; 
+            }
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     mapViewport, eventData.position, eventData.pressEventCamera, out var local))
@@ -293,9 +300,10 @@ namespace UI
 
             if (TryFindValidSlot(eventData, cellPos, out var slotPos))
             {
-                var isOccupied = towerSystem.IsCellOccupied(slotPos);
-                targetScale = isOccupied ? startScaleMultiplier : 1f;
-                targetColor = isOccupied ? ghostInvalidColor : ghostValidColor;
+                var isValid = towerSystem.CanPlaceTower(towerData, slotPos);
+
+                targetScale = isValid ? 1f : startScaleMultiplier;
+                targetColor = isValid ? ghostValidColor : ghostInvalidColor;
             }
             else
             {

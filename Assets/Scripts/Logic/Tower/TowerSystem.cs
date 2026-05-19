@@ -70,20 +70,32 @@ namespace Logic.Tower
                 }
             }
         }
+        
+        public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
+        {
+            if (IsCellOccupied(cellPos))
+                return false;
+
+            if (!CanAffordTower(data))
+                return false;
+
+            return true;
+        }
+        
+        public bool CanAffordTower(TowerData data)
+        {
+            return castleSystem.CanAfford(data.baseCost);
+        }
 
         public bool IsCellOccupied(Vector3Int cellPos) => towersModel.Towers.Any(t => t.GridPosition == cellPos);
 
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos)
         {
-            if (towersModel.Towers.Any(t => t.GridPosition == cellPos))
-            {
-                Debug.Log("Cell is occupied!");
+            if (!CanPlaceTower(data, cellPos))
                 return false;
-            }
-
-            if (!castleSystem.TrySpendGold(data.baseCost))
-                return false;
-
+            
+            
+            castleSystem.TrySpendGold(data.baseCost);
             var tower = new TowerModel(data, cellPos, worldPos);
             towersModel.AddTower(tower);
             

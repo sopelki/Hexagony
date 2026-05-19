@@ -72,8 +72,12 @@ namespace Logic.Castle
             spawnTimer = 0f;
             SpawnUnitsFromBarracks();
         }
-
-
+        
+        public bool CanAfford(int price)
+        {
+            return Model.Gold >= price;
+        }
+        
         public bool TrySpendGold(int price)
         {
             if (Model.Gold < price)
