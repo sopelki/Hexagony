@@ -15,7 +15,7 @@ namespace UI
         [Range(0.5f, 1f)]
         private float hoverScale = 0.85f;
 
-        private CastleSystem castleSystem;
+        private static CastleSystem castleSystem;
 
         public void Construct(CastleSystem system) => castleSystem = system;
 
@@ -86,7 +86,11 @@ namespace UI
         private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
         {
             if (draggingItem.IsFromShop)
-                return existingItem == null;
+            {
+                var isSlotEmpty = existingItem == null;
+                var canAfford = castleSystem.CanAfford(draggingItem.BuildingData.baseCost);
+                return isSlotEmpty && canAfford;
+            }
             
             return true;
         }
