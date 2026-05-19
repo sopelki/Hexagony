@@ -50,6 +50,11 @@ namespace Audio
         public AudioClip[] unitDamageSounds;
         [Range(0f, 1f)]
         public float unitDamageVolume = 0.6f;
+        
+        [Header("Castle damage Sounds")]
+        public AudioClip[] castleDamageSounds;
+        [Range(0f, 1f)]
+        public float castleDamageVolume = 0.8f;
 
         [Header("Background Music")]
         public AudioClip backgroundMusic;

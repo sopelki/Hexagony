@@ -113,7 +113,7 @@ namespace Core
             if (fieldGenerator != null)
                 fieldGenerator.Initialize(field);
 
-            castleModel = new CastleModel(startHp, startGold, startFood);
+            castleModel = new CastleModel(startHp, startGold, startFood, soundData);
             monsterSystem = new MonsterSystem();
             projectileSystem = new ProjectileSystem(monsterSystem, soundData);
             unitSystem = new UnitSystem(monsterSystem, field, tilemap, soundData);
