@@ -124,6 +124,16 @@ namespace UI
             currentScale = startScaleMultiplier;
             targetScale = startScaleMultiplier;
             targetColor = ghostValidColor;
+            
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)canvas.transform,
+                eventData.position,
+                eventData.pressEventCamera,
+                out var localPoint);
+
+            currentGhostPosition = localPoint;
+            targetGhostPosition = localPoint;
+            ghostRect.localPosition = currentGhostPosition;
 
             for (var i = 0; i < 3; i++)
             {
