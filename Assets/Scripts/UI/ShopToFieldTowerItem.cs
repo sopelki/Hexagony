@@ -281,7 +281,12 @@ namespace UI
 
             var basePosition = localPoint + ghostOffset;
 
-            if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
+            if (!towerSystem.CanAffordTower(towerData))
+            {
+                targetGhostPosition = basePosition;
+                isSnapping = false;
+            }
+            else if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
             {
                 targetGhostPosition = snapPosition;
                 isSnapping = true;
