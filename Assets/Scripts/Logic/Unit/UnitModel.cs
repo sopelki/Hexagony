@@ -2,6 +2,7 @@
 using System.Linq;
 using Interfaces;
 using UnityEngine;
+using Audio;
 
 namespace Logic.Unit
 {
@@ -11,10 +12,10 @@ namespace Logic.Unit
         public Vector2Int CurrentHex { get; private set; }
         public Vector3 CurrentDirection { get; set; }
         public int AttackType { get; set; }
-        // public float DirectionTimer { get; set; }
 
         private IMovementStrategy movementStrategy;
         private IAttackStrategy attackStrategy;
+        private readonly SoundData soundData;
 
         public UnitData UnitData { get; }
         private readonly List<Buff> buffs = new();
@@ -23,12 +24,13 @@ namespace Logic.Unit
         public int CurrentHealth { get; set; }
         public bool IsDead => CurrentHealth <= 0;
 
-        public UnitModel(Vector3 startPos, Vector2Int startHex, UnitData unitData)
+        public UnitModel(Vector3 startPos, Vector2Int startHex, UnitData unitData, SoundData soundData)
         {
             WorldPosition = startPos;
             CurrentHex = startHex;
             UnitData = unitData;
             CurrentHealth = unitData.maxHealth;
+            this.soundData = soundData;
         }
 
         public void SetStrategies(
@@ -79,9 +81,11 @@ namespace Logic.Unit
         {
             Debug.Log($"Unit got damaged: {damage}");
             CurrentHealth -= damage;
-        }
 
-        // public void Move(Vector3 direction, float step) => WorldPosition += direction * GetMoveSpeed() * step;
+            if (soundData != null && 
+                soundData.unitDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.unitDamageSounds, soundData.unitDamageVolume);
+        }
 
         public void SetHex(Vector2Int hex) => CurrentHex = hex;
 

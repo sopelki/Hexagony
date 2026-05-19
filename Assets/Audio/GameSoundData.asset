@@ -12,12 +12,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9373f305ab45e88306003a93445b28, type: 3}
   m_Name: GameSoundData
   m_EditorClassIdentifier: Assembly-CSharp::Audio.SoundData
-  towerPlaceSound: {fileID: 8300000, guid: 611255a0583684e49928d428fe7c86c0, type: 3}
-  trapPlaceSound: {fileID: 8300000, guid: 611255a0583684e49928d428fe7c86c0, type: 3}
-  buildingPlaceSound: {fileID: 8300000, guid: 611255a0583684e49928d428fe7c86c0, type: 3}
-  monsterAttackSound: {fileID: 8300000, guid: 9fc1b31c0728f9c4db471d64ab470a77, type: 3}
-  monsterDamageSound: {fileID: 0}
-  unitMeleeAttackSound: {fileID: 0}
-  unitRangeAttackSound: {fileID: 0}
-  unitDamageSound: {fileID: 0}
+  towerPlaceSound: {fileID: 8300000, guid: 9a997be0ff3388a4dbef75bfa0181b14, type: 3}
+  trapPlaceSound: {fileID: 8300000, guid: d4d5af712910ed04692bfbc74763a39e, type: 3}
+  buildingPlaceSound: {fileID: 8300000, guid: 86588df3d0100924ea263810b583a242, type: 3}
+  buildingPlacementVolume: 0.7
+  monsterDamageSounds:
+  - {fileID: 8300000, guid: e684d2c7d2882f14cac3868775e77d24, type: 3}
+  - {fileID: 8300000, guid: 82a0d044e1a2b1f449b7fd4766e7ed32, type: 3}
+  - {fileID: 8300000, guid: b89c473e20c797543b851e7d6b29768f, type: 3}
+  monsterDamageVolume: 0.6
+  monsterAttackSounds:
+  - {fileID: 8300000, guid: 95ae9ab659d884d44ad63a05d3263432, type: 3}
+  - {fileID: 8300000, guid: b6e1587f492800f4ba076f73a56cb9e5, type: 3}
+  - {fileID: 8300000, guid: 6a05c76afa37fec4a9ab7cc5ff064e61, type: 3}
+  monsterAttackVolume: 0.6
+  archerTowerShootSounds:
+  - {fileID: 8300000, guid: 86a82b0ddf0bd9043bfaf161bf2b4131, type: 3}
+  - {fileID: 8300000, guid: 82882693af6c11344a1614a053d8df94, type: 3}
+  archerShootVolume: 0.75
+  archerTowerHitSounds:
+  - {fileID: 8300000, guid: 0b359d7a4b53edb4f90d9d61e6579b2f, type: 3}
+  - {fileID: 8300000, guid: 3c9a6c0e941a87d40a36f396e64b148e, type: 3}
+  - {fileID: 8300000, guid: a72749647949f7946b89286bb4652fb7, type: 3}
+  archerHitVolume: 0.6
+  mageTowerShootSounds:
+  - {fileID: 8300000, guid: 26f64397a430a94499249659318ab4d5, type: 3}
+  - {fileID: 8300000, guid: a341f26a1e2a46947b3009bde7cea9e0, type: 3}
+  - {fileID: 8300000, guid: 0e0952e41e79d7a4fb81435f8b8c5562, type: 3}
+  mageShootVolume: 0.75
+  mageTowerHitSounds:
+  - {fileID: 8300000, guid: 9aef4cc7448eec54e9a2e121895c02b5, type: 3}
+  - {fileID: 8300000, guid: 3418614959fe2c34ebe1b4343831987c, type: 3}
+  mageHitVolume: 0.6
+  unitMeleeAttackSounds:
+  - {fileID: 8300000, guid: f786602a76cfc1a4081208b6d3054d01, type: 3}
+  - {fileID: 8300000, guid: 9e9c859028fd81f4c820922e83270b6e, type: 3}
+  - {fileID: 8300000, guid: 06a0a00b7afa4334cbb34bfce8757270, type: 3}
+  unitMeleeAttackVolume: 0.8
+  unitRangeAttackSounds:
+  - {fileID: 8300000, guid: 9412eca80a0531a42bf2baa8ba249f87, type: 3}
+  - {fileID: 8300000, guid: e42ec6b2b84fea04cbe12e7a18cc268f, type: 3}
+  - {fileID: 8300000, guid: 998514215b2dc9e4ca62021f23a555bf, type: 3}
+  unitRangeAttackVolume: 0.8
+  unitDamageSounds:
+  - {fileID: 8300000, guid: 474e8e1f42d9d6c46b06e419bf17b7e8, type: 3}
+  - {fileID: 8300000, guid: 0976006fc000e2442bc22983c987b2f6, type: 3}
+  - {fileID: 8300000, guid: a076b10bee019c745bed5644bed9e665, type: 3}
+  unitDamageVolume: 0.6
+  castleDamageSounds:
+  - {fileID: 8300000, guid: 271f541151cf0aa4c8f140ec1404ff09, type: 3}
+  - {fileID: 8300000, guid: 471e343eb40d00744a0b2c51083b7d3d, type: 3}
+  - {fileID: 8300000, guid: b0767d17ae579be4cbd9ce38e51adbde, type: 3}
+  - {fileID: 8300000, guid: 86588df3d0100924ea263810b583a242, type: 3}
+  - {fileID: 8300000, guid: 14f86c9f3f9e76d4b8475fd6dff5cbdd, type: 3}
+  - {fileID: 8300000, guid: 9404784c32614ae4da63877a68ffb18e, type: 3}
+  castleDamageVolume: 0.8
   backgroundMusic: {fileID: 8300000, guid: 3b1d538dccbd69d488bc032da714b0b4, type: 3}

@@ -28,7 +28,6 @@ namespace Logic.Unit
 
         public void Tick()
         {
-
             if (currentCooldown > 0f)
             {
                 currentCooldown -= Core.TickManager.Instance.tickInterval;
@@ -57,15 +56,17 @@ namespace Logic.Unit
             var distance = Vector3.Distance(closest.WorldPosition, unit.WorldPosition);
             var meleeRange = unit.UnitData.attackRadius * 0.5f;
             unit.AttackType = distance <= meleeRange ? 1 : 2;
-            
+
             if (soundData != null)
             {
-                if (distance <= meleeRange && soundData.unitMeleeAttackSound != null)
-                    AudioManager.Instance.PlaySfx(soundData.unitMeleeAttackSound, 0.8f);
-                else if (distance > meleeRange && soundData.unitRangeAttackSound != null)
-                    AudioManager.Instance.PlaySfx(soundData.unitRangeAttackSound, 0.8f);
+                if (distance <= meleeRange && 
+                    soundData.unitMeleeAttackSounds is { Length: > 0 })
+                    AudioManager.Instance.PlayRandomSfx(soundData.unitMeleeAttackSounds, soundData.unitMeleeAttackVolume);
+                else if (distance > meleeRange && 
+                         soundData.unitRangeAttackSounds is { Length: > 0 })
+                    AudioManager.Instance.PlayRandomSfx(soundData.unitRangeAttackSounds, soundData.unitRangeAttackVolume);
             }
-            
+
             foreach (var monster in targets)
                 monster.TakeDamage(unit.GetAttack());
 

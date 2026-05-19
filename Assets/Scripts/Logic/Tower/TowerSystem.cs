@@ -12,15 +12,15 @@ namespace Logic.Tower
     public class TowerSystem : Interfaces.ITickable
     {
         public event Action OnFirstTowerPlaced;
-        
+
         private readonly CastleSystem castleSystem;
         private readonly TowersModel towersModel;
         private readonly ProjectileSystem projectileSystem;
         private readonly MonsterSystem monsterSystem;
         private readonly SoundData soundData;
-        
+
         private bool firstTowerPlaced;
-        
+
         public TowerSystem(
             CastleSystem castleSystem,
             TowersModel towersModel,
@@ -98,22 +98,40 @@ namespace Logic.Tower
             castleSystem.TrySpendGold(data.baseCost);
             var tower = new TowerModel(data, cellPos, worldPos);
             towersModel.AddTower(tower);
-            
+
             if (soundData != null && soundData.towerPlaceSound != null)
                 AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
-            
+
             if (!firstTowerPlaced)
             {
                 firstTowerPlaced = true;
                 OnFirstTowerPlaced?.Invoke();
                 Debug.Log("First tower placed!. Game can start.");
             }
-            
+
             return true;
         }
 
         private void Shoot(TowerModel tower, MonsterModel target)
         {
+            AudioClip[] sound;
+            float volume;
+            
+            if (tower.Data.type == TowerType.Mage)
+            {
+                sound = soundData.mageTowerShootSounds;
+                volume = soundData.mageShootVolume;
+            }
+            else
+            {
+                sound = soundData.archerTowerShootSounds;
+                volume = soundData.archerShootVolume;
+            }
+
+            if (soundData != null &&
+                soundData.archerTowerShootSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(sound, volume);
+
             var firePoint = tower.WorldPosition +
                             new Vector3(tower.Data.projectileData.xOffset, tower.Data.projectileData.yOffset, 0);
 

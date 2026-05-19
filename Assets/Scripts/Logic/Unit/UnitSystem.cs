@@ -36,7 +36,7 @@ namespace Logic.Unit
 
         public void SpawnUnit(Vector3 worldPos, Vector2Int hexPos, UnitData stats)
         {
-            var unit = new UnitModel(worldPos, hexPos, stats);
+            var unit = new UnitModel(worldPos, hexPos, stats, soundData);
             
             foreach (var buff in buffs)
                 unit.AddBuff(buff);

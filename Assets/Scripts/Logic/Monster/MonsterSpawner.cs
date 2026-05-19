@@ -110,7 +110,8 @@ namespace Logic.Monster
                 data,
                 wave.healthMultiplier,
                 wave.damageMultiplier,
-                wave.speedMultiplier
+                wave.speedMultiplier,
+                soundData
             );
 
             var movement = new HexMoveToTargetStrategy(monster, field, tilemap, trapSystem);

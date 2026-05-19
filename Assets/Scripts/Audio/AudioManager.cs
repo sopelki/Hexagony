@@ -15,10 +15,10 @@ namespace Audio
         [Header("Volume Settings")]
         [SerializeField]
         [Range(0f, 1f)]
-        private float musicVolume = 0.7f;
+        private float musicVolume = 0.25f;
         [SerializeField]
         [Range(0f, 1f)]
-        private float sfxVolume = 0.8f;
+        private float sfxVolume = 1f;
 
         private void Awake()
         {
@@ -61,6 +61,18 @@ namespace Audio
             }
 
             sfxSource.PlayOneShot(clip, sfxVolume * volumeMultiplier);
+        }
+
+        public void PlayRandomSfx(AudioClip[] clips, float volumeMultiplier = 1f)
+        {
+            if (clips == null || clips.Length == 0)
+            {
+                Debug.LogWarning("AudioManager: AudioClip array is empty or null!");
+                return;
+            }
+
+            var randomClip = clips[Random.Range(0, clips.Length)];
+            PlaySfx(randomClip, volumeMultiplier);
         }
 
         public void SetMusicVolume(float volume)

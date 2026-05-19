@@ -106,7 +106,7 @@ namespace Logic.Castle
             ApplyBuff(data);
             
             if (soundData != null && soundData.buildingPlaceSound != null)
-                AudioManager.Instance.PlaySfx(soundData.buildingPlaceSound);
+                AudioManager.Instance.PlaySfx(soundData.buildingPlaceSound, soundData.buildingPlacementVolume);
 
             if (!firstBuildingPlaced)
             {

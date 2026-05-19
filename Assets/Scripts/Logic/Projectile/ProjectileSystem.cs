@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Audio;
 using Logic.Monster;
+using Logic.Tower;
 using UnityEngine;
 
 namespace Logic.Projectile
@@ -9,13 +11,15 @@ namespace Logic.Projectile
     {
         private readonly List<ProjectileModel> projectiles = new();
         private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
 
         public event Action<ProjectileModel> OnProjectileCreated;
         public event Action<ProjectileModel> OnProjectileDestroyed;
 
-        public ProjectileSystem(MonsterSystem monsterSystem)
+        public ProjectileSystem(MonsterSystem monsterSystem, SoundData soundData)
         {
             this.monsterSystem = monsterSystem;
+            this.soundData = soundData;
         }
 
         public void CreateProjectile(ProjectileModel projectile)
@@ -96,7 +100,11 @@ namespace Logic.Projectile
             if (p.Data.aoeRadius <= 0f)
             {
                 if (!p.Target.IsDead)
+                {
                     p.Target.TakeDamage(p.Data.damage);
+                    PlayHitSound(p.Data.isHoming);
+                }
+
                 return;
             }
 
@@ -110,10 +118,34 @@ namespace Logic.Projectile
 
                 if (!(dist <= p.Data.aoeRadius))
                     continue;
+
                 Debug.Log("ApplyDamage: " + p.Data.damage);
                 monster.TakeDamage(p.Data.damage);
+                PlayHitSound(p.Data.isHoming);
             }
         }
+
+        private void PlayHitSound(bool isHoming)
+        {
+            AudioClip[] sound;
+            float volume;
+            
+            if (isHoming)
+            {
+                sound = soundData.mageTowerHitSounds;
+                volume = soundData.mageHitVolume;
+            }
+            else
+            {
+                sound = soundData.archerTowerHitSounds;
+                volume = soundData.archerHitVolume;
+            }
+
+            if (soundData != null &&
+                soundData.archerTowerHitSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(sound, volume);
+        }
+
 
         private void Remove(int index)
         {

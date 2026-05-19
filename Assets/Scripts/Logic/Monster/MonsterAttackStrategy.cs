@@ -18,8 +18,10 @@ namespace Logic.Monster
 
         public bool IsAttacking => currentTarget != null;
 
-
-        public MonsterAttackStrategy(MonsterModel monsterModel, UnitSystem unitSystem, SoundData soundData)
+        public MonsterAttackStrategy(
+            MonsterModel monsterModel,
+            UnitSystem unitSystem,
+            SoundData soundData)
         {
             this.monsterModel = monsterModel;
             this.unitSystem = unitSystem;
@@ -48,7 +50,8 @@ namespace Logic.Monster
                         .First();
                 }
 
-                if (currentTarget.IsDead || Vector3.Distance(targetPos, monsterModel.WorldPosition) > monsterModel.AttackRadius)
+                if (currentTarget.IsDead ||
+                    Vector3.Distance(targetPos, monsterModel.WorldPosition) > monsterModel.AttackRadius)
                     currentTarget = null;
             }
 
@@ -83,9 +86,9 @@ namespace Logic.Monster
                 currentCooldown -= Core.TickManager.Instance.tickInterval;
                 return;
             }
-            
-            if (soundData != null && soundData.monsterAttackSound != null)
-                AudioManager.Instance.PlaySfx(soundData.monsterAttackSound, 0.7f);
+
+            if (soundData != null && soundData.monsterAttackSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.monsterAttackSounds, soundData.monsterAttackVolume);
 
             currentTarget.TakeDamage(monsterModel.Damage);
             currentCooldown = monsterModel.AttackCooldown;

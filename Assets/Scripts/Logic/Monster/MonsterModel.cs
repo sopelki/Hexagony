@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Audio;
+using Core;
 using UnityEngine;
 using Interfaces;
 
@@ -29,6 +30,7 @@ namespace Logic.Monster
 
         private IMovementStrategy movementStrategy;
         private IAttackStrategy attackStrategy;
+        private readonly SoundData soundData;
 
         public MonsterModel(
             Vector3 startWorldPos,
@@ -36,7 +38,8 @@ namespace Logic.Monster
             MonsterData data,
             float healthMultiplier,
             float damageMultiplier,
-            float speedMultiplier)
+            float speedMultiplier,
+            SoundData soundData)
         {
             WorldPosition = startWorldPos;
             CurrentHex = startHex;
@@ -52,6 +55,8 @@ namespace Logic.Monster
             DebuffSystem = new MonsterDebuffSystem(this);
 
             currentHealth = MaxHealth;
+            
+            this.soundData = soundData;
         }
 
         public void Tick()
@@ -83,7 +88,14 @@ namespace Logic.Monster
 
         public void SetHex(Vector2Int hex) => CurrentHex = hex;
 
-        public void TakeDamage(int damage) => currentHealth -= damage;
+        public void TakeDamage(int damage)
+        {
+            currentHealth -= damage;
+            
+            if (soundData != null && 
+                soundData.monsterDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
+        }
 
         public void SetStrategies(IMovementStrategy movement, IAttackStrategy attack)
         {
