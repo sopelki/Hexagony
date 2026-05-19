@@ -1,4 +1,5 @@
-﻿using Logic.Trap;
+﻿using System.Collections;
+using Logic.Trap;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -49,12 +50,24 @@ namespace UI
         private float targetScale;
         [SerializeField]
         private float validSizeScale = 1f;
-        
+
         [Header("Animation & Speeds")]
-        [SerializeField] private float snapSpeed = 20f;
-        [SerializeField] private float unSnapSpeed = 15f;
-        [SerializeField] private Vector2 ghostOffset = Vector2.zero;
-        
+        [SerializeField]
+        private float snapSpeed = 20f;
+        [SerializeField]
+        private float unSnapSpeed = 15f;
+        [SerializeField]
+        private Vector2 ghostOffset = Vector2.zero;
+
+        [Header("Slot Feedback")]
+        [SerializeField]
+        private Image iconImage;
+        [SerializeField]
+        private float fadeDuration = 0.1f;
+
+        private CanvasGroup iconCanvasGroup;
+        private Coroutine fadeCoroutine;
+
         private Vector2 targetGhostPosition;
         private Vector2 currentGhostPosition;
         private bool isSnapping;
@@ -82,10 +95,25 @@ namespace UI
 
             var trigger = gameObject.AddComponent<TooltipTrigger>();
             trigger.SetContent(trapData);
+
+            if (iconImage != null)
+            {
+                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+                if (iconCanvasGroup == null)
+                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (iconCanvasGroup != null)
+            {
+                if (fadeCoroutine != null)
+                    StopCoroutine(fadeCoroutine);
+
+                iconCanvasGroup.alpha = 0f;
+            }
+
             if (trapSystem == null)
                 return;
 
@@ -100,7 +128,7 @@ namespace UI
             ghostImage.sprite = prefabRenderer.sprite;
             ghostImage.preserveAspect = true;
             ghostImage.raycastTarget = false;
-            
+
             var sprite = prefabRenderer.sprite;
             ghostRect.pivot = new Vector2(0.5f, 0.5f);
 
@@ -118,13 +146,13 @@ namespace UI
 
                 ghostRect.sizeDelta = spriteSize * pixelsPerUnit / canvas.scaleFactor;
             }
-            
+
             ghostRect.anchorMin = ghostRect.anchorMax = new Vector2(0.5f, 0.5f);
 
             currentScale = startScaleMultiplier;
             targetScale = startScaleMultiplier;
             targetColor = ghostValidColor;
-            
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 (RectTransform)canvas.transform,
                 eventData.position,
@@ -161,7 +189,14 @@ namespace UI
         private void UpdatePlacementFeedback(PointerEventData eventData)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform, eventData.position, eventData.pressEventCamera, out var mouseLocalPoint);
+                (RectTransform)canvas.transform,
+                eventData.position,
+                eventData.pressEventCamera,
+                out var mouseLocalPoint);
+
+            targetGhostPosition = mouseLocalPoint + ghostOffset;
+            isSnapping = false;
+
             if (TryGetCellUnderMouse(eventData, out var cellPos))
             {
                 var axial = HexagonScripts.HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
@@ -169,50 +204,45 @@ namespace UI
 
                 targetColor = isValid ? ghostValidColor : ghostInvalidColor;
                 targetScale = isValid ? validSizeScale : startScaleMultiplier;
-                
-                var hexObj = field.GetHex(axial);
-                
-                // Используем наш новый точный метод через Tilemap и Viewport!
-                if (hexObj != null && isValid && TryGetSlotCanvasPosition(hexObj.offset, eventData, out var snappedCanvasPos))
-                {
-                    targetGhostPosition = snappedCanvasPos + ghostOffset;
-                    isSnapping = true;
-                }
-                else
-                {
-                    // Если место занято или нет денег - просто следуем за мышкой
-                    targetGhostPosition = mouseLocalPoint + ghostOffset;
-                    isSnapping = false;
-                }
 
-                var hexes = trapSystem.GetTrapOccupiedHexes(axial);
-                for (var i = 0; i < highlights.Count; i++)
-                {
-                    if (i >= hexes.Count)
-                    {
-                        highlights[i].SetActive(false);
-                        continue;
-                    }
-
-                    var hObj = field.GetHex(hexes[i]);
-                    if (hObj != null)
-                    {
-                        highlights[i].SetActive(true);
-                        var hWorldPos = fieldTilemap.GetCellCenterWorld(hObj.offset);
-                        hWorldPos.z = -0.5f;
-                        highlights[i].transform.position = hWorldPos;
-
-                        if (highlights[i].TryGetComponent<SpriteRenderer>(out var sr))
-                            sr.color = isValid ? highlightValidColor : highlightInvalidColor;
-                    }
-                    else highlights[i].SetActive(false);
-                }
+                UpdateHighlights(axial, isValid);
             }
             else
             {
                 targetColor = ghostInvalidColor;
                 targetScale = startScaleMultiplier;
                 highlights.ForEach(h => h.SetActive(false));
+            }
+        }
+        
+        private void UpdateHighlights(Vector2Int axial, bool isValid)
+        {
+            var hexes = trapSystem.GetTrapOccupiedHexes(axial);
+
+            for (var i = 0; i < highlights.Count; i++)
+            {
+                if (i >= hexes.Count)
+                {
+                    highlights[i].SetActive(false);
+                    continue;
+                }
+
+                var hexObj = field.GetHex(hexes[i]);
+                if (hexObj != null)
+                {
+                    highlights[i].SetActive(true);
+
+                    var worldPos = fieldTilemap.GetCellCenterWorld(hexObj.offset);
+                    worldPos.z = -0.5f;
+                    highlights[i].transform.position = worldPos;
+
+                    if (highlights[i].TryGetComponent<SpriteRenderer>(out var sr))
+                        sr.color = isValid ? highlightValidColor : highlightInvalidColor;
+                }
+                else
+                {
+                    highlights[i].SetActive(false);
+                }
             }
         }
 
@@ -246,12 +276,14 @@ namespace UI
                 return;
             if (isSnapping)
             {
-                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * snapSpeed);
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * snapSpeed);
                 wasSnapping = true;
             }
             else if (wasSnapping)
             {
-                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * unSnapSpeed);
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * unSnapSpeed);
                 if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
                     wasSnapping = false;
             }
@@ -273,6 +305,29 @@ namespace UI
 
             if (ghost != null) Destroy(ghost);
             ClearHighlights();
+
+            if (iconCanvasGroup != null)
+            {
+                if (fadeCoroutine != null)
+                    StopCoroutine(fadeCoroutine);
+
+                fadeCoroutine = StartCoroutine(FadeInIcon());
+            }
+        }
+
+        private IEnumerator FadeInIcon()
+        {
+            var elapsed = 0f;
+
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                iconCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+                yield return null;
+            }
+
+            iconCanvasGroup.alpha = 1f;
+            fadeCoroutine = null;
         }
 
         private void ClearHighlights()
@@ -282,8 +337,9 @@ namespace UI
 
             highlights.Clear();
         }
-        
-        private bool TryGetSlotCanvasPosition(Vector3Int slotCell, PointerEventData eventData, out Vector2 canvasPosition)
+
+        private bool TryGetSlotCanvasPosition(Vector3Int slotCell, PointerEventData eventData,
+            out Vector2 canvasPosition)
         {
             canvasPosition = Vector2.zero;
             var cam = Camera.main;
