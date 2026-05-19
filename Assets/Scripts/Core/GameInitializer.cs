@@ -215,14 +215,6 @@ namespace Core
             );
 
             gameFlowManager.Initialize();
-            
-            if (soundData != null && soundData.backgroundMusic != null)
-            {
-                AudioManager.Instance.PlayMusic(soundData.backgroundMusic);
-                Debug.Log("Background music started");
-            }
-            else
-                Debug.LogWarning("SoundData or background music clip is missing!");
         }
     }
 }

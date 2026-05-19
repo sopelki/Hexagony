@@ -67,4 +67,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 14f86c9f3f9e76d4b8475fd6dff5cbdd, type: 3}
   - {fileID: 8300000, guid: 9404784c32614ae4da63877a68ffb18e, type: 3}
   castleDamageVolume: 0.8
-  backgroundMusic: {fileID: 8300000, guid: 3b1d538dccbd69d488bc032da714b0b4, type: 3}
+  backgroundMusic: {fileID: 8300000, guid: f69401d9337f8f74ebbdd23951da8994, type: 3}

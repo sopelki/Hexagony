@@ -18,7 +18,7 @@ namespace Audio
         private float musicVolume = 0.25f;
         [SerializeField]
         [Range(0f, 1f)]
-        private float sfxVolume = 1f;
+        private float sfxVolume = 0.8f;
 
         private void Awake()
         {
