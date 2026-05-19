@@ -20627,7 +20627,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 895813766122179846, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Name
-      value: FieldShopTrapSlot (2)
+      value: TrapShopSlot
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: canvas
@@ -20653,10 +20653,14 @@ PrefabInstance:
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
+    - target: {fileID: 3527780305968954717, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7912549542613383710, guid: 5d2cf2cb0fb89bd4ab75c0980c1c5680, type: 3}
     - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 6368796556325787434, guid: 44efd881e1f66f64aa5de89e9bfda808, type: 3}
+      objectReference: {fileID: 7912549542613383710, guid: 5d2cf2cb0fb89bd4ab75c0980c1c5680, type: 3}
     - target: {fileID: 8050700227806902550, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -26490,7 +26494,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 895813766122179846, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Name
-      value: FieldShopTrapSlot (1)
+      value: SpikesShopSlot
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: canvas
@@ -28839,7 +28843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 895813766122179846, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Name
-      value: FieldShopTrapSlot
+      value: VineShopSlot
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: canvas
@@ -28865,10 +28869,14 @@ PrefabInstance:
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
+    - target: {fileID: 3527780305968954717, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3486939950096845021, guid: 9fe9078f879fa1c4690b126ef37ac6da, type: 3}
     - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1493294192905300667, guid: d8577a596eeb54c4bb4490c9d04f9103, type: 3}
+      objectReference: {fileID: 3486939950096845021, guid: 9fe9078f879fa1c4690b126ef37ac6da, type: 3}
     - target: {fileID: 8050700227806902550, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
