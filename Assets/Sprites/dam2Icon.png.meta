@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 69597a06618ef4848a8e070eda1915b1
+guid: b45cf23a62a479b4782a60f1f84ad45b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9200374244353985709
-    second: kapKontur-1.png_0
+      213: 4952936439075374402
+    second: trap1.2-3.png (1)_0
+  - first:
+      213: 4060983669312750106
+    second: trap1.2-3.png (1)_1
+  - first:
+      213: 7522524881230023233
+    second: trap1.2-3.png (1)_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kapKontur-1.png_0
+      name: trap1.2-3.png (1)_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 0
-        width: 34
-        height: 36
+        x: 16
+        y: 12
+        width: 30
+        height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dac4f5b21ab4eaf70800000000000000
-      internalID: 9200374244353985709
+      spriteID: 2450d26137d5cb440800000000000000
+      internalID: 4952936439075374402
       vertices: []
       indices: 
       edges: []
@@ -138,7 +144,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 68a0bf3f250a74c45b1d0971193e8e1b
+    spriteID: 71f903acca611124b8194b4be7ca8806
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +152,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      kapKontur-1.png_0: 9200374244353985709
+      trap1.2-3.png (1)_0: 4952936439075374402
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
