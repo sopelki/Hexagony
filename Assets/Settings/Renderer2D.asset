@@ -16,16 +16,16 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     psxColorDepth: 6
-    psxDitherIntensity: 0.75
-    psxPosterization: 0.64
+    psxDitherIntensity: 0.85
+    psxPosterization: 0.6
     psxResolutionScale: 1
-    psxSaturationBoost: 1.1
+    psxSaturationBoost: 1.15
     psxDarkening: 0
     colorBleedIntensity: 0.1
     chromaticShift: 0
     verticalBlur: 0.5
     vhsTracking: 0
-    signalNoise: 0.002
+    signalNoise: 0.003
     colorTemperature: 0.2
     pixelPerfectSnapping: 0.5
     paletteReduction: 0

@@ -1,4 +1,5 @@
-﻿using Logic.Tower;
+﻿using System.Collections;
+using Logic.Tower;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -51,6 +52,15 @@ namespace UI
         [SerializeField]
         private TowerData towerData;
 
+        [Header("Slot Feedback")]
+        [SerializeField]
+        private Image iconImage;
+        [SerializeField]
+        private float fadeDuration = 0.1f;
+
+        private CanvasGroup iconCanvasGroup;
+        private Coroutine fadeCoroutine;
+
         private TowerSystem towerSystem;
         private GameObject ghost;
         private RectTransform ghostRect;
@@ -75,10 +85,25 @@ namespace UI
 
             var trigger = gameObject.AddComponent<TooltipTrigger>();
             trigger.SetContent(towerData);
+
+            if (iconImage != null)
+            {
+                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+                if (iconCanvasGroup == null)
+                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (iconCanvasGroup != null)
+            {
+                if (fadeCoroutine != null)
+                    StopCoroutine(fadeCoroutine);
+
+                iconCanvasGroup.alpha = 0f;
+            }
+
             if (TryGetComponent<TooltipTrigger>(out var trigger))
                 trigger.StopDisplay();
 
@@ -115,30 +140,15 @@ namespace UI
             if (ghost != null)
                 Destroy(ghost);
 
-            var cam = Camera.main;
-            if (cam == null || mapViewport == null || fieldTilemap == null)
-                return;
+            TryPlaceTower(eventData);
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
-                return;
+            if (iconCanvasGroup != null)
+            {
+                if (fadeCoroutine != null)
+                    StopCoroutine(fadeCoroutine);
 
-            var u = local.x / mapViewport.rect.width + 0.5f;
-            var v = local.y / mapViewport.rect.height + 0.5f;
-            if (u < 0f || u > 1f || v < 0f || v > 1f)
-                return;
-
-            var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
-            var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
-            var cellPos = fieldTilemap.WorldToCell(worldPos);
-
-            if (!TryFindValidSlot(eventData, cellPos, out var closestSlotPos))
-                return;
-
-            var spawnPos = fieldTilemap.GetCellCenterWorld(closestSlotPos);
-            spawnPos.z = fieldTilemap.transform.position.z;
-
-            towerSystem.TryPlaceTower(towerData, closestSlotPos, spawnPos);
+                fadeCoroutine = StartCoroutine(FadeInIcon());
+            }
         }
 
         private void Update()
@@ -179,6 +189,49 @@ namespace UI
                 targetColor,
                 Time.deltaTime * colorLerpSpeed
             );
+        }
+
+        private void TryPlaceTower(PointerEventData eventData)
+        {
+            var cam = Camera.main;
+            if (cam == null || mapViewport == null || fieldTilemap == null)
+                return;
+
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
+                return;
+
+            var u = local.x / mapViewport.rect.width + 0.5f;
+            var v = local.y / mapViewport.rect.height + 0.5f;
+            if (u < 0f || u > 1f || v < 0f || v > 1f)
+                return;
+
+            var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
+            var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
+            var cellPos = fieldTilemap.WorldToCell(worldPos);
+
+            if (!TryFindValidSlot(eventData, cellPos, out var closestSlotPos))
+                return;
+
+            var spawnPos = fieldTilemap.GetCellCenterWorld(closestSlotPos);
+            spawnPos.z = fieldTilemap.transform.position.z;
+
+            towerSystem.TryPlaceTower(towerData, closestSlotPos, spawnPos);
+        }
+
+        private IEnumerator FadeInIcon()
+        {
+            var elapsed = 0f;
+
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                iconCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+                yield return null;
+            }
+
+            iconCanvasGroup.alpha = 1f;
+            fadeCoroutine = null;
         }
 
         private void CreateGhost(SpriteRenderer prefabRenderer)
@@ -228,7 +281,12 @@ namespace UI
 
             var basePosition = localPoint + ghostOffset;
 
-            if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
+            if (!towerSystem.CanAffordTower(towerData))
+            {
+                targetGhostPosition = basePosition;
+                isSnapping = false;
+            }
+            else if (enableSnapping && TryGetSnapPosition(eventData, basePosition, out var snapPosition))
             {
                 targetGhostPosition = snapPosition;
                 isSnapping = true;
@@ -276,12 +334,12 @@ namespace UI
             var cam = Camera.main;
             if (!cam || !mapViewport || !fieldTilemap)
                 return;
-            
+
             if (!towerSystem.CanAffordTower(towerData))
             {
                 targetScale = startScaleMultiplier;
-                targetColor = ghostInvalidColor; 
-                return; 
+                targetColor = ghostInvalidColor;
+                return;
             }
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(

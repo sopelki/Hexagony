@@ -1,3 +1,4 @@
+using System;
 using Logic.Castle;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,8 @@ namespace UI
     [RequireComponent(typeof(Image))]
     public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
+        public event Action OnDropped;
+
         [Header("Data")]
         [SerializeField]
         private BuildingData buildingData;
@@ -16,17 +19,14 @@ namespace UI
         [Header("Visual Settings")]
         [SerializeField]
         private float scaleSpeed = 30f;
-
         [SerializeField]
         private float colorLerpSpeed = 15f;
-
         [SerializeField]
         [Range(0f, 1f)]
         private float draggingAlpha = 0.8f;
 
         private Vector3 originalScale;
         private Vector3 targetScale;
-
         private CanvasGroup canvasGroup;
         private Image itemImage;
         private CastleDragHandler dragHandler;
@@ -48,26 +48,18 @@ namespace UI
 
             originalScale = transform.localScale;
             targetScale = originalScale;
-
             originalColor = itemImage.color;
-            normalDraggingColor = new Color(
-                originalColor.r,
-                originalColor.g,
-                originalColor.b,
-                draggingAlpha
-            );
+            normalDraggingColor = new Color(originalColor.r, originalColor.g, originalColor.b, draggingAlpha);
             invalidColor = new Color(1f, 0.6f, 0.6f, draggingAlpha);
             targetColor = originalColor;
         }
 
         public void SetDraggingScale(float multiplier) => targetScale = originalScale * multiplier;
-
         public void SetValidationState(bool isValid) => targetColor = isValid ? normalDraggingColor : invalidColor;
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             GetComponent<TooltipTrigger>()?.StopDisplay();
-
             canvasGroup.blocksRaycasts = false;
             targetColor = invalidColor;
 
@@ -81,10 +73,12 @@ namespace UI
             targetColor = originalColor;
             canvasGroup.blocksRaycasts = true;
 
+            OnDropped?.Invoke();
+
             if (transform.parent != dragHandler.MainCanvas.transform)
                 return;
 
-            if (IsFromShop)
+            if (IsFromShop) 
                 Destroy(gameObject);
             else
                 ReturnToStart();
@@ -92,34 +86,15 @@ namespace UI
 
         private void Update()
         {
-            if (transform.localScale != targetScale)
-            {
-                transform.localScale = Vector3.Lerp(
-                    transform.localScale,
-                    targetScale,
-                    Time.deltaTime * scaleSpeed
-                );
-            }
-
-            if (itemImage.color != targetColor)
-            {
-                itemImage.color = Color.Lerp(
-                    itemImage.color,
-                    targetColor,
-                    Time.deltaTime * colorLerpSpeed
-                );
-            }
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
+            itemImage.color = Color.Lerp(itemImage.color, targetColor, Time.deltaTime * colorLerpSpeed);
         }
 
         public void SetData(BuildingData data, bool fromShop)
         {
             buildingData = data;
             IsFromShop = fromShop;
-
-            var trigger = GetComponent<TooltipTrigger>();
-            if (trigger == null)
-                trigger = gameObject.AddComponent<TooltipTrigger>();
-
+            var trigger = GetComponent<TooltipTrigger>() ?? gameObject.AddComponent<TooltipTrigger>();
             trigger.SetContent(buildingData, true);
         }
 
@@ -128,8 +103,6 @@ namespace UI
             transform.SetParent(slot);
             dragHandler.ResetPosition();
             IsFromShop = false;
-
-            itemImage.color = originalColor;
             targetColor = originalColor;
         }
 
@@ -142,9 +115,12 @@ namespace UI
         private void ReturnToStart()
         {
             transform.SetParent(OriginalParent);
-
-            if (dragHandler != null)
-                dragHandler.ResetPosition();
+            dragHandler?.ResetPosition();
+        }
+        
+        private void OnDestroy()
+        {
+            OnDropped?.Invoke();
         }
     }
 }

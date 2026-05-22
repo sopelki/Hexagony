@@ -98,6 +98,8 @@ MonoBehaviour:
   snapSpeed: 25
   unSnapSpeed: 25
   towerData: {fileID: 0}
+  iconImage: {fileID: 5749159570408318314}
+  fadeDuration: 0.1
 --- !u!222 &899378862108174943
 CanvasRenderer:
   m_ObjectHideFlags: 0

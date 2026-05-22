@@ -104,6 +104,11 @@ MonoBehaviour:
   highlightInvalidColor: {r: 0.6603774, g: 0, b: 0, a: 0.7529412}
   targetScale: 0
   validSizeScale: 0.5
+  snapSpeed: 20
+  unSnapSpeed: 15
+  ghostOffset: {x: 0, y: 0}
+  iconImage: {fileID: 5749159570408318314}
+  fadeDuration: 0.1
 --- !u!1 &1993169984352487858
 GameObject:
   m_ObjectHideFlags: 0

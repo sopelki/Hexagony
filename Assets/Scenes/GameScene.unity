@@ -25412,7 +25412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c29f9f5e824db59abe49db5b2024fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.GameInitializer
-  startGold: 300
+  startGold: 100
   startFood: 100
   startHp: 500
   castleUI: {fileID: 998659908}
