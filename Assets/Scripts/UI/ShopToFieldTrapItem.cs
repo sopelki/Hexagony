@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using Logic.Trap;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -204,6 +204,20 @@ namespace UI
 
                 targetColor = isValid ? ghostValidColor : ghostInvalidColor;
                 targetScale = isValid ? validSizeScale : startScaleMultiplier;
+
+                var hexObj = field.GetHex(axial);
+
+                if (hexObj != null && isValid &&
+                    TryGetSlotCanvasPosition(hexObj.offset, eventData, out var snappedCanvasPos))
+                {
+                    targetGhostPosition = snappedCanvasPos + ghostOffset;
+                    isSnapping = true;
+                }
+                else
+                {
+                    targetGhostPosition = mouseLocalPoint + ghostOffset;
+                    isSnapping = false;
+                }
 
                 UpdateHighlights(axial, isValid);
             }
