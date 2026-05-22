@@ -5,6 +5,8 @@ namespace View
 {
     public class MonsterView : MonoBehaviour
     {
+        private static readonly int moveX = Animator.StringToHash("MoveX");
+        private static readonly int moveY = Animator.StringToHash("MoveY");
         private MonsterModel model;
         private Vector3 previousPosition;
         
@@ -47,7 +49,7 @@ namespace View
         
         private void Update()
         {
-            if (animator == null) return;
+            if (!animator) return;
 
             // Плавно перетекаем из текущего направления в целевое
             currentSmoothDirection = Vector2.Lerp(
@@ -57,8 +59,8 @@ namespace View
             );
 
             // Отправляем в аниматор уже сглаженные значения
-            animator.SetFloat("MoveX", currentSmoothDirection.x);
-            animator.SetFloat("MoveY", currentSmoothDirection.y);
+            animator.SetFloat(moveX, currentSmoothDirection.x);
+            animator.SetFloat(moveY, currentSmoothDirection.y);
         }
         
         // private void UpdateDirection(Vector3 direction)

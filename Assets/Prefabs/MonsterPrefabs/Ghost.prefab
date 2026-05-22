@@ -79,9 +79,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1977738689
-  m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingLayerID: 1841721055
+  m_SortingLayer: 3
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1760256145, guid: 1ad25efa9bcbbb147a83f633c8c69c72, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.MonsterView
   animator: {fileID: 6741280003670567019}
+  smoothingSpeed: 10
 --- !u!95 &6741280003670567019
 Animator:
   serializedVersion: 7
