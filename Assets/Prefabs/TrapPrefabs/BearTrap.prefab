@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 2931742901230349991}
   - component: {fileID: 3901183718884541313}
   m_Layer: 0
-  m_Name: kontur
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

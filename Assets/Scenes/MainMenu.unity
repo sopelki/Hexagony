@@ -790,8 +790,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Audio.AudioManager
   musicSource: {fileID: 669032553}
   sfxSource: {fileID: 669032552}
-  musicVolume: 0.1
-  sfxVolume: 0.6
+  musicVolume: 0.05
+  sfxVolume: 0.2
 --- !u!4 &669032555
 Transform:
   m_ObjectHideFlags: 0

@@ -254,9 +254,7 @@ namespace UI
                         sr.color = isValid ? highlightValidColor : highlightInvalidColor;
                 }
                 else
-                {
                     highlights[i].SetActive(false);
-                }
             }
         }
 
@@ -352,30 +350,30 @@ namespace UI
             highlights.Clear();
         }
 
-        private bool TryGetSlotCanvasPosition(Vector3Int slotCell, PointerEventData eventData,
-            out Vector2 canvasPosition)
-        {
-            canvasPosition = Vector2.zero;
-            var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return false;
-
-            var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
-            var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
-
-            var slotLocalInViewport = new Vector2(
-                (slotViewport.x - 0.5f) * mapViewport.rect.width,
-                (slotViewport.y - 0.5f) * mapViewport.rect.height
-            );
-
-            var slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
-                mapViewport.TransformPoint(slotLocalInViewport));
-
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                slotScreenPos,
-                eventData.pressEventCamera,
-                out canvasPosition);
-        }
+        // private bool TryGetSlotCanvasPosition(Vector3Int slotCell, PointerEventData eventData,
+        //     out Vector2 canvasPosition)
+        // {
+        //     canvasPosition = Vector2.zero;
+        //     var cam = Camera.main;
+        //     if (!cam || !mapViewport || !fieldTilemap)
+        //         return false;
+        //
+        //     var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
+        //     var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
+        //
+        //     var slotLocalInViewport = new Vector2(
+        //         (slotViewport.x - 0.5f) * mapViewport.rect.width,
+        //         (slotViewport.y - 0.5f) * mapViewport.rect.height
+        //     );
+        //
+        //     var slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
+        //         mapViewport.TransformPoint(slotLocalInViewport));
+        //
+        //     return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        //         (RectTransform)canvas.transform,
+        //         slotScreenPos,
+        //         eventData.pressEventCamera,
+        //         out canvasPosition);
+        // }
     }
 }
