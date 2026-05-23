@@ -27,6 +27,8 @@ namespace View
             this.visualOffset = new Vector3(0, model.Data.visualOffsetY, 0);
         }
 
+        private static readonly int isMovingHash = Animator.StringToHash("IsMoving");
+
         public void UpdateView()
         {
             var logicalPosition = model.WorldPosition;
@@ -34,7 +36,13 @@ namespace View
 
             transform.position = logicalPosition + visualOffset;
 
-            if (direction.sqrMagnitude > 0.0001f)
+            // IsMoving для Юли Курановой
+            // "Добавьте параметр типа Bool с именем IsMoving.
+            // В переходах (Transitions) между Idle и Walk используйте этот параметр."
+            var isMoving = direction.sqrMagnitude > 0.0001f;
+            animator.SetBool(isMovingHash, isMoving);
+
+            if (isMoving)
             {
                 targetDirection = new Vector2(direction.x, direction.y).normalized;
                 previousPosition = logicalPosition;
