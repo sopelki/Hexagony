@@ -48,6 +48,9 @@ TagManager:
   - name: Units
     uniqueID: 2317228607
     locked: 0
+  - name: Trap
+    uniqueID: 290984539
+    locked: 0
   - name: Buildings
     uniqueID: 1841721055
     locked: 0

@@ -11,7 +11,6 @@ using View;
 using UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using View.View;
 
 namespace Core
 {
