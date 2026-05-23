@@ -73,12 +73,11 @@ namespace Logic.Projectile
 
         private void UpdateHoming(ProjectileModel p, float step, int index)
         {
-            var dir = (p.Target.WorldPosition - p.Position).normalized;
+            var dir = ( p.Target.HitPosition - p.Position).normalized;
 
             p.Position += dir * p.Data.speed * step;
 
-            var dist =
-                Vector3.Distance(p.Position, p.Target.WorldPosition);
+            var dist = Vector3.Distance(p.Position,  p.Target.HitPosition);
 
             if (dist <= 0.2f)
             {

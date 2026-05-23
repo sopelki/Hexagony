@@ -137,7 +137,7 @@ namespace Logic.Tower
 
             var interceptPoint = CalculateInterceptPoint(
                 firePoint,
-                target.WorldPosition,
+                target.HitPosition,
                 target.CurrentVelocity,
                 tower.Data.projectileData.speed
             );

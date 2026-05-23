@@ -46,6 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.ProjectileView
   spriteRenderer: {fileID: 8566803457089493999}
+  animationFrames:
+  - {fileID: 4211761467620165101, guid: dcc22b7c2ccb4b544a34733ee29bfd36, type: 3}
+  - {fileID: 5155163167032735316, guid: 13d1dec8370532a4ea017b9aee8ce51b, type: 3}
+  - {fileID: 8420994399391746316, guid: 72928f1d6af421d4f81a8027c90192c6, type: 3}
+  - {fileID: 4641925799719628613, guid: 3d5641da9ddf1384caf393aa469c3f16, type: 3}
+  - {fileID: 8701536793483841217, guid: 710e5eb70632e444ea217992d15b6751, type: 3}
+  - {fileID: 1418063362356470954, guid: c58bed6db80e64c49b4df071aa847a50, type: 3}
+  - {fileID: 5768811150274278660, guid: 48987b047a98d1c488ab2e64b1316e02, type: 3}
+  - {fileID: -2295233355542045494, guid: afe2e6436e361b442a8883d59841b517, type: 3}
+  - {fileID: 3626186460955925390, guid: df8c4e208fe8772429c897efbf27b998, type: 3}
+  - {fileID: 6335081431340241071, guid: 783c2246042299c41b18ecb833ac35f4, type: 3}
+  - {fileID: 8120449960788202493, guid: 6d56cc00173e20d4c85b808d2fd01ffb, type: 3}
+  - {fileID: 518924280655045077, guid: 2609fee3dfe1d7945b4e74ec1188b361, type: 3}
+  - {fileID: -5982941940075545493, guid: cc9646b8dda197146b3b6d65895992df, type: 3}
+  - {fileID: 1204236988781962780, guid: e071cda62365bde41b54d3ac63aaf63e, type: 3}
+  - {fileID: 6185800538022621663, guid: 3910b7632621d8f4fb331cdff42d6925, type: 3}
+  framesPerSecond: 12
   maxArcHeight: 2
   referenceDistance: 8
   minArcHeightFactor: 0.2
@@ -98,7 +115,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: -1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 771453615440124750, guid: 77c1017bce6461047a228d629bd54eca, type: 3}
+  m_Sprite: {fileID: 4211761467620165101, guid: dcc22b7c2ccb4b544a34733ee29bfd36, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

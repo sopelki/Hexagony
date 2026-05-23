@@ -35,7 +35,7 @@ namespace View
             );
 
             var view = go.GetComponent<MonsterView>();
-            view.Initialize(model);
+            view.Initialize(model, model.Data.visualOffsetY);
 
             views.Add(model, view);
         }

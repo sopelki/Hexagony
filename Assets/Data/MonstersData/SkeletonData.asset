@@ -15,6 +15,9 @@ MonoBehaviour:
   maxHealth: 50
   damage: 25
   moveSpeed: 3
+  goldReward: 20
   attackRadius: 5
   attackCooldown: 1
   prefab: {fileID: 6346340308779131127, guid: 2dd503130d4b19942bd532396cddb0d3, type: 3}
+  hitOffsetY: 1.5
+  visualOffsetY: -0.35

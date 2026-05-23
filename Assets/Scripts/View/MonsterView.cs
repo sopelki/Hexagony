@@ -5,69 +5,71 @@ namespace View
 {
     public class MonsterView : MonoBehaviour
     {
+        private static readonly int moveX = Animator.StringToHash("MoveX");
+        private static readonly int moveY = Animator.StringToHash("MoveY");
         private MonsterModel model;
         private Vector3 previousPosition;
-        
-        // [SerializeField] private SpriteRenderer spriteRenderer;
 
-        [SerializeField] private Animator animator;
+        [SerializeField]
+        private Animator animator;
         private Vector2 targetDirection;
         private Vector2 currentSmoothDirection;
-        [SerializeField] private float smoothingSpeed = 10f;
+        [SerializeField]
+        private float smoothingSpeed = 10f;
+        private Vector3 visualOffset;
 
 
-        public void Initialize(MonsterModel model)
+        public void Initialize(MonsterModel model, float visualOffset)
         {
             this.model = model;
             transform.position = model.WorldPosition;
             previousPosition = model.WorldPosition;
+            this.visualOffset = new Vector3(0, model.Data.visualOffsetY, 0);
         }
-        
+
+        private static readonly int isMovingHash = Animator.StringToHash("IsMoving");
+
         public void UpdateView()
         {
-            var currentPosition = model.WorldPosition;
-            var direction = currentPosition - previousPosition;
+            var logicalPosition = model.WorldPosition;
+            var direction = logicalPosition - previousPosition;
 
-            transform.position = currentPosition;
+            transform.position = logicalPosition + visualOffset;
 
-            if (direction.sqrMagnitude > 0.0001f)
+            // IsMoving для Юли Курановой
+            // "Добавьте параметр типа Bool с именем IsMoving.
+            // В переходах (Transitions) между Idle и Walk используйте этот параметр."
+            var isMoving = direction.sqrMagnitude > 0.0001f;
+            animator.SetBool(isMovingHash, isMoving);
+
+            if (isMoving)
             {
-                // UpdateDirection(direction);
                 targetDirection = new Vector2(direction.x, direction.y).normalized;
-                previousPosition = currentPosition;
+                previousPosition = logicalPosition;
             }
-            // else 
-            // {
-            //     // Если монстр стоит, можно занулить параметры, 
-            //     // чтобы он перешел в Idle (если ты его добавишь)
-            //     animator.SetFloat("MoveX", 0);
-            //     animator.SetFloat("MoveY", 0);
-            // }
         }
-        
+
         private void Update()
         {
-            if (animator == null) return;
+            if (!animator) return;
 
-            // Плавно перетекаем из текущего направления в целевое
             currentSmoothDirection = Vector2.Lerp(
-                currentSmoothDirection, 
-                targetDirection, 
+                currentSmoothDirection,
+                targetDirection,
                 Time.deltaTime * smoothingSpeed
             );
 
-            // Отправляем в аниматор уже сглаженные значения
-            animator.SetFloat("MoveX", currentSmoothDirection.x);
-            animator.SetFloat("MoveY", currentSmoothDirection.y);
+            animator.SetFloat(moveX, currentSmoothDirection.x);
+            animator.SetFloat(moveY, currentSmoothDirection.y);
         }
-        
+
         // private void UpdateDirection(Vector3 direction)
         // {
         //     direction.Normalize();
         //     animator.SetFloat("MoveX", direction.x, 0.1f, Time.deltaTime);
         //     animator.SetFloat("MoveY", direction.y, 0.1f, Time.deltaTime);
         // }
-        
+
         // private void Update()
         // {
         //     if (currentFrames == null || currentFrames.Length == 0) return;
@@ -117,6 +119,5 @@ namespace View
         //             spriteRenderer.sprite = currentFrames[0];
         //     }
         // }
-        
     }
 }

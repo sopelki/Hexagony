@@ -17,5 +17,7 @@ namespace Logic.Monster
 
         [Header("View")]
         public GameObject prefab;
+        public float hitOffsetY;
+        public float visualOffsetY;
     }
 }

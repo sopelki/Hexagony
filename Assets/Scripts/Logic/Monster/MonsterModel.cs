@@ -24,6 +24,8 @@ namespace Logic.Monster
         public float AttackRadius { get; }
         public float AttackCooldown { get; }
         public int GoldReward { get; }
+        
+        public Vector3 HitPosition => WorldPosition + new Vector3(0, Data.hitOffsetY, 0);
 
         private int currentHealth;
         private readonly float baseMoveSpeed;
