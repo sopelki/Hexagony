@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Logic.Monster;
 
 namespace View
@@ -24,6 +25,7 @@ namespace View
         private float smoothingSpeed = 10f;
         private Vector3 visualOffset;
         private bool isDeadAnimationPlaying;
+        public Action<MonsterModel> OnDeathAnimationFinished;
 
 
         public void Initialize(MonsterModel monsterModel, float visualOffset)
@@ -60,7 +62,6 @@ namespace View
 
             if (moving)
             {
-                // targetDirection = new Vector2(direction.x, direction.y).normalized;
                 targetDirection = SnapTo4Directions(direction);
                 animator.SetFloat(LastMoveX, targetDirection.x);
                 animator.SetFloat(LastMoveY, targetDirection.y);
@@ -75,33 +76,24 @@ namespace View
             
             return angle switch
             {
-                >= -45f and < 45f   => new Vector2(1, 0),   // Right
-                >= 45f and < 135f   => new Vector2(0, 1),   // Up
-                >= -135f and < -45f => new Vector2(0, -1),  // Down
-                _                    => new Vector2(-1, 0)   // Left
+                >= -45f and < 45f   => new Vector2(1, 0),
+                >= 45f and < 135f   => new Vector2(0, 1),
+                >= -135f and < -45f => new Vector2(0, -1),
+                _                    => new Vector2(-1, 0)
             };
         }
         
-        private void HandleAttack()
-        {
-            animator.SetTrigger(IsAttacking);
-        }
-        private void HandleDamaged()
-        {
-            animator.SetTrigger(IsDamaged);
-        }
-
+        private void HandleAttack() => animator.SetTrigger(IsAttacking);
+        private void HandleDamaged() => animator.SetTrigger(IsDamaged);
+        private void HandleDeath() => animator.SetBool(IsDead, true);
         
-        private void HandleDeath()
-        {
-            isDeadAnimationPlaying = true;
-            animator.SetBool(IsDead, true);
-        }
         
         public void OnDeathAnimationEnd()
         {
+            OnDeathAnimationFinished?.Invoke(model);
             Destroy(gameObject);
-        }
+        }    
+        
 
         private void Update()
         {
@@ -126,62 +118,5 @@ namespace View
                 model.OnDied -= HandleDeath;
             }
         }
-
-        // private void UpdateDirection(Vector3 direction)
-        // {
-        //     direction.Normalize();
-        //     animator.SetFloat("MoveX", direction.x, 0.1f, Time.deltaTime);
-        //     animator.SetFloat("MoveY", direction.y, 0.1f, Time.deltaTime);
-        // }
-
-        // private void Update()
-        // {
-        //     if (currentFrames == null || currentFrames.Length == 0) return;
-        //     
-        //     timer += Time.deltaTime;
-        //
-        //     if (timer >= animationData.ticksPerFrame)
-        //     {
-        //         timer = 0;
-        //         currentFrameIndex = (currentFrameIndex + 1) % currentFrames.Length;
-        //         spriteRenderer.sprite = currentFrames[currentFrameIndex];
-        //         Debug.Log($"Смена кадра: {currentFrameIndex} у объекта {gameObject.name}");
-        //     }
-        // }
-        //
-        // private void UpdateDirection(Vector3 direction)
-        // {
-        //     direction.Normalize();
-        //     var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //
-        //     Sprite[] nextFrames;
-        //     
-        //     if (angle >= -22.5f && angle < 22.5f)
-        //         nextFrames = animationData.right;
-        //     else if (angle >= 22.5f && angle < 67.5f)
-        //         nextFrames = animationData.upRight;
-        //     else if (angle >= 67.5f && angle < 112.5f)
-        //         nextFrames = animationData.up;
-        //     else if (angle >= 112.5f && angle < 157.5f)
-        //         nextFrames = animationData.upLeft;
-        //     else if (angle >= 157.5f || angle < -157.5f)
-        //         nextFrames = animationData.left;
-        //     else if (angle >= -157.5f && angle < -112.5f)
-        //         nextFrames = animationData.downLeft;
-        //     else if (angle >= -112.5f && angle < -67.5f)
-        //         nextFrames = animationData.down;
-        //     else
-        //         nextFrames = animationData.downRight;
-        //     
-        //     if (currentFrames != nextFrames)
-        //     {
-        //         currentFrames = nextFrames;
-        //         currentFrameIndex = 0;
-        //         timer = 0; 
-        //         
-        //         if (currentFrames != null && currentFrames.Length > 0)
-        //             spriteRenderer.sprite = currentFrames[0];
-        //     }
-        // }
     }
 }

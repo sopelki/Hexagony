@@ -294,7 +294,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Monster_Controller
+  m_Name: Main_Anim_Controller
   serializedVersion: 6
   m_AnimatorParameters:
   - m_Name: MoveX

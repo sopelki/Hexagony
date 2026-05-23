@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Logic.Unit;
 
@@ -18,7 +19,6 @@ namespace View
             unitSystem = system;
 
             unitSystem.OnUnitCreated += HandleUnitCreated;
-            unitSystem.OnUnitDied += HandleUnitDied;
         }
 
         private void OnDestroy()
@@ -26,7 +26,6 @@ namespace View
             if (unitSystem == null) return;
 
             unitSystem.OnUnitCreated -= HandleUnitCreated;
-            unitSystem.OnUnitDied -= HandleUnitDied;
         }
 
         private void HandleUnitCreated(UnitModel model)
@@ -37,23 +36,27 @@ namespace View
 
             var view = go.GetComponent<UnitView>();
             view.Initialize(model, buffView);
+            view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
 
             views.Add(model, view);
         }
-
-        private void HandleUnitDied(UnitModel model)
+        private void HandleDeathAnimationFinished(UnitModel model)
         {
-            if (!views.TryGetValue(model, out var view))
-                return;
-
-            Destroy(view.gameObject);
-            views.Remove(model);
+            if (views.TryGetValue(model, out var view))
+            {
+                view.OnDeathAnimationFinished -= HandleDeathAnimationFinished;
+                views.Remove(model);
+            }
+            
+            unitSystem.RemoveUnit(model);
         }
 
         private void Update()
         {
-            foreach (var (model, view) in views)
-                view.SetPosition(model.WorldPosition);
+            foreach (var pair in views.ToList())
+            {
+                pair.Value.UpdateView();
+            }
         }
     }
 }

@@ -56,6 +56,8 @@ namespace Logic.Unit
             var distance = Vector3.Distance(closest.WorldPosition, unit.WorldPosition);
             var meleeRange = unit.UnitData.attackRadius * 0.5f;
             unit.AttackType = distance <= meleeRange ? 1 : 2;
+            
+            unit.Attack();
 
             if (soundData != null)
             {

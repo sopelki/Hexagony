@@ -18,7 +18,6 @@ namespace View
             this.system = system;
 
             system.OnMonsterCreated += HandleCreated;
-            system.OnMonsterDied += HandleDied;
 
             if (TickManager.Instance != null)
                 TickManager.Instance.OnTick += HandleTick;
@@ -37,8 +36,18 @@ namespace View
 
             var view = go.GetComponent<MonsterView>();
             view.Initialize(model, model.Data.visualOffsetY);
+            view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
 
             views.Add(model, view);
+        }
+        
+        private void HandleDeathAnimationFinished(MonsterModel model)
+        {
+            if (views.TryGetValue(model, out var view))
+            {
+                view.OnDeathAnimationFinished -= HandleDeathAnimationFinished;
+                views.Remove(model);
+            }
         }
         
         private void HandleTick()
@@ -48,23 +57,11 @@ namespace View
                 pair.Value.UpdateView();
             }
         }
-
-        private void HandleDied(MonsterModel model)
-        {
-            // if (!views.TryGetValue(model, out var view))
-            //     return;
-            //
-            // Destroy(view.gameObject);
-            views.Remove(model);
-        }
         
         private void OnDestroy()
         {
             if (system != null)
-            {
                 system.OnMonsterCreated -= HandleCreated;
-                system.OnMonsterDied -= HandleDied;
-            }
 
             if (TickManager.Instance != null)
                 TickManager.Instance.OnTick -= HandleTick;

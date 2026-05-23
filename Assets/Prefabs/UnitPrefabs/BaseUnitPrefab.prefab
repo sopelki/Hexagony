@@ -105,6 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c235dc8c7b49e69c49a77f32676af5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.UnitView
+  smoothingSpeed: 10
 --- !u!95 &2182206100262761127
 Animator:
   serializedVersion: 7
@@ -115,7 +116,7 @@ Animator:
   m_GameObject: {fileID: 7943356929508303804}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0eba9155716b61648bb46d4200a27648, type: 2}
+  m_Controller: {fileID: 22100000, guid: a5ac8e219b8a4184fa566c12b3a73cac, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

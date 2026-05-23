@@ -17,7 +17,6 @@ namespace Logic.Unit
         private readonly SoundData soundData;
 
         public event Action<UnitModel> OnUnitCreated;
-        // public event Action<UnitModel> OnUnitMoved;
         public event Action<UnitModel> OnUnitDied;
 
         public UnitSystem(
@@ -58,23 +57,24 @@ namespace Logic.Unit
 
             OnUnitCreated?.Invoke(unit);
         }
-
-        // TODO: Переделать в foreach
+        
         public void Tick()
         {
-            for (var i = units.Count - 1; i >= 0; i--)
+            foreach (var unit in units)
             {
-                var unit = units[i];
-
                 if (unit.IsDead)
-                {
-                    Debug.Log("Unit died");
-                    units.RemoveAt(i);
-                    OnUnitDied?.Invoke(unit);
                     continue;
-                }
 
                 unit.Tick();
+            }
+        }
+        
+        public void RemoveUnit(UnitModel unit)
+        {
+            if (units.Contains(unit))
+            {
+                units.Remove(unit);
+                OnUnitDied?.Invoke(unit);
             }
         }
         

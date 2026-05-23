@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
 using UnityEngine;
@@ -23,6 +24,10 @@ namespace Logic.Unit
 
         public int CurrentHealth { get; set; }
         public bool IsDead => CurrentHealth <= 0;
+        private bool deathEventSent;
+        public event Action OnAttack;
+        public event Action OnDamaged;
+        public event Action OnDied;
 
         public UnitModel(Vector3 startPos, Vector2Int startHex, UnitData unitData, SoundData soundData)
         {
@@ -79,12 +84,30 @@ namespace Logic.Unit
 
         public void TakeDamage(int damage)
         {
+            if (IsDead) return;
             Debug.Log($"Unit got damaged: {damage}");
+            OnDamaged?.Invoke();
             CurrentHealth -= damage;
 
             if (soundData != null && 
                 soundData.unitDamageSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(soundData.unitDamageSounds, soundData.unitDamageVolume);
+            if (CurrentHealth <= 0)
+            {
+                Die();
+            }
+        }
+        
+        public void Attack()
+        {
+            OnAttack?.Invoke();
+        }
+
+        public void Die()
+        {
+            if (deathEventSent) return;
+            deathEventSent = true;
+            OnDied?.Invoke();
         }
 
         public void SetHex(Vector2Int hex) => CurrentHex = hex;
