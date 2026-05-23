@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 25
   moveSpeed: 3
   goldReward: 20
-  attackRadius: 1
+  attackRadius: 5
   attackCooldown: 1
-  prefab: {fileID: 6346340308779131127, guid: 8ae1d7d0bdd192048989bdaf6a7f7af9, type: 3}
-  hitOffsetY: 0
-  visualOffsetY: 0.6
+  prefab: {fileID: 6346340308779131127, guid: 2dd503130d4b19942bd532396cddb0d3, type: 3}
+  hitOffsetY: 1.5
+  visualOffsetY: -0.35
