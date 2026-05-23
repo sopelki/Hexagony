@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace MenuScripts
 {
@@ -32,9 +33,13 @@ namespace MenuScripts
                 lastPanel = mainMenuPanel;
 
             if (lastPanel != null)
-                lastPanel.SetActive(false);
+            {
+                lastPanel.GetComponent<Canvas>().enabled = false;
+                lastPanel.GetComponent<GraphicRaycaster>().enabled = false;
+            }
 
-            settingsPanel.SetActive(true);
+            settingsPanel.GetComponent<Canvas>().enabled = true;
+            settingsPanel.GetComponent<GraphicRaycaster>().enabled = true;
         }
 
         public void CloseSettings()
@@ -43,10 +48,16 @@ namespace MenuScripts
             Debug.Log("Settings Saved to Disk");
 
             if (settingsPanel != null)
-                settingsPanel.SetActive(false);
+            {
+                settingsPanel.GetComponent<Canvas>().enabled = false;
+                settingsPanel.GetComponent<GraphicRaycaster>().enabled = false;
+            }
 
             if (lastPanel != null)
-                lastPanel.SetActive(true);
+            {
+                lastPanel.GetComponent<Canvas>().enabled = true;
+                lastPanel.GetComponent<GraphicRaycaster>().enabled = true;
+            }
         }
     }
 }

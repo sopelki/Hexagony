@@ -22,46 +22,11 @@ namespace MenuScripts
 
         [Header("Graphics")]
         [SerializeField]
-        private TMP_Dropdown resolutionDropdown;
-        [SerializeField]
         private Toggle fullscreenToggle;
-
-        private Resolution[] resolutions;
 
         private void Start()
         {
-            SetupResolutions();
             LoadSettings();
-        }
-
-        private void SetupResolutions()
-        {
-            resolutions = Screen.resolutions;
-            resolutionDropdown.ClearOptions();
-
-            var options = new List<string>();
-            var currentResolutionIndex = 0;
-
-            for (var i = 0; i < resolutions.Length; i++)
-            {
-                var option = resolutions[i].width + " x " + resolutions[i].height;
-                options.Add(option);
-
-                if (resolutions[i].width == Screen.currentResolution.width &&
-                    resolutions[i].height == Screen.currentResolution.height)
-                    currentResolutionIndex = i;
-            }
-
-            resolutionDropdown.AddOptions(options);
-            resolutionDropdown.value = PlayerPrefs.GetInt("ResIndex", currentResolutionIndex);
-            resolutionDropdown.RefreshShownValue();
-        }
-
-        public void SetResolution(int resolutionIndex)
-        {
-            var resolution = resolutions[resolutionIndex];
-            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-            PlayerPrefs.SetInt("ResIndex", resolutionIndex);
         }
 
         public void SetMasterVolume(float volume)
@@ -81,7 +46,7 @@ namespace MenuScripts
             audioMixer.SetFloat("SfxVol", Mathf.Log10(volume) * 20);
             PlayerPrefs.SetFloat("SfxVol", volume);
         }
-        
+
         public void SetUiVolume(float volume)
         {
             audioMixer.SetFloat("UiVol", Mathf.Log10(volume) * 20);
