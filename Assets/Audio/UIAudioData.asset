@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Audio.UIAudioData
   buttonClickSound: {fileID: 8300000, guid: 967e1e9167f3d604c8d461e54578d86e, type: 3}
   buttonHoverSound: {fileID: 8300000, guid: 6bb29dbe4f7c7b54ab2e35d0a48e9333, type: 3}
-  buttonClickVolume: 0.3
-  buttonHoverVolume: 0.2
+  buttonClickVolume: 0.1
+  buttonHoverVolume: 0.05
