@@ -20,44 +20,40 @@ namespace MenuScripts
 
         public void OpenSettings()
         {
-            if (pausePanel != null && pausePanel.activeSelf)
-                lastPanel = pausePanel;
-
-            else if (gameOverPanel != null && gameOverPanel.activeSelf)
-                lastPanel = gameOverPanel;
-
-            else if (gameWonPanel != null && gameWonPanel.activeSelf)
-                lastPanel = gameWonPanel;
-
-            else if (mainMenuPanel != null && mainMenuPanel.activeSelf)
-                lastPanel = mainMenuPanel;
+            lastPanel = FindActivePanel();
 
             if (lastPanel != null)
-            {
-                lastPanel.GetComponent<Canvas>().enabled = false;
-                lastPanel.GetComponent<GraphicRaycaster>().enabled = false;
-            }
+                lastPanel.SetActive(false);
 
-            settingsPanel.GetComponent<Canvas>().enabled = true;
-            settingsPanel.GetComponent<GraphicRaycaster>().enabled = true;
+            settingsPanel.SetActive(true);
         }
 
         public void CloseSettings()
         {
             PlayerPrefs.Save();
-            Debug.Log("Settings Saved to Disk");
 
             if (settingsPanel != null)
-            {
-                settingsPanel.GetComponent<Canvas>().enabled = false;
-                settingsPanel.GetComponent<GraphicRaycaster>().enabled = false;
-            }
+                settingsPanel.SetActive(false);
 
             if (lastPanel != null)
-            {
-                lastPanel.GetComponent<Canvas>().enabled = true;
-                lastPanel.GetComponent<GraphicRaycaster>().enabled = true;
-            }
+                lastPanel.SetActive(true);
+        }
+
+        private GameObject FindActivePanel()
+        {
+            if (pausePanel != null && pausePanel.activeSelf)
+                return pausePanel;
+
+            if (gameOverPanel != null && gameOverPanel.activeSelf)
+                return gameOverPanel;
+
+            if (gameWonPanel != null && gameWonPanel.activeSelf)
+                return gameWonPanel;
+
+            if (mainMenuPanel != null && mainMenuPanel.activeSelf)
+                return mainMenuPanel;
+
+            return null;
         }
     }
 }
