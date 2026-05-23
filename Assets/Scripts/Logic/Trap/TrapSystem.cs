@@ -77,6 +77,7 @@ namespace Logic.Trap
             if (castleSystem.TrySpendGold(data.baseCost))
             {
                 var trap = new TrapModel(data, GetTrapOccupiedHexes(hex));
+                trap.OnTriggered += HandleTrapTriggered;
                 trapsModel.AddTrap(trap);
                 
                 if (soundData != null && soundData.trapPlaceSound != null)
@@ -93,6 +94,12 @@ namespace Logic.Trap
             }
             
             return false;
+        }
+        
+        private void HandleTrapTriggered(TrapModel trap)
+        {
+            trap.OnTriggered -= HandleTrapTriggered;
+            trapsModel.RemoveTrap(trap);
         }
 
         public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
@@ -168,6 +175,7 @@ namespace Logic.Trap
             {
                 foreach (var m in inZone) m.TakeDamage(trap.Data.criticalDamage);
                 trap.Trigger();
+                Debug.Log("Bear trap triggered.");
                 trapsModel.RemoveTrap(trap);
             }
         }

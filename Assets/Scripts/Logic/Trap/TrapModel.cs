@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Logic.Monster;
 
@@ -8,6 +9,7 @@ namespace Logic.Trap
     {
         public TrapData Data { get; }
         public List<Vector2Int> Hexes { get; }
+        public event Action<TrapModel> OnTriggered;
 
         public bool IsTriggered { get; private set; }
 
@@ -21,6 +23,13 @@ namespace Logic.Trap
             Hexes = hexes;
         }
 
-        public void Trigger() => IsTriggered = true;
+        public void Trigger()
+        {
+            if (IsTriggered)
+                return;
+
+            IsTriggered = true;
+            OnTriggered?.Invoke(this);
+        }
     }
 }

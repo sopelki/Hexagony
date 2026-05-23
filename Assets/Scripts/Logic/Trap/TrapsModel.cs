@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Logic.Trap
 {
     public class TrapsModel
     {
         public event Action<TrapModel> OnTrapAdded;
+        public event Action<TrapModel> OnTrapRemoved;
 
         private readonly List<TrapModel> traps = new();
         public IReadOnlyList<TrapModel> Traps => traps;
@@ -18,7 +20,11 @@ namespace Logic.Trap
         
         public void RemoveTrap(TrapModel trap)
         {
-            traps.Remove(trap);
+            if (traps.Remove(trap))
+            {
+                Debug.Log("2. МОДЕЛЬ: Капкан успешно удален из списка. Рассылаю событие!");
+                OnTrapRemoved?.Invoke(trap);
+            }
         }
     }
 }

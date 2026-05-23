@@ -24,12 +24,16 @@ namespace View
                 this.tilemap = tilemap;
 
                 model.OnTrapAdded += HandleTrapAdded;
+                model.OnTrapRemoved += HandleTrapRemoved; 
             }
 
             private void OnDestroy()
             {
                 if (model != null)
+                {
                     model.OnTrapAdded -= HandleTrapAdded;
+                    model.OnTrapRemoved -= HandleTrapRemoved;
+                }
             }
 
             private void HandleTrapAdded(TrapModel trap)
@@ -39,8 +43,16 @@ namespace View
                 var viewGo = Instantiate(trap.Data.viewPrefab, finalPos, Quaternion.identity);
                 var view = viewGo.GetComponent<TrapView>();
                 view.Initialize(trap.Data.viewPrefab.GetComponentInChildren<SpriteRenderer>().sprite);
-                
                 views.Add(trap, view);
+            }
+            
+            private void HandleTrapRemoved(TrapModel trap)
+            {
+                if (views.TryGetValue(trap, out var view))
+                {
+                    views.Remove(trap);
+                    view.AnimateAndDestroy();
+                }
             }
         }
     }

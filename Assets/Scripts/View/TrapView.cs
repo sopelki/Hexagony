@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Logic.Trap;
+using UnityEngine;
 
 namespace View
 {
@@ -7,6 +10,7 @@ namespace View
         [SerializeField] private SpriteRenderer spriteRenderer;
         [Header("X-Ray Settings")]
         [SerializeField] private GameObject outline;
+        [SerializeField] private Animator animator;
         
         private int occludersCount = 0;
         public void Initialize(Sprite sprite)
@@ -20,6 +24,27 @@ namespace View
         {
             if (outline != null)
                 outline.SetActive(value);
+        }
+        
+        public void AnimateAndDestroy()
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("Close");
+                StartCoroutine(WaitAnimationAndDestroyRoutine());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        
+        private IEnumerator WaitAnimationAndDestroyRoutine()
+        {
+            yield return null; 
+            float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
+            yield return new WaitForSeconds(animLength);
+            Destroy(gameObject);
         }
         
         private void OnTriggerEnter2D(Collider2D other)
