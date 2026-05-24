@@ -60,6 +60,15 @@ TagManager:
   - name: Projectiles
     uniqueID: 1007650763
     locked: 0
+  - name: HUD
+    uniqueID: 174576549
+    locked: 0
+  - name: PopUp
+    uniqueID: 591933231
+    locked: 0
+  - name: Menu
+    uniqueID: 1714296417
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []
