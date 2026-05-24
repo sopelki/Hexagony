@@ -24999,34 +24999,38 @@ PrefabInstance:
     - target: {fileID: 2165089604719921017, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -7995126695386096967, guid: b0661778f3c79ac4b881b491124d71e9, type: 3}
+      objectReference: {fileID: -3753825769889500098, guid: 2c1e9d9f16eb69a43b6c79787963b168, type: 3}
     - target: {fileID: 2165089604719921017, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_Color.b
-      value: 0.9169811
+      value: 0.9245283
       objectReference: {fileID: 0}
     - target: {fileID: 2165089604719921017, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_Color.g
-      value: 0.78721964
+      value: 0.83556426
       objectReference: {fileID: 0}
     - target: {fileID: 2165089604719921017, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_Color.r
-      value: 0.8834221
+      value: 0.90026534
+      objectReference: {fileID: 0}
+    - target: {fileID: 2698120399158673703, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
+      propertyPath: m_text
+      value: '**/**'
       objectReference: {fileID: 0}
     - target: {fileID: 2698120399158673703, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.06005683
+      value: 0.5568628
       objectReference: {fileID: 0}
     - target: {fileID: 2698120399158673703, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.44868696
+      value: 0.54509807
       objectReference: {fileID: 0}
     - target: {fileID: 2698120399158673703, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.r
-      value: 0.90943396
+      value: 0.54509807
       objectReference: {fileID: 0}
     - target: {fileID: 2698120399158673703, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4279202536
+      value: 4287531915
       objectReference: {fileID: 0}
     - target: {fileID: 3273017742838191160, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_AnchorMax.y
@@ -25054,23 +25058,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3775926294943505921, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_text
-      value: "\u0415\u0434\u0430"
+      value: "\u0410\u0440\u043C\u0438\u044F"
       objectReference: {fileID: 0}
     - target: {fileID: 3775926294943505921, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.14509805
+      value: 0.5568628
       objectReference: {fileID: 0}
     - target: {fileID: 3775926294943505921, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.38039216
+      value: 0.54509807
       objectReference: {fileID: 0}
     - target: {fileID: 3775926294943505921, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor.r
-      value: 0.827451
+      value: 0.54509807
       objectReference: {fileID: 0}
     - target: {fileID: 3775926294943505921, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4280639955
+      value: 4287531915
       objectReference: {fileID: 0}
     - target: {fileID: 4358207405198625566, guid: ba87db2eca9e5c04682631c89a098449, type: 3}
       propertyPath: m_AnchorMax.y
@@ -25635,8 +25639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c29f9f5e824db59abe49db5b2024fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.GameInitializer
-  startGold: 500
-  startFood: 100
+  startGold: 200
+  startSupply: 10
   startHp: 500
   castleUI: {fileID: 998659908}
   waveNotificationUI: {fileID: 1558017290}

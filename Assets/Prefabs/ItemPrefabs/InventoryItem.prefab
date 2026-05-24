@@ -104,6 +104,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryItem
   buildingData: {fileID: 0}
+  soundData: {fileID: 11400000, guid: 46a3f0b4faf3c4447b41a4d4118726cc, type: 2}
+  scaleSpeed: 30
+  colorLerpSpeed: 15
+  draggingAlpha: 0.8
 --- !u!114 &-1089007897838033186
 MonoBehaviour:
   m_ObjectHideFlags: 0

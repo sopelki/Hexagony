@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Logic.Castle;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +16,8 @@ namespace UI
         [Header("Data")]
         [SerializeField]
         private BuildingData buildingData;
+        [SerializeField]
+        private SoundData soundData;
 
         [Header("Visual Settings")]
         [SerializeField]
@@ -78,7 +81,7 @@ namespace UI
             if (transform.parent != dragHandler.MainCanvas.transform)
                 return;
 
-            if (IsFromShop) 
+            if (IsFromShop)
                 Destroy(gameObject);
             else
                 ReturnToStart();
@@ -104,6 +107,7 @@ namespace UI
             dragHandler.ResetPosition();
             IsFromShop = false;
             targetColor = originalColor;
+            AudioManager.Instance.PlaySfx(soundData.buildingPlaceSound, soundData.buildingPlacementVolume);
         }
 
         private void CaptureState()
@@ -117,10 +121,7 @@ namespace UI
             transform.SetParent(OriginalParent);
             dragHandler?.ResetPosition();
         }
-        
-        private void OnDestroy()
-        {
-            OnDropped?.Invoke();
-        }
+
+        private void OnDestroy() => OnDropped?.Invoke();
     }
 }

@@ -59,7 +59,7 @@ namespace UI
 
             var item = itemGo.GetComponent<InventoryItem>();
             item.SetData(buildingData, true);
-            item.OnDropped += HandleItemDropped;
+            item.OnDropped += OnDroppedHandler;
 
             var itemImage = itemGo.GetComponent<Image>();
             if (sourceImage != null && itemImage != null)
@@ -71,6 +71,13 @@ namespace UI
 
             eventData.pointerDrag = itemGo;
             itemGo.GetComponent<CastleDragHandler>().OnBeginDrag(eventData);
+            return;
+
+            void OnDroppedHandler()
+            {
+                item.OnDropped -= OnDroppedHandler;
+                HandleItemDropped();
+            }
         }
 
         private void HandleItemDropped()

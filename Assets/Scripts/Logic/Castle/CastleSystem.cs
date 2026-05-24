@@ -102,9 +102,7 @@ namespace Logic.Castle
             Model.Buildings.Add(instance);
             
             if (data.type == BuildingType.Farm)
-            {
                 Model.MaxSupply += data.supplyProvided;
-            }
 
             ApplyBuff(data);
 
