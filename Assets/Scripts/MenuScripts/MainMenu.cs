@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using Audio;
+using Core;
 
 namespace MenuScripts
 {
@@ -19,7 +19,7 @@ namespace MenuScripts
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
         }
 
-        public void PlayGame() => SceneManager.LoadScene("GameScene");
+        public void PlayGame() => SceneTransitions.LoadScene("GameScene");
 
         public void QuitGame()
         {

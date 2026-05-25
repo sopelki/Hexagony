@@ -1,7 +1,5 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Logic.Castle;
-using Logic.Unit;
 using TMPro;
 using UnityEngine;
 

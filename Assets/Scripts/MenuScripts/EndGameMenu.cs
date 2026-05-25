@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using Audio;
+using Core;
 using Logic.Castle;
 using Misc;
 
@@ -77,13 +78,13 @@ namespace MenuScripts
         public void RestartGame()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneTransitions.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void LoadMainMenu()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene("MainMenu");
+            SceneTransitions.LoadScene("MainMenu");
         }
     }
 }

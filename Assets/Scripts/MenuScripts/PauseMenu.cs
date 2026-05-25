@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using Core;
+using UnityEngine;
 using Misc;
 
 namespace MenuScripts
@@ -42,7 +42,7 @@ namespace MenuScripts
         public void LoadMainMenu()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene("MainMenu");
+            SceneTransitions.LoadScene("MainMenu");
         }
     }
 }
