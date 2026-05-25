@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UI;
 
 namespace Misc
@@ -13,6 +14,15 @@ namespace Misc
 
             var allComponents = Object.FindObjectsByType<MonoBehaviour>();
 
+            var currentMousePosition = Vector2.zero;
+            if (Mouse.current != null)
+                currentMousePosition = Mouse.current.position.ReadValue();
+
+            var pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = currentMousePosition
+            };
+
             foreach (var mb in allComponents)
             {
                 switch (mb)
@@ -24,7 +34,12 @@ namespace Misc
 
                     case IBeginDragHandler or IDragHandler or IEndDragHandler:
                         if (mb is not UnityEngine.UI.Slider)
+                        {
+                            if (mb is IEndDragHandler endDragHandler)
+                                endDragHandler.OnEndDrag(pointerData);
+
                             mb.enabled = false;
+                        }
                         break;
                 }
             }
@@ -36,7 +51,8 @@ namespace Misc
 
             foreach (var mb in allComponents)
             {
-                if (mb is TooltipTrigger or IBeginDragHandler or IDragHandler or IEndDragHandler)
+                if (mb is (TooltipTrigger or IBeginDragHandler or IDragHandler or IEndDragHandler)
+                    and not UnityEngine.UI.Slider)
                     mb.enabled = true;
             }
         }
