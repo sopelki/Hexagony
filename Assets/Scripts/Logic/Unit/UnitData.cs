@@ -17,5 +17,6 @@ namespace Logic.Unit
 
         [Header("View")]
         public GameObject unitPrefab;
+        public float visualOffsetY;
     }
 }

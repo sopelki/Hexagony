@@ -23,7 +23,8 @@ namespace Misc
                         break;
 
                     case IBeginDragHandler or IDragHandler or IEndDragHandler:
-                        mb.enabled = false;
+                        if (mb is not UnityEngine.UI.Slider)
+                            mb.enabled = false;
                         break;
                 }
             }

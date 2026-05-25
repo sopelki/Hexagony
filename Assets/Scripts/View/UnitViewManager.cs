@@ -35,7 +35,7 @@ namespace View
             var go = Instantiate(prefab, model.WorldPosition, Quaternion.identity, unitsParent);
 
             var view = go.GetComponent<UnitView>();
-            view.Initialize(model, buffView);
+            view.Initialize(model, buffView, model.UnitData.visualOffsetY);
             view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
 
             views.Add(model, view);

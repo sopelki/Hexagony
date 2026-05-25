@@ -844,6 +844,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameWonPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 6829448409298105952, guid: 52968d4574ee41647a1f50726518c1c3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8442406328887426781, guid: 52968d4574ee41647a1f50726518c1c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -21985,11 +21989,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 669311198}
-  - {fileID: 1671710288}
   - {fileID: 1825367176}
   - {fileID: 1340545267}
   - {fileID: 1715936213}
   - {fileID: 82437798}
+  - {fileID: 1671710288}
   m_Father: {fileID: 520034715}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -26424,6 +26428,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 1715936214}
   gameWonPanel: {fileID: 82437799}
   panelDelay: 0.1
+  fadeDuration: 0.2
   gameOverSound: {fileID: 8300000, guid: f7ad4128574548a48985b2a7a15df610, type: 3}
   gameWonSound: {fileID: 8300000, guid: 2352210a849a0204495091212e40c113, type: 3}
   gameInitializer: {fileID: 1242743164}
@@ -29244,6 +29249,10 @@ PrefabInstance:
     - target: {fileID: 6829448409298105952, guid: 52968d4574ee41647a1f50726518c1c3, type: 3}
       propertyPath: m_Name
       value: GameOverPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6829448409298105952, guid: 52968d4574ee41647a1f50726518c1c3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8442406328887426781, guid: 52968d4574ee41647a1f50726518c1c3, type: 3}
       propertyPath: m_AnchorMax.y
