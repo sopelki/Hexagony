@@ -1733,6 +1733,10 @@ PrefabInstance:
       value: "\u0413\u0440\u043E\u043C\u043A\u043E\u0441\u0442\u044C \u043C\u0443\u0437\u044B\u043A\u0438"
       objectReference: {fileID: 0}
     - target: {fileID: 6897782362838743820, guid: 0999feb8239a2524785dbdf91c5bc70a, type: 3}
+      propertyPath: m_Value
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6897782362838743820, guid: 0999feb8239a2524785dbdf91c5bc70a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
