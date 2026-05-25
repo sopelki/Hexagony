@@ -19,13 +19,7 @@ namespace MenuScripts
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
         }
 
-        public void PlayGame()
-        {
-            if (gameplaySoundData != null && gameplaySoundData.backgroundMusic != null)
-                AudioManager.Instance.PlayMusic(gameplaySoundData.backgroundMusic);
-
-            SceneManager.LoadScene("GameScene");
-        }
+        public void PlayGame() => SceneManager.LoadScene("GameScene");
 
         public void QuitGame()
         {

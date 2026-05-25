@@ -214,6 +214,9 @@ namespace Core
             );
 
             gameFlowManager.Initialize();
+
+            if (soundData != null && soundData.backgroundMusic != null)
+                AudioManager.Instance.PlayMusic(soundData.backgroundMusic);
         }
     }
 }

@@ -20772,6 +20772,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.g
+      value: 0.8886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.r
+      value: 0.96684057
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.b
+      value: 0.45638645
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.g
+      value: 0.23921567
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -20783,6 +20803,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 7912549542613383710, guid: 86be92b97245e374f821fae9c8564c0f, type: 3}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96862745
+      objectReference: {fileID: 0}
     - target: {fileID: 5788103701376740331, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.73
@@ -26427,7 +26455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuScripts.EndGameMenu
   gameOverPanel: {fileID: 1715936214}
   gameWonPanel: {fileID: 82437799}
-  panelDelay: 0.1
+  panelDelay: 0
   fadeDuration: 0.2
   gameOverSound: {fileID: 8300000, guid: f7ad4128574548a48985b2a7a15df610, type: 3}
   gameWonSound: {fileID: 8300000, guid: 2352210a849a0204495091212e40c113, type: 3}
@@ -27677,6 +27705,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.g
+      value: 0.8886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.r
+      value: 0.96684057
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.b
+      value: 0.45638645
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.g
+      value: 0.23921567
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -27688,6 +27736,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 4952936439075374402, guid: b45cf23a62a479b4782a60f1f84ad45b, type: 3}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96862745
+      objectReference: {fileID: 0}
     - target: {fileID: 5788103701376740331, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.73
@@ -30302,6 +30358,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.g
+      value: 0.8886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostValidColor.r
+      value: 0.96684057
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.b
+      value: 0.45638645
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostInvalidColor.g
+      value: 0.23921567
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -30313,6 +30389,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 3486939950096845021, guid: 9fe9078f879fa1c4690b126ef37ac6da, type: 3}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.96862745
+      objectReference: {fileID: 0}
     - target: {fileID: 5788103701376740331, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.73

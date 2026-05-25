@@ -15,8 +15,6 @@ namespace MenuScripts
 
         [Header("Settings")]
         [SerializeField]
-        private float panelDelay = 0.5f;
-        [SerializeField]
         private float fadeDuration = 0.2f;
 
         [Header("Audio")]
@@ -66,8 +64,6 @@ namespace MenuScripts
                 AudioManager.Instance.StopMusic();
                 audioSource.PlayOneShot(clip);
             }
-
-            yield return new WaitForSecondsRealtime(panelDelay);
 
             UIBlocker.BlockAll();
             Time.timeScale = 0f;
