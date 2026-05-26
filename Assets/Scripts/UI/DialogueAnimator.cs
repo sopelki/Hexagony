@@ -24,10 +24,9 @@ namespace UI
         {
             dialogueText.text = "";
 
-            foreach (char letter in phrase.ToCharArray())
+            foreach (var letter in phrase.ToCharArray())
             {
                 dialogueText.text += letter;
-                // Тут можно добавить воспроизведение короткого пиксельного звука "блып-блып"
                 yield return new WaitForSecondsRealtime(textSpeed); 
             }
         }

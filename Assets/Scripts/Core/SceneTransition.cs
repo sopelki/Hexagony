@@ -78,7 +78,7 @@ namespace Core
             while (asyncLoad is not { isDone: true })
                 yield return null;
 
-            yield return new WaitForSecondsRealtime(0.05f);
+            yield return new WaitForSecondsRealtime(0.1f);
 
             yield return Fade(0f);
 

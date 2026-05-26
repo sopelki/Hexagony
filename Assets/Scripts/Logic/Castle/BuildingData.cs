@@ -41,12 +41,13 @@ namespace Logic.Castle
                 stats = customSpecialInfo;
             else
             {
-                if (type is BuildingType.Blacksmith or BuildingType.Hospital)
-                    stats = $"{effectLabel}: <color=#66BB6A>+{buffValue * 100f}%</color>";
-                else if (type == BuildingType.Farm)
-                    stats = $"{effectLabel}: <color=#66BB6A>+{supplyProvided}</color>";
-                else
-                    stats = $"{effectLabel}: <color=#66BB6A>+{baseProduction}</color>";
+                stats = type switch
+                {
+                    BuildingType.Blacksmith or BuildingType.Hospital =>
+                        $"{effectLabel}: <color=#66BB6A>+{buffValue * 100f}%</color>",
+                    BuildingType.Farm => $"{effectLabel}: <color=#66BB6A>+{supplyProvided}</color>",
+                    _ => $"{effectLabel}: <color=#66BB6A>+{baseProduction}</color>"
+                };
             }
 
             return new TooltipContent
