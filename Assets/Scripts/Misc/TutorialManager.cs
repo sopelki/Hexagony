@@ -5,6 +5,7 @@ using Logic.Castle;
 using Logic.Tower;
 using Logic.Trap;
 using Logic.Unit;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,29 +23,16 @@ namespace Misc
         [SerializeField]
         private Button actionButton;
         [SerializeField]
-        private TMPro.TextMeshProUGUI actionButtonText;
+        private TextMeshProUGUI actionButtonText;
         [SerializeField]
         private GameObject barrackSlot, towerSlot, trapSlot;
         [SerializeField]
         private GameObject highlightEffect;
-
-        private enum TutorialStep
-        {
-            Greeting,
-            BuildBarrack,
-            BarrackSuccess,
-            BuildTower,
-            TowerSuccess,
-            BuildTrap,
-            Finish
-        }
+        private bool barrackTracked, towerTracked, trapTracked;
 
         private TutorialStep currentStep = TutorialStep.Greeting;
 
         private GameFlowManager gameFlowManager;
-        private bool barrackTracked, towerTracked, trapTracked;
-
-        public void Setup(GameFlowManager flowManager) => gameFlowManager = flowManager;
 
         private void Start()
         {
@@ -54,51 +42,13 @@ namespace Misc
             UpdateTutorialState();
         }
 
-        public static bool IsTutorialActive()
-        {
-            var tutorial = FindAnyObjectByType<TutorialManager>();
-            return tutorial && tutorial.isActiveAndEnabled;
-        }
-        
-        public void OnActionButtonClick()
-        {
-            switch (currentStep)
-            {
-                case TutorialStep.Greeting:
-                    currentStep = TutorialStep.BuildBarrack;
-                    break;
-
-                case TutorialStep.BarrackSuccess:
-                    currentStep = TutorialStep.BuildTower;
-                    break;
-
-                case TutorialStep.TowerSuccess:
-                    currentStep = TutorialStep.BuildTrap;
-                    break;
-
-                case TutorialStep.Finish:
-                    FinishTutorialAndStartRealGame();
-                    return;
-                
-                case TutorialStep.BuildBarrack:
-                case TutorialStep.BuildTower:
-                case TutorialStep.BuildTrap:
-                    return;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            UpdateTutorialState();
-        }
-        
         private void Update()
         {
             switch (currentStep)
             {
                 case TutorialStep.BuildBarrack:
-                    if (CastleSystem.Instance != null && 
-                        CastleSystem.Instance.Model.Buildings.Count > 0 && 
+                    if (CastleSystem.Instance != null &&
+                        CastleSystem.Instance.Model.Buildings.Count > 0 &&
                         CastleSystem.Instance.Model.Buildings.Any(b => b.Data.type == BuildingType.Barracks))
                     {
                         currentStep = TutorialStep.BarrackSuccess;
@@ -128,11 +78,54 @@ namespace Misc
             }
         }
 
+        public void Setup(GameFlowManager flowManager)
+        {
+            gameFlowManager = flowManager;
+        }
+
+        public static bool IsTutorialActive()
+        {
+            var tutorial = FindAnyObjectByType<TutorialManager>();
+            return tutorial && tutorial.isActiveAndEnabled;
+        }
+
+        public void OnActionButtonClick()
+        {
+            switch (currentStep)
+            {
+                case TutorialStep.Greeting:
+                    currentStep = TutorialStep.BuildBarrack;
+                    break;
+
+                case TutorialStep.BarrackSuccess:
+                    currentStep = TutorialStep.BuildTower;
+                    break;
+
+                case TutorialStep.TowerSuccess:
+                    currentStep = TutorialStep.BuildTrap;
+                    break;
+
+                case TutorialStep.Finish:
+                    FinishTutorialAndStartRealGame();
+                    return;
+
+                case TutorialStep.BuildBarrack:
+                case TutorialStep.BuildTower:
+                case TutorialStep.BuildTrap:
+                    return;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            UpdateTutorialState();
+        }
+
         private void UpdateTutorialState()
         {
-            if (highlightEffect) 
+            if (highlightEffect)
                 highlightEffect.SetActive(false);
-            if (tutorialWindow) 
+            if (tutorialWindow)
                 tutorialWindow.SetActive(true);
 
             switch (currentStep)
@@ -179,18 +172,18 @@ namespace Misc
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         private void ConfigureButton(bool isVisible, string text = "")
         {
-            if (actionButton) 
+            if (actionButton)
                 actionButton.gameObject.SetActive(isVisible);
-            if (actionButtonText && isVisible) 
+            if (actionButtonText && isVisible)
                 actionButtonText.text = text;
         }
 
         private void PrintPhrase(string text)
         {
-            if (dialogueAnimator) 
+            if (dialogueAnimator)
                 dialogueAnimator.PrintPhrase(text);
         }
 
@@ -237,6 +230,17 @@ namespace Misc
                 tutorialWindow.SetActive(false);
 
             transform.parent.gameObject.SetActive(false);
+        }
+
+        private enum TutorialStep
+        {
+            Greeting,
+            BuildBarrack,
+            BarrackSuccess,
+            BuildTower,
+            TowerSuccess,
+            BuildTrap,
+            Finish
         }
     }
 }

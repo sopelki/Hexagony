@@ -7,17 +7,15 @@ namespace UI
 {
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private ITooltipProvider provider;
-        private Coroutine delayCoroutine;
-        private bool isBought;
-
         [SerializeField]
         private float delay = 0.5f;
+        private Coroutine delayCoroutine;
+        private bool isBought;
+        private ITooltipProvider provider;
 
-        public void SetContent(ITooltipProvider tooltipProvider, bool bought = false)
+        private void OnDisable()
         {
-            provider = tooltipProvider;
-            isBought = bought;
+            StopDisplay();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -31,7 +29,16 @@ namespace UI
             delayCoroutine = StartCoroutine(ShowWithDelay());
         }
 
-        public void OnPointerExit(PointerEventData eventData) => StopDisplay();
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            StopDisplay();
+        }
+
+        public void SetContent(ITooltipProvider tooltipProvider, bool bought = false)
+        {
+            provider = tooltipProvider;
+            isBought = bought;
+        }
 
         private IEnumerator ShowWithDelay()
         {
@@ -47,7 +54,5 @@ namespace UI
             if (TooltipUI.Instance != null)
                 TooltipUI.Instance.Hide();
         }
-
-        private void OnDisable() => StopDisplay();
     }
 }

@@ -6,18 +6,17 @@ namespace Logic.Trap
 {
     public class TrapsModel
     {
-        public event Action<TrapModel> OnTrapAdded;
-        public event Action<TrapModel> OnTrapRemoved;
-
         private readonly List<TrapModel> traps = new();
         public IReadOnlyList<TrapModel> Traps => traps;
+        public event Action<TrapModel> OnTrapAdded;
+        public event Action<TrapModel> OnTrapRemoved;
 
         public void AddTrap(TrapModel trap)
         {
             traps.Add(trap);
             OnTrapAdded?.Invoke(trap);
         }
-        
+
         public void RemoveTrap(TrapModel trap)
         {
             if (traps.Remove(trap))
@@ -26,8 +25,8 @@ namespace Logic.Trap
                 OnTrapRemoved?.Invoke(trap);
             }
         }
-        
-        public void Clear() 
+
+        public void Clear()
         {
             traps.Clear();
         }

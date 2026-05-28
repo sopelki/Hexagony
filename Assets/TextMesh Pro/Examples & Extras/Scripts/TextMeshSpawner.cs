@@ -3,25 +3,21 @@ using UnityEngine;
 
 namespace TextMesh_Pro.Examples___Extras.Scripts
 {
-    
     public class TextMeshSpawner : MonoBehaviour
     {
-
-        public int SpawnType = 0;
+        public int SpawnType;
         public int NumberOfNPC = 12;
 
         public Font TheFont;
 
         private TextMeshProFloatingText floatingText_Script;
 
-        void Awake()
+        private void Awake()
         {
-
         }
 
-        void Start()
+        private void Start()
         {
-
             for (var i = 0; i < NumberOfNPC; i++)
             {
                 if (SpawnType == 0)
@@ -73,6 +69,5 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
                 }
             }
         }
-
     }
 }

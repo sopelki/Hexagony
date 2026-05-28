@@ -1,27 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Audio;
+using Core;
+using Interfaces;
 using Logic.Castle;
 using Logic.Monster;
 using Logic.Projectile;
 using UnityEngine;
-using Audio;
 
 namespace Logic.Tower
 {
-    public class TowerSystem : Interfaces.ITickable
+    public class TowerSystem : ITickable
     {
-        public event Action OnFirstTowerPlaced;
-
         private readonly CastleSystem castleSystem;
-        private readonly TowersModel towersModel;
-        private readonly ProjectileSystem projectileSystem;
         private readonly MonsterSystem monsterSystem;
+        private readonly ProjectileSystem projectileSystem;
         private readonly SoundData soundData;
+        private readonly TowersModel towersModel;
 
         private bool firstTowerPlaced;
-        
-        public static TowerSystem Instance { get; private set; }
 
         public TowerSystem(
             CastleSystem castleSystem,
@@ -35,16 +33,17 @@ namespace Logic.Tower
             this.monsterSystem = monsterSystem;
             this.projectileSystem = projectileSystem;
             this.soundData = soundData;
-            
+
             Instance = this;
         }
 
-        
+        public static TowerSystem Instance { get; private set; }
+
 
         public void Tick()
         {
             var monsters = monsterSystem.GetAllMonsters();
-            var step = Core.TickManager.Instance.tickInterval;
+            var step = TickManager.Instance.tickInterval;
 
             foreach (var tower in towersModel.Towers)
             {
@@ -76,7 +75,9 @@ namespace Logic.Tower
                 }
             }
         }
-        
+
+        public event Action OnFirstTowerPlaced;
+
         public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
         {
             if (IsCellOccupied(cellPos))
@@ -87,20 +88,23 @@ namespace Logic.Tower
 
             return true;
         }
-        
+
         public bool CanAffordTower(TowerData data)
         {
             return castleSystem.CanAfford(data.baseCost);
         }
 
-        public bool IsCellOccupied(Vector3Int cellPos) => towersModel.Towers.Any(t => t.GridPosition == cellPos);
+        public bool IsCellOccupied(Vector3Int cellPos)
+        {
+            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
+        }
 
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos)
         {
             if (!CanPlaceTower(data, cellPos))
                 return false;
-            
-            
+
+
             castleSystem.TrySpendGold(data.baseCost);
             var tower = new TowerModel(data, cellPos, worldPos);
             towersModel.AddTower(tower);
@@ -122,7 +126,7 @@ namespace Logic.Tower
         {
             AudioClip[] sound;
             float volume;
-            
+
             if (tower.Data.type == TowerType.Mage)
             {
                 sound = soundData.mageTowerShootSounds;
@@ -199,8 +203,8 @@ namespace Logic.Tower
                 .Select(x => x.Monster)
                 .ToList();
         }
-        
-        public List<TowerModel> GetTowers() 
+
+        public List<TowerModel> GetTowers()
         {
             return (List<TowerModel>)towersModel.Towers;
         }

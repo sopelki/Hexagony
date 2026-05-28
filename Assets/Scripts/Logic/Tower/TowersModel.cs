@@ -15,7 +15,10 @@ namespace Logic.Tower
             towers.Add(tower);
             OnChanged?.Invoke(tower);
         }
-        
-        public void Clear() => towers.Clear();
+
+        public void Clear()
+        {
+            towers.Clear();
+        }
     }
 }

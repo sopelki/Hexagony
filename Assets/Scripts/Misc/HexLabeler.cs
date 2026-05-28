@@ -1,7 +1,6 @@
+using HexagonScripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using HexagonScripts;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -36,7 +35,7 @@ namespace Misc
             {
                 if (!tilemap.HasTile(pos))
                     continue;
-                
+
                 var axial = HexagonMath.OffsetToAxial(pos.x, pos.y);
 
                 var worldPos = tilemap.GetCellCenterWorld(pos);

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
+﻿using System.Collections;
 using Audio;
 using Core;
 using Logic.Castle;
 using Misc;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MenuScripts
 {
@@ -26,12 +26,12 @@ namespace MenuScripts
 
         [Header("References")]
         [SerializeField]
-        private Core.GameInitializer gameInitializer;
+        private GameInitializer gameInitializer;
         [SerializeField]
         private FadePanel menuBackground;
+        private AudioSource audioSource;
 
         private CastleModel model;
-        private AudioSource audioSource;
 
         private void Awake()
         {
@@ -51,9 +51,15 @@ namespace MenuScripts
                 OpenGameOver();
         }
 
-        public void OpenGameOver() => StartCoroutine(EndGameSequence(gameOverPanel, gameOverSound));
+        public void OpenGameOver()
+        {
+            StartCoroutine(EndGameSequence(gameOverPanel, gameOverSound));
+        }
 
-        public void OpenWinMenu() => StartCoroutine(EndGameSequence(gameWonPanel, gameWonSound));
+        public void OpenWinMenu()
+        {
+            StartCoroutine(EndGameSequence(gameWonPanel, gameWonSound));
+        }
 
         private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip)
         {

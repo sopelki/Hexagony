@@ -1,57 +1,14 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RenderGraphModule;
+using UnityEngine.Rendering.Universal;
 
 namespace Retro.PSXEffects
 {
     public class CRTRendererFeature : ScriptableRendererFeature
     {
-        [System.Serializable]
-        public class CRTSettings
-        {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
-
-            [Header("Pixelation")]
-            [Range(1, 20)] public float pixelSize = 4f;
-
-            [Header("Scanlines")]
-            [Range(0, 1)] public float scanlineIntensity = 0.3f;
-            [Range(100, 1000)] public float scanlineCount = 300f;
-
-            [Header("Distortion")]
-            [Range(0, 0.1f)] public float curvature = 0.02f;
-            [Range(0, 0.02f)] public float chromaticAberration = 0.003f;
-
-            [Header("Color")]
-            [Range(0, 1)] public float vignette = 0.3f;
-            [Range(0.5f, 1.5f)] public float brightness = 1f;
-
-            [Header("RGB Phosphor")]
-            [Range(0, 1)] public float phosphorIntensity = 0f;
-
-            [Header("Flicker")]
-            [Range(0, 1)] public float flickerIntensity = 0f;
-
-            [Header("Rolling Scanline")]
-            [Range(0, 1)] public float rollingScanlineIntensity = 0f;
-            [Range(0.1f, 2f)] public float rollingScanlineSpeed = 0.5f;
-
-            [Header("Glow")]
-            [Range(0, 1)] public float glowIntensity = 0f;
-            [Range(1, 10)] public float glowSpread = 3f;
-
-            [Header("Static Noise")]
-            [Range(0, 1)] public float noiseIntensity = 0f;
-
-            [Header("Color Bleed")]
-            [Range(0, 1)] public float colorBleedIntensity = 0f;
-
-            [Header("Interlacing")]
-            [Range(0, 1)] public float interlacingIntensity = 0f;
-        }
-
-        public CRTSettings settings = new CRTSettings();
+        public CRTSettings settings = new();
         private CRTRenderPass crtPass;
         private Material material;
 
@@ -79,20 +36,70 @@ namespace Retro.PSXEffects
             if (material != null)
                 CoreUtils.Destroy(material);
         }
+
+        [Serializable]
+        public class CRTSettings
+        {
+            public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
+
+            [Header("Pixelation")]
+            [Range(1, 20)]
+            public float pixelSize = 4f;
+
+            [Header("Scanlines")]
+            [Range(0, 1)]
+            public float scanlineIntensity = 0.3f;
+            [Range(100, 1000)]
+            public float scanlineCount = 300f;
+
+            [Header("Distortion")]
+            [Range(0, 0.1f)]
+            public float curvature = 0.02f;
+            [Range(0, 0.02f)]
+            public float chromaticAberration = 0.003f;
+
+            [Header("Color")]
+            [Range(0, 1)]
+            public float vignette = 0.3f;
+            [Range(0.5f, 1.5f)]
+            public float brightness = 1f;
+
+            [Header("RGB Phosphor")]
+            [Range(0, 1)]
+            public float phosphorIntensity;
+
+            [Header("Flicker")]
+            [Range(0, 1)]
+            public float flickerIntensity;
+
+            [Header("Rolling Scanline")]
+            [Range(0, 1)]
+            public float rollingScanlineIntensity;
+            [Range(0.1f, 2f)]
+            public float rollingScanlineSpeed = 0.5f;
+
+            [Header("Glow")]
+            [Range(0, 1)]
+            public float glowIntensity;
+            [Range(1, 10)]
+            public float glowSpread = 3f;
+
+            [Header("Static Noise")]
+            [Range(0, 1)]
+            public float noiseIntensity;
+
+            [Header("Color Bleed")]
+            [Range(0, 1)]
+            public float colorBleedIntensity;
+
+            [Header("Interlacing")]
+            [Range(0, 1)]
+            public float interlacingIntensity;
+        }
     }
 
     public class CRTRenderPass : ScriptableRenderPass
     {
-        private class PassData
-        {
-            public TextureHandle source;
-            public TextureHandle destination;
-            public Material material;
-        }
-
-        private Material material;
-        private CRTRendererFeature.CRTSettings settings;
-
         // Shader property IDs
         private static readonly int PixelSizeID = Shader.PropertyToID("_PixelSize");
         private static readonly int ScanlineIntensityID = Shader.PropertyToID("_ScanlineIntensity");
@@ -111,6 +118,9 @@ namespace Retro.PSXEffects
         private static readonly int ColorBleedIntensityID = Shader.PropertyToID("_ColorBleedIntensity");
         private static readonly int InterlacingIntensityID = Shader.PropertyToID("_InterlacingIntensity");
         private static readonly int TimeID = Shader.PropertyToID("_CRTTime");
+
+        private readonly Material material;
+        private CRTRendererFeature.CRTSettings settings;
 
         public CRTRenderPass(Material material, CRTRendererFeature.CRTSettings settings)
         {
@@ -139,7 +149,7 @@ namespace Retro.PSXEffects
             destinationDesc.name = "_CRTTempTexture";
             destinationDesc.clearBuffer = false;
 
-            TextureHandle destination = renderGraph.CreateTexture(destinationDesc);
+            var destination = renderGraph.CreateTexture(destinationDesc);
 
             // Set all shader properties
             material.SetFloat(PixelSizeID, settings.pixelSize);
@@ -188,6 +198,13 @@ namespace Retro.PSXEffects
                     Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0, false);
                 });
             }
+        }
+
+        private class PassData
+        {
+            public TextureHandle destination;
+            public Material material;
+            public TextureHandle source;
         }
     }
 }

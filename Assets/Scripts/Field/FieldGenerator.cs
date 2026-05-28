@@ -23,8 +23,8 @@ namespace Field
 
         private Field currentField;
         private Tilemap myTilemap;
-        private Dictionary<HexagonType, TileBase> typeToTileDict;
         private Dictionary<TileBase, HexagonType> tileToTypeDict;
+        private Dictionary<HexagonType, TileBase> typeToTileDict;
 
         private void Awake()
         {
@@ -86,7 +86,7 @@ namespace Field
         {
             if (objectsContainer == null || currentField.MapObjects == null)
                 return;
-            
+
             foreach (var objData in currentField.MapObjects)
             {
                 var mapping = objectMappings.Find(m => m.id == objData.objectId);
@@ -98,64 +98,6 @@ namespace Field
                 }
             }
         }
-
-#if UNITY_EDITOR
-
-        [ContextMenu("Load Field From File")]
-        public void LoadAndDraw()
-        {
-            // ClearField();
-
-            var loadedField = SaveLoadManager.LoadMapFromFile();
-
-            if (loadedField != null)
-            {
-                Initialize(loadedField);
-                Debug.Log(
-                    $"Field Loaded: {currentField.Hexagons.Count} tiles, {currentField.MapObjects.Count} objects.");
-            }
-            else
-            {
-                Debug.LogWarning("Load Field From File: File not found. Generating default grid.");
-                // GenerateAndDraw();
-            }
-        }
-
-        [ContextMenu("Save Field To File")]
-        public void SaveGrid()
-        {
-            currentField = new Field();
-
-            ReadHexagonsFromBrush();
-            ReadObjectsFromScene();
-
-            if (currentField.Hexagons.Count > 0)
-            {
-                SaveLoadManager.SaveMapToFile(currentField);
-                Debug.Log($"Saved {currentField.Hexagons.Count} tiles and {currentField.MapObjects.Count} objects.");
-            }
-            else
-                Debug.LogWarning("Save Field To File: Tilemap is empty.");
-        }
-
-        [ContextMenu("Clear Field (Editor Only)")]
-        public void ClearField()
-        {
-            ClearGrid();
-            ClearDecorations();
-
-            Debug.Log("Field cleared (Editor mode).");
-        }
-
-        // [ContextMenu("Generate Random Grid")]
-        // public void GenerateAndDraw()
-        // {
-        //     ClearField();
-        //     CurrentField = new Field();
-        //     CurrentField.GenerateFieldData(FieldWidth, FieldHeight);
-        //     DrawHexagons(CurrentField);
-        // }
-#endif
 
         private void ClearGrid()
         {
@@ -228,5 +170,63 @@ namespace Field
                     tileToTypeDict.Add(mapping.tileAsset, mapping.type);
             }
         }
+
+#if UNITY_EDITOR
+
+        [ContextMenu("Load Field From File")]
+        public void LoadAndDraw()
+        {
+            // ClearField();
+
+            var loadedField = SaveLoadManager.LoadMapFromFile();
+
+            if (loadedField != null)
+            {
+                Initialize(loadedField);
+                Debug.Log(
+                    $"Field Loaded: {currentField.Hexagons.Count} tiles, {currentField.MapObjects.Count} objects.");
+            }
+            else
+            {
+                Debug.LogWarning("Load Field From File: File not found. Generating default grid.");
+                // GenerateAndDraw();
+            }
+        }
+
+        [ContextMenu("Save Field To File")]
+        public void SaveGrid()
+        {
+            currentField = new Field();
+
+            ReadHexagonsFromBrush();
+            ReadObjectsFromScene();
+
+            if (currentField.Hexagons.Count > 0)
+            {
+                SaveLoadManager.SaveMapToFile(currentField);
+                Debug.Log($"Saved {currentField.Hexagons.Count} tiles and {currentField.MapObjects.Count} objects.");
+            }
+            else
+                Debug.LogWarning("Save Field To File: Tilemap is empty.");
+        }
+
+        [ContextMenu("Clear Field (Editor Only)")]
+        public void ClearField()
+        {
+            ClearGrid();
+            ClearDecorations();
+
+            Debug.Log("Field cleared (Editor mode).");
+        }
+
+        // [ContextMenu("Generate Random Grid")]
+        // public void GenerateAndDraw()
+        // {
+        //     ClearField();
+        //     CurrentField = new Field();
+        //     CurrentField.GenerateFieldData(FieldWidth, FieldHeight);
+        //     DrawHexagons(CurrentField);
+        // }
+#endif
     }
 }

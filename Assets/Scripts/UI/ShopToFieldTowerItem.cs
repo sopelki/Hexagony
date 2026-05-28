@@ -57,26 +57,24 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+        private Vector2 currentGhostPosition;
+        private float currentScale;
+        private Coroutine fadeCoroutine;
+        private GameObject ghost;
+        private Image ghostImage;
+        private RectTransform ghostRect;
 
         private CanvasGroup iconCanvasGroup;
-        private Coroutine fadeCoroutine;
 
-        private TowerSystem towerSystem;
-        private GameObject ghost;
-        private RectTransform ghostRect;
-        private Image ghostImage;
-
-        private float targetScale;
-        private float currentScale;
+        private bool isSnapping;
         private Color targetColor;
 
         private Vector2 targetGhostPosition;
-        private Vector2 currentGhostPosition;
 
-        private bool isSnapping;
+        private float targetScale;
+
+        private TowerSystem towerSystem;
         private bool wasSnapping;
-
-        public void Construct(TowerSystem system) => towerSystem = system;
 
         private void Awake()
         {
@@ -92,6 +90,46 @@ namespace UI
                 if (iconCanvasGroup == null)
                     iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
             }
+        }
+
+        private void Update()
+        {
+            if (!ghostRect)
+                return;
+
+            if (isSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.deltaTime * snapSpeed
+                );
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.deltaTime * unSnapSpeed
+                );
+
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
+                    wasSnapping = false;
+            }
+            else
+                currentGhostPosition = targetGhostPosition;
+
+            ghostRect.localPosition = currentGhostPosition;
+
+            currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
+            ghostRect.localScale = Vector3.one * currentScale;
+
+            ghostImage.color = Color.Lerp(
+                ghostImage.color,
+                targetColor,
+                Time.deltaTime * colorLerpSpeed
+            );
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -151,44 +189,9 @@ namespace UI
             }
         }
 
-        private void Update()
+        public void Construct(TowerSystem system)
         {
-            if (!ghostRect)
-                return;
-
-            if (isSnapping)
-            {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.deltaTime * snapSpeed
-                );
-                wasSnapping = true;
-            }
-            else if (wasSnapping)
-            {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.deltaTime * unSnapSpeed
-                );
-
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
-            }
-            else
-                currentGhostPosition = targetGhostPosition;
-
-            ghostRect.localPosition = currentGhostPosition;
-
-            currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
-            ghostRect.localScale = Vector3.one * currentScale;
-
-            ghostImage.color = Color.Lerp(
-                ghostImage.color,
-                targetColor,
-                Time.deltaTime * colorLerpSpeed
-            );
+            towerSystem = system;
         }
 
         private void TryPlaceTower(PointerEventData eventData)

@@ -22,7 +22,10 @@ namespace MenuScripts
         [SerializeField]
         private Toggle fullscreenToggle;
 
-        private void OnEnable() => LoadUIValues();
+        private void OnEnable()
+        {
+            LoadUIValues();
+        }
 
         private void LoadUIValues()
         {
@@ -33,10 +36,25 @@ namespace MenuScripts
             fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         }
 
-        public void SetMasterVolume(float volume) => ApplyVolume("MasterVol", volume);
-        public void SetMusicVolume(float volume) => ApplyVolume("MusicVol", volume);
-        public void SetSfxVolume(float volume) => ApplyVolume("SfxVol", volume);
-        public void SetUiVolume(float volume) => ApplyVolume("UiVol", volume);
+        public void SetMasterVolume(float volume)
+        {
+            ApplyVolume("MasterVol", volume);
+        }
+
+        public void SetMusicVolume(float volume)
+        {
+            ApplyVolume("MusicVol", volume);
+        }
+
+        public void SetSfxVolume(float volume)
+        {
+            ApplyVolume("SfxVol", volume);
+        }
+
+        public void SetUiVolume(float volume)
+        {
+            ApplyVolume("UiVol", volume);
+        }
 
         private void ApplyVolume(string parameterName, float volume)
         {

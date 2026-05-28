@@ -1,9 +1,10 @@
-﻿using HexagonScripts;
+﻿using System;
+using HexagonScripts;
 using UnityEngine.Tilemaps;
 
 namespace Field
 {
-    [System.Serializable]
+    [Serializable]
     public struct TileMapping
     {
         public HexagonType type;

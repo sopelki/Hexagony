@@ -16,6 +16,32 @@ namespace View
 
         private int occludersCount;
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Tower"))
+            {
+                if (transform.position.y > other.transform.position.y)
+                {
+                    occludersCount++;
+                    SetOutlineVisible(occludersCount > 0);
+                }
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.CompareTag("Tower"))
+            {
+                if (transform.position.y > other.transform.position.y)
+                {
+                    occludersCount--;
+                    if (occludersCount < 0)
+                        occludersCount = 0;
+                    SetOutlineVisible(occludersCount > 0);
+                }
+            }
+        }
+
         public void Initialize(Sprite sprite)
         {
             spriteRenderer.sprite = sprite;
@@ -46,32 +72,6 @@ namespace View
             var animLength = animator.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(animLength);
             Destroy(gameObject);
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Tower"))
-            {
-                if (transform.position.y > other.transform.position.y)
-                {
-                    occludersCount++;
-                    SetOutlineVisible(occludersCount > 0);
-                }
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Tower"))
-            {
-                if (transform.position.y > other.transform.position.y)
-                {
-                    occludersCount--;
-                    if (occludersCount < 0)
-                        occludersCount = 0;
-                    SetOutlineVisible(occludersCount > 0);
-                }
-            }
         }
     }
 }

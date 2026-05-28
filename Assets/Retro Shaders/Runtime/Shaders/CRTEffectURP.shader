@@ -2,7 +2,10 @@ Shader "Retro/CRTEffectURP"
 {
     SubShader
     {
-        Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" }
+        Tags
+        {
+            "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline"
+        }
         LOD 100
 
         ZWrite Off
@@ -127,9 +130,11 @@ Shader "Retro/CRTEffectURP"
                 float2 texelSize = 1.0 / screenSize;
                 float bleedAmount = _ColorBleedIntensity * _PixelSize;
 
-                float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x * bleedAmount, 0)).r;
+                float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                                           uv + float2(texelSize.x * bleedAmount, 0)).r;
                 float g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).g;
-                float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
+                float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                    uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
 
                 return float3(r, g, b);
             }
@@ -153,7 +158,7 @@ Shader "Retro/CRTEffectURP"
                 float2 curvedPixelUV = curveUV(pixelUV);
                 float2 curvedUV = curveUV(uv); // Для эффектов
 
-                if (curvedPixelUV.x < 0 || curvedPixelUV.x > 1 || 
+                if (curvedPixelUV.x < 0 || curvedPixelUV.x > 1 ||
                     curvedPixelUV.y < 0 || curvedPixelUV.y > 1)
                     return half4(0, 0, 0, 1);
 
@@ -161,30 +166,32 @@ Shader "Retro/CRTEffectURP"
                 if (_ChromaticAberration > 0.0001)
                 {
                     float2 chromaOffset = float2(_ChromaticAberration, 0);
-                    col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
-                            curveUV(pixelate(uv + chromaOffset, screenSize))).r;
-                    col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
-                            curvedPixelUV).g;
-                    col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
-                            curveUV(pixelate(uv - chromaOffset, screenSize))).b;
+                    col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                          curveUV(pixelate(uv + chromaOffset, screenSize))).r;
+                    col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                       curvedPixelUV).g;
+                    col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                 curveUV(pixelate(uv - chromaOffset, screenSize))).b;
                 }
                 else
                 {
                     col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, curvedPixelUV).rgb;
                 }
 
-                
+
                 if (_ColorBleedIntensity > 0.0001)
                 {
                     float2 texelSize = 1.0 / screenSize;
                     float bleedAmount = _ColorBleedIntensity * _PixelSize;
-                    
-                    float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
-                            curveUV(pixelate(uv + float2(texelSize.x * bleedAmount, 0), screenSize))).r;
+
+                    float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                                                    curveUV(pixelate(uv + float2(texelSize.x * bleedAmount, 0),
+                                                        screenSize))).r;
                     float g = col.g;
-                    float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, 
-                            curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0), screenSize))).b;
-                    
+                    float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
+                                                curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0),
+                                                    screenSize))).b;
+
                     col = lerp(col, float3(r, g, b), _ColorBleedIntensity);
                 }
 

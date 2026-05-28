@@ -2,7 +2,10 @@ Shader "Retro/PSXEffectURP"
 {
     SubShader
     {
-        Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" }
+        Tags
+        {
+            "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline"
+        }
         LOD 100
 
         ZWrite Off
@@ -53,10 +56,10 @@ Shader "Retro/PSXEffectURP"
 
             // Ordered dithering (Bayer matrix 4x4)
             static const float bayerMatrix[16] = {
-                 0.0/16.0,  8.0/16.0,  2.0/16.0, 10.0/16.0,
-                12.0/16.0,  4.0/16.0, 14.0/16.0,  6.0/16.0,
-                 3.0/16.0, 11.0/16.0,  1.0/16.0,  9.0/16.0,
-                15.0/16.0,  7.0/16.0, 13.0/16.0,  5.0/16.0
+                0.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0, 10.0 / 16.0,
+                12.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0, 6.0 / 16.0,
+                3.0 / 16.0, 11.0 / 16.0, 1.0 / 16.0, 9.0 / 16.0,
+                15.0 / 16.0, 7.0 / 16.0, 13.0 / 16.0, 5.0 / 16.0
             };
 
             float getBayerValue(float2 pixelPos)
@@ -121,11 +124,13 @@ Shader "Retro/PSXEffectURP"
             float3 colorBleed(float2 uv, float2 texelSize)
             {
                 float bleed = _ColorBleedIntensity * 2.0;
-                
+
                 float3 col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).rgb;
-                col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x * bleed, 0)).rgb * 0.3;
-                col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv - float2(texelSize.x * bleed, 0)).rgb * 0.2;
-                
+                col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x * bleed, 0)).rgb *
+                    0.3;
+                col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv - float2(texelSize.x * bleed, 0)).rgb *
+                    0.2;
+
                 return col / 1.5;
             }
 
@@ -133,11 +138,11 @@ Shader "Retro/PSXEffectURP"
             float3 chromaticAberration(float2 uv, float2 texelSize)
             {
                 float2 offset = float2(_ChromaticShift, 0) * texelSize;
-                
+
                 float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + offset).r;
                 float g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).g;
                 float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv - offset).b;
-                
+
                 return float3(r, g, b);
             }
 
@@ -145,11 +150,11 @@ Shader "Retro/PSXEffectURP"
             float3 verticalBlur(float2 uv, float2 texelSize)
             {
                 float blurAmount = _VerticalBlur * texelSize.y;
-                
+
                 float3 col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).rgb * 0.4;
                 col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(0, blurAmount)).rgb * 0.3;
                 col += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv - float2(0, blurAmount)).rgb * 0.3;
-                
+
                 return col;
             }
 
@@ -191,8 +196,10 @@ Shader "Retro/PSXEffectURP"
             float3 lcdGhosting(float3 color, float2 uv, float2 texelSize)
             {
                 float3 ghost = color;
-                ghost += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x, 0) * 2.0).rgb * 0.3;
-                ghost += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x, 0) * 4.0).rgb * 0.15;
+                ghost += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x, 0) * 2.0).rgb *
+                    0.3;
+                ghost += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x, 0) * 4.0).rgb *
+                    0.15;
                 return lerp(color, ghost / 1.45, _LCDGhosting);
             }
 
@@ -209,7 +216,7 @@ Shader "Retro/PSXEffectURP"
             {
                 float luma = dot(color, float3(0.299, 0.587, 0.114));
                 int index = int(floor(luma * 3.99));
-                
+
                 if (index == 0) return float3(0.06, 0.22, 0.06);
                 else if (index == 1) return float3(0.19, 0.38, 0.19);
                 else if (index == 2) return float3(0.54, 0.67, 0.06);

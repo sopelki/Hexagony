@@ -7,8 +7,13 @@ namespace Logic.Monster
         public float Duration { get; protected set; }
         public bool IsFinished => Duration <= 0f;
 
-        public virtual void OnApply(MonsterModel monster) { }
-        public virtual void OnRemove(MonsterModel monster) { }
+        public virtual void OnApply(MonsterModel monster)
+        {
+        }
+
+        public virtual void OnRemove(MonsterModel monster)
+        {
+        }
 
         public virtual void Tick(MonsterModel monster, float deltaTime)
         {
@@ -16,10 +21,17 @@ namespace Logic.Monster
                 Duration -= deltaTime;
         }
 
-        public virtual float ModifyMoveSpeed(float baseValue) => baseValue;
-        public virtual int ModifyOutgoingDamage(int baseValue) => baseValue;
+        public virtual float ModifyMoveSpeed(float baseValue)
+        {
+            return baseValue;
+        }
+
+        public virtual int ModifyOutgoingDamage(int baseValue)
+        {
+            return baseValue;
+        }
     }
-    
+
     public class SlowDebuff : MonsterDebuff
     {
         private readonly float slowPercent;
@@ -35,11 +47,11 @@ namespace Logic.Monster
             return baseValue * (1f - slowPercent);
         }
     }
-    
+
     public class HealthDebuff : MonsterDebuff
     {
-        private readonly float interval;
         private readonly int damagePerTick;
+        private readonly float interval;
         private float timer;
 
         public HealthDebuff(float duration, float interval, int damagePerTick)

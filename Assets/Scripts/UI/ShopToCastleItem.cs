@@ -20,9 +20,9 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+        private CanvasGroup iconCanvasGroup;
 
         private Image sourceImage;
-        private CanvasGroup iconCanvasGroup;
 
         private void Awake()
         {
@@ -80,6 +80,14 @@ namespace UI
             }
         }
 
+        public void OnDrag(PointerEventData eventData)
+        {
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+        }
+
         private void HandleItemDropped()
         {
             if (!gameObject.activeInHierarchy)
@@ -100,14 +108,6 @@ namespace UI
             }
 
             iconCanvasGroup.alpha = 1f;
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
         }
     }
 }

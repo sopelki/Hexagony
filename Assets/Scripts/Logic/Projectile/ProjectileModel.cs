@@ -1,20 +1,18 @@
-using UnityEngine;
 using Logic.Monster;
+using UnityEngine;
 
 namespace Logic.Projectile
 {
     public class ProjectileModel
     {
-        public Vector3 Position;
+        public ProjectileData Data;
         public Vector3 Direction;
-        public Vector3 TargetPoint;
+        public Vector3 Position;
         public Vector3 StartPosition;
-        public float TravelProgress;
-
-        public float TowerBaseY { get; private set; }
 
         public MonsterModel Target;
-        public ProjectileData Data;
+        public Vector3 TargetPoint;
+        public float TravelProgress;
 
         public ProjectileModel(
             Vector3 startPos,
@@ -36,5 +34,7 @@ namespace Logic.Projectile
 
             TravelProgress = 0f;
         }
+
+        public float TowerBaseY { get; private set; }
     }
 }

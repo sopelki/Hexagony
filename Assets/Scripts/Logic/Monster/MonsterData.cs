@@ -11,7 +11,7 @@ namespace Logic.Monster
         public int damage = 10;
         public float moveSpeed = 3f;
         public int goldReward = 20;
-        
+
         [Header("Attack")]
         public float attackRadius = 1f;
         public float attackCooldown = 1f;

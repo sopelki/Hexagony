@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace TextMesh_Pro.Examples___Extras.Scripts
 {
-
     public class Benchmark04 : MonoBehaviour
     {
-
-        public int SpawnType = 0;
+        public int SpawnType;
 
         public int MinPointSize = 12;
         public int MaxPointSize = 64;
@@ -18,7 +16,7 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
         //public Material material;
 
 
-        void Start()
+        private void Start()
         {
             m_Transform = transform;
 
@@ -35,7 +33,9 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
                     if (lineHeight > orthoSize * 2) return;
 
-                    go.transform.position = m_Transform.position + new Vector3(ratio * -orthoSize * 0.975f, orthoSize * 0.975f - lineHeight, 0);
+                    go.transform.position = m_Transform.position +
+                                            new Vector3(ratio * -orthoSize * 0.975f, orthoSize * 0.975f - lineHeight,
+                                                0);
 
                     var textMeshPro = go.AddComponent<TextMeshPro>();
 
@@ -54,11 +54,9 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
                     lineHeight += i;
                 }
-                else
-                {
-                    // TextMesh Implementation
-                    // Causes crashes since atlas needed exceeds 4096 X 4096
-                    /*
+                // TextMesh Implementation
+                // Causes crashes since atlas needed exceeds 4096 X 4096
+                /*
                     GameObject go = new GameObject("Arial " + i);
 
                     //if (lineHeight > orthoSize * 2 * 0.9f) return;
@@ -76,9 +74,7 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
                     lineHeight += i;
                     */
-                }
             }
         }
-
     }
 }

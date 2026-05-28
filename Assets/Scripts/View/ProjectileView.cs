@@ -1,5 +1,5 @@
-using UnityEngine;
 using Logic.Projectile;
+using UnityEngine;
 
 namespace View
 {
@@ -14,12 +14,6 @@ namespace View
         [SerializeField]
         private float framesPerSecond = 12f;
 
-        private int currentFrameIndex;
-        private float animationTimer;
-
-        private ProjectileModel model;
-        private Vector3 lastVisualPosition;
-
         [Header("Arc Settings")]
         [SerializeField]
         private float maxArcHeight = 2f;
@@ -27,23 +21,14 @@ namespace View
         private float referenceDistance = 8f;
         [SerializeField]
         private float minArcHeightFactor = 0.2f;
+        private float animationTimer;
 
         private float currentDynamicHeight;
 
-        public void Initialize(ProjectileModel projectileModel)
-        {
-            model = projectileModel;
-            lastVisualPosition = model.StartPosition;
-            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
-            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
-            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
+        private int currentFrameIndex;
+        private Vector3 lastVisualPosition;
 
-            if (!spriteRenderer)
-                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-            currentFrameIndex = 0;
-            animationTimer = 0f;
-        }
+        private ProjectileModel model;
 
         private void Update()
         {
@@ -79,6 +64,21 @@ namespace View
             }
 
             spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 0 : 2;
+        }
+
+        public void Initialize(ProjectileModel projectileModel)
+        {
+            model = projectileModel;
+            lastVisualPosition = model.StartPosition;
+            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
+            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
+            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
+
+            if (!spriteRenderer)
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            currentFrameIndex = 0;
+            animationTimer = 0f;
         }
 
         private void UpdateAnimation()

@@ -1,22 +1,21 @@
 ﻿using System.Linq;
+using Audio;
+using Core;
 using Interfaces;
 using Logic.Castle;
-using UnityEngine;
 using Logic.Unit;
-using Audio;
+using UnityEngine;
 
 namespace Logic.Monster
 {
     public class MonsterAttackStrategy : IAttackStrategy
     {
         private readonly MonsterModel monsterModel;
-        private readonly UnitSystem unitSystem;
         private readonly SoundData soundData;
+        private readonly UnitSystem unitSystem;
 
         private float currentCooldown;
         private IDamageable currentTarget;
-
-        public bool IsAttacking => currentTarget != null;
 
         public MonsterAttackStrategy(
             MonsterModel monsterModel,
@@ -27,6 +26,8 @@ namespace Logic.Monster
             this.unitSystem = unitSystem;
             this.soundData = soundData;
         }
+
+        public bool IsAttacking => currentTarget != null;
 
         public void Tick()
         {
@@ -83,10 +84,10 @@ namespace Logic.Monster
 
             if (currentCooldown > 0f)
             {
-                currentCooldown -= Core.TickManager.Instance.tickInterval;
+                currentCooldown -= TickManager.Instance.tickInterval;
                 return;
             }
-            
+
             monsterModel.Attack();
 
             if (soundData != null && soundData.monsterAttackSounds is { Length: > 0 })
@@ -96,34 +97,34 @@ namespace Logic.Monster
                 currentTarget.TakeDamage(monsterModel.Damage);
             else if (monsterModel.Data.attackType == AttackType.Radius)
             {
-                var targetPos = (currentTarget is UnitModel u) ? u.WorldPosition : monsterModel.WorldPosition; 
+                var targetPos = currentTarget is UnitModel u ? u.WorldPosition : monsterModel.WorldPosition;
                 if (currentTarget is CastleModel)
                 {
                     targetPos = castle.Model.WallWorldPositions
                         .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p))
                         .First();
                 }
-                
+
                 var viewDirection = (targetPos - monsterModel.WorldPosition).normalized;
                 if (viewDirection.sqrMagnitude < 0.001f)
                     viewDirection = (targetPos - monsterModel.WorldPosition).normalized;
-                
-                
+
+
                 var allUnitsInRadius = unitSystem.GetAllUnits()
                     .Where(unitModel => !unitModel.IsDead)
-                    .Where(unitModel => Vector3.Distance(unitModel.WorldPosition, monsterModel.WorldPosition) <= monsterModel.AttackRadius);
+                    .Where(unitModel => Vector3.Distance(unitModel.WorldPosition, monsterModel.WorldPosition) <=
+                                        monsterModel.AttackRadius);
 
                 foreach (var unitModel in allUnitsInRadius)
                 {
                     var directionToUnit = (unitModel.WorldPosition - monsterModel.WorldPosition).normalized;
                     var dotProduct = Vector3.Dot(viewDirection, directionToUnit);
-                    
+
                     if (dotProduct >= 0.5f || unitModel == currentTarget)
                         unitModel.TakeDamage(monsterModel.Damage);
                 }
                 if (currentTarget is CastleModel)
                     currentTarget.TakeDamage(monsterModel.Damage);
-                
             }
             currentCooldown = monsterModel.AttackCooldown;
         }

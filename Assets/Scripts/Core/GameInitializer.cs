@@ -7,16 +7,24 @@ using Logic.Projectile;
 using Logic.Tower;
 using Logic.Trap;
 using Logic.Unit;
+using MenuScripts;
 using Misc;
-using View;
 using UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using View;
 
 namespace Core
 {
     public class GameInitializer : MonoBehaviour
     {
+        private static readonly List<Vector2Int> spawnHexes = new()
+        {
+            new Vector2Int(2, -23),
+            new Vector2Int(27, -23),
+            new Vector2Int(20, -4),
+            new Vector2Int(8, 20)
+        };
         [Header("Castle Settings")]
         [SerializeField]
         private int startGold = 300;
@@ -41,7 +49,7 @@ namespace Core
         [SerializeField]
         private CameraSetup cameraSetup;
         [SerializeField]
-        private MenuScripts.EndGameMenu endGameMenu;
+        private EndGameMenu endGameMenu;
 
         [Header("Unit Settings")]
         [SerializeField]
@@ -72,34 +80,27 @@ namespace Core
         [Header("Audio")]
         [SerializeField]
         private SoundData soundData;
-        
-        [Header("Tutorial")]
-        [SerializeField] private TutorialManager tutorialManager;
 
-        private MonsterSystem monsterSystem;
-        private MonsterSpawner monsterSpawner;
+        [Header("Tutorial")]
+        [SerializeField]
+        private TutorialManager tutorialManager;
         private CastleModel castleModel;
         private CastleSystem castleSystem;
-        private TowersModel towersModel;
-        private TowerSystem towerSystem;
-        private UnitSystem unitSystem;
         private CastleView castleView;
-        private ProjectileSystem projectileSystem;
         private Field.Field field;
-        private WaveManager waveManager;
-        private TrapSystem trapSystem;
-        private TrapsModel trapsModel;
         private GameFlowManager gameFlowManager;
 
         private bool gameStarted;
+        private MonsterSpawner monsterSpawner;
 
-        private static readonly List<Vector2Int> spawnHexes = new()
-        {
-            new Vector2Int(2, -23),
-            new Vector2Int(27, -23),
-            new Vector2Int(20, -4),
-            new Vector2Int(8, 20),
-        };
+        private MonsterSystem monsterSystem;
+        private ProjectileSystem projectileSystem;
+        private TowersModel towersModel;
+        private TowerSystem towerSystem;
+        private TrapsModel trapsModel;
+        private TrapSystem trapSystem;
+        private UnitSystem unitSystem;
+        private WaveManager waveManager;
 
         private void Awake()
         {
@@ -218,10 +219,10 @@ namespace Core
             );
 
             gameFlowManager.Initialize();
-            
+
             if (tutorialManager != null)
                 tutorialManager.Setup(gameFlowManager);
-            
+
             if (soundData != null && soundData.backgroundMusic != null)
                 AudioManager.Instance.PlayMusic(soundData.backgroundMusic);
         }

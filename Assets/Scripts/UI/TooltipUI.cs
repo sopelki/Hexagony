@@ -37,12 +37,12 @@ namespace UI
         private float targetTransparency = 0.7f;
         [SerializeField]
         private Vector3 startScale = new(0.8f, 0.8f, 1f);
-
-        private RectTransform rectTransform;
         private Canvas canvas;
         private CanvasGroup canvasGroup;
 
         private bool isVisible;
+
+        private RectTransform rectTransform;
         private float targetAlpha;
         private Vector3 targetScale;
 
@@ -56,6 +56,14 @@ namespace UI
             canvasGroup.alpha = 0;
             rectTransform.localScale = startScale;
             panel.SetActive(false);
+        }
+
+        private void Update()
+        {
+            Animate();
+
+            if (panel.activeSelf)
+                UpdatePosition();
         }
 
         public void Show(TooltipContent content)
@@ -87,14 +95,6 @@ namespace UI
             isVisible = false;
             targetAlpha = 0f;
             targetScale = startScale;
-        }
-
-        private void Update()
-        {
-            Animate();
-
-            if (panel.activeSelf)
-                UpdatePosition();
         }
 
         private void Animate()

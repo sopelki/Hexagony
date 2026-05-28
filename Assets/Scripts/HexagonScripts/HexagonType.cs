@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
+
 namespace HexagonScripts
 {
     public enum HexagonType

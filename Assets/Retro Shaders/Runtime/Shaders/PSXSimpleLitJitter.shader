@@ -3,7 +3,7 @@ Shader "Retro/PSXSimpleLitJitter"
     Properties
     {
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
-        [MainColor]   _BaseColor("Base Color", Color) = (1,1,1,1)
+        [MainColor] _BaseColor("Base Color", Color) = (1,1,1,1)
 
         [Toggle(_ALPHATEST_ON)] _AlphaClip("Alpha Clipping", Float) = 0
         _Cutoff("Cutoff", Range(0, 1)) = 0.5
@@ -39,11 +39,11 @@ Shader "Retro/PSXSimpleLitJitter"
     // PSX-style vertex jitter (clip-space snapping)
     inline float2 PSX_GetJitterResolution(float2 screenSize, float jitterResolutionScale, float2 jitterTargetRes)
     {
-    #if defined(_JITTERMODE_FIXED)
+        #if defined(_JITTERMODE_FIXED)
         float2 res = max(jitterTargetRes, float2(1.0, 1.0));
-    #else
+        #else
         float2 res = max(screenSize * jitterResolutionScale, float2(160.0, 120.0));
-    #endif
+        #endif
         return res;
     }
 
@@ -72,7 +72,10 @@ Shader "Retro/PSXSimpleLitJitter"
         Pass
         {
             Name "UniversalForward"
-            Tags { "LightMode"="UniversalForward" }
+            Tags
+            {
+                "LightMode"="UniversalForward"
+            }
 
             ZWrite On
             Cull Back
@@ -111,16 +114,16 @@ Shader "Retro/PSXSimpleLitJitter"
                 float4 _BaseColor;
                 float4 _BaseMap_ST;
 
-                float  _Cutoff;
-                float  _BumpScale;
+                float _Cutoff;
+                float _BumpScale;
                 float4 _EmissionColor;
 
-                float  _JitterResolutionScale;
+                float _JitterResolutionScale;
                 float4 _JitterTargetRes;
-                float  _JitterStrength;
-                float  _JitterShadows;
+                float _JitterStrength;
+                float _JitterShadows;
 
-                float  _ReceiveShadows;
+                float _ReceiveShadows;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -133,11 +136,11 @@ Shader "Retro/PSXSimpleLitJitter"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                float3 normalOS   : NORMAL;
-#if defined(_NORMALMAP)
-                float4 tangentOS  : TANGENT;
-#endif
-                float2 uv         : TEXCOORD0;
+                float3 normalOS : NORMAL;
+                #if defined(_NORMALMAP)
+                float4 tangentOS : TANGENT;
+                #endif
+                float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -145,12 +148,12 @@ Shader "Retro/PSXSimpleLitJitter"
             {
                 float4 positionCS : SV_POSITION;
                 float3 positionWS : TEXCOORD0;
-                float3 normalWS   : TEXCOORD1;
-#if defined(_NORMALMAP)
-                float4 tangentWS  : TEXCOORD2;
-#endif
-                float2 uv         : TEXCOORD3;
-                half   fogFactor  : TEXCOORD4;
+                float3 normalWS : TEXCOORD1;
+                #if defined(_NORMALMAP)
+                float4 tangentWS : TEXCOORD2;
+                #endif
+                float2 uv : TEXCOORD3;
+                half fogFactor : TEXCOORD4;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -175,9 +178,9 @@ Shader "Retro/PSXSimpleLitJitter"
 
                 VertexPositionInputs posInputs = GetVertexPositionInputs(IN.positionOS.xyz);
                 VertexNormalInputs nrmInputs = GetVertexNormalInputs(IN.normalOS
-#if defined(_NORMALMAP)
+                    #if defined(_NORMALMAP)
                     , IN.tangentOS
-#endif
+                    #endif
                 );
 
                 float4 positionCS = posInputs.positionCS;
@@ -187,9 +190,9 @@ Shader "Retro/PSXSimpleLitJitter"
                 OUT.positionWS = posInputs.positionWS;
                 OUT.normalWS = nrmInputs.normalWS;
 
-#if defined(_NORMALMAP)
+                #if defined(_NORMALMAP)
                 OUT.tangentWS = float4(nrmInputs.tangentWS, nrmInputs.tangentSign);
-#endif
+                #endif
 
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 OUT.fogFactor = ComputeFogFactor(positionCS.z);
@@ -204,19 +207,19 @@ Shader "Retro/PSXSimpleLitJitter"
                 half4 baseSample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv);
                 half4 albedoAlpha = baseSample * _BaseColor;
 
-#if defined(_ALPHATEST_ON)
+                #if defined(_ALPHATEST_ON)
                 clip(albedoAlpha.a - _Cutoff);
-#endif
+                #endif
 
                 float3 normalWS = normalize(IN.normalWS);
 
-#if defined(_NORMALMAP)
+                #if defined(_NORMALMAP)
                 float3 normalTS = SampleNormalTS(uv);
                 float3 tangentWS = normalize(IN.tangentWS.xyz);
                 float3 bitangentWS = cross(normalWS, tangentWS) * IN.tangentWS.w;
                 float3x3 TBN = float3x3(tangentWS, bitangentWS, normalWS);
                 normalWS = normalize(mul(normalTS, TBN));
-#endif
+                #endif
 
                 // Main light
                 float4 shadowCoord = TransformWorldToShadowCoord(IN.positionWS);
@@ -232,7 +235,7 @@ Shader "Retro/PSXSimpleLitJitter"
                 lighting *= mainLight.shadowAttenuation;
 
                 // Additional lights (per-pixel when _ADDITIONAL_LIGHTS is enabled)
-#if defined(_ADDITIONAL_LIGHTS)
+                #if defined(_ADDITIONAL_LIGHTS)
                 uint additionalLightsCount = GetAdditionalLightsCount();
                 for (uint i = 0u; i < additionalLightsCount; i++)
                 {
@@ -240,17 +243,17 @@ Shader "Retro/PSXSimpleLitJitter"
                     half ndotlAdd = saturate(dot(normalWS, light.direction));
                     lighting += light.color * (ndotlAdd * light.distanceAttenuation * light.shadowAttenuation);
                 }
-#endif
+                #endif
 
                 // Ambient (cheap, makes it feel more like URP)
                 half3 ambient = SampleSH(normalWS);
 
                 half3 color = albedoAlpha.rgb * (lighting + ambient);
 
-#if defined(_EMISSION)
+                #if defined(_EMISSION)
                 half3 emission = SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, uv).rgb * _EmissionColor.rgb;
                 color += emission;
-#endif
+                #endif
 
                 color = MixFog(color, IN.fogFactor);
                 return half4(color, albedoAlpha.a);
@@ -261,7 +264,10 @@ Shader "Retro/PSXSimpleLitJitter"
         Pass
         {
             Name "ShadowCaster"
-            Tags { "LightMode"="ShadowCaster" }
+            Tags
+            {
+                "LightMode"="ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -282,11 +288,11 @@ Shader "Retro/PSXSimpleLitJitter"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColor;
-                float  _Cutoff;
-                float  _JitterResolutionScale;
+                float _Cutoff;
+                float _JitterResolutionScale;
                 float4 _JitterTargetRes;
-                float  _JitterStrength;
-                float  _JitterShadows;
+                float _JitterStrength;
+                float _JitterShadows;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -296,15 +302,15 @@ Shader "Retro/PSXSimpleLitJitter"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                float3 normalOS   : NORMAL;
-                float2 uv         : TEXCOORD0;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
-                float2 uv         : TEXCOORD0;
+                float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -339,11 +345,11 @@ Shader "Retro/PSXSimpleLitJitter"
             half4 frag(Varyings IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-#if defined(_ALPHATEST_ON)
+                #if defined(_ALPHATEST_ON)
                 half4 baseSample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
                 half alpha = baseSample.a * _BaseColor.a;
                 clip(alpha - _Cutoff);
-#endif
+                #endif
                 return 0;
             }
             ENDHLSL

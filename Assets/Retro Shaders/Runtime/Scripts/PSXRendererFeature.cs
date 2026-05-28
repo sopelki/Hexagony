@@ -1,78 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RenderGraphModule;
+using UnityEngine.Rendering.Universal;
 
 namespace Retro.PSXEffects
 {
     public class PSXRendererFeature : ScriptableRendererFeature
     {
-        [System.Serializable]
-        public class PSXSettings
-        {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
-
-            [Header("Core PSX Settings")]
-            [Tooltip("Color bit depth per channel. PS1 used ~5 bits (32 levels).")]
-            [Range(2, 8)] public float psxColorDepth = 5f;
-
-            [Tooltip("Ordered dithering intensity.")]
-            [Range(0, 1)] public float psxDitherIntensity = 0.5f;
-
-            [Tooltip("Additional color posterization.")]
-            [Range(0, 1)] public float psxPosterization = 0.2f;
-
-            [Tooltip("Resolution scale. 0.5 = PS1-like pixelation.")]
-            [Range(0.1f, 1f)] public float psxResolutionScale = 0.5f;
-
-            [Tooltip("Saturation boost.")]
-            [Range(1f, 2f)] public float psxSaturationBoost = 1.2f;
-
-            [Tooltip("Subtle darkening.")]
-            [Range(0, 1)] public float psxDarkening = 0.1f;
-
-            [Header("Analog/CRT Effects")]
-            [Tooltip("NTSC color bleeding")]
-            [Range(0, 1)] public float colorBleedIntensity = 0.1f;
-
-            [Tooltip("Chromatic aberration")]
-            [Range(0, 2)] public float chromaticShift = 0f;
-
-            [Tooltip("Vertical blur")]
-            [Range(0, 3)] public float verticalBlur = 0.5f;
-
-            [Tooltip("VHS tracking errors")]
-            [Range(0, 1)] public float vhsTracking = 0f;
-
-            [Tooltip("Analog signal noise")]
-            [Range(0, 0.5f)] public float signalNoise = 0.05f;
-
-            [Tooltip("Color temperature")]
-            [Range(-1, 1)] public float colorTemperature = 0.15f;
-
-            [Header("2D Pixel Art")]
-            [Tooltip("Snap to pixel grid")]
-            [Range(0, 1)] public float pixelPerfectSnapping = 0.5f;
-
-            [Tooltip("Reduce colors to palette")]
-            [Range(0, 1)] public float paletteReduction = 0f;
-
-            [Tooltip("LCD ghosting effect")]
-            [Range(0, 1)] public float lcdGhosting = 0f;
-
-            [Tooltip("Pixel grid intensity")]
-            [Range(0, 1)] public float pixelGridIntensity = 0.1f;
-
-            [Tooltip("Pixel size for grid")]
-            [Range(1, 8)] public float pixelGridSize = 2f;
-
-            [Tooltip("Game Boy mode")]
-            [Range(0, 1)] public float gameBoyMode = 0f;
-        }
-
-        public PSXSettings settings = new PSXSettings();
-        private PSXRenderPass renderPass;
+        public PSXSettings settings = new();
         private Material material;
+        private PSXRenderPass renderPass;
 
         public override void Create()
         {
@@ -98,20 +36,91 @@ namespace Retro.PSXEffects
             if (material != null)
                 CoreUtils.Destroy(material);
         }
+
+        [Serializable]
+        public class PSXSettings
+        {
+            public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
+
+            [Header("Core PSX Settings")]
+            [Tooltip("Color bit depth per channel. PS1 used ~5 bits (32 levels).")]
+            [Range(2, 8)]
+            public float psxColorDepth = 5f;
+
+            [Tooltip("Ordered dithering intensity.")]
+            [Range(0, 1)]
+            public float psxDitherIntensity = 0.5f;
+
+            [Tooltip("Additional color posterization.")]
+            [Range(0, 1)]
+            public float psxPosterization = 0.2f;
+
+            [Tooltip("Resolution scale. 0.5 = PS1-like pixelation.")]
+            [Range(0.1f, 1f)]
+            public float psxResolutionScale = 0.5f;
+
+            [Tooltip("Saturation boost.")]
+            [Range(1f, 2f)]
+            public float psxSaturationBoost = 1.2f;
+
+            [Tooltip("Subtle darkening.")]
+            [Range(0, 1)]
+            public float psxDarkening = 0.1f;
+
+            [Header("Analog/CRT Effects")]
+            [Tooltip("NTSC color bleeding")]
+            [Range(0, 1)]
+            public float colorBleedIntensity = 0.1f;
+
+            [Tooltip("Chromatic aberration")]
+            [Range(0, 2)]
+            public float chromaticShift;
+
+            [Tooltip("Vertical blur")]
+            [Range(0, 3)]
+            public float verticalBlur = 0.5f;
+
+            [Tooltip("VHS tracking errors")]
+            [Range(0, 1)]
+            public float vhsTracking;
+
+            [Tooltip("Analog signal noise")]
+            [Range(0, 0.5f)]
+            public float signalNoise = 0.05f;
+
+            [Tooltip("Color temperature")]
+            [Range(-1, 1)]
+            public float colorTemperature = 0.15f;
+
+            [Header("2D Pixel Art")]
+            [Tooltip("Snap to pixel grid")]
+            [Range(0, 1)]
+            public float pixelPerfectSnapping = 0.5f;
+
+            [Tooltip("Reduce colors to palette")]
+            [Range(0, 1)]
+            public float paletteReduction;
+
+            [Tooltip("LCD ghosting effect")]
+            [Range(0, 1)]
+            public float lcdGhosting;
+
+            [Tooltip("Pixel grid intensity")]
+            [Range(0, 1)]
+            public float pixelGridIntensity = 0.1f;
+
+            [Tooltip("Pixel size for grid")]
+            [Range(1, 8)]
+            public float pixelGridSize = 2f;
+
+            [Tooltip("Game Boy mode")]
+            [Range(0, 1)]
+            public float gameBoyMode;
+        }
     }
 
     public class PSXRenderPass : ScriptableRenderPass
     {
-        private class PassData
-        {
-            public TextureHandle source;
-            public TextureHandle destination;
-            public Material material;
-        }
-
-        private Material material;
-        private PSXRendererFeature.PSXSettings settings;
-
         private static readonly int PSXColorDepthID = Shader.PropertyToID("_PSXColorDepth");
         private static readonly int PSXDitherIntensityID = Shader.PropertyToID("_PSXDitherIntensity");
         private static readonly int PSXPosterizationID = Shader.PropertyToID("_PSXPosterization");
@@ -133,6 +142,9 @@ namespace Retro.PSXEffects
         private static readonly int PixelGridIntensityID = Shader.PropertyToID("_PixelGridIntensity");
         private static readonly int PixelGridSizeID = Shader.PropertyToID("_PixelGridSize");
         private static readonly int GameBoyModeID = Shader.PropertyToID("_GameBoyMode");
+
+        private readonly Material material;
+        private PSXRendererFeature.PSXSettings settings;
 
         public PSXRenderPass(Material material, PSXRendererFeature.PSXSettings settings)
         {
@@ -161,7 +173,7 @@ namespace Retro.PSXEffects
             destinationDesc.name = "_PSXTempTexture";
             destinationDesc.clearBuffer = false;
 
-            TextureHandle destination = renderGraph.CreateTexture(destinationDesc);
+            var destination = renderGraph.CreateTexture(destinationDesc);
 
             // Set properties
             material.SetFloat(PSXColorDepthID, settings.psxColorDepth);
@@ -214,6 +226,13 @@ namespace Retro.PSXEffects
                     Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0, false);
                 });
             }
+        }
+
+        private class PassData
+        {
+            public TextureHandle destination;
+            public Material material;
+            public TextureHandle source;
         }
     }
 }

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Logic.Projectile;
+using UnityEngine;
 
 namespace View
 {
     public class ProjectileViewManager : MonoBehaviour
     {
-        [SerializeField] private Transform parent;
+        [SerializeField]
+        private Transform parent;
 
         private readonly Dictionary<ProjectileModel, ProjectileView> views = new();
 

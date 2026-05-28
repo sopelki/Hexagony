@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HexagonScripts;
 
 namespace Field
 {
-    [System.Serializable]
+    [Serializable]
     public class FieldData
     {
         public List<Hexagon> savedHexes = new();

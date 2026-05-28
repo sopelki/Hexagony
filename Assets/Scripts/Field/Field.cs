@@ -7,9 +7,6 @@ namespace Field
 {
     public class Field
     {
-        public List<MapObjectData> MapObjects = new();
-        public readonly Dictionary<Vector2Int, Hexagon> Hexagons = new();
-        private readonly Dictionary<Vector3Int, Hexagon> hexagonsByOffset = new();
         private static readonly Vector2Int[] neighborDirections =
         {
             new(0, +1),
@@ -19,6 +16,9 @@ namespace Field
             new(-1, 0),
             new(-1, +1)
         };
+        public readonly Dictionary<Vector2Int, Hexagon> Hexagons = new();
+        private readonly Dictionary<Vector3Int, Hexagon> hexagonsByOffset = new();
+        public List<MapObjectData> MapObjects = new();
 
 
         public void AddHexagon(int x, int y, HexagonType type)
@@ -56,7 +56,7 @@ namespace Field
                 ? new List<MapObjectData>(data.savedObjects)
                 : new List<MapObjectData>();
         }
-        
+
         public Hexagon GetHexByOffset(Vector3Int offsetCoords)
         {
             return hexagonsByOffset.GetValueOrDefault(offsetCoords);

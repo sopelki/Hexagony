@@ -8,34 +8,13 @@ namespace View
     public class CastleView : MonoBehaviour
     {
         [Header("Castle wall settings")]
-        [SerializeField] private List<Vector2Int> castleHexes = new();
+        [SerializeField]
+        private List<Vector2Int> castleHexes = new();
 
         public List<Vector3> WallWorldPositions { get; } = new();
         // public List<Vector2Int> WallHexes => castleHexes;
         public CastleModel Model { get; private set; }
         public Field.Field Field { get; private set; }
-
-        public void Initialize(CastleModel model, Tilemap tilemap, Field.Field field)
-        {
-            Model = model;
-            Field = field;
-            WallWorldPositions.Clear();
-            
-            foreach (var logicalHex in castleHexes)
-            {
-                var hexObj = Field.GetHex(logicalHex);
-                if (hexObj != null)
-                {
-                    var worldPos = tilemap.GetCellCenterWorld(hexObj.offset);
-                    worldPos.z = -0.1f; 
-                    WallWorldPositions.Add(worldPos);
-                }
-            }
-
-            if (CastleSystem.Instance != null)
-                CastleSystem.Instance.RegisterCastleData(WallWorldPositions, castleHexes);
-            
-        }
 
         // найти ближайшую точку замка к монстру
         // public Vector3 GetClosestWallPoint(Vector3 monsterPos)
@@ -54,8 +33,8 @@ namespace View
         //     }
         //     return closest;
         // }
-        
-        
+
+
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
@@ -64,6 +43,27 @@ namespace View
                 foreach (var pos in WallWorldPositions)
                     Gizmos.DrawSphere(pos, 0.3f);
             }
+        }
+
+        public void Initialize(CastleModel model, Tilemap tilemap, Field.Field field)
+        {
+            Model = model;
+            Field = field;
+            WallWorldPositions.Clear();
+
+            foreach (var logicalHex in castleHexes)
+            {
+                var hexObj = Field.GetHex(logicalHex);
+                if (hexObj != null)
+                {
+                    var worldPos = tilemap.GetCellCenterWorld(hexObj.offset);
+                    worldPos.z = -0.1f;
+                    WallWorldPositions.Add(worldPos);
+                }
+            }
+
+            if (CastleSystem.Instance != null)
+                CastleSystem.Instance.RegisterCastleData(WallWorldPositions, castleHexes);
         }
     }
 }

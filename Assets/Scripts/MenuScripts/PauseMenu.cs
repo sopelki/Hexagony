@@ -1,6 +1,6 @@
 ﻿using Core;
-using UnityEngine;
 using Misc;
+using UnityEngine;
 
 namespace MenuScripts
 {

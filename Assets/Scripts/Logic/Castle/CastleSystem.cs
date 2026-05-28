@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Audio;
+using Core;
 using Interfaces;
 using Logic.Unit;
 using Misc;
@@ -12,22 +13,19 @@ namespace Logic.Castle
 {
     public class CastleSystem : ITickable
     {
-        public event Action OnFirstBuildingPlaced;
-        public static CastleSystem Instance { get; private set; }
-
-        private static readonly Vector2Int spawnHex = new(-20, 15); // Поменять, если нужна другая точка спавна
-        private readonly UnitSystem unitSystem;
-        private readonly UnitData unitData;
-        private readonly Field.Field field;
-        private readonly Tilemap tilemap;
-        // private float resourceTimer;
-        private float spawnTimer;
         // private const float ResourceInterval = 1f;
         private const float SpawnInterval = 1f;
+
+        private static readonly Vector2Int spawnHex = new(-20, 15); // Поменять, если нужна другая точка спавна
+        private readonly Field.Field field;
         private readonly SoundData soundData;
-        public CastleModel Model { get; }
+        private readonly Tilemap tilemap;
+        private readonly UnitData unitData;
+        private readonly UnitSystem unitSystem;
 
         private bool firstBuildingPlaced;
+        // private float resourceTimer;
+        private float spawnTimer;
 
 
         public CastleSystem(
@@ -47,13 +45,30 @@ namespace Logic.Castle
             Instance = this;
             this.unitSystem.OnUnitDied += HandleUnitDied;
         }
-        
+
+        public static CastleSystem Instance { get; private set; }
+        public CastleModel Model { get; }
+
+        public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
+
+        public void Tick()
+        {
+            var dt = TickManager.Instance.tickInterval;
+
+            spawnTimer += dt;
+
+            if (!(spawnTimer >= SpawnInterval))
+                return;
+            spawnTimer = 0f;
+            SpawnUnitsFromBarracks();
+        }
+
+        public event Action OnFirstBuildingPlaced;
+
         private void HandleUnitDied(UnitModel unit)
         {
-            Model.Changed(); 
+            Model.Changed();
         }
-        
-        public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
 
         public void RegisterCastleData(List<Vector3> worldPositions, List<Vector2Int> hexes)
 
@@ -63,25 +78,16 @@ namespace Logic.Castle
             Debug.Log($"Castle registered in logic. Wall hexes count: {hexes.Count}");
         }
 
-        public void Tick()
+        public bool CanAfford(int price)
         {
-            var dt = Core.TickManager.Instance.tickInterval;
-            
-            spawnTimer += dt;
-
-            if (!(spawnTimer >= SpawnInterval))
-                return;
-            spawnTimer = 0f;
-            SpawnUnitsFromBarracks();
+            return Model.Gold >= price;
         }
-
-        public bool CanAfford(int price) => Model.Gold >= price;
 
         public bool TrySpendGold(int price)
         {
-            if (TutorialManager.IsTutorialActive()) 
+            if (TutorialManager.IsTutorialActive())
                 return true;
-            
+
             if (Model.Gold < price)
                 return false;
 
@@ -104,7 +110,7 @@ namespace Logic.Castle
 
             var instance = new BuildingModel(data);
             Model.Buildings.Add(instance);
-            
+
             if (data.type == BuildingType.Farm)
                 Model.MaxSupply += data.supplyProvided;
 
@@ -119,7 +125,7 @@ namespace Logic.Castle
                 OnFirstBuildingPlaced?.Invoke();
                 Debug.Log("First building placed. Game can start.");
             }
-            
+
             Model.Changed();
             return true;
         }
@@ -139,7 +145,7 @@ namespace Logic.Castle
                 SpawnUnit();
             }
         }
-        
+
         private void SpawnUnit()
         {
             var hex = field.GetHex(spawnHex);
@@ -171,7 +177,7 @@ namespace Logic.Castle
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         public void Clear()
         {
             Model.Buildings.Clear();

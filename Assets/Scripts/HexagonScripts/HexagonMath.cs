@@ -12,23 +12,23 @@ namespace HexagonScripts
 
             return new Vector2Int(q, y);
         }
-        
+
         public static Vector2Int WorldToAxial(Vector3 worldPos)
         {
             var q = (Mathf.Sqrt(3f) / 3f * worldPos.x -
                      1f / 3f * worldPos.y) / HexSize;
 
-            var r = (2f / 3f * worldPos.y) / HexSize;
+            var r = 2f / 3f * worldPos.y / HexSize;
 
             return HexRound(q, r);
         }
-        
+
         public static Vector3 OffsetToWorld(int x, int y)
         {
             var axial = OffsetToAxial(x, y);
             return AxialToWorld(axial.x, axial.y);
         }
-        
+
         public static Vector3 AxialToWorld(int q, int r)
         {
             var x = HexSize * Mathf.Sqrt(3f) * (q + r * 0.5f);
@@ -36,7 +36,7 @@ namespace HexagonScripts
 
             return new Vector3(x, y, 0f);
         }
-        
+
         private static Vector2Int HexRound(float q, float r)
         {
             var x = q;
@@ -61,7 +61,7 @@ namespace HexagonScripts
 
             return new Vector2Int(rx, rz);
         }
-        
+
         public static int Distance(Vector2Int a, Vector2Int b)
         {
             var dq = a.x - b.x;

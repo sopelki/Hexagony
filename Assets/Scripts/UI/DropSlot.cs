@@ -6,6 +6,7 @@ namespace UI
 {
     public class DropSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler
     {
+        private static CastleSystem castleSystem;
         [Header("References")]
         [SerializeField]
         private Transform itemContainer;
@@ -15,11 +16,7 @@ namespace UI
         [Range(0.5f, 1f)]
         private float hoverScale = 0.85f;
 
-        private static CastleSystem castleSystem;
-
         private InventoryItem currentOverlappingItem;
-
-        public void Construct(CastleSystem system) => castleSystem = system;
 
         private void Update()
         {
@@ -101,6 +98,11 @@ namespace UI
             }
         }
 
+        public void Construct(CastleSystem system)
+        {
+            castleSystem = system;
+        }
+
         private void UpdateItemVisualState(InventoryItem draggingItem)
         {
             var existingItem = GetStoredItem();
@@ -118,7 +120,10 @@ namespace UI
             }
         }
 
-        private void ResetSlotState() => currentOverlappingItem = null;
+        private void ResetSlotState()
+        {
+            currentOverlappingItem = null;
+        }
 
         private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
         {
@@ -132,6 +137,9 @@ namespace UI
             return true;
         }
 
-        private InventoryItem GetStoredItem() => itemContainer.GetComponentInChildren<InventoryItem>();
+        private InventoryItem GetStoredItem()
+        {
+            return itemContainer.GetComponentInChildren<InventoryItem>();
+        }
     }
 }

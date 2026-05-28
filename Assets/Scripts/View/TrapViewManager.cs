@@ -1,18 +1,26 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Logic.Trap;
-using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace View
 {
     public class TrapViewManager : MonoBehaviour
     {
-        private TrapsModel model;
+        private readonly Dictionary<TrapModel, TrapView> views = new();
         private Field.Field field;
+        private TrapsModel model;
         private Tilemap tilemap;
 
-        private readonly Dictionary<TrapModel, TrapView> views = new();
+        private void OnDestroy()
+        {
+            if (model != null)
+            {
+                model.OnTrapAdded -= HandleTrapAdded;
+                model.OnTrapRemoved -= HandleTrapRemoved;
+            }
+        }
 
         public void Initialize(TrapsModel trapsModel, Field.Field field, Tilemap tilemap)
         {
@@ -22,15 +30,6 @@ namespace View
 
             model.OnTrapAdded += HandleTrapAdded;
             model.OnTrapRemoved += HandleTrapRemoved;
-        }
-
-        private void OnDestroy()
-        {
-            if (model != null)
-            {
-                model.OnTrapAdded -= HandleTrapAdded;
-                model.OnTrapRemoved -= HandleTrapRemoved;
-            }
         }
 
         private void HandleTrapAdded(TrapModel trap)
@@ -48,11 +47,12 @@ namespace View
             if (views.Remove(trap, out var view))
                 view.AnimateAndDestroy();
         }
-        
+
         public void DestroyAllTraps()
         {
             foreach (var view in views.Values)
-                if (view != null) Destroy(view.gameObject);
+                if (view != null)
+                    Destroy(view.gameObject);
             views.Clear();
         }
     }

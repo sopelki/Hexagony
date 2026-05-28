@@ -2,7 +2,7 @@
 {
     public interface IAttackStrategy
     {
-        void Tick();
         bool IsAttacking { get; }
+        void Tick();
     }
 }

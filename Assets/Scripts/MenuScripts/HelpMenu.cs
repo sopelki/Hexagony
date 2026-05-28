@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using Misc;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using Misc;
 
 namespace MenuScripts
 {
@@ -51,7 +51,7 @@ namespace MenuScripts
 
             titleText.text = "";
             descriptionText.text = "";
-            
+
             helpPanel.Show();
 
             Time.timeScale = 0f;

@@ -12,7 +12,8 @@ namespace Misc
         public bool flipY;
         public Vector2 offset = new(0f, 0f);
         public Vector2 scale = new(1f, 1f);
-        [Range(0,1)] public float alpha = 1f;
+        [Range(0, 1)]
+        public float alpha = 1f;
 
 #if UNITY_EDITOR
         public void CreateShadow()
@@ -41,7 +42,7 @@ namespace Misc
             var spriteRenderer = shadow.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = shadowSprite;
             spriteRenderer.color = new Color(0, 0, 0, alpha);
-            
+
             spriteRenderer.flipX = flipX;
             spriteRenderer.flipY = flipY;
 

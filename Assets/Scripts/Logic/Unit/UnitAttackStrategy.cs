@@ -1,20 +1,19 @@
 ﻿using System.Linq;
-using Interfaces;
-using UnityEngine;
-using Logic.Monster;
 using Audio;
+using Core;
+using Interfaces;
+using Logic.Monster;
+using UnityEngine;
 
 namespace Logic.Unit
 {
     public class UnitAttackStrategy : IAttackStrategy
     {
-        private readonly UnitModel unit;
         private readonly MonsterSystem monsterSystem;
         private readonly SoundData soundData;
+        private readonly UnitModel unit;
 
         private float currentCooldown;
-
-        public bool IsAttacking { get; private set; }
 
         public UnitAttackStrategy(
             UnitModel unit,
@@ -26,15 +25,17 @@ namespace Logic.Unit
             this.soundData = soundData;
         }
 
+        public bool IsAttacking { get; private set; }
+
         public void Tick()
         {
             if (currentCooldown > 0f)
             {
-                currentCooldown -= Core.TickManager.Instance.tickInterval;
+                currentCooldown -= TickManager.Instance.tickInterval;
                 IsAttacking = true;
                 return;
             }
-            
+
             IsAttacking = false;
             unit.AttackType = 0;
 
@@ -48,33 +49,33 @@ namespace Logic.Unit
 
             if (targets.Count == 0)
                 return;
-        
+
             var sortedTargets = targets
                 .OrderBy(m => Vector3.Distance(m.WorldPosition, unit.WorldPosition))
                 .ToList();
-        
+
             var closest = sortedTargets.First();
             var distance = Vector3.Distance(closest.WorldPosition, unit.WorldPosition);
             var meleeRange = unit.UnitData.attackRadius * 0.5f;
             unit.AttackType = distance <= meleeRange ? 1 : 2;
-            
+
             unit.Attack();
 
             if (soundData != null)
             {
-                if (distance <= meleeRange && 
+                if (distance <= meleeRange &&
                     soundData.unitMeleeAttackSounds is { Length: > 0 })
-                    AudioManager.Instance.PlayRandomSfx(soundData.unitMeleeAttackSounds, soundData.unitMeleeAttackVolume);
-                else if (distance > meleeRange && 
+                    AudioManager.Instance.PlayRandomSfx(soundData.unitMeleeAttackSounds,
+                        soundData.unitMeleeAttackVolume);
+                else if (distance > meleeRange &&
                          soundData.unitRangeAttackSounds is { Length: > 0 })
-                    AudioManager.Instance.PlayRandomSfx(soundData.unitRangeAttackSounds, soundData.unitRangeAttackVolume);
+                    AudioManager.Instance.PlayRandomSfx(soundData.unitRangeAttackSounds,
+                        soundData.unitRangeAttackVolume);
             }
-            
+
             var viewDirection = unit.CurrentDirection.normalized;
             if (viewDirection.sqrMagnitude < 0.001f)
-            {
                 viewDirection = (closest.WorldPosition - unit.WorldPosition).normalized;
-            }
 
             foreach (var monster in targets)
             {

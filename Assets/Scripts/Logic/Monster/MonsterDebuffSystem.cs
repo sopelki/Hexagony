@@ -28,9 +28,7 @@ namespace Logic.Monster
                 return;
 
             if (buffs.Remove(buff))
-            {
                 buff.OnRemove(monster);
-            }
         }
 
         public void Tick(float deltaTime)

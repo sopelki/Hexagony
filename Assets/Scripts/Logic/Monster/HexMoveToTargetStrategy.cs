@@ -1,30 +1,31 @@
-﻿using UnityEngine;
-using Interfaces;
-using UnityEngine.Tilemaps;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
+using Interfaces;
 using Logic.Castle;
 using Logic.Trap;
 using Logic.Unit;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Logic.Monster
 {
     public class HexMoveToTargetStrategy : IMovementStrategy
     {
-        private readonly MonsterModel monster;
+        private const float RepathDelay = 0.7f;
         private readonly Field.Field field;
+
+        private readonly Vector3 formationOffset;
+        private readonly MonsterModel monster;
+        private readonly HexAStarPathfinder pathfinder;
         // private readonly List<Vector2Int> targetHexes;
         private readonly Tilemap tilemap;
-        private readonly HexAStarPathfinder pathfinder;
         private readonly TrapSystem trapSystem;
 
         private List<Vector2Int> currentPath;
         private int pathIndex;
 
         private float repathTimer;
-        private const float RepathDelay = 0.7f;
-
-        private readonly Vector3 formationOffset;
 
         public HexMoveToTargetStrategy(
             MonsterModel monster,
@@ -54,7 +55,7 @@ namespace Logic.Monster
             if (castle.Model.WallHexes.Contains(monster.CurrentHex))
                 return;
 
-            repathTimer -= Core.TickManager.Instance.tickInterval;
+            repathTimer -= TickManager.Instance.tickInterval;
 
             if (currentPath == null || pathIndex >= currentPath.Count || repathTimer <= 0f)
             {
@@ -120,7 +121,7 @@ namespace Logic.Monster
 
             var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
             var directionVector = targetWorld - monster.WorldPosition;
-            var maxStep = monster.MoveSpeed * Core.TickManager.Instance.tickInterval;
+            var maxStep = monster.MoveSpeed * TickManager.Instance.tickInterval;
 
             if (directionVector.magnitude <= maxStep)
             {

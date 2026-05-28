@@ -1,45 +1,25 @@
 ﻿using System;
 using Audio;
 using Core;
-using UnityEngine;
 using Interfaces;
+using UnityEngine;
 
 namespace Logic.Monster
 {
     public class MonsterModel : IDamageable
     {
-        public int TargetedByUnits;
-
-        public Vector3 WorldPosition { get; private set; }
-        public Vector2Int CurrentHex { get; private set; }
-        public Vector3 CurrentVelocity { get; private set; }
-        public MonsterDebuffSystem DebuffSystem { get; }
-
-        public bool IsDead => currentHealth <= 0;
-
-        public readonly MonsterData Data;
-
-        public int MaxHealth { get; }
-        public int Damage { get; }
-        public float MoveSpeed => DebuffSystem.ModifyMoveSpeed(baseMoveSpeed);
-        public float AttackRadius { get; }
-        public float AttackCooldown { get; }
-        public int GoldReward { get; }
-        
-        public Vector3 HitPosition => WorldPosition + new Vector3(0, Data.hitOffsetY, 0);
-
-        private int currentHealth;
         private readonly float baseMoveSpeed;
 
-        private IMovementStrategy movementStrategy;
-        private IAttackStrategy attackStrategy;
+        public readonly MonsterData Data;
         private readonly SoundData soundData;
-        
+        private IAttackStrategy attackStrategy;
+
+        private int currentHealth;
+
         private bool deathEventSent;
-        
-        public event Action OnAttack;
-        public event Action OnDamaged; 
-        public event Action OnDied;
+
+        private IMovementStrategy movementStrategy;
+        public int TargetedByUnits;
 
         public MonsterModel(
             Vector3 startWorldPos,
@@ -64,9 +44,44 @@ namespace Logic.Monster
             DebuffSystem = new MonsterDebuffSystem(this);
 
             currentHealth = MaxHealth;
-            
+
             this.soundData = soundData;
         }
+
+        public Vector3 WorldPosition { get; private set; }
+        public Vector2Int CurrentHex { get; private set; }
+        public Vector3 CurrentVelocity { get; private set; }
+        public MonsterDebuffSystem DebuffSystem { get; }
+
+        public int MaxHealth { get; }
+        public int Damage { get; }
+        public float MoveSpeed => DebuffSystem.ModifyMoveSpeed(baseMoveSpeed);
+        public float AttackRadius { get; }
+        public float AttackCooldown { get; }
+        public int GoldReward { get; }
+
+        public Vector3 HitPosition => WorldPosition + new Vector3(0, Data.hitOffsetY, 0);
+
+        public bool IsDead => currentHealth <= 0;
+
+        public void TakeDamage(int damage)
+        {
+            if (IsDead)
+                return;
+            currentHealth -= damage;
+
+            OnDamaged?.Invoke();
+
+            if (soundData != null &&
+                soundData.monsterDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
+            if (currentHealth <= 0)
+                Die();
+        }
+
+        public event Action OnAttack;
+        public event Action OnDamaged;
+        public event Action OnDied;
 
         public void Tick()
         {
@@ -95,25 +110,11 @@ namespace Logic.Monster
             CurrentVelocity = direction * MoveSpeed;
         }
 
-        public void SetHex(Vector2Int hex) => CurrentHex = hex;
-
-        public void TakeDamage(int damage)
+        public void SetHex(Vector2Int hex)
         {
-            if (IsDead) 
-                return;
-            currentHealth -= damage;
-            
-            OnDamaged?.Invoke();
-            
-            if (soundData != null && 
-                soundData.monsterDamageSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
-            if (currentHealth <= 0)
-            {
-                Die();
-            }
+            CurrentHex = hex;
         }
-        
+
         public void Attack()
         {
             OnAttack?.Invoke();
@@ -121,9 +122,9 @@ namespace Logic.Monster
 
         public void Die()
         {
-            if (deathEventSent) 
+            if (deathEventSent)
                 return;
-            
+
             deathEventSent = true;
             OnDied?.Invoke();
         }

@@ -10,9 +10,10 @@ namespace Core
         public float tickInterval = 0.02f;
         private float timer;
 
-        public event Action OnTick;
-
-        private void Awake() => Instance = this;
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Update()
         {
@@ -31,5 +32,7 @@ namespace Core
             if (Instance == this)
                 Instance = null;
         }
+
+        public event Action OnTick;
     }
 }

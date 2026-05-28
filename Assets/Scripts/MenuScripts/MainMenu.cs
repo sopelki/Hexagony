@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using Audio;
+﻿using Audio;
 using Core;
+using UnityEditor;
+using UnityEngine;
 
 namespace MenuScripts
 {
@@ -19,12 +20,15 @@ namespace MenuScripts
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
         }
 
-        public void PlayGame() => SceneTransitions.LoadScene("GameScene");
+        public void PlayGame()
+        {
+            SceneTransitions.LoadScene("GameScene");
+        }
 
         public void QuitGame()
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif

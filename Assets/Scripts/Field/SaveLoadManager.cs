@@ -6,7 +6,8 @@ namespace Field
     public class SaveLoadManager
     {
         private static readonly string saveFilePath = Path
-            .Combine(Application.dataPath, "Scripts", "Levels", "MyLevel.json").Replace(Path.DirectorySeparatorChar, '/');
+            .Combine(Application.dataPath, "Scripts", "Levels", "MyLevel.json")
+            .Replace(Path.DirectorySeparatorChar, '/');
 
         public static void SaveMapToFile(Field fieldToSave)
         {

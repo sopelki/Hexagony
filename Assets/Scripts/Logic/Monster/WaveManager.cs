@@ -1,3 +1,5 @@
+using System;
+using Core;
 using Interfaces;
 using UnityEngine;
 
@@ -5,19 +7,17 @@ namespace Logic.Monster
 {
     public class WaveManager : ITickable
     {
-        public event System.Action OnGameWon;
-        public event System.Action<int> OnWaveStarting;
-
-        private readonly MonsterSpawner spawner;
+        private readonly float delayBetweenWaves;
         private readonly MonsterSystem monsterSystem;
 
-        private bool waitingForNextWave;
-        private bool isDelaying;
-        private float delayTimer;
-        private readonly float delayBetweenWaves;
+        private readonly MonsterSpawner spawner;
         private int currentWaveNumber;
+        private float delayTimer;
 
         private bool gameStarted;
+        private bool isDelaying;
+
+        private bool waitingForNextWave;
 
         public WaveManager(MonsterSpawner spawner, MonsterSystem monsterSystem, float delayBetweenWaves)
         {
@@ -51,7 +51,7 @@ namespace Logic.Monster
 
             if (isDelaying)
             {
-                delayTimer -= Core.TickManager.Instance.tickInterval;
+                delayTimer -= TickManager.Instance.tickInterval;
 
                 if (delayTimer <= 0f)
                 {
@@ -62,6 +62,9 @@ namespace Logic.Monster
                 }
             }
         }
+
+        public event Action OnGameWon;
+        public event Action<int> OnWaveStarting;
 
         public void StartGame()
         {
@@ -85,6 +88,9 @@ namespace Logic.Monster
         //     spawner.StartNextWave();
         // }
 
-        private void OnWaveFinishedSpawning() => waitingForNextWave = true;
+        private void OnWaveFinishedSpawning()
+        {
+            waitingForNextWave = true;
+        }
     }
 }

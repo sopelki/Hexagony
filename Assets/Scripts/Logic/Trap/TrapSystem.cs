@@ -1,40 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using Logic.Monster;
-using Core;
-using Logic.Castle;
-using HexagonScripts;
 using Audio;
+using Core;
+using HexagonScripts;
+using Logic.Castle;
+using Logic.Monster;
+using UnityEngine;
 
 namespace Logic.Trap
 {
     public class TrapSystem
     {
-        public event Action OnFirstTrapPlaced;
-        
-        private readonly MonsterSystem monsterSystem;
-        private readonly TrapsModel trapsModel;
-        private readonly Field.Field field;
         private readonly CastleSystem castleSystem;
+        private readonly Field.Field field;
+
+        private readonly MonsterSystem monsterSystem;
         private readonly SoundData soundData;
-        
+        private readonly TrapsModel trapsModel;
+
         private bool firstTrapPlaced;
-        
-        public static TrapSystem Instance { get; private set; }
 
         public TrapSystem(MonsterSystem monsterSystem, TrapsModel trapsModel, Field.Field field,
-            CastleSystem castleSystem,  SoundData soundData)
+            CastleSystem castleSystem, SoundData soundData)
         {
             this.field = field;
             this.monsterSystem = monsterSystem;
             this.trapsModel = trapsModel;
             this.castleSystem = castleSystem;
             this.soundData = soundData;
-            
+
             Instance = this;
         }
+
+        public static TrapSystem Instance { get; private set; }
+        public event Action OnFirstTrapPlaced;
 
         public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex)
         {
@@ -70,9 +70,9 @@ namespace Logic.Trap
         {
             if (!CanPlaceTrap(data, hex))
                 return false;
-            
+
             var occupied = GetTrapOccupiedHexes(hex);
-            
+
             Debug.Log($"Placing trap at center AXIAL: {hex}");
             foreach (var h in occupied)
                 Debug.Log($"Trap occupies AXIAL: {h}");
@@ -82,23 +82,23 @@ namespace Logic.Trap
                 var trap = new TrapModel(data, GetTrapOccupiedHexes(hex));
                 trap.OnTriggered += HandleTrapTriggered;
                 trapsModel.AddTrap(trap);
-                
+
                 if (soundData != null && soundData.trapPlaceSound != null)
                     AudioManager.Instance.PlaySfx(soundData.trapPlaceSound);
-                
+
                 if (!firstTrapPlaced)
                 {
                     firstTrapPlaced = true;
                     OnFirstTrapPlaced?.Invoke();
                     Debug.Log("First trap placed. Game can start.");
                 }
-                
+
                 return true;
             }
-            
+
             return false;
         }
-        
+
         private void HandleTrapTriggered(TrapModel trap)
         {
             trap.OnTriggered -= HandleTrapTriggered;
@@ -182,8 +182,8 @@ namespace Logic.Trap
                 trapsModel.RemoveTrap(trap);
             }
         }
-        
-        public List<TrapModel> GetTraps() 
+
+        public List<TrapModel> GetTraps()
         {
             return (List<TrapModel>)trapsModel.Traps;
         }

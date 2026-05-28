@@ -9,15 +9,12 @@ namespace Logic.Unit
 {
     public class UnitSystem
     {
-        private readonly List<UnitModel> units = new();
-        private readonly MonsterSystem monsterSystem;
-        private readonly Field.Field field;
-        private readonly Tilemap tilemap;
         private readonly List<Buff> buffs = new();
+        private readonly Field.Field field;
+        private readonly MonsterSystem monsterSystem;
         private readonly SoundData soundData;
-
-        public event Action<UnitModel> OnUnitCreated;
-        public event Action<UnitModel> OnUnitDied;
+        private readonly Tilemap tilemap;
+        private readonly List<UnitModel> units = new();
 
         public UnitSystem(
             MonsterSystem monsterSystem,
@@ -29,23 +26,29 @@ namespace Logic.Unit
             this.field = field;
             this.tilemap = tilemap;
             this.soundData = soundData;
-            
+
             Instance = this;
         }
 
         public static UnitSystem Instance { get; private set; }
 
-        public void AddBuff(Buff buff) => buffs.Add(buff);
+        public event Action<UnitModel> OnUnitCreated;
+        public event Action<UnitModel> OnUnitDied;
+
+        public void AddBuff(Buff buff)
+        {
+            buffs.Add(buff);
+        }
 
         public void SpawnUnit(Vector3 worldPos, Vector2Int hexPos, UnitData stats)
         {
             var unit = new UnitModel(worldPos, hexPos, stats, soundData);
-            
+
             foreach (var buff in buffs)
                 unit.AddBuff(buff);
-            
+
             unit.ResetHealth();
-            
+
             var attack = new UnitAttackStrategy(unit, monsterSystem, soundData);
             var movement = new UnitAStarMoveStrategy(
                 unit,
@@ -56,12 +59,13 @@ namespace Logic.Unit
 
             unit.SetStrategies(movement, attack);
             units.Add(unit);
-            
-            Debug.Log($"[UnitSpawn] HP: {unit.CurrentHealth}/{unit.GetMaxHealth()} | ATK: {unit.GetAttack()} | Buffs: {buffs.Count}");
+
+            Debug.Log(
+                $"[UnitSpawn] HP: {unit.CurrentHealth}/{unit.GetMaxHealth()} | ATK: {unit.GetAttack()} | Buffs: {buffs.Count}");
 
             OnUnitCreated?.Invoke(unit);
         }
-        
+
         public void Tick()
         {
             foreach (var unit in units)
@@ -72,7 +76,7 @@ namespace Logic.Unit
                 unit.Tick();
             }
         }
-        
+
         public void RemoveUnit(UnitModel unit)
         {
             if (units.Contains(unit))
@@ -81,9 +85,15 @@ namespace Logic.Unit
                 OnUnitDied?.Invoke(unit);
             }
         }
-        
-        public IReadOnlyList<UnitModel> GetAllUnits() => units;
 
-        public void Clear() => units.Clear();
+        public IReadOnlyList<UnitModel> GetAllUnits()
+        {
+            return units;
+        }
+
+        public void Clear()
+        {
+            units.Clear();
+        }
     }
 }

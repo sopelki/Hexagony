@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Field
 {
-    [System.Serializable]
+    [Serializable]
     public class ObjectMapping
     {
         public string id;

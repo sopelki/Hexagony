@@ -7,8 +7,6 @@ namespace Core
 {
     public class SceneTransitions : MonoBehaviour
     {
-        public static SceneTransitions Instance { get; private set; }
-
         [Header("Settings")]
         [SerializeField]
         private float fadeDuration = 0.1f;
@@ -17,6 +15,7 @@ namespace Core
 
         private CanvasGroup canvasGroup;
         private bool isTransitioning;
+        public static SceneTransitions Instance { get; private set; }
 
         private void Awake()
         {
@@ -74,7 +73,7 @@ namespace Core
             yield return Fade(1f);
 
             var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-            
+
             while (asyncLoad is not { isDone: true })
                 yield return null;
 

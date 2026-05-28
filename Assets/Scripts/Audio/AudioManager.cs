@@ -4,8 +4,6 @@ namespace Audio
 {
     public class AudioManager : MonoBehaviour
     {
-        public static AudioManager Instance { get; private set; }
-
         [Header("Audio Sources")]
         [SerializeField]
         private AudioSource musicSource;
@@ -19,6 +17,7 @@ namespace Audio
         [SerializeField]
         [Range(0f, 1f)]
         private float sfxVolume = 0.8f;
+        public static AudioManager Instance { get; private set; }
 
         private void Awake()
         {
@@ -33,7 +32,7 @@ namespace Audio
 
             if (musicSource == null)
                 musicSource = gameObject.AddComponent<AudioSource>();
-            
+
             if (sfxSource == null)
                 sfxSource = gameObject.AddComponent<AudioSource>();
 
@@ -50,7 +49,10 @@ namespace Audio
             musicSource.Play();
         }
 
-        public void StopMusic() => musicSource.Stop();
+        public void StopMusic()
+        {
+            musicSource.Stop();
+        }
 
         public void PlaySfx(AudioClip clip, float volumeMultiplier = 1f)
         {
@@ -82,13 +84,22 @@ namespace Audio
         //         musicSource.volume = musicVolume;
         // }
 
-        public void SetSfxVolume(float volume) => sfxVolume = Mathf.Clamp01(volume);
+        public void SetSfxVolume(float volume)
+        {
+            sfxVolume = Mathf.Clamp01(volume);
+        }
 
-        public float GetMusicVolume() => musicVolume;
-        
-        public float GetSfxVolume() => sfxVolume;
+        public float GetMusicVolume()
+        {
+            return musicVolume;
+        }
 
-        private void ApplyVolumes() 
+        public float GetSfxVolume()
+        {
+            return sfxVolume;
+        }
+
+        private void ApplyVolumes()
         {
             musicSource.volume = 1f;
             sfxSource.volume = 1f;

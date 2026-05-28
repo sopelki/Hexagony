@@ -6,8 +6,8 @@ namespace UI
     [RequireComponent(typeof(CanvasGroup), typeof(RectTransform))]
     public class CastleDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
+        private RectTransform rectTransform;
 
         public Canvas MainCanvas { get; private set; }
 
@@ -26,8 +26,10 @@ namespace UI
             transform.SetAsLastSibling();
         }
 
-        public void OnDrag(PointerEventData eventData) =>
+        public void OnDrag(PointerEventData eventData)
+        {
             rectTransform.anchoredPosition += eventData.delta / MainCanvas.scaleFactor;
+        }
 
         public void OnEndDrag(PointerEventData eventData)
         {
@@ -35,6 +37,9 @@ namespace UI
             canvasGroup.alpha = 1f;
         }
 
-        public void ResetPosition() => rectTransform.anchoredPosition = Vector2.zero;
+        public void ResetPosition()
+        {
+            rectTransform.anchoredPosition = Vector2.zero;
+        }
     }
 }

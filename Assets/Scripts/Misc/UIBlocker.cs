@@ -1,7 +1,8 @@
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UI;
+using UnityEngine.UI;
 
 namespace Misc
 {
@@ -33,7 +34,7 @@ namespace Misc
                         break;
 
                     case IBeginDragHandler or IDragHandler or IEndDragHandler:
-                        if (mb is not UnityEngine.UI.Slider)
+                        if (mb is not Slider)
                         {
                             if (mb is IEndDragHandler endDragHandler)
                                 endDragHandler.OnEndDrag(pointerData);
@@ -52,7 +53,7 @@ namespace Misc
             foreach (var mb in allComponents)
             {
                 if (mb is (TooltipTrigger or IBeginDragHandler or IDragHandler or IEndDragHandler)
-                    and not UnityEngine.UI.Slider)
+                    and not Slider)
                     mb.enabled = true;
             }
         }

@@ -1,11 +1,12 @@
+using System;
 using UnityEngine;
 
 namespace Field
 {
-    [System.Serializable]
+    [Serializable]
     public class MapObjectData
     {
-        public Vector3Int position; 
+        public Vector3Int position;
         public string objectId;
     }
 }

@@ -11,8 +11,6 @@ namespace UI
     [RequireComponent(typeof(Image))]
     public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
-        public event Action OnDropped;
-
         [Header("Data")]
         [SerializeField]
         private BuildingData buildingData;
@@ -27,17 +25,17 @@ namespace UI
         [SerializeField]
         [Range(0f, 1f)]
         private float draggingAlpha = 0.8f;
-
-        private Vector3 originalScale;
-        private Vector3 targetScale;
         private CanvasGroup canvasGroup;
-        private Image itemImage;
         private CastleDragHandler dragHandler;
+        private Color invalidColor;
+        private Image itemImage;
+        private Color normalDraggingColor;
 
         private Color originalColor;
-        private Color normalDraggingColor;
-        private Color invalidColor;
+
+        private Vector3 originalScale;
         private Color targetColor;
+        private Vector3 targetScale;
 
         public BuildingData BuildingData => buildingData;
         public Transform OriginalParent { get; private set; }
@@ -57,8 +55,16 @@ namespace UI
             targetColor = originalColor;
         }
 
-        public void SetDraggingScale(float multiplier) => targetScale = originalScale * multiplier;
-        public void SetValidationState(bool isValid) => targetColor = isValid ? normalDraggingColor : invalidColor;
+        private void Update()
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
+            itemImage.color = Color.Lerp(itemImage.color, targetColor, Time.deltaTime * colorLerpSpeed);
+        }
+
+        private void OnDestroy()
+        {
+            OnDropped?.Invoke();
+        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -87,10 +93,16 @@ namespace UI
                 ReturnToStart();
         }
 
-        private void Update()
+        public event Action OnDropped;
+
+        public void SetDraggingScale(float multiplier)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
-            itemImage.color = Color.Lerp(itemImage.color, targetColor, Time.deltaTime * colorLerpSpeed);
+            targetScale = originalScale * multiplier;
+        }
+
+        public void SetValidationState(bool isValid)
+        {
+            targetColor = isValid ? normalDraggingColor : invalidColor;
         }
 
         public void SetData(BuildingData data, bool fromShop)
@@ -121,7 +133,5 @@ namespace UI
             transform.SetParent(OriginalParent);
             dragHandler?.ResetPosition();
         }
-
-        private void OnDestroy() => OnDropped?.Invoke();
     }
 }

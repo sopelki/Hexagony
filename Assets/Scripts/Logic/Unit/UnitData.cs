@@ -10,7 +10,7 @@ namespace Logic.Unit
         public int attack = 10;
         public float moveSpeed = 6f;
         public int foodCost = 5;
-        
+
         [Header("Attack")]
         public float attackRadius = 1f;
         public float attackCooldown = 1f;

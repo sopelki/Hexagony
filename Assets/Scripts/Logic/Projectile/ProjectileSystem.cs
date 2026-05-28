@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Audio;
+using Core;
 using Logic.Monster;
 using UnityEngine;
 
@@ -8,18 +9,18 @@ namespace Logic.Projectile
 {
     public class ProjectileSystem
     {
-        private readonly List<ProjectileModel> projectiles = new();
         private readonly MonsterSystem monsterSystem;
+        private readonly List<ProjectileModel> projectiles = new();
         private readonly SoundData soundData;
-
-        public event Action<ProjectileModel> OnProjectileCreated;
-        public event Action<ProjectileModel> OnProjectileDestroyed;
 
         public ProjectileSystem(MonsterSystem monsterSystem, SoundData soundData)
         {
             this.monsterSystem = monsterSystem;
             this.soundData = soundData;
         }
+
+        public event Action<ProjectileModel> OnProjectileCreated;
+        public event Action<ProjectileModel> OnProjectileDestroyed;
 
         public void CreateProjectile(ProjectileModel projectile)
         {
@@ -29,7 +30,7 @@ namespace Logic.Projectile
 
         public void Tick()
         {
-            var step = Core.TickManager.Instance.tickInterval;
+            var step = TickManager.Instance.tickInterval;
 
             for (var i = projectiles.Count - 1; i >= 0; i--)
             {
@@ -72,11 +73,11 @@ namespace Logic.Projectile
 
         private void UpdateHoming(ProjectileModel p, float step, int index)
         {
-            var dir = ( p.Target.HitPosition - p.Position).normalized;
+            var dir = (p.Target.HitPosition - p.Position).normalized;
 
             p.Position += dir * p.Data.speed * step;
 
-            var dist = Vector3.Distance(p.Position,  p.Target.HitPosition);
+            var dist = Vector3.Distance(p.Position, p.Target.HitPosition);
 
             if (dist <= 0.2f)
             {
@@ -127,7 +128,7 @@ namespace Logic.Projectile
         {
             AudioClip[] sound;
             float volume;
-            
+
             if (isHoming)
             {
                 sound = soundData.mageTowerHitSounds;

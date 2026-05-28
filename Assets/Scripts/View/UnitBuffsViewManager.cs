@@ -6,15 +6,8 @@ using UnityEngine;
 namespace View
 {
     [CreateAssetMenu(menuName = "BuffViewManger")]
-    public class UnitBuffsViewManager: ScriptableObject
+    public class UnitBuffsViewManager : ScriptableObject
     {
-        [Serializable]
-        public struct BuffMap
-        {
-            public string buffClassName;
-            public GameObject glowPrefab;
-        }
-
         public List<BuffMap> mappings;
 
         public GameObject GetPrefabForBuff(Buff buff)
@@ -22,6 +15,13 @@ namespace View
             var typeName = buff.GetType().Name;
             var map = mappings.Find(m => m.buffClassName == typeName);
             return map.glowPrefab;
+        }
+
+        [Serializable]
+        public struct BuffMap
+        {
+            public string buffClassName;
+            public GameObject glowPrefab;
         }
     }
 }

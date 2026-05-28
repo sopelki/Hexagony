@@ -1,29 +1,42 @@
+using Logic.Castle;
+using Logic.Tower;
+using Logic.Trap;
+
 namespace Misc
 {
     public static class GameLocalization
     {
-        public static string GetRussianName(this Logic.Castle.BuildingType type) => type switch
+        public static string GetRussianName(this BuildingType type)
         {
-            Logic.Castle.BuildingType.Farm => "Ферма",
-            Logic.Castle.BuildingType.Barracks => "Казарма",
-            Logic.Castle.BuildingType.Hospital => "Алхимик",
-            Logic.Castle.BuildingType.Blacksmith => "Кузница",
-            _ => "Здание"
-        };
+            return type switch
+            {
+                BuildingType.Farm => "Ферма",
+                BuildingType.Barracks => "Казарма",
+                BuildingType.Hospital => "Алхимик",
+                BuildingType.Blacksmith => "Кузница",
+                _ => "Здание"
+            };
+        }
 
-        public static string GetRussianName(this Logic.Tower.TowerType type) => type switch
+        public static string GetRussianName(this TowerType type)
         {
-            Logic.Tower.TowerType.Archer => "Башня лучников",
-            Logic.Tower.TowerType.Mage => "Башня магов",
-            _ => "Башня"
-        };
-        
-        public static string GetRussianName(this Logic.Trap.TrapType type) => type switch
+            return type switch
+            {
+                TowerType.Archer => "Башня лучников",
+                TowerType.Mage => "Башня магов",
+                _ => "Башня"
+            };
+        }
+
+        public static string GetRussianName(this TrapType type)
         {
-            Logic.Trap.TrapType.DamageZone => "Колья",
-            Logic.Trap.TrapType.SlowZone => "Смола",
-            Logic.Trap.TrapType.BearTrap => "Капкан",
-            _ => "Ловушка"
-        };
+            return type switch
+            {
+                TrapType.DamageZone => "Колья",
+                TrapType.SlowZone => "Смола",
+                TrapType.BearTrap => "Капкан",
+                _ => "Ловушка"
+            };
+        }
     }
 }

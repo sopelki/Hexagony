@@ -1,5 +1,5 @@
 Shader "Custom/New SRP Blit Shader"
-{   
+{
     SubShader
     {
         HLSLINCLUDE
@@ -7,7 +7,10 @@ Shader "Custom/New SRP Blit Shader"
         #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
         ENDHLSL
 
-        Tags { "RenderType"="Opaque" }
+        Tags
+        {
+            "RenderType"="Opaque"
+        }
         LOD 100
         ZWrite Off Cull Off
         Pass
@@ -15,16 +18,14 @@ Shader "Custom/New SRP Blit Shader"
             Name "New SRP Blit Shader"
 
             HLSLPROGRAM
-            
             #pragma vertex Vert
             #pragma fragment Frag
 
-            float4 Frag (Varyings input) : SV_Target
+            float4 Frag(Varyings input) : SV_Target
             {
                 float4 color = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, input.texcoord).rgba;
                 return color;
             }
-            
             ENDHLSL
         }
     }

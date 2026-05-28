@@ -2,9 +2,9 @@
 
 namespace Misc
 {
-    public class ResetIsDamaged: StateMachineBehaviour
+    public class ResetIsDamaged : StateMachineBehaviour
     {
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool("IsDamaged", false);
         }

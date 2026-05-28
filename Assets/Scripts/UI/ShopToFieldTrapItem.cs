@@ -1,11 +1,12 @@
-﻿﻿using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using HexagonScripts;
 using Logic.Trap;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace UI
 {
@@ -64,29 +65,23 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
-
-        private CanvasGroup iconCanvasGroup;
-        private Coroutine fadeCoroutine;
-
-        private Vector2 targetGhostPosition;
+        private readonly List<GameObject> highlights = new();
         private Vector2 currentGhostPosition;
-        private bool isSnapping;
-        private bool wasSnapping;
         private float currentScale;
-        private Color targetColor;
-
-        private TrapSystem trapSystem;
+        private Coroutine fadeCoroutine;
         private Field.Field field;
         private GameObject ghost;
-        private RectTransform ghostRect;
         private Image ghostImage;
-        private readonly List<GameObject> highlights = new();
+        private RectTransform ghostRect;
 
-        public void Construct(TrapSystem trapSystem, Field.Field field)
-        {
-            this.trapSystem = trapSystem;
-            this.field = field;
-        }
+        private CanvasGroup iconCanvasGroup;
+        private bool isSnapping;
+        private Color targetColor;
+
+        private Vector2 targetGhostPosition;
+
+        private TrapSystem trapSystem;
+        private bool wasSnapping;
 
         private void Awake()
         {
@@ -102,6 +97,31 @@ namespace UI
                 if (iconCanvasGroup == null)
                     iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
             }
+        }
+
+        private void Update()
+        {
+            if (!ghost)
+                return;
+            if (isSnapping)
+            {
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * snapSpeed);
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * unSnapSpeed);
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
+                    wasSnapping = false;
+            }
+            else
+                currentGhostPosition = targetGhostPosition;
+            ghostRect.localPosition = currentGhostPosition;
+            currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
+            ghostRect.localScale = Vector3.one * currentScale;
+            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.deltaTime * colorLerpSpeed);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -186,6 +206,32 @@ namespace UI
             UpdatePlacementFeedback(eventData);
         }
 
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (TryGetCellUnderMouse(eventData, out var cellPos))
+            {
+                var axial = HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
+                trapSystem.TryPlaceTrap(trapData, axial);
+            }
+
+            if (ghost != null) Destroy(ghost);
+            ClearHighlights();
+
+            if (iconCanvasGroup != null)
+            {
+                if (fadeCoroutine != null)
+                    StopCoroutine(fadeCoroutine);
+
+                fadeCoroutine = StartCoroutine(FadeInIcon());
+            }
+        }
+
+        public void Construct(TrapSystem trapSystem, Field.Field field)
+        {
+            this.trapSystem = trapSystem;
+            this.field = field;
+        }
+
         private void UpdatePlacementFeedback(PointerEventData eventData)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -199,7 +245,7 @@ namespace UI
 
             if (TryGetCellUnderMouse(eventData, out var cellPos))
             {
-                var axial = HexagonScripts.HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
+                var axial = HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
                 var isValid = trapSystem.CanPlaceTrap(trapData, axial);
 
                 targetColor = isValid ? ghostValidColor : ghostInvalidColor;
@@ -207,7 +253,8 @@ namespace UI
 
                 var hexObj = field.GetHex(axial);
 
-                if (hexObj != null && isValid && TryGetSlotCanvasPosition(hexObj.offset, eventData, out var snappedCanvasPos))
+                if (hexObj != null && isValid &&
+                    TryGetSlotCanvasPosition(hexObj.offset, eventData, out var snappedCanvasPos))
                 {
                     targetGhostPosition = snappedCanvasPos + ghostOffset;
                     isSnapping = true;
@@ -227,7 +274,7 @@ namespace UI
                 highlights.ForEach(h => h.SetActive(false));
             }
         }
-        
+
         private void UpdateHighlights(Vector2Int axial, bool isValid)
         {
             var hexes = trapSystem.GetTrapOccupiedHexes(axial);
@@ -281,51 +328,6 @@ namespace UI
             return true;
         }
 
-        private void Update()
-        {
-            if (!ghost)
-                return;
-            if (isSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * snapSpeed);
-                wasSnapping = true;
-            }
-            else if (wasSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.deltaTime * unSnapSpeed);
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
-            }
-            else
-                currentGhostPosition = targetGhostPosition;
-            ghostRect.localPosition = currentGhostPosition;
-            currentScale = Mathf.Lerp(currentScale, targetScale, Time.deltaTime * scaleSpeed);
-            ghostRect.localScale = Vector3.one * currentScale;
-            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.deltaTime * colorLerpSpeed);
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            if (TryGetCellUnderMouse(eventData, out var cellPos))
-            {
-                var axial = HexagonScripts.HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
-                trapSystem.TryPlaceTrap(trapData, axial);
-            }
-
-            if (ghost != null) Destroy(ghost);
-            ClearHighlights();
-
-            if (iconCanvasGroup != null)
-            {
-                if (fadeCoroutine != null)
-                    StopCoroutine(fadeCoroutine);
-
-                fadeCoroutine = StartCoroutine(FadeInIcon());
-            }
-        }
-
         private IEnumerator FadeInIcon()
         {
             var elapsed = 0f;
@@ -356,18 +358,18 @@ namespace UI
             var cam = Camera.main;
             if (!cam || !mapViewport || !fieldTilemap)
                 return false;
-        
+
             var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
             var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
-        
+
             var slotLocalInViewport = new Vector2(
                 (slotViewport.x - 0.5f) * mapViewport.rect.width,
                 (slotViewport.y - 0.5f) * mapViewport.rect.height
             );
-        
+
             var slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
                 mapViewport.TransformPoint(slotLocalInViewport));
-        
+
             return RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 (RectTransform)canvas.transform,
                 slotScreenPos,

@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Audio;
 using Interfaces;
 using UnityEngine;
-using Audio;
 
 namespace Logic.Unit
 {
     public class UnitModel : IDamageable
     {
-        public Vector3 WorldPosition { get; private set; }
-        public Vector2Int CurrentHex { get; private set; }
-        public Vector3 CurrentDirection { get; set; }
-        public int AttackType { get; set; }
+        private readonly List<Buff> buffs = new();
+        private readonly SoundData soundData;
+        private IAttackStrategy attackStrategy;
+        private bool deathEventSent;
 
         private IMovementStrategy movementStrategy;
-        private IAttackStrategy attackStrategy;
-        private readonly SoundData soundData;
-
-        public UnitData UnitData { get; }
-        private readonly List<Buff> buffs = new();
-        public IReadOnlyList<Buff> ActiveBuffs => buffs;
-
-        public int CurrentHealth { get; set; }
-        public bool IsDead => CurrentHealth <= 0;
-        private bool deathEventSent;
-        public event Action OnAttack;
-        public event Action OnDamaged;
-        public event Action OnDied;
 
         public UnitModel(Vector3 startPos, Vector2Int startHex, UnitData unitData, SoundData soundData)
         {
@@ -37,6 +24,35 @@ namespace Logic.Unit
             CurrentHealth = unitData.maxHealth;
             this.soundData = soundData;
         }
+
+        public Vector3 WorldPosition { get; private set; }
+        public Vector2Int CurrentHex { get; private set; }
+        public Vector3 CurrentDirection { get; set; }
+        public int AttackType { get; set; }
+
+        public UnitData UnitData { get; }
+        public IReadOnlyList<Buff> ActiveBuffs => buffs;
+
+        public int CurrentHealth { get; set; }
+        public bool IsDead => CurrentHealth <= 0;
+
+        public void TakeDamage(int damage)
+        {
+            if (IsDead) return;
+            Debug.Log($"Unit got damaged: {damage}");
+            OnDamaged?.Invoke();
+            CurrentHealth -= damage;
+
+            if (soundData != null &&
+                soundData.unitDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.unitDamageSounds, soundData.unitDamageVolume);
+            if (CurrentHealth <= 0)
+                Die();
+        }
+
+        public event Action OnAttack;
+        public event Action OnDamaged;
+        public event Action OnDied;
 
         public void SetStrategies(
             IMovementStrategy movement,
@@ -58,16 +74,20 @@ namespace Logic.Unit
                 CurrentDirection = Vector3.zero;
                 return;
             }
-            
+
             movementStrategy?.Tick();
         }
 
-        public float GetMoveSpeed() =>
-            buffs.Aggregate(UnitData.moveSpeed, (current, buff) => buff.ModifyMoveSpeed(current));
+        public float GetMoveSpeed()
+        {
+            return buffs.Aggregate(UnitData.moveSpeed, (current, buff) => buff.ModifyMoveSpeed(current));
+        }
 
-        public int GetMaxHealth() =>
-            buffs.Aggregate(UnitData.maxHealth, (current, buff) => buff.ModifyMaxHealth(current));
-        
+        public int GetMaxHealth()
+        {
+            return buffs.Aggregate(UnitData.maxHealth, (current, buff) => buff.ModifyMaxHealth(current));
+        }
+
         public void ResetHealth()
         {
             CurrentHealth = GetMaxHealth();
@@ -80,24 +100,11 @@ namespace Logic.Unit
             return result;
         }
 
-        public void AddBuff(Buff buff) => buffs.Add(buff);
-
-        public void TakeDamage(int damage)
+        public void AddBuff(Buff buff)
         {
-            if (IsDead) return;
-            Debug.Log($"Unit got damaged: {damage}");
-            OnDamaged?.Invoke();
-            CurrentHealth -= damage;
-
-            if (soundData != null && 
-                soundData.unitDamageSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(soundData.unitDamageSounds, soundData.unitDamageVolume);
-            if (CurrentHealth <= 0)
-            {
-                Die();
-            }
+            buffs.Add(buff);
         }
-        
+
         public void Attack()
         {
             OnAttack?.Invoke();
@@ -110,7 +117,10 @@ namespace Logic.Unit
             OnDied?.Invoke();
         }
 
-        public void SetHex(Vector2Int hex) => CurrentHex = hex;
+        public void SetHex(Vector2Int hex)
+        {
+            CurrentHex = hex;
+        }
 
         public void SetPosition(Vector3 newPosition)
         {

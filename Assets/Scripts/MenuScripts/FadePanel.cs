@@ -11,7 +11,12 @@ namespace MenuScripts
         private CanvasGroup canvasGroup;
         private Coroutine currentFade;
 
-        private void Awake() => EnsureCanvasGroup();
+        public float FadeDuration => fadeDuration;
+
+        private void Awake()
+        {
+            EnsureCanvasGroup();
+        }
 
         private void EnsureCanvasGroup()
         {
@@ -19,9 +24,10 @@ namespace MenuScripts
                 canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public float FadeDuration => fadeDuration;
-
-        public void Show() => Show(fadeDuration);
+        public void Show()
+        {
+            Show(fadeDuration);
+        }
 
         public void Show(float duration)
         {
@@ -34,7 +40,10 @@ namespace MenuScripts
             currentFade = StartCoroutine(FadeRoutine(1f, duration));
         }
 
-        public void Hide() => Hide(fadeDuration);
+        public void Hide()
+        {
+            Hide(fadeDuration);
+        }
 
         public void Hide(float duration)
         {

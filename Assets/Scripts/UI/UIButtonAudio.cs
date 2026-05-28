@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -8,7 +8,7 @@ namespace UI
     {
         [SerializeField]
         private Button button;
-        
+
         private bool isInitialized;
 
         private void OnEnable()
@@ -19,7 +19,7 @@ namespace UI
             if (!isInitialized)
             {
                 button.onClick.AddListener(PlayClickSound);
-                
+
                 var eventTrigger = gameObject.GetComponent<EventTrigger>();
                 if (eventTrigger == null)
                     eventTrigger = gameObject.AddComponent<EventTrigger>();
@@ -35,6 +35,12 @@ namespace UI
             }
         }
 
+        private void OnDisable()
+        {
+            if (button != null)
+                button.onClick.RemoveListener(PlayClickSound);
+        }
+
         private static void PlayClickSound()
         {
             if (UIAudioManager.Instance != null)
@@ -45,12 +51,6 @@ namespace UI
         {
             if (UIAudioManager.Instance != null)
                 UIAudioManager.Instance.PlayButtonHover();
-        }
-
-        private void OnDisable()
-        {
-            if (button != null)
-                button.onClick.RemoveListener(PlayClickSound);
         }
     }
 }

@@ -24,13 +24,19 @@ Shader "Retro/PSXUnlitJitter"
 
     SubShader
     {
-        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" }
+        Tags
+        {
+            "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque"
+        }
         LOD 100
 
         Pass
         {
             Name "UniversalForward"
-            Tags { "LightMode"="UniversalForward" }
+            Tags
+            {
+                "LightMode"="UniversalForward"
+            }
 
             HLSLPROGRAM
             #pragma vertex vert
@@ -64,16 +70,16 @@ Shader "Retro/PSXUnlitJitter"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                float3 normalOS   : NORMAL;
-                float2 uv         : TEXCOORD0;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
                 float3 positionWS : TEXCOORD0;
-                float3 normalWS   : TEXCOORD1;
-                float2 uv         : TEXCOORD2;
+                float3 normalWS : TEXCOORD1;
+                float2 uv : TEXCOORD2;
             };
 
             float2 GetJitterResolution()
@@ -81,9 +87,9 @@ Shader "Retro/PSXUnlitJitter"
                 float2 screen = _ScreenParams.xy;
 
                 #if defined(_JITTERMODE_FIXED)
-                    float2 res = max(_JitterTargetRes.xy, float2(1,1));
+                float2 res = max(_JitterTargetRes.xy, float2(1, 1));
                 #else
-                    float2 res = max(screen * _JitterResolutionScale, float2(160,120));
+                float2 res = max(screen * _JitterResolutionScale, float2(160, 120));
                 #endif
 
                 return res;
@@ -151,7 +157,10 @@ Shader "Retro/PSXUnlitJitter"
         Pass
         {
             Name "ShadowCaster"
-            Tags { "LightMode"="ShadowCaster" }
+            Tags
+            {
+                "LightMode"="ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -189,9 +198,9 @@ Shader "Retro/PSXUnlitJitter"
                 float2 screen = _ScreenParams.xy;
 
                 #if defined(_JITTERMODE_FIXED)
-                    float2 res = max(_JitterTargetRes.xy, float2(1,1));
+                float2 res = max(_JitterTargetRes.xy, float2(1, 1));
                 #else
-                    float2 res = max(screen * _JitterResolutionScale, float2(160,120));
+                float2 res = max(screen * _JitterResolutionScale, float2(160, 120));
                 #endif
 
                 return res;

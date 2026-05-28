@@ -13,9 +13,15 @@ namespace UI
         private TextMeshProUGUI goldText;
         [SerializeField]
         private TextMeshProUGUI foodText;
+        private CastleSystem castleSystem;
 
         private CastleModel model;
-        private CastleSystem castleSystem;
+
+        private void OnDestroy()
+        {
+            if (model != null)
+                model.OnChanged -= UpdateUI;
+        }
 
         public void Initialize(CastleSystem castleSystem)
         {
@@ -23,12 +29,6 @@ namespace UI
             this.castleSystem = castleSystem;
             model.OnChanged += UpdateUI;
             UpdateUI();
-        }
-
-        private void OnDestroy()
-        {
-            if (model != null)
-                model.OnChanged -= UpdateUI;
         }
 
         private void UpdateUI()

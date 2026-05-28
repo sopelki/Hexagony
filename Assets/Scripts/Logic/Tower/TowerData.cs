@@ -1,6 +1,6 @@
 ﻿using Interfaces;
-using Misc;
 using Logic.Projectile;
+using Misc;
 using UnityEngine;
 
 namespace Logic.Tower
@@ -25,7 +25,7 @@ namespace Logic.Tower
                 $"Целей: <color=#AB47BC>{targetsCount}</color>\n" +
                 $"Скорость: <color=#FF7733>{fireRate}с</color>\n" +
                 $"Дальность: <color=#FFA726>{range}</color>";
-            
+
             return new TooltipContent
             {
                 Title = type.GetRussianName(),

@@ -5,12 +5,11 @@ namespace UI
 {
     public class UIAudioManager : MonoBehaviour
     {
-        public static UIAudioManager Instance { get; private set; }
-
         [SerializeField]
         private UIAudioData uiAudioData;
         [SerializeField]
         private AudioSource audioSource;
+        public static UIAudioManager Instance { get; private set; }
 
         private void Awake()
         {

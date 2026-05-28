@@ -16,6 +16,5 @@ namespace HexagonScripts
             this.offset = offset;
             this.type = type;
         }
-    
     }
 }

@@ -1,32 +1,29 @@
-using UnityEngine;
-using Logic.Tower;
-using Logic.Trap;
 using Logic.Castle;
 using Logic.Monster;
+using Logic.Tower;
+using Logic.Trap;
 using UI;
+using UnityEngine;
 
 namespace Core
 {
     public class GameFlowManager
     {
-        private readonly WaveManager waveManager;
-        private readonly TowerSystem towerSystem;
-        private readonly TrapSystem trapSystem;
-        private readonly CastleSystem castleSystem;
-        private readonly HintUI hintUI;
-
-        private bool gameStarted;
-        private bool waitingToStart;
-        private float timeSinceStart;
-        private float timeSinceLastHint;
-        private float timeSinceObjectPlaced;
-        private bool hintCycleStarted;
-
         private const float HintStartDelay = 5f;
         private const float HintCycleInterval = 20f;
         private const float StartGameDelay = 2f;
-        
-        public bool IsTutorialActive { get; set; } = true;
+        private readonly CastleSystem castleSystem;
+        private readonly HintUI hintUI;
+        private readonly TowerSystem towerSystem;
+        private readonly TrapSystem trapSystem;
+        private readonly WaveManager waveManager;
+
+        private bool gameStarted;
+        private bool hintCycleStarted;
+        private float timeSinceLastHint;
+        private float timeSinceObjectPlaced;
+        private float timeSinceStart;
+        private bool waitingToStart;
 
         public GameFlowManager(
             WaveManager waveManager,
@@ -41,6 +38,8 @@ namespace Core
             this.castleSystem = castleSystem;
             this.hintUI = hintUI;
         }
+
+        public bool IsTutorialActive { get; set; } = true;
 
         public void Initialize()
         {
@@ -99,9 +98,9 @@ namespace Core
 
         private void OnFirstObjectPlaced()
         {
-            if (IsTutorialActive) 
+            if (IsTutorialActive)
                 return;
-            
+
             if (gameStarted || waitingToStart)
                 return;
 
@@ -128,24 +127,24 @@ namespace Core
 
             Debug.Log("GameFlowManager: Game started.");
         }
-        
+
         public void ResetToStandardMode()
         {
             IsTutorialActive = false;
-            
+
             towerSystem.OnFirstTowerPlaced -= OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced -= OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced -= OnFirstObjectPlaced;
-            
+
             towerSystem.OnFirstTowerPlaced += OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced += OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced += OnFirstObjectPlaced;
-            
+
             gameStarted = false;
             waitingToStart = false;
             hintCycleStarted = false;
             timeSinceStart = 0f;
-    
+
             Debug.Log("GameFlowManager: Сброшен в режим чистой игры.");
         }
     }

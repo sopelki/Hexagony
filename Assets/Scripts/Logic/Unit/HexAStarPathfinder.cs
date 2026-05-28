@@ -98,35 +98,35 @@
 using System.Collections.Generic;
 using HexagonScripts;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Logic.Unit
 {
     public class HexAStarPathfinder
     {
-        private readonly Field.Field field;
-        private readonly System.Random randomGenerator;
-
         // --- ИЗМЕНЕНИЯ ДЛЯ ВАРИАТИВНОСТИ ---
         // Базовая стоимость перехода на соседнюю клетку
         private const int BASE_MOVE_COST = 10;
         // Величина случайного "шума". Путь может стать "дороже" на это значение.
         private const int RANDOM_COST_RANGE = 5;
+        private readonly Field.Field field;
+        private readonly Random randomGenerator;
 
         public HexAStarPathfinder(Field.Field field)
         {
             this.field = field;
             // Используем один экземпляр System.Random для настоящей случайности
-            randomGenerator = new System.Random();
+            randomGenerator = new Random();
         }
 
         public List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
         {
             var startHex = field.GetHex(start);
             var goalHex = field.GetHex(goal);
-            
+
             if (start == goal || !field.IsWalkable(startHex) || !field.IsWalkable(goalHex))
                 return null;
-                
+
             // Используем PriorityQueue для огромного прироста скорости
             var openSet = new PriorityQueue<Vector2Int>();
             openSet.Enqueue(start, 0);
@@ -149,7 +149,7 @@ namespace Logic.Unit
                     if (!field.IsWalkable(neighbor)) continue;
 
                     var nCoord = neighbor.coordinates;
-                    
+
                     // --- СБАЛАНСИРОВАННАЯ СТОИМОСТЬ ---
                     // Стоимость = База + Случайный шум
                     var moveCost = BASE_MOVE_COST + randomGenerator.Next(0, RANDOM_COST_RANGE + 1);
@@ -159,11 +159,11 @@ namespace Logic.Unit
                     {
                         cameFrom[nCoord] = current;
                         gScore[nCoord] = tentativeGScore;
-                        
+
                         // Эвристику тоже умножаем на базу, чтобы она была сопоставима с G-score
                         var heuristic = HexagonMath.Distance(nCoord, goal) * BASE_MOVE_COST;
                         float fScore = tentativeGScore + heuristic;
-                        
+
                         openSet.Enqueue(nCoord, fScore);
                     }
                 }

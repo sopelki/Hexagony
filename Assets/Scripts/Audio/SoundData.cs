@@ -16,7 +16,7 @@ namespace Audio
         public AudioClip[] monsterDamageSounds;
         [Range(0f, 1f)]
         public float monsterDamageVolume = 0.6f;
-        
+
         public AudioClip[] monsterAttackSounds;
         [Range(0f, 1f)]
         public float monsterAttackVolume = 0.8f;
@@ -25,15 +25,15 @@ namespace Audio
         public AudioClip[] archerTowerShootSounds;
         [Range(0f, 1f)]
         public float archerShootVolume = 0.75f;
-        
+
         public AudioClip[] archerTowerHitSounds;
         [Range(0f, 1f)]
         public float archerHitVolume = 0.6f;
-        
+
         public AudioClip[] mageTowerShootSounds;
         [Range(0f, 1f)]
         public float mageShootVolume = 0.75f;
-        
+
         public AudioClip[] mageTowerHitSounds;
         [Range(0f, 1f)]
         public float mageHitVolume = 0.6f;
@@ -50,7 +50,7 @@ namespace Audio
         public AudioClip[] unitDamageSounds;
         [Range(0f, 1f)]
         public float unitDamageVolume = 0.6f;
-        
+
         [Header("Castle damage Sounds")]
         public AudioClip[] castleDamageSounds;
         [Range(0f, 1f)]
@@ -58,6 +58,5 @@ namespace Audio
 
         [Header("Background Music")]
         public AudioClip backgroundMusic;
-
     }
 }
