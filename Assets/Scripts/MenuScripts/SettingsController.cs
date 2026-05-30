@@ -1,3 +1,5 @@
+using Logic.Castle;
+using Misc;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -21,6 +23,10 @@ namespace MenuScripts
         [Header("Graphics")]
         [SerializeField]
         private Toggle fullscreenToggle;
+        
+        [Header("Tutorial")]
+        [SerializeField]
+        private Toggle tutorialToggle;
 
         private void OnEnable()
         {
@@ -29,11 +35,20 @@ namespace MenuScripts
 
         private void LoadUIValues()
         {
+            var savedValue = PlayerPrefs.GetInt("ShowTutorial", 1);
+            if (tutorialToggle != null)
+            {
+                tutorialToggle.SetIsOnWithoutNotify(savedValue == 1);
+                Debug.Log($"UI Synced: Toggle is now {savedValue == 1} based on PlayerPrefs");
+            }
+            
             masterSlider.value = PlayerPrefs.GetFloat("MasterVol", 0.75f);
             musicSlider.value = PlayerPrefs.GetFloat("MusicVol", 0.75f);
             sfxSlider.value = PlayerPrefs.GetFloat("SfxVol", 0.75f);
             uiSlider.value = PlayerPrefs.GetFloat("UiVol", 0.75f);
             fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+            // tutorialToggle.isOn = PlayerPrefs.GetInt("ShowTutorial", 1) == 1;
+            // tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
         }
 
         public void SetMasterVolume(float volume)
@@ -68,6 +83,23 @@ namespace MenuScripts
         {
             Screen.fullScreen = isFullscreen;
             PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        }
+        
+        public void SetTutorial(bool value)
+        {
+            Debug.Log("SetTutorial called: " + value);
+            PlayerPrefs.SetInt("ShowTutorial", value ? 1 : 0);
+            PlayerPrefs.Save();
+
+            var tutorial = FindAnyObjectByType<TutorialManager>(FindObjectsInactive.Include);
+            
+            if (tutorial == null) 
+                return;
+
+            if (value)
+                tutorial.TryStartTutorialFromScratch();
+            else
+                tutorial.ForceStopTutorial();
         }
     }
 }

@@ -38,12 +38,18 @@ namespace Misc
         {
             if (actionButton)
                 actionButton.onClick.AddListener(OnActionButtonClick);
-
-            UpdateTutorialState();
+            
+            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 1)
+                TryStartTutorialFromScratch();
+            else
+                ForceStopTutorial();
         }
 
         private void Update()
         {
+            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 0) 
+                return;
+            
             switch (currentStep)
             {
                 case TutorialStep.BuildBarrack:
@@ -195,18 +201,9 @@ namespace Misc
                 highlightEffect.SetActive(true);
             }
         }
-
-        private void FinishTutorialAndStartRealGame()
+        
+        private void ClearAllTutorialBuildings()
         {
-            if (gameFlowManager != null)
-                gameFlowManager.IsTutorialActive = false;
-
-            if (CastleSystem.Instance != null)
-            {
-                CastleSystem.Instance.Clear();
-                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude))
-                    Destroy(b.gameObject);
-            }
             if (TowerSystem.Instance != null)
             {
                 FindAnyObjectByType<TowerViewManager>()?.DestroyAllTowers();
@@ -222,14 +219,72 @@ namespace Misc
                 FindAnyObjectByType<UnitViewManager>()?.DestroyAllUnits();
                 UnitSystem.Instance.Clear();
             }
+            if (CastleSystem.Instance != null)
+            {
+                CastleSystem.Instance.Clear();
+                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude))
+                    Destroy(b.gameObject);
+            }
+        }
 
-
+        private void FinishTutorialAndStartRealGame()
+        {
+            ClearAllTutorialBuildings();
             gameFlowManager?.ResetToStandardMode();
-
+            ForceStopTutorial();
+        }
+        
+        public void ForceStopTutorial()
+        {
+            if (gameFlowManager != null && gameFlowManager.IsTutorialActive)
+            {
+                ClearAllTutorialBuildings();
+                gameFlowManager.IsTutorialActive = false;
+                gameFlowManager?.ResetToStandardMode();
+            }
+            
             if (tutorialWindow)
                 tutorialWindow.SetActive(false);
+            if (highlightEffect) 
+                highlightEffect.SetActive(false);
+        }
+        
+        public void TryStartTutorialFromScratch()
+        {
+            if (CastleSystem.Instance == null) 
+                return;
+            
+            var hasBuildings = false;
+            if (CastleSystem.Instance != null && CastleSystem.Instance.Model.Buildings.Count > 0) 
+                hasBuildings = true;
+            if (TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0) 
+                hasBuildings = true;
+            if (TrapSystem.Instance != null && TrapSystem.Instance.GetTraps().Count > 0) 
+                hasBuildings = true;
 
-            transform.parent.gameObject.SetActive(false);
+            if (hasBuildings)
+            {
+                Debug.Log("Нельзя запустить туториал: на поле уже есть постройки!");
+                return;
+            }
+
+            if (gameFlowManager != null)
+            {
+                gameFlowManager.ResetToStandardMode();
+                gameFlowManager.IsTutorialActive = true;
+
+                currentStep = TutorialStep.Greeting;
+
+                if (transform.parent != null)
+                    transform.parent.gameObject.SetActive(true);
+
+                gameObject.SetActive(true);
+                
+                if (tutorialWindow)
+                    tutorialWindow.SetActive(true);
+
+                UpdateTutorialState();
+            }
         }
 
         private enum TutorialStep
