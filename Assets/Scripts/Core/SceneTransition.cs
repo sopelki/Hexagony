@@ -83,6 +83,8 @@ namespace Core
 
             canvasGroup.blocksRaycasts = false;
             isTransitioning = false;
+
+            Time.timeScale = 1f;
         }
 
         private IEnumerator Fade(float targetAlpha)
