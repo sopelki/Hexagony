@@ -57,8 +57,6 @@ namespace MenuScripts
             helpPanel.Show();
 
             Time.timeScale = 0f;
-
-            // ShowMechanics();
         }
 
         public void CloseHelp()
@@ -93,39 +91,39 @@ namespace MenuScripts
             UpdateTabs(tabMechanicsButton);
             textBackground.Show();
             titleText.text = "<color=#FFD54F>ОСНОВЫ ИГРЫ</color>";
-            descriptionText.text =
+            descriptionText.text = 
                 "<b>Ваша миссия:</b> Не дать монстрам прорваться к воротам замка.\n" +
-                "• <color=#FFD54F><b>Подготовка:</b></color> Время застыло, пока вы не разместите свою <b>первую постройку</b>. Используйте это, чтобы спланировать оборону.\n" +
-                "• <color=#FFEE58><b>Ресурсы:</b></color> Золото добывается за уничтожение врагов.\n" +
-                "• <color=#FFA726><b>Информация:</b></color> Наведите курсор на любой объект в магазине, чтобы увидеть его <color=#FF7733>параметры и описание</color>.";
+                "• <color=#dfe88b><b>Подготовка:</b></color> Время застыло, пока вы не разместите свою первую постройку.\n" +
+                "• <color=#dfe88b><b>Ресурсы:</b></color> <b>Золото</b> добывается за уничтожение врагов.\n" +
+                "• <color=#dfe88b><b>Информация:</b></color> Наведите курсор на объект, чтобы увидеть его <color=#EF5350>урон</color> и <color=#FF7733>скорость</color>.";
         }
-
+        
         public void ShowCastle()
         {
             UpdateTabs(tabCastleButton);
             textBackground.Show();
-            titleText.text = "<color=#66BB6A>ЗАМОК</color>";
+            titleText.text = "<color=#66BB6A>ЭКОНОМИКА ЗАМКА</color>";
             descriptionText.text =
-                "Правильная комбинация зданий на внутреннем дворе замка (сетка 3х3) определяет исход войны:\n" +
-                "• <color=#666fd9><b>Казарма:</b></color> Вербует новых рыцарей, которые будут защищать ваш замок.\n" +
-                "• <color=#dfe665><b>Ферма:</b></color> Увеличивает максимальное количество рыцарей, которые могут выходить на поле бое.\n" +
-                "• <color=#EF5350><b>Кузница:</b></color> Улучшает оружие, повышая <color=#EF5350>урон</color> ваших войск.\n" +
-                "• <color=#42A5F5><b>Алхимик:</b></color> Повышает выживаемость армии, увеличивая их <color=#42A5F5>максимальное здоровье</color>.\n";
+                "Здания во внутреннем дворе (сетка 3х3) определяют мощь вашей армии:\n" +
+                "• <color=#dfe88b><b>Казарма:</b></color> Автоматически нанимает рыцарей для защиты стен.\n" +
+                "• <color=#dfe88b><b>Ферма:</b></color> Увеличивает <b>лимит населения</b> для содержания армии.\n" +
+                "• <color=#dfe88b><b>Кузница:</b></color> Повышает <color=#EF5350>урон</color> ваших войск через улучшение стали.\n" +
+                "• <color=#dfe88b><b>Алхимик:</b></color> Увеличивает <color=#ade6a3>максимальное здоровье</color> всех защитников.\n";
         }
 
         public void ShowField()
         {
             UpdateTabs(tabFieldButton);
             textBackground.Show();
-            titleText.text = "<color=#EF5350>ПОЛЕ БОЯ</color>";
+            titleText.text = "<color=#EF5350>ОБОРОНА ПОЛЯ</color>";
             descriptionText.text =
-                "<color=#FFA726><b>БАШНИ</b></color>\n" +
-                "• <b>Маг:</b> Обрушивает магические сферы. Бьёт медленно, но <color=#AB47BC>по области (AoE)</color>.\n" +
-                "• <b>Лучник:</b> Высокая скорострельность. Идеален против <color=#EF5350>быстрых одиночных целей</color>.\n" +
-                "<color=#FF7733><b>ЛОВУШКИ</b></color>:\n" +
-                "• <color=#66BB6A><b>Лоза:</b></color> Сковывает движения монстров, значительно <color=#66BB6A>замедляя</color> их.\n" +
-                "• <color=#BDBDBD><b>Колья:</b></color> Наносят периодический урон всем, кто по ним проходит.\n" +
-                "• <color=#EF5350><b>Капкан:</b></color> <color=#EF5350>Огромный урон</color>, но ломается после активации.\n";
+                "<color=#90CAF9><b>БАШНИ</b></color>:\n" +
+                "• <color=#dfe88b><b>Маг:</b></color> Атакует магическими сферами <color=#AB47BC>по области (AoE)</color>.\n" +
+                "• <color=#dfe88b><b>Лучник:</b></color> Высокая <color=#FF7733>скорострельность</color> по одиночным целям.\n" +
+                "<color=#90CAF9><b>ЛОВУШКИ</b></color>:\n" +
+                "• <color=#dfe88b><b>Лоза:</b></color> Оплетает монстров, значительно замедляя их ход.\n" +
+                "• <color=#dfe88b><b>Колья:</b></color> Наносят стабильный <b>урон</b> всем, кто стоит на них.\n" +
+                "• <color=#dfe88b><b>Капкан:</b></color> Наносит <b>критический удар</b> и исчезает.\n";
         }
     }
 }
