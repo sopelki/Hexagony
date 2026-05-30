@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4ca90d5e124389b43a65aa9a2c35cb4f
+guid: 9685bee94b7db6d4783c411480c685aa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1692998760251987672
-    second: MageTowerSprite_0
+      213: 922068823444140279
+    second: SlotDecoration_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageTowerSprite_0
+      name: SlotDecoration_0
       rect:
         serializedVersion: 2
-        x: 31
-        y: 19
-        width: 44
-        height: 89
-      alignment: 9
-      pivot: {x: 0.5, y: 0.14606741}
+        x: 13
+        y: 11
+        width: 31
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d61ffd076dbe7710800000000000000
-      internalID: 1692998760251987672
+      spriteID: 7f0b9d7a5b8dbcc00800000000000000
+      internalID: 922068823444140279
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d9450d7d1be7e154c94bf93cacc38242
+    spriteID: 334700937e386c048948a756fd281624
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MageTowerSprite_0: 1692998760251987672
+      SlotDecoration_0: 922068823444140279
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

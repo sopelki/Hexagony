@@ -87,13 +87,13 @@ namespace MenuScripts
 
         public void RestartGame()
         {
-            Time.timeScale = 1f;
+            // Time.timeScale = 1f;
             SceneTransitions.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void LoadMainMenu()
         {
-            Time.timeScale = 1f;
+            // Time.timeScale = 1f;
             SceneTransitions.LoadScene("MainMenu");
         }
     }

@@ -76,12 +76,11 @@ namespace UI
 
         private CanvasGroup iconCanvasGroup;
         private bool isSnapping;
-        private Color targetColor;
-
-        private Vector2 targetGhostPosition;
-
-        private TrapSystem trapSystem;
         private bool wasSnapping;
+        private Color targetColor;
+        private Vector2 targetGhostPosition;
+        private TrapSystem trapSystem;
+        private bool isDragging;
 
         private void Awake()
         {
@@ -126,6 +125,11 @@ namespace UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (trapSystem == null)
+                return;
+
+            isDragging = true;
+            
             if (iconCanvasGroup != null)
             {
                 if (fadeCoroutine != null)
@@ -133,9 +137,6 @@ namespace UI
 
                 iconCanvasGroup.alpha = 0f;
             }
-
-            if (trapSystem == null)
-                return;
 
             ClearHighlights();
 
@@ -193,7 +194,7 @@ namespace UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (ghostRect == null)
+            if (ghostRect == null || !isDragging)
                 return;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -208,14 +209,18 @@ namespace UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!isDragging)
+                return;
+            
+            isDragging = false;
+
             if (TryGetCellUnderMouse(eventData, out var cellPos))
             {
                 var axial = HexagonMath.OffsetToAxial(cellPos.x, cellPos.y);
                 trapSystem.TryPlaceTrap(trapData, axial);
             }
 
-            if (ghost != null) Destroy(ghost);
-            ClearHighlights();
+            CleanupDraggingUI();
 
             if (iconCanvasGroup != null)
             {
@@ -225,12 +230,32 @@ namespace UI
                 fadeCoroutine = StartCoroutine(FadeInIcon());
             }
         }
+        
+        private void OnDisable()
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                CleanupDraggingUI();
+                if (iconCanvasGroup != null)
+                    iconCanvasGroup.alpha = 1f;
+            }
+        }
+
+        private void CleanupDraggingUI()
+        {
+            if (ghost != null)
+                Destroy(ghost);
+
+            ClearHighlights();
+        }
 
         public void Construct(TrapSystem trapSystem, Field.Field field)
         {
             this.trapSystem = trapSystem;
             this.field = field;
         }
+
 
         private void UpdatePlacementFeedback(PointerEventData eventData)
         {

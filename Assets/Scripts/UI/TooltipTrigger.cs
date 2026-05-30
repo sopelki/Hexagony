@@ -7,8 +7,7 @@ namespace UI
 {
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField]
-        private float delay = 0.5f;
+        private const float Delay = 0.75f;
         private Coroutine delayCoroutine;
         private bool isBought;
         private ITooltipProvider provider;
@@ -42,7 +41,7 @@ namespace UI
 
         private IEnumerator ShowWithDelay()
         {
-            yield return new WaitForSecondsRealtime(delay);
+            yield return new WaitForSecondsRealtime(Delay);
             TooltipUI.Instance.Show(provider.GetTooltipContent(isBought));
         }
 

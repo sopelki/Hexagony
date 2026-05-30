@@ -57,6 +57,8 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+
+        private TowerSystem towerSystem;
         private Vector2 currentGhostPosition;
         private float currentScale;
         private Coroutine fadeCoroutine;
@@ -67,14 +69,13 @@ namespace UI
         private CanvasGroup iconCanvasGroup;
 
         private bool isSnapping;
-        private Color targetColor;
+        private bool wasSnapping;
 
         private Vector2 targetGhostPosition;
-
+        private Color targetColor;
         private float targetScale;
 
-        private TowerSystem towerSystem;
-        private bool wasSnapping;
+        private bool isDragging;
 
         private void Awake()
         {
@@ -148,6 +149,8 @@ namespace UI
             if (towerSystem == null)
                 return;
 
+            isDragging = true;
+
             var prefabRenderer = towerData.viewPrefab.GetComponentInChildren<SpriteRenderer>();
             if (prefabRenderer == null)
                 return;
@@ -169,15 +172,18 @@ namespace UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (ghostRect != null)
+            if (ghostRect != null && isDragging)
                 UpdateGhostPosition(eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (ghost != null)
-                Destroy(ghost);
+            if (!isDragging)
+                return;
 
+            isDragging = false;
+
+            CleanupGhost();
             TryPlaceTower(eventData);
 
             if (iconCanvasGroup != null)
@@ -189,10 +195,25 @@ namespace UI
             }
         }
 
-        public void Construct(TowerSystem system)
+        private void OnDisable()
         {
-            towerSystem = system;
+            if (isDragging)
+            {
+                isDragging = false;
+                CleanupGhost();
+                
+                if (iconCanvasGroup != null)
+                    iconCanvasGroup.alpha = 1f;
+            }
         }
+        
+        private void CleanupGhost()
+        {
+            if (ghost != null)
+                Destroy(ghost);
+        }
+
+        public void Construct(TowerSystem system) => towerSystem = system;
 
         private void TryPlaceTower(PointerEventData eventData)
         {

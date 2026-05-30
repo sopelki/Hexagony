@@ -86,7 +86,7 @@ MonoBehaviour:
   mapViewport: {fileID: 0}
   fieldTilemap: {fileID: 0}
   slotTile: {fileID: 11400000, guid: 7b7b59e8a9176ba47913fef81288eec8, type: 2}
-  ghostOffset: {x: 0, y: 0}
+  ghostOffset: {x: 1, y: -2}
   enableSnapping: 1
   searchRadius: 3
   detectionDistance: 50

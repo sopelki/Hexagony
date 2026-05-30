@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4ca90d5e124389b43a65aa9a2c35cb4f
+guid: a8265607c7492ec4dbd5559ac55c106f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1692998760251987672
-    second: MageTowerSprite_0
+      213: 6529909481953654932
+    second: Rock1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MageTowerSprite_0
+      name: Rock1_0
       rect:
         serializedVersion: 2
-        x: 31
-        y: 19
-        width: 44
-        height: 89
-      alignment: 9
-      pivot: {x: 0.5, y: 0.14606741}
+        x: 25
+        y: 18
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d61ffd076dbe7710800000000000000
-      internalID: 1692998760251987672
+      spriteID: 4987d4fa316ee9a50800000000000000
+      internalID: 6529909481953654932
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d9450d7d1be7e154c94bf93cacc38242
+    spriteID: cd66ca0d67cf50d4f85c6f7de76ecfb8
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MageTowerSprite_0: 1692998760251987672
+      Rock1_0: 6529909481953654932
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

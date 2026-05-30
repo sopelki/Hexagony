@@ -11890,7 +11890,7 @@
                 "y": 3,
                 "z": 0
             },
-            "type": 3
+            "type": 1
         },
         {
             "coordinates": {
@@ -12322,7 +12322,7 @@
                 "y": 4,
                 "z": 0
             },
-            "type": 3
+            "type": 1
         },
         {
             "coordinates": {
@@ -13210,7 +13210,7 @@
                 "y": 6,
                 "z": 0
             },
-            "type": 3
+            "type": 0
         },
         {
             "coordinates": {
@@ -20541,6 +20541,278 @@
                 "z": 0
             },
             "objectId": "Castle"
+        },
+        {
+            "position": {
+                "x": 11,
+                "y": 3,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 7,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -8,
+                "y": 0,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": 4,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 12,
+                "y": -8,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": 6,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 7,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": -6,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": -21,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -12,
+                "y": -20,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -14,
+                "y": 4,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -8,
+                "y": 20,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -8,
+                "y": 20,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -7,
+                "y": 18,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": -21,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": -11,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": 8,
+                "y": -5,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": -2,
+                "y": -12,
+                "z": 0
+            },
+            "objectId": "Rocks 1"
+        },
+        {
+            "position": {
+                "x": -8,
+                "y": -8,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": -17,
+                "y": -20,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": 16,
+                "y": 8,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": 1,
+                "y": 5,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": -3,
+                "y": 19,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": -14,
+                "y": 5,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": 9,
+                "y": -20,
+                "z": 0
+            },
+            "objectId": "Rocks 2"
+        },
+        {
+            "position": {
+                "x": -4,
+                "y": -11,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": -8,
+                "y": -4,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": -18,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": -13,
+                "y": -17,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": -14,
+                "y": 9,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": 2,
+                "y": 9,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": -1,
+                "y": 3,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": 10,
+                "y": 6,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
+        },
+        {
+            "position": {
+                "x": 6,
+                "y": -4,
+                "z": 0
+            },
+            "objectId": "SlotDecoration"
         }
     ]
 }

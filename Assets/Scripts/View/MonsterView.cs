@@ -8,12 +8,12 @@ namespace View
     {
         private static readonly int moveX = Animator.StringToHash("MoveX");
         private static readonly int moveY = Animator.StringToHash("MoveY");
-        private static readonly int LastMoveX = Animator.StringToHash("LastMoveX");
-        private static readonly int LastMoveY = Animator.StringToHash("LastMoveY");
-        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
-        private static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
-        private static readonly int IsDamaged = Animator.StringToHash("IsDamaged");
-        private static readonly int IsDead = Animator.StringToHash("IsDead");
+        private static readonly int lastMoveX = Animator.StringToHash("LastMoveX");
+        private static readonly int lastMoveY = Animator.StringToHash("LastMoveY");
+        private static readonly int isMoving = Animator.StringToHash("IsMoving");
+        private static readonly int isAttacking = Animator.StringToHash("IsAttacking");
+        private static readonly int isDamaged = Animator.StringToHash("IsDamaged");
+        private static readonly int isDead = Animator.StringToHash("IsDead");
 
         [SerializeField]
         private Animator animator;
@@ -72,8 +72,8 @@ namespace View
                 if (!isDeadAnimationPlaying)
                 {
                     isDeadAnimationPlaying = true;
-                    animator.SetBool(IsMoving, false);
-                    animator.SetBool(IsDead, true);
+                    animator.SetBool(isMoving, false);
+                    animator.SetBool(isDead, true);
                 }
                 return;
             }
@@ -83,13 +83,13 @@ namespace View
             var moving = direction.sqrMagnitude > 0.0001f;
 
             transform.position = logicalPosition + visualOffset;
-            animator.SetBool(IsMoving, moving);
+            animator.SetBool(isMoving, moving);
 
             if (moving)
             {
                 targetDirection = SnapTo4Directions(direction);
-                animator.SetFloat(LastMoveX, targetDirection.x);
-                animator.SetFloat(LastMoveY, targetDirection.y);
+                animator.SetFloat(lastMoveX, targetDirection.x);
+                animator.SetFloat(lastMoveY, targetDirection.y);
 
                 previousPosition = logicalPosition;
             }
@@ -110,17 +110,17 @@ namespace View
 
         private void HandleAttack()
         {
-            animator.SetTrigger(IsAttacking);
+            animator.SetTrigger(isAttacking);
         }
 
         private void HandleDamaged()
         {
-            animator.SetBool(IsDamaged, true);
+            animator.SetBool(isDamaged, true);
         }
 
         private void HandleDeath()
         {
-            animator.SetBool(IsDead, true);
+            animator.SetBool(isDead, true);
         }
 
 

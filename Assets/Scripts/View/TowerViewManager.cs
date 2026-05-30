@@ -34,8 +34,10 @@ namespace View
         public void DestroyAllTowers()
         {
             foreach (var view in views.Values)
+            {
                 if (view != null)
                     Destroy(view.gameObject);
+            }
             views.Clear();
         }
     }

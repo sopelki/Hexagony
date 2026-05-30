@@ -51,8 +51,10 @@ namespace View
         public void DestroyAllTraps()
         {
             foreach (var view in views.Values)
+            {
                 if (view != null)
                     Destroy(view.gameObject);
+            }
             views.Clear();
         }
     }

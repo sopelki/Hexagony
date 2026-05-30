@@ -21,7 +21,6 @@ namespace UI
         [SerializeField]
         private float fadeDuration = 0.1f;
         private CanvasGroup iconCanvasGroup;
-
         private Image sourceImage;
 
         private void Awake()
@@ -70,7 +69,9 @@ namespace UI
             }
 
             eventData.pointerDrag = itemGo;
+
             itemGo.GetComponent<CastleDragHandler>().OnBeginDrag(eventData);
+            item.OnBeginDrag(eventData);
             return;
 
             void OnDroppedHandler()
@@ -91,7 +92,10 @@ namespace UI
         private void HandleItemDropped()
         {
             if (!gameObject.activeInHierarchy)
+            {
+                iconCanvasGroup.alpha = 1f;
                 return;
+            }
 
             StartCoroutine(FadeIn());
         }
@@ -99,14 +103,12 @@ namespace UI
         private IEnumerator FadeIn()
         {
             var elapsed = 0f;
-
             while (elapsed < fadeDuration)
             {
                 elapsed += Time.deltaTime;
                 iconCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
                 yield return null;
             }
-
             iconCanvasGroup.alpha = 1f;
         }
     }

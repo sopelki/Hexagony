@@ -33,13 +33,13 @@ namespace UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            canvasGroup.blocksRaycasts = true;
-            canvasGroup.alpha = 1f;
         }
 
         public void ResetPosition()
         {
             rectTransform.anchoredPosition = Vector2.zero;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.alpha = 1f;
         }
     }
 }

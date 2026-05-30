@@ -30,7 +30,7 @@ namespace UI
             foreach (var letter in phrase.ToCharArray())
             {
                 dialogueText.text += letter;
-                yield return new WaitForSecondsRealtime(textSpeed);
+                yield return new WaitForSeconds(textSpeed);
             }
         }
     }
