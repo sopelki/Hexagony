@@ -246,12 +246,19 @@ namespace Logic.Unit
             if (overlapCount > 0)
             {
                 var newPosition = unit.WorldPosition + separationForce * SeparationStrength * dt;
-                unit.SetPosition(newPosition);
                 var cellPos = tilemap.WorldToCell(newPosition);
                 var hexAtPos = field.GetHexByOffset(cellPos);
-
-                if (hexAtPos != null)
+                if (hexAtPos != null && field.IsWalkable(hexAtPos))
+                {
+                    unit.SetPosition(newPosition);
                     unit.SetHex(hexAtPos.coordinates);
+                }
+                else
+                {
+                    var currentCell = tilemap.WorldToCell(unit.WorldPosition);
+                    if (cellPos == currentCell)
+                        unit.SetPosition(newPosition);
+                }
             }
         }
     }
