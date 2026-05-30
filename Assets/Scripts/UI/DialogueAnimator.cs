@@ -30,8 +30,15 @@ namespace UI
 
         public void PrintPhrase(string phrase)
         {
-            StopAllCoroutines();
+            StopDialogue();
             StartCoroutine(TypeText(phrase));
+        }
+
+        public void StopDialogue()
+        {
+            StopAllCoroutines();
+            if (audioSource != null)
+                audioSource.Stop();
         }
 
         private IEnumerator TypeText(string phrase)

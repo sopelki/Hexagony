@@ -238,12 +238,17 @@ namespace Misc
 
         public void ForceStopTutorial()
         {
+            CancelInvoke(nameof(BeginTutorialDisplay));
+
             if (gameFlowManager is { IsTutorialActive: true })
             {
                 ClearAllTutorialBuildings();
                 gameFlowManager.IsTutorialActive = false;
                 gameFlowManager?.ResetToStandardMode();
             }
+
+            if (dialogueAnimator)
+                dialogueAnimator.StopDialogue();
 
             if (tutorialFadePanel)
                 tutorialFadePanel.Hide();
