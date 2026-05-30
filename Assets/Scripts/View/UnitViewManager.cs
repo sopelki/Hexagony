@@ -63,8 +63,10 @@ namespace View
         public void DestroyAllUnits()
         {
             foreach (var view in views.Values)
+            {
                 if (view != null)
                     Destroy(view.gameObject);
+            }
             views.Clear();
         }
     }

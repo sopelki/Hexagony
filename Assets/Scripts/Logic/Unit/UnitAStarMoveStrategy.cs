@@ -10,13 +10,15 @@ namespace Logic.Unit
 {
     public class UnitAStarMoveStrategy : IMovementStrategy
     {
-        private const float repathDelay = 0.5f;
+        private const float RepathDelay = 0.5f;
 
         private const float MinDistanceBetweenUnits = 2.0f;
         private const float SeparationStrength = 2.5f;
         private readonly Field.Field field;
+        private readonly Vector3 formationOffset;
         private readonly MonsterSystem monsterSystem;
         private readonly HexAStarPathfinder pathfinder;
+        private readonly Vector2Int spawnHex = new(-12, 9);
         private readonly Tilemap tilemap;
         private readonly UnitModel unit;
 
@@ -24,14 +26,12 @@ namespace Logic.Unit
         private MonsterModel currentTarget;
 
         private Vector2Int currentTargetHex;
-        private readonly Vector3 formationOffset;
         private bool isPatrolling;
         private int pathIndex;
 
         private float patrolWaitTimer;
 
         private float repathTimer;
-        private readonly Vector2Int spawnHex = new(-12, 9);
 
         public UnitAStarMoveStrategy(
             UnitModel unit,
@@ -110,7 +110,7 @@ namespace Logic.Unit
                 }
 
                 BuildNewPath(target);
-                repathTimer = repathDelay;
+                repathTimer = RepathDelay;
             }
             if (currentPath != null && pathIndex < currentPath.Count)
                 MoveAlongPath();
