@@ -190,3 +190,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.MonsterInteractionHandler
   damagePerClick: 3
+  clickCooldown: 0.25

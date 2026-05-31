@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac51071bacc04f829073f3768d19c9ad, type: 3}
   m_Name: SkeletonData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
-  maxHealth: 50
+  maxHealth: 65
   damage: 35
   moveSpeed: 1.7
   goldReward: 16

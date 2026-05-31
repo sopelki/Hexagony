@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using View;
 
 namespace Misc
 {
-    public class ViewportRaycaster : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler
+    public class ViewportRaycaster : MonoBehaviour, IPointerClickHandler
     {
         [Header("Настройки")]
         [SerializeField]
@@ -13,42 +14,73 @@ namespace Misc
         private RectTransform viewportRect;
 
         private MonsterInteractionHandler lastHoveredMonster;
+        private Canvas parentCanvas;
+
+        private void Awake()
+        {
+            parentCanvas = GetComponentInParent<Canvas>();
+        }
+
+        private void Update()
+        {
+            Vector2 mousePos;
+            if (Mouse.current != null)
+                mousePos = Mouse.current.position.ReadValue();
+            else
+                mousePos = Input.mousePosition;
+
+            UpdateMonsterHover(mousePos);
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            var monster = RaycastMonster(eventData);
+            var monster = RaycastAtPosition(eventData.position);
             if (monster)
                 monster.OnPointerClick(eventData);
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        private void UpdateMonsterHover(Vector2 screenPosition)
         {
-            var currentMonster = RaycastMonster(eventData);
+            if (!worldCamera || !viewportRect) return;
+
+            var currentMonster = RaycastAtPosition(screenPosition);
 
             if (currentMonster != lastHoveredMonster)
             {
-                if (lastHoveredMonster) lastHoveredMonster.OnPointerExit(eventData);
-                if (currentMonster) currentMonster.OnPointerEnter(eventData);
+                if (lastHoveredMonster) lastHoveredMonster.OnPointerExit(null);
+                if (currentMonster) currentMonster.OnPointerEnter(null);
 
                 lastHoveredMonster = currentMonster;
             }
+
+            if (lastHoveredMonster != null)
+            {
+                if (lastHoveredMonster.IsModelDead() || !lastHoveredMonster.gameObject.activeInHierarchy)
+                {
+                    lastHoveredMonster.OnPointerExit(null);
+                    lastHoveredMonster = null;
+                }
+            }
         }
 
-        private MonsterInteractionHandler RaycastMonster(PointerEventData eventData)
+        private MonsterInteractionHandler RaycastAtPosition(Vector2 screenPosition)
         {
-            if (!worldCamera || !viewportRect)
+            var uiCam = (parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+                ? parentCanvas.worldCamera
+                : null;
+
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewportRect, screenPosition, uiCam,
+                    out var localPoint))
                 return null;
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewportRect, eventData.position,
-                    eventData.pressEventCamera, out var localPoint))
+            var rect = viewportRect.rect;
+            var normX = Mathf.InverseLerp(rect.xMin, rect.xMax, localPoint.x);
+            var normY = Mathf.InverseLerp(rect.yMin, rect.yMax, localPoint.y);
+
+            if (normX < 0 || normX > 1 || normY < 0 || normY > 1)
                 return null;
 
-            var r = viewportRect.rect;
-            var normalizedX = (localPoint.x - r.x) / r.width;
-            var normalizedY = (localPoint.y - r.y) / r.height;
-
-            var ray = worldCamera.ViewportPointToRay(new Vector3(normalizedX, normalizedY, 0));
-
+            var ray = worldCamera.ViewportPointToRay(new Vector3(normX, normY, 0));
             var hit = Physics2D.GetRayIntersection(ray);
 
             return hit.collider != null ? hit.collider.GetComponent<MonsterInteractionHandler>() : null;
