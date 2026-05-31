@@ -21,9 +21,9 @@ MonoBehaviour:
     psxResolutionScale: 1
     psxSaturationBoost: 1.15
     psxDarkening: 0
-    colorBleedIntensity: 0.1
+    colorBleedIntensity: 0
     chromaticShift: 0
-    verticalBlur: 0.5
+    verticalBlur: 0
     vhsTracking: 0
     signalNoise: 0.0011
     colorTemperature: 0.5
@@ -107,7 +107,7 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     pixelSize: 1
-    scanlineIntensity: 0.2
+    scanlineIntensity: 0.25
     scanlineCount: 256
     curvature: 0.025
     chromaticAberration: 0
