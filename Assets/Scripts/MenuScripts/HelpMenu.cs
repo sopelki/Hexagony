@@ -97,7 +97,7 @@ namespace MenuScripts
                 "<b>Ваша миссия:</b> Не дать монстрам прорваться к воротам замка.\n" +
                 "▪ <color=#dfe88b><b>Подготовка:</b></color> Время застыло, пока вы не разместите свою первую постройку.\n" +
                 "▪ <color=#dfe88b><b>Ресурсы:</b></color> <b>Золото</b> добывается <nobr>за уничтожение</nobr> врагов.\n" +
-                "▪ <color=#dfe88b><b>Информация:</b></color> Наведите курсор на объект, чтобы увидеть его <nobr><color=#EF5350>урон </color></nobr>и <color=#FF7733>скорость</color>.\n" +
+                "▪ <color=#dfe88b><b>Информация:</b></color> Наведите <nobr>курсор на</nobr> объект, чтобы увидеть его <nobr><color=#EF5350>урон </color></nobr>и <color=#FF7733>скорость</color>.\n" +
                 "▪ Если захотите  <color=#dfe88b>ускорить игру</color> — нажмите <color=#FFEE58>Пробел</color>. Чтобы вернуть, как было нажмите снова.";
         }
 
@@ -121,7 +121,7 @@ namespace MenuScripts
             titleText.text = "<color=#EF5350>ОБОРОНА ПОЛЯ</color>";
             descriptionText.text =
                 "<color=#90CAF9><b>БАШНИ</b></color>:\n" +
-                "▪ <color=#dfe88b><b>Маг:</b></color> Атакует магическими сферами <nobr><color=#AB47BC>по</nobr> области (AoE)</color>.\n" +
+                "▪ <color=#dfe88b><b>Маг:</b></color> Атакует магическими <nobr>сферами <color=#AB47BC>по</nobr> области (AoE)</color>.\n" +
                 "▪ <color=#dfe88b><b>Лучник:</b></color> Высокая <color=#FF7733>скорострельность </color><nobr>по одиночным</nobr> целям.\n" +
                 "<color=#90CAF9><b>ЛОВУШКИ</b></color>:\n" +
                 "▪ <color=#dfe88b><b>Лоза:</b></color> Оплетает монстров, значительно замедляя их ход.\n" +
