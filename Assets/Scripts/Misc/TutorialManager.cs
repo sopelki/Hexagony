@@ -142,24 +142,24 @@ namespace Misc
             {
                 case TutorialStep.Greeting:
                     ConfigureButton(true, "Далее");
-                    PrintPhrase("Здравствуйте, властитель Гексагонии! Ваш замок атакуют монстры.");
+                    PrintPhrase("Здравствуйте, правитель Гексагонии! Ваш замок атакуют монстры.");
                     break;
 
                 case TutorialStep.BuildBarrack:
                     ConfigureButton(false);
                     PrintPhrase(
-                        "Давайте начнём строить! Перетяните казарму в\u00A0замок <size=65%>(сетка 3x3)</size>.");
+                        "Давайте начнём строить! Перетяните <color=#FFEE58>Казарму</color> в\u00A0замок <size=65%>(сетка 3x3)</size>.");
                     ApplyHighlight(barrackSlot);
                     break;
 
                 case TutorialStep.BarrackSuccess:
                     ConfigureButton(true, "Далее");
-                    PrintPhrase("Отлично, казарма готова! Теперь у\u00A0вас есть верные рыцари.");
+                    PrintPhrase("Отлично, <color=#FFEE58>Казарма</color> готова! Теперь у\u00A0вас есть верные рыцари.");
                     break;
 
                 case TutorialStep.BuildTower:
                     ConfigureButton(false);
-                    PrintPhrase("Защита периметра превыше всего! Перетяние Башню в\u00A0слот на\u00A0поле боя.");
+                    PrintPhrase("Защита периметра превыше всего! Перетяние <color=#FFEE58>Башню</color> в\u00A0слот на\u00A0поле боя.");
                     ApplyHighlight(towerSlot);
                     break;
 
@@ -170,7 +170,7 @@ namespace Misc
 
                 case TutorialStep.BuildTrap:
                     ConfigureButton(false);
-                    PrintPhrase("Остался последний штрих. Перетяните Ловушку на\u00A0дорогу.");
+                    PrintPhrase("Остался последний штрих. Перетяните <color=#FFEE58>Ловушку</color> на\u00A0дорогу.");
                     ApplyHighlight(trapSlot);
                     break;
 

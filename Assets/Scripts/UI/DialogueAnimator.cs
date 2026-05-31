@@ -45,16 +45,21 @@ namespace UI
         {
             dialogueText.text = phrase;
             dialogueText.maxVisibleCharacters = 0;
+
             dialogueText.ForceMeshUpdate();
 
-            var totalCharacters = phrase.Length;
+            var textInfo = dialogueText.textInfo;
+            var totalVisibleCharacters = textInfo.characterCount;
 
-            for (var i = 0; i <= totalCharacters; i++)
+            for (var i = 0; i <= totalVisibleCharacters; i++)
             {
                 dialogueText.maxVisibleCharacters = i;
 
-                if (i < totalCharacters)
-                    TryPlayTypingSound(phrase[i]);
+                if (i > 0 && i <= totalVisibleCharacters)
+                {
+                    var character = textInfo.characterInfo[i - 1].character;
+                    TryPlayTypingSound(character);
+                }
 
                 yield return new WaitForSeconds(textSpeed);
             }
@@ -62,7 +67,7 @@ namespace UI
 
         private void TryPlayTypingSound(char currentLetter)
         {
-            if (char.IsWhiteSpace(currentLetter))
+            if (char.IsWhiteSpace(currentLetter) || currentLetter == '\0')
                 return;
 
             if (Time.time - lastSoundTime >= minTimeBetweenSounds)
