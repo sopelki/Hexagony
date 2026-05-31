@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Logic.Castle;
@@ -6,6 +7,7 @@ using Logic.Tower;
 using Logic.Trap;
 using Logic.Unit;
 using MenuScripts;
+using NUnit.Framework;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -26,9 +28,11 @@ namespace Misc
         [SerializeField]
         private TextMeshProUGUI actionButtonText;
         [SerializeField]
-        private GameObject barrackSlot, towerSlot, trapSlot, helpButton, pauseButton;
+        private GameObject barrackSlot, towerSlot, trapSlot, helpButton, pauseButton, castleGrid;
         [SerializeField]
-        private GameObject highlightEffect;
+        private List<GameObject> towerSlots;
+        [SerializeField]
+        private GameObject highlightEffect, highlightEffectCastle, highlightEffectHex;
 
         [Header("Настройки задержки")]
         [SerializeField]
@@ -152,7 +156,11 @@ namespace Misc
         {
             if (highlightEffect)
                 highlightEffect.SetActive(false);
-
+            if (highlightEffectCastle)
+                highlightEffectCastle.SetActive(false);    
+            if (highlightEffectHex)
+                highlightEffectHex.SetActive(false);
+            
             switch (currentStep)
             {
                 case TutorialStep.Greeting:
@@ -165,6 +173,7 @@ namespace Misc
                     PrintPhrase(
                         "Давайте начнём строить! Перетяните <color=#FFEE58>Казарму</color> в\u00A0замок <size=65%>(сетка 3x3)</size>.");
                     ApplyHighlight(barrackSlot);
+                    ApplyCastleHighlight(castleGrid);
                     break;
 
                 case TutorialStep.BarrackSuccess:
@@ -176,6 +185,7 @@ namespace Misc
                     ConfigureButton(false);
                     PrintPhrase("Защита периметра превыше всего! Перетяние <color=#FFEE58>Башню</color> в\u00A0слот на\u00A0поле боя.");
                     ApplyHighlight(towerSlot);
+                    // ApplyHexHighlight(towerSlots);
                     break;
 
                 case TutorialStep.TowerSuccess:
@@ -193,14 +203,14 @@ namespace Misc
                     ConfigureButton(true, "Далее");
                     ApplyHighlight(helpButton);
                     PrintPhrase(
-                        "Изучите другие \u00A0постройки, наведясь на них в\u00A0магазине. Или прочтите <color=#FFEE58>Справка</color>.");
+                        "Изучите другие \u00A0постройки, наведясь на них в\u00A0магазине. Или прочтите <color=#FFEE58>Справку</color>.");
                     break;
                 
                 case TutorialStep.PauseExplanation:
                     ConfigureButton(true, "Далее");
                     ApplyHighlight(pauseButton);
                     PrintPhrase(
-                        "Чтобы открыть \u00A0настройки или выйти из \u00A0игры, нажмите <color=#FFEE58>Пауза</color>.");
+                        "Чтобы открыть \u00A0настройки или выйти из \u00A0игры, нажмите <color=#FFEE58>Паузу</color>.");
                     break;
 
                 case TutorialStep.SpeedExplanation:
@@ -241,6 +251,44 @@ namespace Misc
                 highlightEffect.SetActive(true);
             }
         }
+        
+        private void ApplyCastleHighlight(GameObject slot)
+        {
+            if (highlightEffectCastle && slot != null)
+            {
+                var slotRect = slot.GetComponent<RectTransform>();
+                var highlightRect = highlightEffectCastle.GetComponent<RectTransform>();
+                
+                if (slotRect != null && highlightRect != null)
+                {
+                    highlightEffectCastle.transform.position = slot.transform.position;
+                    highlightRect.sizeDelta = slotRect.sizeDelta; 
+                    highlightEffectCastle.SetActive(true);
+                }
+            }
+        }
+        
+        // private void ApplyHexHighlight(List<GameObject> slots)
+        // {
+        //     if (highlightEffectHex)
+        //     {
+        //         foreach (var slot in slots)
+        //         {
+        //             if (slot == null) continue;
+        //             GameObject instance = Instantiate(highlightEffectHex, slot.transform.position, Quaternion.identity);
+        //             
+        //             instance.transform.SetParent(slot.transform, true);
+        //             Vector3 localPos = instance.transform.localPosition;
+        //             localPos.z = -1f;
+        //             instance.transform.localPosition = localPos;
+        //
+        //             // Принудительно сбрасываем масштаб в 1, чтобы подсветка не сжалась в 0 из-за масштаба родителя
+        //             instance.transform.localScale = Vector3.one;
+        //
+        //             instance.SetActive(true);
+        //         }
+        //     }
+        // }
 
         private static void ClearAllTutorialBuildings()
         {
