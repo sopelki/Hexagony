@@ -65,10 +65,7 @@ namespace Logic.Castle
 
         public event Action OnFirstBuildingPlaced;
 
-        private void HandleUnitDied(UnitModel unit)
-        {
-            Model.Changed();
-        }
+        private void HandleUnitDied(UnitModel unit) => Model.Changed();
 
         public void RegisterCastleData(List<Vector3> worldPositions, List<Vector2Int> hexes)
 
@@ -78,10 +75,7 @@ namespace Logic.Castle
             Debug.Log($"Castle registered in logic. Wall hexes count: {hexes.Count}");
         }
 
-        public bool CanAfford(int price)
-        {
-            return Model.Gold >= price;
-        }
+        public bool CanAfford(int price) => Model.Gold >= price;
 
         public bool TrySpendGold(int price)
         {

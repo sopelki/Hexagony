@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Unit.UnitData
   maxHealth: 75
   attack: 15
-  moveSpeed: 1.75
+  moveSpeed: 2
   attackRadius: 1
   attackCooldown: 1
   unitPrefab: {fileID: 7943356929508303804, guid: 8e79d25db3dc06f4ba1836b3f3b51c3f, type: 3}

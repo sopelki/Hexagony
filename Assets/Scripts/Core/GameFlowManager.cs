@@ -9,8 +9,8 @@ namespace Core
 {
     public class GameFlowManager
     {
-        private const float HintStartDelay = 5f;
-        private const float HintCycleInterval = 20f;
+        private const float HintStartDelay = 15f;
+        private const float HintCycleInterval = 15f;
         private const float StartGameDelay = 2f;
         private readonly CastleSystem castleSystem;
         private readonly HintUI hintUI;

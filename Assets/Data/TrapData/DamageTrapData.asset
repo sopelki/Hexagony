@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DamageTrapData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Trap.Logic.Trap.TrapData
   trapType: 0
-  baseCost: 50
+  baseCost: 25
   viewPrefab: {fileID: 4790872506747466711, guid: 56a420a6b8ae90745ba15c3b3ad106cc, type: 3}
   tickInterval: 0.25
   tickDamage: 8
