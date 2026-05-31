@@ -25,7 +25,7 @@ MonoBehaviour:
     chromaticShift: 0
     verticalBlur: 0.5
     vhsTracking: 0
-    signalNoise: 0.003
+    signalNoise: 0.001
     colorTemperature: 0.2
     pixelPerfectSnapping: 0.5
     paletteReduction: 0

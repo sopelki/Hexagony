@@ -18,6 +18,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da2be5bd7bd17d34283390c93fb813a3, type: 2}
   totalMonsters: 12
   spawnInterval: 2
-  healthMultiplier: 1.6
-  damageMultiplier: 1.6
+  healthMultiplier: 1.65
+  damageMultiplier: 1.65
   speedMultiplier: 1.3

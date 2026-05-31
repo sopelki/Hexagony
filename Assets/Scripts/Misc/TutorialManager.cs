@@ -89,10 +89,7 @@ namespace Misc
             }
         }
 
-        public void Setup(GameFlowManager flowManager)
-        {
-            gameFlowManager = flowManager;
-        }
+        public void Setup(GameFlowManager flowManager) => gameFlowManager = flowManager;
 
         public static bool IsTutorialActive()
         {
@@ -146,7 +143,8 @@ namespace Misc
 
                 case TutorialStep.BuildBarrack:
                     ConfigureButton(false);
-                    PrintPhrase("Давайте начнём строить! Перетяните казарму в\u00A0замок <size=65%>(сетка 3x3)</size>.");
+                    PrintPhrase(
+                        "Давайте начнём строить! Перетяните казарму в\u00A0замок <size=65%>(сетка 3x3)</size>.");
                     ApplyHighlight(barrackSlot);
                     break;
 
@@ -235,13 +233,14 @@ namespace Misc
             ClearAllTutorialBuildings();
             gameFlowManager?.ResetToStandardMode();
             ForceStopTutorial();
+            PlayerPrefs.SetInt("ShowTutorial", 0);
+            PlayerPrefs.Save();
         }
 
         public void ForceStopTutorial()
         {
-            
             IsRunning = false;
-            
+
             CancelInvoke(nameof(BeginTutorialDisplay));
 
             if (gameFlowManager is { IsTutorialActive: true })
@@ -275,7 +274,7 @@ namespace Misc
                 Debug.Log("Нельзя запустить туториал: на поле уже есть постройки!");
                 return;
             }
-            
+
             IsRunning = true;
 
             if (gameFlowManager != null)

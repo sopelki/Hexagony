@@ -2848,6 +2848,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2007012887}
   - {fileID: 1355291425}
   - {fileID: 1491410891}
   - {fileID: 1578399484}
@@ -2860,7 +2861,6 @@ Transform:
   - {fileID: 1914179707}
   - {fileID: 1432967717}
   - {fileID: 960468821}
-  - {fileID: 2007012887}
   - {fileID: 1950184165}
   - {fileID: 556927544}
   - {fileID: 404547012}
@@ -21987,14 +21987,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.3764706}
+  m_Color: {r: 0.06535244, g: 0.017693132, b: 0.13207549, a: 0.3764706}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: 5291263f8eefe0042873c237a44aff80, type: 3}
+  m_Sprite: {fileID: -7537210171776040846, guid: 4f8066937c8808c449b2d95a620a17bd, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -26158,14 +26158,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.45490196}
+  m_Color: {r: 0.079791084, g: 0.021893881, b: 0.15471691, a: 0.6901961}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: 5291263f8eefe0042873c237a44aff80, type: 3}
+  m_Sprite: {fileID: -7537210171776040846, guid: 4f8066937c8808c449b2d95a620a17bd, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33178,14 +33178,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.45490196}
+  m_Color: {r: 0.08235294, g: 0.023529412, b: 0.15686275, a: 0.6901961}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: 5291263f8eefe0042873c237a44aff80, type: 3}
+  m_Sprite: {fileID: -7537210171776040846, guid: 4f8066937c8808c449b2d95a620a17bd, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -35521,13 +35521,32 @@ MonoBehaviour:
   - {x: -20, y: 17}
   - {x: -20, y: 16}
   - {x: -20, y: 15}
+  - {x: -21, y: 18}
+  - {x: -21, y: 17}
+  - {x: -21, y: 16}
   - {x: -21, y: 15}
   - {x: -21, y: 14}
   - {x: -21, y: 13}
   - {x: -22, y: 13}
   - {x: -22, y: 12}
-  - {x: -23, y: 12}
+  - {x: -22, y: 15}
+  - {x: -22, y: 16}
+  - {x: -22, y: 18}
+  - {x: -22, y: 19}
+  - {x: -22, y: 20}
   - {x: -23, y: 11}
+  - {x: -23, y: 12}
+  - {x: -23, y: 15}
+  - {x: -23, y: 16}
+  - {x: -23, y: 17}
+  - {x: -23, y: 19}
+  - {x: -23, y: 18}
+  - {x: -24, y: 15}
+  - {x: -24, y: 16}
+  - {x: -24, y: 17}
+  - {x: -24, y: 18}
+  - {x: -24, y: 19}
+  - {x: -24, y: 20}
 --- !u!212 &2007012889
 SpriteRenderer:
   serializedVersion: 2

@@ -17,7 +17,6 @@ namespace View
         public CastleModel Model { get; private set; }
         public Field.Field Field { get; private set; }
 
-        // найти ближайшую точку замка к монстру
         // public Vector3 GetClosestWallPoint(Vector3 monsterPos)
         // {
         //     var closest = WallWorldPositions[0];

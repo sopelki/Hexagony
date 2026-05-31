@@ -51,25 +51,13 @@ namespace MenuScripts
             // tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
         }
 
-        public void SetMasterVolume(float volume)
-        {
-            ApplyVolume("MasterVol", volume);
-        }
+        public void SetMasterVolume(float volume) => ApplyVolume("MasterVol", volume);
 
-        public void SetMusicVolume(float volume)
-        {
-            ApplyVolume("MusicVol", volume);
-        }
+        public void SetMusicVolume(float volume) => ApplyVolume("MusicVol", volume);
 
-        public void SetSfxVolume(float volume)
-        {
-            ApplyVolume("SfxVol", volume);
-        }
+        public void SetSfxVolume(float volume) => ApplyVolume("SfxVol", volume);
 
-        public void SetUiVolume(float volume)
-        {
-            ApplyVolume("UiVol", volume);
-        }
+        public void SetUiVolume(float volume) => ApplyVolume("UiVol", volume);
 
         private void ApplyVolume(string parameterName, float volume)
         {

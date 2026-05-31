@@ -63,14 +63,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.33333334}
+  m_Color: {r: 0.08235294, g: 0.023529412, b: 0.15686275, a: 0.33333334}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: 5291263f8eefe0042873c237a44aff80, type: 3}
+  m_Sprite: {fileID: -7537210171776040846, guid: 4f8066937c8808c449b2d95a620a17bd, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -304,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: -4395061001812844211, guid: e1e3ac0c1dc82b34a94bcf637dd3bded, type: 2}
     - target: {fileID: 792100331304386037, guid: 5f404d520ed4ed24f8755be65f63752e, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4281544218
+      value: 2426641764
       objectReference: {fileID: 0}
     - target: {fileID: 792100331304386037, guid: 5f404d520ed4ed24f8755be65f63752e, type: 3}
       propertyPath: m_VerticalAlignment
