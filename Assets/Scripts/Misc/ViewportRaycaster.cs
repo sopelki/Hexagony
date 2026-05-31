@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using View;
+using System.Collections.Generic;
 
 namespace Misc
 {
@@ -23,13 +24,37 @@ namespace Misc
 
         private void Update()
         {
-            Vector2 mousePos;
-            if (Mouse.current != null)
-                mousePos = Mouse.current.position.ReadValue();
-            else
-                mousePos = Input.mousePosition;
+            var mousePos = Mouse.current != null ? Mouse.current.position.ReadValue() : (Vector2)Input.mousePosition;
+
+            if (IsPointerBlockedByUI())
+            {
+                if (lastHoveredMonster)
+                {
+                    lastHoveredMonster.OnPointerExit(null);
+                    lastHoveredMonster = null;
+                }
+                return;
+            }
 
             UpdateMonsterHover(mousePos);
+        }
+
+        private bool IsPointerBlockedByUI()
+        {
+            if (EventSystem.current == null) return false;
+
+            var eventData = new PointerEventData(EventSystem.current)
+            {
+                position = Mouse.current != null ? Mouse.current.position.ReadValue() : Input.mousePosition
+            };
+
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            if (results.Count > 0)
+                return results[0].gameObject != gameObject;
+
+            return false;
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -175,7 +175,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.5, y: 1.75}
+  m_Size: {x: 1.8, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &-7381688641652108116
 MonoBehaviour:
@@ -189,5 +189,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99e66f1b70494b74b183d1a78c07e50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.MonsterInteractionHandler
-  damagePerClick: 2
-  clickCooldown: 0.25
+  damagePerClick: 1
+  clickCooldown: 0.075

@@ -189,5 +189,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99e66f1b70494b74b183d1a78c07e50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::View.MonsterInteractionHandler
-  damagePerClick: 3
-  clickCooldown: 0.25
+  damagePerClick: 1
+  clickCooldown: 0.075
