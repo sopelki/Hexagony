@@ -14,7 +14,7 @@ namespace Logic.Castle
     public class CastleSystem : ITickable
     {
         // private const float ResourceInterval = 1f;
-        private const float SpawnInterval = 1f;
+        private const float SpawnInterval = 3f;
 
         private static readonly Vector2Int spawnHex = new(-20, 15); // Поменять, если нужна другая точка спавна
         private readonly Field.Field field;

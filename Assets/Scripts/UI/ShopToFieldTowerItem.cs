@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Logic.Tower;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -150,6 +151,7 @@ namespace UI
                 return;
 
             isDragging = true;
+            GlobalCursorManager.Instance.SetHold();
 
             var prefabRenderer = towerData.viewPrefab.GetComponentInChildren<SpriteRenderer>();
             if (prefabRenderer == null)
@@ -182,6 +184,7 @@ namespace UI
                 return;
 
             isDragging = false;
+            GlobalCursorManager.Instance.ReleaseHold(eventData);
 
             CleanupGhost();
             TryPlaceTower(eventData);
@@ -201,6 +204,7 @@ namespace UI
             {
                 isDragging = false;
                 CleanupGhost();
+                GlobalCursorManager.Instance.ReleaseHold(null);
                 
                 if (iconCanvasGroup != null)
                     iconCanvasGroup.alpha = 1f;

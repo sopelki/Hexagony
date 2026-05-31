@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 517473056238766870}
   - component: {fileID: -1089007897838033186}
   - component: {fileID: 6785189389283884653}
+  - component: {fileID: -8026598229194257216}
   m_Layer: 5
   m_Name: InventoryItem
   m_TagString: Untagged
@@ -135,3 +136,15 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5019608}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &-8026598229194257216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8398991809077642870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3309dddd420a4b028c9a4c2eb3485297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UICursorTrigger

@@ -1325,6 +1325,56 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1540335001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540335003}
+  - component: {fileID: 1540335002}
+  m_Layer: 0
+  m_Name: GlobalCursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1540335002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540335001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b526a77fc59c43d2b5297b809ad53b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Misc.GlobalCursorManager
+  defaultCursor: {fileID: 2800000, guid: b0b4eb592193c21469dd0ac5d8b17ae9, type: 3}
+  interactCursor: {fileID: 2800000, guid: 2efd8714055adf74aba0aac4d7b813dc, type: 3}
+  holdCursor: {fileID: 2800000, guid: aa8ecb6370248db4c964bf4ce7b467c9, type: 3}
+  defaultHotspot: {x: 0, y: 0}
+  interactHotspot: {x: 9, y: 3}
+  holdHotspot: {x: 7, y: -1}
+--- !u!4 &1540335003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540335001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 806.63916, y: -732.69464, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1623944409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2750,3 +2800,4 @@ SceneRoots:
   - {fileID: 669032555}
   - {fileID: 492616837758092904}
   - {fileID: 83543683}
+  - {fileID: 1540335003}

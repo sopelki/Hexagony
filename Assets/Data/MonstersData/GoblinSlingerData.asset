@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GoblinSlingerData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
   maxHealth: 50
-  damage: 25
-  moveSpeed: 3
+  damage: 10
+  moveSpeed: 1.35
   goldReward: 20
   attackRadius: 3
   attackCooldown: 1

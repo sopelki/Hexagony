@@ -1,6 +1,7 @@
 using System;
 using Audio;
 using Logic.Castle;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -70,6 +71,7 @@ namespace UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            GlobalCursorManager.Instance.SetHold();
             isDragging = true;
             GetComponent<TooltipTrigger>()?.StopDisplay();
             canvasGroup.blocksRaycasts = false;
@@ -85,7 +87,10 @@ namespace UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging) return;
+            if (!isDragging)
+                return;
+
+            GlobalCursorManager.Instance.ReleaseHold(eventData); 
             isDragging = false;
 
             targetScale = originalScale;
@@ -117,6 +122,7 @@ namespace UI
         public void Place(Transform slot)
         {
             isDragging = false;
+            GlobalCursorManager.Instance.ReleaseHold(null);
             transform.SetParent(slot);
             dragHandler.ResetPosition();
 

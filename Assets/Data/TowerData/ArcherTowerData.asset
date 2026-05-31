@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherTowerData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Tower.TowerData
   type: 0
-  baseCost: 50
+  baseCost: 75
   range: 10
   fireRate: 1
   projectileData: {fileID: 11400000, guid: 581532593b0460f42af288ad15bb0022, type: 2}

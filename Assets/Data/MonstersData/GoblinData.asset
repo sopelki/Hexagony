@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GoblinData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
   maxHealth: 50
-  damage: 25
-  moveSpeed: 3
+  damage: 20
+  moveSpeed: 1.25
   goldReward: 20
   attackRadius: 2
   attackCooldown: 1

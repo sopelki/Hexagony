@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BearTrapData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Trap.Logic.Trap.TrapData
   trapType: 2
-  baseCost: 50
+  baseCost: 75
   viewPrefab: {fileID: 4790872506747466711, guid: f1dd9bce1c3bc394e8c21d915b9616b8, type: 3}
   tickInterval: 0.4
   tickDamage: 200

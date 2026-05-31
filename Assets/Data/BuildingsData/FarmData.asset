@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastleScrripts.BuildingData
   type: 0
   baseProduction: 1
-  baseCost: 30
+  baseCost: 50
   supplyProvided: 5
   buffValue: 0.25
   viewPrefab: {fileID: 3984174178962830700, guid: 87aca66d29783a14cb48bf8c77a9d2ac, type: 3}

@@ -16,7 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a3e72874c1703684abfc36588a59e4fd, type: 2}
   - {fileID: 11400000, guid: 28eaee259108e2d47b2ac99833aca557, type: 2}
   totalMonsters: 5
-  spawnInterval: 5
+  spawnInterval: 3.5
   healthMultiplier: 1
   damageMultiplier: 1
   speedMultiplier: 1

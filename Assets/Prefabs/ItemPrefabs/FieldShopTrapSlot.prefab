@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3527780305968954717}
   - component: {fileID: 899378862108174943}
   - component: {fileID: 1791082414744095116}
+  - component: {fileID: 3058037973453688683}
   m_Layer: 5
   m_Name: FieldShopTrapSlot
   m_TagString: Untagged
@@ -109,6 +110,18 @@ MonoBehaviour:
   ghostOffset: {x: 0, y: 0}
   iconImage: {fileID: 5749159570408318314}
   fadeDuration: 0.1
+--- !u!114 &3058037973453688683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895813766122179846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3309dddd420a4b028c9a4c2eb3485297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UICursorTrigger
 --- !u!1 &1993169984352487858
 GameObject:
   m_ObjectHideFlags: 0

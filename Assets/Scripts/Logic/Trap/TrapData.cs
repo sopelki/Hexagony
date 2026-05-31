@@ -25,7 +25,7 @@ namespace Logic.Trap
 
         [Header("Bear Trap")]
         public int criticalDamage;
-        public int requiredMonsters = 3;
+        public int requiredMonsters = 1;
         public int triggerRadius = 5;
 
         [Header("Tooltip")]
@@ -43,8 +43,7 @@ namespace Logic.Trap
                                      $"Интервал: <color=#FF7733>{tickInterval}с</color>",
 
                 TrapType.BearTrap => $"Крит. урон: <color=#EF5350>{criticalDamage}</color>\n" +
-                                     $"Радиус: <color=#26C6DA>{triggerRadius}</color>\n" +
-                                     $"Нужно монстров: <color=#AB47BC>{requiredMonsters}</color>",
+                                     $"Радиус: <color=#26C6DA>{triggerRadius}</color>\n",
 
                 _ => $"Урон: <color=#EF5350>{tickDamage}</color>"
             };

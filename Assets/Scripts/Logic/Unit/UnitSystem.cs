@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Audio;
 using Logic.Monster;
 using UnityEngine;
@@ -68,13 +69,8 @@ namespace Logic.Unit
 
         public void Tick()
         {
-            foreach (var unit in units)
-            {
-                if (unit.IsDead)
-                    continue;
-
+            foreach (var unit in units.Where(unit => !unit.IsDead))
                 unit.Tick();
-            }
         }
 
         public void RemoveUnit(UnitModel unit)

@@ -15,8 +15,8 @@ MonoBehaviour:
   monsterPool:
   - {fileID: 11400000, guid: a3e72874c1703684abfc36588a59e4fd, type: 2}
   - {fileID: 11400000, guid: 28eaee259108e2d47b2ac99833aca557, type: 2}
-  totalMonsters: 1
-  spawnInterval: 3.5
+  totalMonsters: 8
+  spawnInterval: 3
   healthMultiplier: 1.25
   damageMultiplier: 1.25
   speedMultiplier: 1.25

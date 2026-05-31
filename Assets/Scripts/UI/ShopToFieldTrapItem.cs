@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HexagonScripts;
 using Logic.Trap;
+using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -128,8 +129,9 @@ namespace UI
             if (trapSystem == null)
                 return;
 
+            GlobalCursorManager.Instance.SetHold();
             isDragging = true;
-            
+
             if (iconCanvasGroup != null)
             {
                 if (fadeCoroutine != null)
@@ -211,7 +213,8 @@ namespace UI
         {
             if (!isDragging)
                 return;
-            
+
+            GlobalCursorManager.Instance.ReleaseHold(eventData);
             isDragging = false;
 
             if (TryGetCellUnderMouse(eventData, out var cellPos))
@@ -230,11 +233,12 @@ namespace UI
                 fadeCoroutine = StartCoroutine(FadeInIcon());
             }
         }
-        
+
         private void OnDisable()
         {
             if (isDragging)
             {
+                GlobalCursorManager.Instance.ReleaseHold(null);
                 isDragging = false;
                 CleanupDraggingUI();
                 if (iconCanvasGroup != null)

@@ -16,7 +16,7 @@ MonoBehaviour:
   xOffset: 0
   yOffset: 2
   speed: 8
-  damage: 5
+  damage: 9
   aoeRadius: 0
   isHoming: 1
   maxTravelDistance: 30
