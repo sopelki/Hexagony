@@ -12,6 +12,8 @@ namespace MenuScripts
         private SettingsMenu settingsMenu;
         [SerializeField]
         private HelpMenu helpMenu;
+        [SerializeField]
+        private EndGameMenu endGameMenu;
 
         private void Update()
         {
@@ -33,13 +35,17 @@ namespace MenuScripts
                 return;
             }
 
-            if (pauseMenu != null)
+            if (pauseMenu != null && pauseMenu.IsOpen)
             {
-                if (pauseMenu.IsOpen)
-                    pauseMenu.ResumeGame();
-                else
-                    pauseMenu.OpenPause();
+                pauseMenu.ResumeGame();
+                return;
             }
+
+            if (endGameMenu != null && endGameMenu.IsAnyEndGameOpen)
+                return;
+
+            if (pauseMenu != null)
+                pauseMenu.OpenPause();
         }
     }
 }

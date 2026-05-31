@@ -33,6 +33,11 @@ namespace MenuScripts
         private FadePanel menuBackground;
         private AudioSource audioSource;
 
+        public bool IsGameOverOpen => gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
+        public bool IsGameWonOpen => gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
+
+        public bool IsAnyEndGameOpen => IsGameOverOpen || IsGameWonOpen;
+
         private CastleModel model;
 
         private void Awake()

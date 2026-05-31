@@ -58,16 +58,16 @@ namespace MenuScripts
 
         private FadePanel FindActivePanel()
         {
-            if (pausePanel != null && pausePanel.GetComponent<CanvasGroup>().alpha > 0)
-                return pausePanel;
-
-            if (gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0)
+            if (gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return gameOverPanel;
 
-            if (gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0)
+            if (gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return gameWonPanel;
 
-            if (mainMenuPanel != null && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0)
+            if (pausePanel != null && pausePanel.GetComponent<CanvasGroup>().alpha > 0.1f)
+                return pausePanel;
+
+            if (mainMenuPanel != null && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return mainMenuPanel;
 
             return null;

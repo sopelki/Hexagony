@@ -24738,6 +24738,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 1825367179}
   settingsMenu: {fileID: 1671710289}
   helpMenu: {fileID: 1340545268}
+  endGameMenu: {fileID: 1302547644}
 --- !u!4 &886064239
 Transform:
   m_ObjectHideFlags: 0
