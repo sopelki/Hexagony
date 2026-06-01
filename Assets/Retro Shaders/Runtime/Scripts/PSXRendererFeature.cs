@@ -4,13 +4,13 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Retro.PSXEffects
+namespace Retro.PSXEffects.Retro_Shaders.Runtime.Scripts
 {
-    public class PSXRendererFeature : ScriptableRendererFeature
+    public class PsxRendererFeature : ScriptableRendererFeature
     {
-        public PSXSettings settings = new();
+        public PsxSettings settings = new();
         private Material material;
-        private PSXRenderPass renderPass;
+        private PsxRenderPass renderPass;
 
         public override void Create()
         {
@@ -18,8 +18,10 @@ namespace Retro.PSXEffects
             if (shader != null)
                 material = CoreUtils.CreateEngineMaterial(shader);
 
-            renderPass = new PSXRenderPass(material, settings);
-            renderPass.renderPassEvent = settings.renderPassEvent;
+            renderPass = new PsxRenderPass(material, settings)
+            {
+                renderPassEvent = settings.renderPassEvent
+            };
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -38,7 +40,7 @@ namespace Retro.PSXEffects
         }
 
         [Serializable]
-        public class PSXSettings
+        public class PsxSettings
         {
             public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
 
@@ -119,40 +121,40 @@ namespace Retro.PSXEffects
         }
     }
 
-    public class PSXRenderPass : ScriptableRenderPass
+    public class PsxRenderPass : ScriptableRenderPass
     {
-        private static readonly int PSXColorDepthID = Shader.PropertyToID("_PSXColorDepth");
-        private static readonly int PSXDitherIntensityID = Shader.PropertyToID("_PSXDitherIntensity");
-        private static readonly int PSXPosterizationID = Shader.PropertyToID("_PSXPosterization");
-        private static readonly int PSXResolutionScaleID = Shader.PropertyToID("_PSXResolutionScale");
-        private static readonly int PSXSaturationBoostID = Shader.PropertyToID("_PSXSaturationBoost");
-        private static readonly int PSXDarkeningID = Shader.PropertyToID("_PSXDarkening");
-        private static readonly int TimeID = Shader.PropertyToID("_CRTTime");
+        private static readonly int psxColorDepthID = Shader.PropertyToID("_PSXColorDepth");
+        private static readonly int psxDitherIntensityID = Shader.PropertyToID("_PSXDitherIntensity");
+        private static readonly int psxPosterizationID = Shader.PropertyToID("_PSXPosterization");
+        private static readonly int psxResolutionScaleID = Shader.PropertyToID("_PSXResolutionScale");
+        private static readonly int psxSaturationBoostID = Shader.PropertyToID("_PSXSaturationBoost");
+        private static readonly int psxDarkeningID = Shader.PropertyToID("_PSXDarkening");
+        private static readonly int timeID = Shader.PropertyToID("_CRTTime");
 
-        private static readonly int ColorBleedIntensityID = Shader.PropertyToID("_ColorBleedIntensity");
-        private static readonly int ChromaticShiftID = Shader.PropertyToID("_ChromaticShift");
-        private static readonly int VerticalBlurID = Shader.PropertyToID("_VerticalBlur");
-        private static readonly int VHSTrackingID = Shader.PropertyToID("_VHSTracking");
-        private static readonly int SignalNoiseID = Shader.PropertyToID("_SignalNoise");
-        private static readonly int ColorTemperatureID = Shader.PropertyToID("_ColorTemperature");
+        private static readonly int colorBleedIntensityID = Shader.PropertyToID("_ColorBleedIntensity");
+        private static readonly int chromaticShiftID = Shader.PropertyToID("_ChromaticShift");
+        private static readonly int verticalBlurID = Shader.PropertyToID("_VerticalBlur");
+        private static readonly int vhsTrackingID = Shader.PropertyToID("_VHSTracking");
+        private static readonly int signalNoiseID = Shader.PropertyToID("_SignalNoise");
+        private static readonly int colorTemperatureID = Shader.PropertyToID("_ColorTemperature");
 
-        private static readonly int PixelPerfectSnappingID = Shader.PropertyToID("_PixelPerfectSnapping");
-        private static readonly int PaletteReductionID = Shader.PropertyToID("_PaletteReduction");
-        private static readonly int LCDGhostingID = Shader.PropertyToID("_LCDGhosting");
-        private static readonly int PixelGridIntensityID = Shader.PropertyToID("_PixelGridIntensity");
-        private static readonly int PixelGridSizeID = Shader.PropertyToID("_PixelGridSize");
-        private static readonly int GameBoyModeID = Shader.PropertyToID("_GameBoyMode");
+        private static readonly int pixelPerfectSnappingID = Shader.PropertyToID("_PixelPerfectSnapping");
+        private static readonly int paletteReductionID = Shader.PropertyToID("_PaletteReduction");
+        private static readonly int lcdGhostingID = Shader.PropertyToID("_LCDGhosting");
+        private static readonly int pixelGridIntensityID = Shader.PropertyToID("_PixelGridIntensity");
+        private static readonly int pixelGridSizeID = Shader.PropertyToID("_PixelGridSize");
+        private static readonly int gameBoyModeID = Shader.PropertyToID("_GameBoyMode");
 
         private readonly Material material;
-        private PSXRendererFeature.PSXSettings settings;
+        private PsxRendererFeature.PsxSettings settings;
 
-        public PSXRenderPass(Material material, PSXRendererFeature.PSXSettings settings)
+        public PsxRenderPass(Material material, PsxRendererFeature.PsxSettings settings)
         {
             this.material = material;
             this.settings = settings;
         }
 
-        public void UpdateSettings(PSXRendererFeature.PSXSettings settings)
+        public void UpdateSettings(PsxRendererFeature.PsxSettings settings)
         {
             this.settings = settings;
         }
@@ -175,63 +177,63 @@ namespace Retro.PSXEffects
 
             var destination = renderGraph.CreateTexture(destinationDesc);
 
-            material.SetFloat(PSXColorDepthID, settings.psxColorDepth);
-            material.SetFloat(PSXDitherIntensityID, settings.psxDitherIntensity);
-            material.SetFloat(PSXPosterizationID, settings.psxPosterization);
-            material.SetFloat(PSXResolutionScaleID, settings.psxResolutionScale);
-            material.SetFloat(PSXSaturationBoostID, settings.psxSaturationBoost);
-            material.SetFloat(PSXDarkeningID, settings.psxDarkening);
-            material.SetFloat(TimeID, Time.realtimeSinceStartup);
+            material.SetFloat(psxColorDepthID, settings.psxColorDepth);
+            material.SetFloat(psxDitherIntensityID, settings.psxDitherIntensity);
+            material.SetFloat(psxPosterizationID, settings.psxPosterization);
+            material.SetFloat(psxResolutionScaleID, settings.psxResolutionScale);
+            material.SetFloat(psxSaturationBoostID, settings.psxSaturationBoost);
+            material.SetFloat(psxDarkeningID, settings.psxDarkening);
+            material.SetFloat(timeID, Time.realtimeSinceStartup);
 
-            material.SetFloat(ColorBleedIntensityID, settings.colorBleedIntensity);
-            material.SetFloat(ChromaticShiftID, settings.chromaticShift);
-            material.SetFloat(VerticalBlurID, settings.verticalBlur);
-            material.SetFloat(VHSTrackingID, settings.vhsTracking);
-            material.SetFloat(SignalNoiseID, settings.signalNoise);
-            material.SetFloat(ColorTemperatureID, settings.colorTemperature);
+            material.SetFloat(colorBleedIntensityID, settings.colorBleedIntensity);
+            material.SetFloat(chromaticShiftID, settings.chromaticShift);
+            material.SetFloat(verticalBlurID, settings.verticalBlur);
+            material.SetFloat(vhsTrackingID, settings.vhsTracking);
+            material.SetFloat(signalNoiseID, settings.signalNoise);
+            material.SetFloat(colorTemperatureID, settings.colorTemperature);
 
-            material.SetFloat(PixelPerfectSnappingID, settings.pixelPerfectSnapping);
-            material.SetFloat(PaletteReductionID, settings.paletteReduction);
-            material.SetFloat(LCDGhostingID, settings.lcdGhosting);
-            material.SetFloat(PixelGridIntensityID, settings.pixelGridIntensity);
-            material.SetFloat(PixelGridSizeID, settings.pixelGridSize);
-            material.SetFloat(GameBoyModeID, settings.gameBoyMode);
+            material.SetFloat(pixelPerfectSnappingID, settings.pixelPerfectSnapping);
+            material.SetFloat(paletteReductionID, settings.paletteReduction);
+            material.SetFloat(lcdGhostingID, settings.lcdGhosting);
+            material.SetFloat(pixelGridIntensityID, settings.pixelGridIntensity);
+            material.SetFloat(pixelGridSizeID, settings.pixelGridSize);
+            material.SetFloat(gameBoyModeID, settings.gameBoyMode);
 
             using (var builder = renderGraph.AddRasterRenderPass<PassData>("PSX Effect", out var passData))
             {
-                passData.source = source;
-                passData.destination = destination;
-                passData.material = material;
+                passData.Source = source;
+                passData.Destination = destination;
+                passData.Material = material;
 
                 builder.UseTexture(source);
                 builder.SetRenderAttachment(destination, 0);
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), data.material, 0);
+                    Blitter.BlitTexture(context.cmd, data.Source, new Vector4(1, 1, 0, 0), data.Material, 0);
                 });
             }
 
             using (var builder = renderGraph.AddRasterRenderPass<PassData>("PSX Effect Copy Back", out var passData))
             {
-                passData.source = destination;
-                passData.destination = source;
+                passData.Source = destination;
+                passData.Destination = source;
 
                 builder.UseTexture(destination);
                 builder.SetRenderAttachment(source, 0);
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0, false);
+                    Blitter.BlitTexture(context.cmd, data.Source, new Vector4(1, 1, 0, 0), 0, false);
                 });
             }
         }
 
         private class PassData
         {
-            public TextureHandle destination;
-            public Material material;
-            public TextureHandle source;
+            public TextureHandle Destination;
+            public Material Material;
+            public TextureHandle Source;
         }
     }
 }

@@ -24711,7 +24711,7 @@ GameObject:
   - component: {fileID: 886064239}
   - component: {fileID: 886064238}
   m_Layer: 0
-  m_Name: PauseController
+  m_Name: GameInputController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24735,6 +24735,8 @@ MonoBehaviour:
   endGameMenu: {fileID: 1302547644}
   speedUpMultiplier: 3
   speedUpIcon: {fileID: 1205295817}
+  rendererData: {fileID: 11400000, guid: 424799608f7334c24bf367e4bbfa7f9a, type: 2}
+  vhsTrackingTarget: 0.02
 --- !u!4 &886064239
 Transform:
   m_ObjectHideFlags: 0

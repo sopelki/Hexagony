@@ -43,15 +43,21 @@ namespace UI
         private IEnumerator DisplayWaveCoroutine(int waveNumber)
         {
             var text = $"Началась волна {waveNumber} из {wavesCount}";
+
             if (waveText)
                 waveText.text = text;
-
             if (shadowText)
                 shadowText.text = text;
 
             yield return FadeCanvasGroup(0, targetOpacity, fadeDuration);
 
-            yield return new WaitForSeconds(displayDuration);
+            float timer = 0;
+            while (timer < displayDuration)
+            {
+                if (Time.timeScale > 0)
+                    timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
 
             yield return FadeCanvasGroup(targetOpacity, 0, fadeDuration);
         }
@@ -62,8 +68,11 @@ namespace UI
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
+                if (Time.timeScale > 0)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
+                }
                 yield return null;
             }
 

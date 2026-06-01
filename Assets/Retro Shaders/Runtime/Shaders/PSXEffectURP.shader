@@ -161,7 +161,8 @@ Shader "Retro/PSXEffectURP"
             // VHS tracking
             float2 vhsTracking(float2 uv)
             {
-                float trackingNoise = sin(uv.y * 100.0 + _CRTTime * 2.0) * _VHSTracking * 0.01;
+                float jitter = frac(sin(_CRTTime * 50.0) * 43758.5453); 
+                float trackingNoise = sin(uv.y * 100.0 + _CRTTime * 30.0 + jitter) * _VHSTracking * 0.01;
                 uv.x += trackingNoise;
                 return uv;
             }

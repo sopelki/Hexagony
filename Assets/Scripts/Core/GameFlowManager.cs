@@ -9,9 +9,9 @@ namespace Core
 {
     public class GameFlowManager
     {
-        private const float HintStartDelay = 15f;
-        private const float HintCycleInterval = 15f;
-        private const float StartGameDelay = 2f;
+        private const float HintStartDelay = 10f;
+        private const float HintCycleInterval = 10f;
+        private const float StartGameDelay = 1.5f;
         private readonly CastleSystem castleSystem;
         private readonly HintUI hintUI;
         private readonly TowerSystem towerSystem;
@@ -64,7 +64,11 @@ namespace Core
             if (gameStarted || IsTutorialActive)
                 return;
 
-            var deltaTime = TickManager.Instance.tickInterval;
+            if (Time.timeScale <= 0)
+                return;
+            
+            var deltaTime = Time.unscaledDeltaTime;
+            
             timeSinceStart += deltaTime;
             timeSinceLastHint += deltaTime;
 
@@ -84,7 +88,6 @@ namespace Core
                 if (hintUI != null)
                     hintUI.ShowHint("Защититесь от монстров до начала первой волны");
                 timeSinceLastHint = -hintUI.displayDuration;
-                Debug.Log("Hint cycle started");
             }
 
             if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
@@ -92,7 +95,6 @@ namespace Core
                 if (hintUI != null)
                     hintUI.ShowHint("Пока вы не поставите башню, ловушку или здание игра не начнется");
                 timeSinceLastHint = -hintUI.displayDuration;
-                Debug.Log($"Hint repeated at {timeSinceStart}s, TimeSinceLastHint: {timeSinceLastHint}s");
             }
         }
 
