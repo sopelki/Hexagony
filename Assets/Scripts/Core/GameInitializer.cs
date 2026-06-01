@@ -146,7 +146,7 @@ namespace Core
 
             if (waveNotificationUI != null)
             {
-                waveNotificationUI.Initialize();
+                waveNotificationUI.Initialize(waves.Count);
                 waveManager.OnWaveStarting += waveNotificationUI.ShowWaveNotification;
             }
 

@@ -19,14 +19,17 @@ namespace UI
         [SerializeField]
         private float targetOpacity = 0.75f;
 
+        private int wavesCount;
         private Coroutine displayCoroutine;
 
-        public void Initialize()
+        public void Initialize(int wavesCount)
         {
             if (canvasGroup == null)
                 canvasGroup = GetComponent<CanvasGroup>();
 
             canvasGroup.alpha = 0;
+
+            this.wavesCount = wavesCount;
         }
 
         public void ShowWaveNotification(int waveNumber)
@@ -39,7 +42,7 @@ namespace UI
 
         private IEnumerator DisplayWaveCoroutine(int waveNumber)
         {
-            var text = $"Началась волна {waveNumber}";
+            var text = $"Началась волна {waveNumber} из {wavesCount}";
             if (waveText)
                 waveText.text = text;
 
