@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2418156951690682089, guid: 9cc5f4f22177375439127eb679f76ccf, type: 3}
+  m_Sprite: {fileID: 3139830859091055660, guid: 4501e9c3fb393a541bad85094235730b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,7 +101,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6594106822739990193}
   - component: {fileID: 1343094532047291546}
-  - component: {fileID: 3383824697670310355}
   m_Layer: 0
   m_Name: SlotDecoration
   m_TagString: hexHighlight
@@ -184,30 +183,3 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &3383824697670310355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191577663113750100}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b737e822602e4cd98c3cee10f8d269dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::View.CastleView
-  castleHexes:
-  - {x: -20, y: 21}
-  - {x: -20, y: 20}
-  - {x: -20, y: 19}
-  - {x: -20, y: 18}
-  - {x: -20, y: 17}
-  - {x: -21, y: 17}
-  - {x: -21, y: 16}
-  - {x: -21, y: 15}
-  - {x: -21, y: 14}
-  - {x: -22, y: 14}
-  - {x: -22, y: 13}
-  - {x: -22, y: 12}
-  - {x: -23, y: 12}
-  - {x: -23, y: 11}

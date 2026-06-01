@@ -29,7 +29,7 @@ namespace Misc
         private TextMeshProUGUI actionButtonText;
         [SerializeField]
         private GameObject barrackSlot, towerSlot, trapSlot, helpButton, pauseButton, castleGrid;
-        [SerializeField]
+        // [SerializeField]
         private List<GameObject> towerSlots;
         [SerializeField]
         private GameObject highlightEffect, highlightEffectCastle, highlightEffectHex;
@@ -47,6 +47,9 @@ namespace Misc
 
         private void Start()
         {
+            var foundSlots = GameObject.FindGameObjectsWithTag("hexHighlight");
+            towerSlots = foundSlots.ToList();
+            
             if (actionButton)
                 actionButton.onClick.AddListener(OnActionButtonClick);
 
