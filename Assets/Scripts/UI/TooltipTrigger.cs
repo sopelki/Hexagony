@@ -7,7 +7,7 @@ namespace UI
 {
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private const float Delay = 0.75f;
+        private const float Delay = 0.5f;
         private Coroutine delayCoroutine;
         private bool isBought;
         private ITooltipProvider provider;

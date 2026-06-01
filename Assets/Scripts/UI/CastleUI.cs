@@ -33,7 +33,9 @@ namespace UI
 
         private void UpdateUI()
         {
-            hpText.text = Math.Max(0, model.Hp).ToString();
+            var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
+
+            hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
         }

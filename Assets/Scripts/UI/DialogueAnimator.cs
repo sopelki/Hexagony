@@ -61,7 +61,14 @@ namespace UI
                     TryPlayTypingSound(character);
                 }
 
-                yield return new WaitForSecondsRealtime(textSpeed);
+                float timer = 0;
+                while (timer < textSpeed)
+                {
+                    if (Time.timeScale > 0)
+                        timer += Time.unscaledDeltaTime;
+
+                    yield return null;
+                }
             }
         }
 

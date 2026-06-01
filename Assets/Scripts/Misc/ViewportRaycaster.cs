@@ -90,7 +90,7 @@ namespace Misc
 
         private MonsterInteractionHandler RaycastAtPosition(Vector2 screenPosition)
         {
-            var uiCam = (parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            var uiCam = parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay
                 ? parentCanvas.worldCamera
                 : null;
 
