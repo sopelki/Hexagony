@@ -15,7 +15,7 @@ namespace Logic.Castle
     {
         private const float SpawnInterval = 3f;
 
-        private static readonly Vector2Int spawnHex = new(-20, 15);
+        private static readonly Vector2Int spawnHex = new(-19, 14);
         private readonly Field.Field field;
         private readonly SoundData soundData;
         private readonly Tilemap tilemap;
@@ -180,6 +180,7 @@ namespace Logic.Castle
         {
             Model.Buildings.Clear();
             firstBuildingPlaced = false;
+            unitSystem?.ClearBuffs();
             Model.Changed();
         }
     }

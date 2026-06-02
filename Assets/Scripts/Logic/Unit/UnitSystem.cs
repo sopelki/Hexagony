@@ -91,5 +91,10 @@ namespace Logic.Unit
         {
             units.Clear();
         }
+        
+        public void ClearBuffs()
+        {
+            buffs.Clear(); 
+        }
     }
 }
