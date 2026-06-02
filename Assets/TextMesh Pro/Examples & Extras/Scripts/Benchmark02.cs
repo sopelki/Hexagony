@@ -18,8 +18,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
             {
                 if (SpawnType == 0)
                 {
-                    var go = new GameObject();
-                    go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f));
+                    var go = new GameObject
+                    {
+                        transform =
+                        {
+                            position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f))
+                        }
+                    };
 
                     var textMeshPro = go.AddComponent<TextMeshPro>();
 
@@ -40,8 +45,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
                 }
                 else if (SpawnType == 1)
                 {
-                    var go = new GameObject();
-                    go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f));
+                    var go = new GameObject
+                    {
+                        transform =
+                        {
+                            position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f))
+                        }
+                    };
 
                     var textMesh = go.AddComponent<TextMesh>();
                     textMesh.font = Resources.Load<Font>("Fonts/ARIAL");

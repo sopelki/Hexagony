@@ -57,8 +57,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
                     case BenchmarkType.TMP_SDF:
                     case BenchmarkType.TMP_BITMAP_MOBILE:
                     {
-                        var go = new GameObject();
-                        go.transform.position = new Vector3(0, 1.2f, 0);
+                        var go = new GameObject
+                        {
+                            transform =
+                            {
+                                position = new Vector3(0, 1.2f, 0)
+                            }
+                        };
 
                         var textComponent = go.AddComponent<TextMeshPro>();
                         textComponent.font = fontAsset;
@@ -73,8 +78,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
                         break;
                     case BenchmarkType.TEXTMESH_BITMAP:
                     {
-                        var go = new GameObject();
-                        go.transform.position = new Vector3(0, 1.2f, 0);
+                        var go = new GameObject
+                        {
+                            transform =
+                            {
+                                position = new Vector3(0, 1.2f, 0)
+                            }
+                        };
 
                         var textMesh = go.AddComponent<TextMesh>();
                         textMesh.GetComponent<Renderer>().sharedMaterial = SourceFont.material;

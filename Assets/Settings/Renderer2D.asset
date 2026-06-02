@@ -107,8 +107,9 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     pixelSize: 1
-    scanlineIntensity: 0.25
-    scanlineCount: 256
+    scanlineIntensity: 0.5
+    scanlineCount: 376
+    scanlineRGBShift: 0.05
     curvature: 0.025
     chromaticAberration: 0
     vignette: 0.059
@@ -120,5 +121,5 @@ MonoBehaviour:
     glowIntensity: 0.005
     glowSpread: 3
     noiseIntensity: 0
-    colorBleedIntensity: 0
+    colorBleedIntensity: 0.5
     interlacingIntensity: 0

@@ -4,12 +4,12 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Retro.PSXEffects
+namespace Retro.PSXEffects.Retro_Shaders.Runtime.Scripts
 {
-    public class CRTRendererFeature : ScriptableRendererFeature
+    public class CrtRendererFeature : ScriptableRendererFeature
     {
-        public CRTSettings settings = new();
-        private CRTRenderPass crtPass;
+        public CrtSettings settings = new();
+        private CrtRenderPass crtPass;
         private Material material;
 
         public override void Create()
@@ -18,8 +18,10 @@ namespace Retro.PSXEffects
             if (shader != null)
                 material = CoreUtils.CreateEngineMaterial(shader);
 
-            crtPass = new CRTRenderPass(material, settings);
-            crtPass.renderPassEvent = settings.renderPassEvent;
+            crtPass = new CrtRenderPass(material, settings)
+            {
+                renderPassEvent = settings.renderPassEvent
+            };
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -38,7 +40,7 @@ namespace Retro.PSXEffects
         }
 
         [Serializable]
-        public class CRTSettings
+        public class CrtSettings
         {
             public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
 
@@ -51,6 +53,8 @@ namespace Retro.PSXEffects
             public float scanlineIntensity = 0.3f;
             [Range(100, 1000)]
             public float scanlineCount = 300f;
+            [Range(0, 0.05f)]
+            public float scanlineRGBShift = 0.01f;
 
             [Header("Distortion")]
             [Range(0, 0.1f)]
@@ -98,36 +102,37 @@ namespace Retro.PSXEffects
         }
     }
 
-    public class CRTRenderPass : ScriptableRenderPass
+    public class CrtRenderPass : ScriptableRenderPass
     {
-        private static readonly int PixelSizeID = Shader.PropertyToID("_PixelSize");
-        private static readonly int ScanlineIntensityID = Shader.PropertyToID("_ScanlineIntensity");
-        private static readonly int ScanlineCountID = Shader.PropertyToID("_ScanlineCount");
-        private static readonly int CurvatureID = Shader.PropertyToID("_Curvature");
-        private static readonly int ChromaticAberrationID = Shader.PropertyToID("_ChromaticAberration");
-        private static readonly int VignetteID = Shader.PropertyToID("_Vignette");
-        private static readonly int BrightnessID = Shader.PropertyToID("_Brightness");
-        private static readonly int PhosphorIntensityID = Shader.PropertyToID("_PhosphorIntensity");
-        private static readonly int FlickerIntensityID = Shader.PropertyToID("_FlickerIntensity");
-        private static readonly int RollingScanlineIntensityID = Shader.PropertyToID("_RollingScanlineIntensity");
-        private static readonly int RollingScanlineSpeedID = Shader.PropertyToID("_RollingScanlineSpeed");
-        private static readonly int GlowIntensityID = Shader.PropertyToID("_GlowIntensity");
-        private static readonly int GlowSpreadID = Shader.PropertyToID("_GlowSpread");
-        private static readonly int NoiseIntensityID = Shader.PropertyToID("_NoiseIntensity");
-        private static readonly int ColorBleedIntensityID = Shader.PropertyToID("_ColorBleedIntensity");
-        private static readonly int InterlacingIntensityID = Shader.PropertyToID("_InterlacingIntensity");
-        private static readonly int TimeID = Shader.PropertyToID("_CRTTime");
+        private static readonly int pixelSizeID = Shader.PropertyToID("_PixelSize");
+        private static readonly int scanlineIntensityID = Shader.PropertyToID("_ScanlineIntensity");
+        private static readonly int scanlineCountID = Shader.PropertyToID("_ScanlineCount");
+        private static readonly int curvatureID = Shader.PropertyToID("_Curvature");
+        private static readonly int chromaticAberrationID = Shader.PropertyToID("_ChromaticAberration");
+        private static readonly int vignetteID = Shader.PropertyToID("_Vignette");
+        private static readonly int brightnessID = Shader.PropertyToID("_Brightness");
+        private static readonly int phosphorIntensityID = Shader.PropertyToID("_PhosphorIntensity");
+        private static readonly int flickerIntensityID = Shader.PropertyToID("_FlickerIntensity");
+        private static readonly int rollingScanlineIntensityID = Shader.PropertyToID("_RollingScanlineIntensity");
+        private static readonly int rollingScanlineSpeedID = Shader.PropertyToID("_RollingScanlineSpeed");
+        private static readonly int glowIntensityID = Shader.PropertyToID("_GlowIntensity");
+        private static readonly int glowSpreadID = Shader.PropertyToID("_GlowSpread");
+        private static readonly int noiseIntensityID = Shader.PropertyToID("_NoiseIntensity");
+        private static readonly int colorBleedIntensityID = Shader.PropertyToID("_ColorBleedIntensity");
+        private static readonly int interlacingIntensityID = Shader.PropertyToID("_InterlacingIntensity");
+        private static readonly int timeID = Shader.PropertyToID("_CRTTime");
+        private static readonly int scanlineRGBShiftID = Shader.PropertyToID("_ScanlineRGBShift");
 
         private readonly Material material;
-        private CRTRendererFeature.CRTSettings settings;
+        private CrtRendererFeature.CrtSettings settings;
 
-        public CRTRenderPass(Material material, CRTRendererFeature.CRTSettings settings)
+        public CrtRenderPass(Material material, CrtRendererFeature.CrtSettings settings)
         {
             this.material = material;
             this.settings = settings;
         }
 
-        public void UpdateSettings(CRTRendererFeature.CRTSettings settings)
+        public void UpdateSettings(CrtRendererFeature.CrtSettings settings)
         {
             this.settings = settings;
         }
@@ -150,59 +155,60 @@ namespace Retro.PSXEffects
 
             var destination = renderGraph.CreateTexture(destinationDesc);
 
-            material.SetFloat(PixelSizeID, settings.pixelSize);
-            material.SetFloat(ScanlineIntensityID, settings.scanlineIntensity);
-            material.SetFloat(ScanlineCountID, settings.scanlineCount);
-            material.SetFloat(CurvatureID, settings.curvature);
-            material.SetFloat(ChromaticAberrationID, settings.chromaticAberration);
-            material.SetFloat(VignetteID, settings.vignette);
-            material.SetFloat(BrightnessID, settings.brightness);
-            material.SetFloat(PhosphorIntensityID, settings.phosphorIntensity);
-            material.SetFloat(FlickerIntensityID, settings.flickerIntensity);
-            material.SetFloat(RollingScanlineIntensityID, settings.rollingScanlineIntensity);
-            material.SetFloat(RollingScanlineSpeedID, settings.rollingScanlineSpeed);
-            material.SetFloat(GlowIntensityID, settings.glowIntensity);
-            material.SetFloat(GlowSpreadID, settings.glowSpread);
-            material.SetFloat(NoiseIntensityID, settings.noiseIntensity);
-            material.SetFloat(ColorBleedIntensityID, settings.colorBleedIntensity);
-            material.SetFloat(InterlacingIntensityID, settings.interlacingIntensity);
-            material.SetFloat(TimeID, Time.time);
+            material.SetFloat(pixelSizeID, settings.pixelSize);
+            material.SetFloat(scanlineIntensityID, settings.scanlineIntensity);
+            material.SetFloat(scanlineCountID, settings.scanlineCount);
+            material.SetFloat(curvatureID, settings.curvature);
+            material.SetFloat(chromaticAberrationID, settings.chromaticAberration);
+            material.SetFloat(vignetteID, settings.vignette);
+            material.SetFloat(brightnessID, settings.brightness);
+            material.SetFloat(phosphorIntensityID, settings.phosphorIntensity);
+            material.SetFloat(flickerIntensityID, settings.flickerIntensity);
+            material.SetFloat(rollingScanlineIntensityID, settings.rollingScanlineIntensity);
+            material.SetFloat(rollingScanlineSpeedID, settings.rollingScanlineSpeed);
+            material.SetFloat(glowIntensityID, settings.glowIntensity);
+            material.SetFloat(glowSpreadID, settings.glowSpread);
+            material.SetFloat(noiseIntensityID, settings.noiseIntensity);
+            material.SetFloat(colorBleedIntensityID, settings.colorBleedIntensity);
+            material.SetFloat(interlacingIntensityID, settings.interlacingIntensity);
+            material.SetFloat(timeID, Time.time);
+            material.SetFloat(scanlineRGBShiftID, settings.scanlineRGBShift);
 
             using (var builder = renderGraph.AddRasterRenderPass<PassData>("CRT Effect", out var passData))
             {
-                passData.source = source;
-                passData.destination = destination;
-                passData.material = material;
+                passData.Source = source;
+                passData.Destination = destination;
+                passData.Material = material;
 
                 builder.UseTexture(source);
                 builder.SetRenderAttachment(destination, 0);
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), data.material, 0);
+                    Blitter.BlitTexture(context.cmd, data.Source, new Vector4(1, 1, 0, 0), data.Material, 0);
                 });
             }
 
             using (var builder = renderGraph.AddRasterRenderPass<PassData>("CRT Effect Copy Back", out var passData))
             {
-                passData.source = destination;
-                passData.destination = source;
+                passData.Source = destination;
+                passData.Destination = source;
 
                 builder.UseTexture(destination);
                 builder.SetRenderAttachment(source, 0);
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0, false);
+                    Blitter.BlitTexture(context.cmd, data.Source, new Vector4(1, 1, 0, 0), 0, false);
                 });
             }
         }
 
         private class PassData
         {
-            public TextureHandle destination;
-            public Material material;
-            public TextureHandle source;
+            public TextureHandle Destination;
+            public Material Material;
+            public TextureHandle Source;
         }
     }
 }

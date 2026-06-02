@@ -1,4 +1,4 @@
-﻿namespace Logic.Unit
+﻿namespace Logic.Monster
 {
     public enum AttackType
     {

@@ -43,6 +43,7 @@ Shader "Retro/CRTEffectURP"
             float _ColorBleedIntensity;
             float _InterlacingIntensity;
             float _CRTTime;
+            float _ScanlineRGBShift;
 
             // Random function for noise
             float random(float2 st)
@@ -86,7 +87,7 @@ Shader "Retro/CRTEffectURP"
             float flicker()
             {
                 float f = sin(_CRTTime * 60.0) * 0.5 + 0.5;
-                return 1.0 - (_FlickerIntensity * f * 0.1);
+                return 1.0 - _FlickerIntensity * f * 0.1;
             }
 
             // Rolling scanline
@@ -96,7 +97,7 @@ Shader "Retro/CRTEffectURP"
                 float dist = abs(uv.y - scanPos);
                 dist = min(dist, 1.0 - dist); // Wrap around
                 float scanVal = 1.0 - smoothstep(0.0, 0.1, dist);
-                return 1.0 + (scanVal * _RollingScanlineIntensity);
+                return 1.0 + scanVal * _RollingScanlineIntensity;
             }
 
             // Simple blur for glow (sample nearby pixels)
@@ -131,10 +132,10 @@ Shader "Retro/CRTEffectURP"
                 float bleedAmount = _ColorBleedIntensity * _PixelSize;
 
                 float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                           uv + float2(texelSize.x * bleedAmount, 0)).r;
+                                          uv + float2(texelSize.x * bleedAmount, 0)).r;
                 float g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).g;
                 float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                    uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
+                                         uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
 
                 return float3(r, g, b);
             }
@@ -145,7 +146,7 @@ Shader "Retro/CRTEffectURP"
                 float lineNum = floor(uv.y * screenSize.y);
                 float frameOffset = floor(frac(_CRTTime * 30.0) * 2.0); // Alternate each frame
                 float interlace = fmod(lineNum + frameOffset, 2.0);
-                return 1.0 - (interlace * _InterlacingIntensity * 0.3);
+                return 1.0 - interlace * _InterlacingIntensity * 0.3;
             }
 
             half4 frag(Varyings input) : SV_Target
@@ -156,7 +157,7 @@ Shader "Retro/CRTEffectURP"
                 float2 pixelUV = pixelate(uv, screenSize);
 
                 float2 curvedPixelUV = curveUV(pixelUV);
-                float2 curvedUV = curveUV(uv); // Для эффектов
+                float2 curvedUV = curveUV(uv);
 
                 if (curvedPixelUV.x < 0 || curvedPixelUV.x > 1 ||
                     curvedPixelUV.y < 0 || curvedPixelUV.y > 1)
@@ -167,11 +168,11 @@ Shader "Retro/CRTEffectURP"
                 {
                     float2 chromaOffset = float2(_ChromaticAberration, 0);
                     col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                          curveUV(pixelate(uv + chromaOffset, screenSize))).r;
+                                                                curveUV(pixelate(uv + chromaOffset, screenSize))).r;
                     col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                       curvedPixelUV).g;
+                      curvedPixelUV).g;
                     col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                 curveUV(pixelate(uv - chromaOffset, screenSize))).b;
+                     curveUV(pixelate(uv - chromaOffset, screenSize))).b;
                 }
                 else
                 {
@@ -185,12 +186,12 @@ Shader "Retro/CRTEffectURP"
                     float bleedAmount = _ColorBleedIntensity * _PixelSize;
 
                     float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                                    curveUV(pixelate(uv + float2(texelSize.x * bleedAmount, 0),
-                                                        screenSize))).r;
+                         curveUV(pixelate(uv + float2(texelSize.x * bleedAmount, 0),
+                             screenSize))).r;
                     float g = col.g;
                     float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                                curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0),
-                                                    screenSize))).b;
+                                                     curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0),
+                                                         screenSize))).b;
 
                     col = lerp(col, float3(r, g, b), _ColorBleedIntensity);
                 }
@@ -208,9 +209,21 @@ Shader "Retro/CRTEffectURP"
 
                 if (_ScanlineIntensity > 0.0001)
                 {
-                    float scanline = sin(uv.y * _ScanlineCount * 3.14159) * 0.5 + 0.5;
-                    scanline = pow(scanline, 0.5);
-                    col *= 1.0 - (_ScanlineIntensity * (1.0 - scanline));
+                    float sharp = 2.0;
+
+                    float scanlineR = pow(sin((pixelUV.y + _ScanlineRGBShift) * _ScanlineCount * 3.14159) * 0.5 + 0.5,
+                                                         sharp);
+                    float scanlineG = pow(sin(pixelUV.y * _ScanlineCount * 3.14159) * 0.5 + 0.5, sharp);
+                    float scanlineB = pow(sin((pixelUV.y - _ScanlineRGBShift) * _ScanlineCount * 3.14159) * 0.5 + 0.5,
+                        sharp);
+
+                    scanlineR = pow(scanlineR, 0.5);
+                    scanlineG = pow(scanlineG, 0.5);
+                    scanlineB = pow(scanlineB, 0.5);
+
+                    col.r *= lerp(1.2, 1.0 - _ScanlineIntensity, 1.0 - scanlineR);
+                    col.g *= lerp(1.2, 1.0 - _ScanlineIntensity, 1.0 - scanlineG);
+                    col.b *= lerp(1.2, 1.0 - _ScanlineIntensity, 1.0 - scanlineB);
                 }
 
                 if (_RollingScanlineIntensity > 0.0001)
@@ -224,7 +237,7 @@ Shader "Retro/CRTEffectURP"
                 }
 
                 if (_NoiseIntensity > 0.0001)
-                    col += staticNoise(curvedUV) - (_NoiseIntensity * 0.5);
+                    col += staticNoise(curvedUV) - _NoiseIntensity * 0.5;
 
                 if (_FlickerIntensity > 0.0001)
                     col *= flicker();

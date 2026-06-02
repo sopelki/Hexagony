@@ -27,9 +27,10 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
         private AnimationCurve CopyAnimationCurve(AnimationCurve curve)
         {
-            var newCurve = new AnimationCurve();
-
-            newCurve.keys = curve.keys;
+            var newCurve = new AnimationCurve
+            {
+                keys = curve.keys
+            };
 
             return newCurve;
         }

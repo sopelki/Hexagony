@@ -203,11 +203,16 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
                 if (m_HandleSize < 0.5f)
                 {
-                    var style = new GUIStyle(GUI.skin.GetStyle("Label"));
-                    style.normal.textColor = new Color(0.6f, 0.6f, 0.6f, 1.0f);
-                    style.fontSize = 12;
-                    style.fixedWidth = 200;
-                    style.fixedHeight = 20;
+                    var style = new GUIStyle(GUI.skin.GetStyle("Label"))
+                    {
+                        normal =
+                        {
+                            textColor = new Color(0.6f, 0.6f, 0.6f, 1.0f)
+                        },
+                        fontSize = 12,
+                        fixedWidth = 200,
+                        fixedHeight = 20
+                    };
 
                     Vector3 labelPosition;
                     var center = (origin + advance) / 2;
@@ -488,11 +493,16 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
                 if (m_HandleSize < 1.0f)
                 {
-                    var style = new GUIStyle();
-                    style.normal.textColor = new Color(0.8f, 0.8f, 0.8f, 1.0f);
-                    style.fontSize = 12;
-                    style.fixedWidth = 200;
-                    style.fixedHeight = 20;
+                    var style = new GUIStyle
+                    {
+                        normal =
+                        {
+                            textColor = new Color(0.8f, 0.8f, 0.8f, 1.0f)
+                        },
+                        fontSize = 12,
+                        fixedWidth = 200,
+                        fixedHeight = 20
+                    };
                     Vector3 labelPosition;
 
                     labelPosition = m_Transform.TransformPoint(new Vector3(lineBottomLeft, ascentline, 0));

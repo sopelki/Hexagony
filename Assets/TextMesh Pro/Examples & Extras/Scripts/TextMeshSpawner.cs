@@ -22,8 +22,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
             {
                 if (SpawnType == 0)
                 {
-                    var go = new GameObject();
-                    go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f));
+                    var go = new GameObject
+                    {
+                        transform =
+                        {
+                            position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f))
+                        }
+                    };
 
                     var textMeshPro = go.AddComponent<TextMeshPro>();
                     textMeshPro.fontSize = 96;
@@ -37,8 +42,13 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
                 }
                 else
                 {
-                    var go = new GameObject();
-                    go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f));
+                    var go = new GameObject
+                    {
+                        transform =
+                        {
+                            position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f))
+                        }
+                    };
 
                     var textMesh = go.AddComponent<TextMesh>();
                     textMesh.GetComponent<Renderer>().sharedMaterial = TheFont.material;
