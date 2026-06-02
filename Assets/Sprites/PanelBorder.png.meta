@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0d6eff7c702e08b42b229ee70d75c55c
+guid: 10a6808edb4a36d48b88f57d620f239b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4093317122517550114
-    second: ViewportVignette_0
+      213: 5402105980129724735
+    second: PanelBorder_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ViewportVignette_0
+      name: PanelBorder_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: edb315fa3cd9137c0800000000000000
-      internalID: -4093317122517550114
+      spriteID: f3945a074c228fa40800000000000000
+      internalID: 5402105980129724735
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 57ec924c45d9537479ec042a2f5c6b37
+    spriteID: 97388ef423600d440ba69c50a4a5467d
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ViewportVignette_0: -4093317122517550114
+      PanelBorder_0: 5402105980129724735
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

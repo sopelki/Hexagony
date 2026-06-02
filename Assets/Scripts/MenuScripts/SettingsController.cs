@@ -1,7 +1,10 @@
+using System.Linq;
 using Audio;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
+using Retro.PSXEffects.Retro_Shaders.Runtime.Scripts;
+using UnityEngine.Rendering.Universal;
 
 namespace MenuScripts
 {
@@ -22,9 +25,22 @@ namespace MenuScripts
         private Toggle fullscreenToggle;
         [SerializeField]
         private Toggle tutorialToggle;
+        [SerializeField]
+        private Renderer2DData rendererData;
+        [SerializeField]
+        private Toggle crtToggle;
 
-        private void OnEnable()
+        private CrtRendererFeature crtFeature;
+
+        private void Start()
         {
+            if (rendererData != null)
+            {
+                crtFeature = rendererData.rendererFeatures
+                    .OfType<CrtRendererFeature>()
+                    .FirstOrDefault();
+            }
+
             LoadUIValues();
         }
 
@@ -40,6 +56,13 @@ namespace MenuScripts
 
             if (fullscreenToggle)
                 fullscreenToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("Fullscreen", 1) == 1);
+
+            if (crtToggle)
+            {
+                var savedState = PlayerPrefs.GetInt("CRTEnabled", 1) == 1;
+                crtToggle.SetIsOnWithoutNotify(savedState);
+                SetCrtEffect(savedState);
+            }
         }
 
         private static float LoadAndApply(string key, float defaultValue)
@@ -98,6 +121,17 @@ namespace MenuScripts
 
             if (value) tutorial.TryStartTutorialFromScratch();
             else tutorial.ForceStopTutorial();
+        }
+
+        public void SetCrtEffect(bool isEnabled)
+        {
+            if (crtFeature)
+            {
+                crtFeature.SetActive(isEnabled);
+                rendererData.SetDirty();
+            }
+            PlayerPrefs.SetInt("CRTEnabled", isEnabled ? 1 : 0);
+            PlayerPrefs.Save();
         }
     }
 }

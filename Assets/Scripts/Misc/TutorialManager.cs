@@ -202,7 +202,6 @@ namespace Misc
                     ApplyHighlight(towerSlot);
                     ApplyHexHighlight(towerSlots);
                     break;
-                    break;
 
                 case TutorialStep.TowerSuccess:
                     ConfigureButton(true, "Далее");

@@ -11,7 +11,7 @@ namespace Core
     {
         private const float HintStartDelay = 10f;
         private const float HintCycleInterval = 10f;
-        private const float StartGameDelay = 1.5f;
+        private const float StartGameDelay = 0.5f;
         private readonly CastleSystem castleSystem;
         private readonly HintUI hintUI;
         private readonly TowerSystem towerSystem;
@@ -64,37 +64,42 @@ namespace Core
             if (gameStarted || IsTutorialActive)
                 return;
 
-            if (Time.timeScale <= 0)
-                return;
-
-            var deltaTime = Time.unscaledDeltaTime;
-
-            timeSinceStart += deltaTime;
-            timeSinceLastHint += deltaTime;
-
-            if (waitingToStart)
+            if (Time.timeScale > 0)
             {
-                timeSinceObjectPlaced += deltaTime;
+                var deltaTime = Time.unscaledDeltaTime;
 
-                if (timeSinceObjectPlaced >= StartGameDelay)
-                    StartGame();
+                timeSinceStart += deltaTime;
+                timeSinceLastHint += deltaTime;
 
-                return;
-            }
+                if (waitingToStart)
+                {
+                    timeSinceObjectPlaced += deltaTime;
 
-            if (!hintCycleStarted && timeSinceStart >= HintStartDelay)
-            {
-                hintCycleStarted = true;
-                if (hintUI != null)
-                    hintUI.ShowHint("Защититесь от монстров до начала первой волны");
-                timeSinceLastHint = -hintUI.displayDuration;
-            }
+                    if (timeSinceObjectPlaced >= StartGameDelay)
+                    {
+                        Debug.Log("GameFlowManager: Game started.");
+                        StartGame();
+                    }
 
-            if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
-            {
-                if (hintUI != null)
-                    hintUI.ShowHint("Пока вы не поставите башню, ловушку или здание игра не начнется");
-                timeSinceLastHint = -hintUI.displayDuration;
+                    return;
+                }
+
+                if (!hintCycleStarted && timeSinceStart >= HintStartDelay)
+                {
+                    hintCycleStarted = true;
+                    if (hintUI)
+                        hintUI.ShowHint("Защититесь от монстров до начала первой волны");
+
+                    timeSinceLastHint = hintUI != null ? -hintUI.displayDuration : 0f;
+                }
+
+                if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
+                {
+                    if (hintUI)
+                        hintUI.ShowHint("Пока вы не поставите башню, ловушку или здание игра не начнется");
+
+                    timeSinceLastHint = hintUI != null ? -hintUI.displayDuration : 0f;
+                }
             }
         }
 

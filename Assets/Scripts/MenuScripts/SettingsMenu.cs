@@ -22,16 +22,16 @@ namespace MenuScripts
 
         private FadePanel lastPanel;
 
-        public bool IsOpen => settingsPanel != null && settingsPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
+        public bool IsOpen => settingsPanel && settingsPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
         public void OpenSettings()
         {
             lastPanel = FindActivePanel();
 
-            if (lastPanel != null)
+            if (lastPanel)
                 lastPanel.Hide(lastPanel.FadeDuration);
 
-            if (settingsPanel != null)
+            if (settingsPanel)
                 settingsPanel.Show();
         }
 
@@ -39,16 +39,16 @@ namespace MenuScripts
         {
             PlayerPrefs.Save();
 
-            if (settingsPanel != null)
+            if (settingsPanel)
                 settingsPanel.Hide();
 
-            if (lastPanel != null)
+            if (lastPanel)
             {
-                if (menuBackground != null)
+                if (menuBackground)
                 {
                     var bgCanvas = menuBackground.GetComponent<CanvasGroup>();
 
-                    if (bgCanvas != null && bgCanvas.alpha <= 0)
+                    if (bgCanvas && bgCanvas.alpha <= 0)
                         menuBackground.Show(lastPanel.FadeDuration);
                 }
 
@@ -58,16 +58,16 @@ namespace MenuScripts
 
         private FadePanel FindActivePanel()
         {
-            if (gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
+            if (gameOverPanel && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return gameOverPanel;
 
-            if (gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
+            if (gameWonPanel && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return gameWonPanel;
 
-            if (pausePanel != null && pausePanel.GetComponent<CanvasGroup>().alpha > 0.1f)
+            if (pausePanel && pausePanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return pausePanel;
 
-            if (mainMenuPanel != null && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
+            if (mainMenuPanel && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
                 return mainMenuPanel;
 
             return null;

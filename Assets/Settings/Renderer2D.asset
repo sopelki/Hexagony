@@ -25,7 +25,7 @@ MonoBehaviour:
     chromaticShift: 0
     verticalBlur: 0
     vhsTracking: 0
-    signalNoise: 0.0011
+    signalNoise: 0
     colorTemperature: 0.5
     pixelPerfectSnapping: 0.5
     paletteReduction: 0
@@ -107,10 +107,10 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     pixelSize: 1
-    scanlineIntensity: 0.5
-    scanlineCount: 376
+    scanlineIntensity: 0.35
+    scanlineCount: 267
     scanlineRGBShift: 0.05
-    curvature: 0.025
+    curvature: 0.02
     chromaticAberration: 0
     vignette: 0.059
     brightness: 1
