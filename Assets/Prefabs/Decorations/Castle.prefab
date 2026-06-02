@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3053112638323094626, guid: 711fc67b38144d54f8cc727afdffa72b, type: 3}
+  m_Sprite: {fileID: 6925406333979057557, guid: c8e82f2f0e3759d479720191ce5e69c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -119,3 +119,7 @@ MonoBehaviour:
   - {x: -22, y: 12}
   - {x: -23, y: 12}
   - {x: -23, y: 11}
+  - {x: -20, y: 14}
+  - {x: -20, y: 15}
+  - {x: -20, y: 16}
+  - {x: -19, y: 16}
