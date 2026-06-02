@@ -139,6 +139,10 @@ namespace Misc
                     break;
 
                 case TutorialStep.HelpExplanation:
+                    currentStep = TutorialStep.ClickExplanation;
+                    break;
+                
+                case TutorialStep.ClickExplanation:
                     currentStep = TutorialStep.PauseExplanation;
                     break;
 
@@ -219,6 +223,12 @@ namespace Misc
                     ApplyHighlight(helpButton);
                     PrintPhrase(
                         "Изучите другие \u00A0постройки в магазине или прочтите <color=#FFEE58>Справку</color>.");
+                    break;
+                
+                case TutorialStep.ClickExplanation:
+                    ConfigureButton(true, "Далее");
+                    PrintPhrase(
+                        "Вы также можете наносить урон монстрам, кликая <nobr>по ним.</nobr>");
                     break;
 
                 case TutorialStep.PauseExplanation:
@@ -438,6 +448,7 @@ namespace Misc
             HelpExplanation,
             PauseExplanation,
             SpeedExplanation,
+            ClickExplanation,
             Finish
         }
     }
