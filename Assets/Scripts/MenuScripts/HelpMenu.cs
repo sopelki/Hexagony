@@ -149,7 +149,7 @@ namespace MenuScripts
                 "▪ <color=#dfe88b><b>Награда:</b></color> 8\n" +
                 "</line-height>" +
                 "<line-height=-15px>\n</line-height>" +
-                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: Прыткий монстр, который будет отвлекать ваших рыцарей." +
+                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
                 "<line-height=20px>\n</line-height>" +
                 "<line-height=60%>" +
                 "▪ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +

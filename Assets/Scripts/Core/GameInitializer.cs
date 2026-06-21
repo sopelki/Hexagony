@@ -123,6 +123,20 @@ namespace Core
             unitSystem = new UnitSystem(monsterSystem, field, tilemap, soundData);
             castleSystem = new CastleSystem(castleModel, unitSystem, soldierData, field, tilemap, soundData);
 
+            trapsModel = new TrapsModel();
+            trapSystem = new TrapSystem(monsterSystem, trapsModel, field, castleSystem, soundData);
+
+            monsterSpawner = new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap,
+                trapSystem, soundData);
+
+            waveManager = new WaveManager(monsterSpawner, monsterSystem, wavesDelay);
+
+            if (endGameMenu != null)
+            {
+                endGameMenu.Initialize(castleModel, waveManager);
+                waveManager.OnGameWon += endGameMenu.OpenWinMenu;
+            }
+
             castleView = FindAnyObjectByType<CastleView>();
 
             if (castleUI != null)
@@ -130,19 +144,6 @@ namespace Core
 
             if (castleView != null)
                 castleView.Initialize(castleModel, tilemap, field);
-
-            if (endGameMenu != null)
-                endGameMenu.Initialize(castleModel);
-
-
-            trapsModel = new TrapsModel();
-            trapSystem = new TrapSystem(monsterSystem, trapsModel, field, castleSystem, soundData);
-
-            monsterSpawner =
-                new MonsterSpawner(spawnHexes, field, monsterSystem, unitSystem, waves, tilemap, trapSystem, soundData);
-
-            waveManager = new WaveManager(monsterSpawner, monsterSystem, wavesDelay);
-            waveManager.OnGameWon += endGameMenu.OpenWinMenu;
 
             if (waveNotificationUI != null)
             {
@@ -153,8 +154,7 @@ namespace Core
             towersModel = new TowersModel();
             towerSystem = new TowerSystem(castleSystem, towersModel, monsterSystem, projectileSystem, soundData);
 
-            if (tickManager == null)
-                return;
+            if (tickManager == null) return;
 
             tickManager.OnTick += castleSystem.Tick;
             tickManager.OnTick += towerSystem.Tick;
@@ -165,11 +165,7 @@ namespace Core
             tickManager.OnTick += waveManager.Tick;
             tickManager.OnTick += trapSystem.Tick;
 
-            monsterSystem.OnMonsterDied += monster =>
-            {
-                castleSystem.AddGold(monster.GoldReward);
-                Debug.Log($"Monster is killed. Gold received: {monster.GoldReward}. Balance: {castleModel.Gold}");
-            };
+            monsterSystem.OnMonsterDied += monster => { castleSystem.AddGold(monster.GoldReward); };
             monsterSystem.SubscribeToCastle(castleModel);
         }
 

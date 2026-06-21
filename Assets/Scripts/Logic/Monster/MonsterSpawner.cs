@@ -28,6 +28,9 @@ namespace Logic.Monster
         private float spawnTimer;
         private bool waveSpawnFinished;
 
+        private InfiniteModeSettings infiniteSettings;
+        private bool isInfiniteMode;
+
         public MonsterSpawner(
             List<Vector2Int> spawnHexes,
             Field.Field field,
@@ -48,21 +51,34 @@ namespace Logic.Monster
             this.soundData = soundData;
         }
 
-        public bool IsLastWave => currentWaveIndex == waves.Count - 1;
-        public bool IsWaveFullySpawned =>
-            CurrentWave != null && spawnedInCurrentWave >= CurrentWave.totalMonsters;
-
-        private WaveData CurrentWave =>
-            currentWaveIndex >= 0 && currentWaveIndex < waves.Count
-                ? waves[currentWaveIndex]
-                : null;
+        public bool IsLastWave => !isInfiniteMode && currentWaveIndex == waves.Count - 1;
 
         public void Tick()
         {
-            if (CurrentWave == null || waveSpawnFinished)
+            if (currentWaveIndex < 0) return;
+
+            int totalMonsters;
+            float spawnInterval;
+
+            if (currentWaveIndex < waves.Count)
+            {
+                totalMonsters = waves[currentWaveIndex].totalMonsters;
+                spawnInterval = waves[currentWaveIndex].spawnInterval;
+            }
+            else if (isInfiniteMode)
+            {
+                var extraWaves = currentWaveIndex - waves.Count + 1;
+                totalMonsters = infiniteSettings.referenceWave.totalMonsters +
+                                (extraWaves * infiniteSettings.monstersCountStep);
+                spawnInterval = Mathf.Max(infiniteSettings.minSpawnInterval,
+                    infiniteSettings.referenceWave.spawnInterval - (extraWaves * infiniteSettings.spawnIntervalStep));
+            }
+            else
                 return;
 
-            if (spawnedInCurrentWave >= CurrentWave.totalMonsters)
+            if (waveSpawnFinished) return;
+
+            if (spawnedInCurrentWave >= totalMonsters)
             {
                 waveSpawnFinished = true;
                 OnWaveSpawnCompleted?.Invoke();
@@ -70,23 +86,28 @@ namespace Logic.Monster
             }
 
             spawnTimer += TickManager.Instance.tickInterval;
-
-            if (spawnTimer >= CurrentWave.spawnInterval)
+            if (spawnTimer >= spawnInterval)
             {
                 spawnTimer = 0f;
-                Spawn(CurrentWave);
+                Spawn();
             }
         }
 
         public event Action OnWaveSpawnCompleted;
 
+        public void EnableInfiniteMode(InfiniteModeSettings settings)
+        {
+            infiniteSettings = settings;
+            isInfiniteMode = true;
+        }
+
         public void StartNextWave()
         {
             currentWaveIndex++;
 
-            if (currentWaveIndex >= waves.Count)
+            if (!isInfiniteMode && currentWaveIndex >= waves.Count)
             {
-                Debug.Log("MonsterSpawner: No more waves to start.");
+                Debug.Log("MonsterSpawner: All manual waves completed.");
                 return;
             }
 
@@ -94,33 +115,44 @@ namespace Logic.Monster
             spawnTimer = 0f;
             waveSpawnFinished = false;
 
-            Debug.Log($"MonsterSpawner: Wave {currentWaveIndex + 1} started.");
+            Debug.Log($"MonsterSpawner: Wave {currentWaveIndex + 1} started. (Infinite: {isInfiniteMode})");
         }
 
-        private void Spawn(WaveData wave)
+
+        private void Spawn()
         {
             var hex = spawnHexes[Random.Range(0, spawnHexes.Count)];
             var hexObj = field.GetHex(hex);
-
             if (hexObj == null) return;
 
             var world = tilemap.GetCellCenterWorld(hexObj.offset);
-            var data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
 
-            var monster = new MonsterModel(
-                world,
-                hex,
-                data,
-                wave.healthMultiplier,
-                wave.damageMultiplier,
-                wave.speedMultiplier,
-                soundData
-            );
+            MonsterData data;
+            float hMult, dMult, sMult;
 
+            if (currentWaveIndex < waves.Count)
+            {
+                var wave = waves[currentWaveIndex];
+                data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
+                hMult = wave.healthMultiplier;
+                dMult = wave.damageMultiplier;
+                sMult = wave.speedMultiplier;
+            }
+            else
+            {
+                var extraWaves = currentWaveIndex - waves.Count + 1;
+                var wave = infiniteSettings.referenceWave;
+                data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
+
+                hMult = wave.healthMultiplier * Mathf.Pow(infiniteSettings.healthMultiplierStep, extraWaves);
+                dMult = wave.damageMultiplier * Mathf.Pow(infiniteSettings.damageMultiplierStep, extraWaves);
+                sMult = wave.speedMultiplier * Mathf.Pow(infiniteSettings.speedMultiplierStep, extraWaves);
+            }
+
+            var monster = new MonsterModel(world, hex, data, hMult, dMult, sMult, soundData);
             var movement = new HexMoveToTargetStrategy(monster, field, tilemap, trapSystem, monsterSystem);
             var attack = new MonsterAttackStrategy(monster, unitSystem, soundData);
             monster.SetStrategies(movement, attack);
-
             monsterSystem.AddMonster(monster);
             spawnedInCurrentWave++;
         }

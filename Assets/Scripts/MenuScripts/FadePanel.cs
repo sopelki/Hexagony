@@ -57,9 +57,11 @@ namespace MenuScripts
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            if (canvasGroup.alpha <= 0f && currentFade == null) return;
+            if (canvasGroup.alpha <= 0f && currentFade == null)
+                return;
 
-            if (currentFade != null) StopCoroutine(currentFade);
+            if (currentFade != null)
+                StopCoroutine(currentFade);
 
             if (duration <= 0)
                 canvasGroup.alpha = 0f;

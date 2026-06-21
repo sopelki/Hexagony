@@ -2,6 +2,7 @@
 using Audio;
 using Core;
 using Logic.Castle;
+using Logic.Monster;
 using Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,6 +34,11 @@ namespace MenuScripts
         private FadePanel menuBackground;
         private AudioSource audioSource;
 
+        [Header("Infinite Mode")]
+        [SerializeField]
+        private InfiniteModeSettings infiniteSettings;
+        private WaveManager waveManager;
+
         private CastleModel model;
 
         public bool IsGameOverOpen => gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
@@ -46,10 +52,11 @@ namespace MenuScripts
             audioSource.ignoreListenerPause = true;
         }
 
-        public void Initialize(CastleModel castleModel)
+        public void Initialize(CastleModel castleModel, WaveManager waveManager)
         {
             model = castleModel;
             model.OnChanged += CheckGameOver;
+            this.waveManager = waveManager;
         }
 
         private void CheckGameOver()
@@ -98,6 +105,18 @@ namespace MenuScripts
         public void LoadMainMenu()
         {
             SceneTransitions.LoadScene("MainMenu");
+        }
+
+        public void ContinueInfinite()
+        {
+            Time.timeScale = 1f;
+            UIBlocker.UnblockAll();
+
+            gameWonPanel.Hide();
+            if (menuBackground)
+                menuBackground.Hide(fadeDuration);
+
+            waveManager.StartInfiniteMode(infiniteSettings);
         }
     }
 }

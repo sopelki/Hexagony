@@ -85,5 +85,13 @@ namespace Logic.Monster
         {
             waitingForNextWave = true;
         }
+
+        public void StartInfiniteMode(InfiniteModeSettings settings)
+        {
+            spawner.EnableInfiniteMode(settings);
+            waitingForNextWave = false;
+            isDelaying = true;
+            delayTimer = delayBetweenWaves;
+        }
     }
 }
