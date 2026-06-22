@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Tower;
 using UnityEngine;
 
@@ -8,11 +9,17 @@ namespace View
     {
         private readonly Dictionary<TowerModel, TowerView> views = new();
         private TowersModel model;
+        public static TowerViewManager Instance { get; private set; }
+
+        private void Awake() => Instance = this;
 
         private void OnDestroy()
         {
             if (model != null)
                 model.OnChanged -= HandleTowerAdded;
+
+            foreach (var pair in views)
+                pair.Key.OnLevelUp -= pair.Value.SetLevel;
         }
 
         public void Initialize(TowersModel modelToInitialize)
@@ -40,19 +47,31 @@ namespace View
             var viewGo = Instantiate(towerModel.Data.viewPrefab, towerModel.WorldPosition, Quaternion.identity);
             var view = viewGo.GetComponent<TowerView>();
 
-            views.Add(towerModel, view);
+            if (view != null)
+            {
+                view.Initialize(towerModel.Data.viewPrefab.GetComponentInChildren<SpriteRenderer>().sprite);
+                view.SetLevel(towerModel.Level);
+                towerModel.OnLevelUp += view.SetLevel;
+                views.Add(towerModel, view);
+            }
 
-            Debug.Log($"TowerView created for tower at {towerModel.GridPosition}");
+            Debug.Log($"TowerView created and linked for tower at {towerModel.GridPosition}");
         }
 
         public void DestroyAllTowers()
         {
-            foreach (var view in views.Values)
+            foreach (var pair in views.Where(pair => pair.Value != null))
             {
-                if (view != null)
-                    Destroy(view.gameObject);
+                pair.Key.OnLevelUp -= pair.Value.SetLevel;
+                Destroy(pair.Value.gameObject);
             }
             views.Clear();
+        }
+
+        public TowerView GetViewAtCell(Vector3Int cellPos)
+        {
+            var towerModel = views.Keys.FirstOrDefault(t => t.GridPosition == cellPos);
+            return towerModel != null ? views[towerModel] : null;
         }
     }
 }

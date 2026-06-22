@@ -100,7 +100,7 @@ namespace Logic.Projectile
             {
                 if (!p.Target.IsDead)
                 {
-                    p.Target.TakeDamage(p.Data.damage);
+                    p.Target.TakeDamage(p.Damage);
                     PlayHitSound(p.Data.isHoming);
                 }
 
@@ -118,8 +118,8 @@ namespace Logic.Projectile
                 if (!(dist <= p.Data.aoeRadius))
                     continue;
 
-                Debug.Log("ApplyDamage: " + p.Data.damage);
-                monster.TakeDamage(p.Data.damage);
+                Debug.Log("ApplyDamage: " + p.Damage);
+                monster.TakeDamage(p.Damage);
                 PlayHitSound(p.Data.isHoming);
             }
         }
