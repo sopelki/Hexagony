@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections;
 using Logic.Castle;
 using TMPro;
@@ -14,6 +15,8 @@ namespace UI
         private TextMeshProUGUI goldText;
         [SerializeField]
         private TextMeshProUGUI foodText;
+        [SerializeField]
+        private GameObject inventoryItemPrefab;
 
         [Header("Effects")]
         [SerializeField]
@@ -51,6 +54,26 @@ namespace UI
 
             UpdateUI();
         }
+        
+        public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
+        {
+            var allSlots = FindObjectsByType<DropSlot>();
+    
+            for (int i = 0; i < savedBuildings.Count; i++)
+            {
+                if (i >= allSlots.Length) break;
+        
+                var buildingData = savedBuildings[i].Data;
+                
+                var itemGo = Instantiate(inventoryItemPrefab, allSlots[i].transform.Find("ItemContainer"));
+                var item = itemGo.GetComponent<InventoryItem>();
+                
+                item.SetData(buildingData, false);
+                item.ApplyBuildingVisual(buildingData);
+                item.Place(allSlots[i].transform.Find("ItemContainer"));
+            }
+        }
+        
 
         private void HandleDamage(int damage)
         {

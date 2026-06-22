@@ -1,7 +1,9 @@
 ﻿using Audio;
 using Core;
+using SaveSystem;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MenuScripts
 {
@@ -13,16 +15,36 @@ namespace MenuScripts
         private SoundData gameplaySoundData;
         [SerializeField]
         private SettingsMenu settingsMenu;
-
+        
+        [SerializeField]
+        private Button continueButton;
+        
         private void Start()
         {
+            Debug.Log("ПУТЬ К СОХРАНЕНИЮ: " + Application.persistentDataPath);
             if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
+            
+            if (continueButton != null)
+            {
+                continueButton.interactable = SessionSaveManager.HasSavedSession();
+            }
         }
 
         public void PlayGame()
         {
+            SessionSaveManager.IsSaveLoaded = false;
+            SessionSaveManager.DeleteSession();
             SceneTransitions.LoadScene("GameScene");
+        }
+        
+        public void ContinueGame()
+        {
+            if (SessionSaveManager.HasSavedSession())
+            {
+                SessionSaveManager.IsSaveLoaded = true;
+                SceneTransitions.LoadScene("GameScene");
+            }
         }
 
         public void QuitGame()
