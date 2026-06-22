@@ -5043,8 +5043,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3221225472
-  m_fontColor: {r: 0, g: 0, b: 0, a: 0.7529412}
+    rgba: 2147483648
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0.5019608}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5177,7 +5177,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5080142134199866115}
   levelText: {fileID: 334778342772774804}
   shadowLevelText: {fileID: 8763040173867173664}
-  previewColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.627451}
+  previewColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.5019608}
   animationDuration: 0.1
 --- !u!212 &5080142134199866115
 SpriteRenderer:
@@ -5418,8 +5418,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2696722305
-  m_fontColor: {r: 0.50398713, g: 0.71928746, b: 0.735849, a: 0.627451}
+    rgba: 2159851393
+  m_fontColor: {r: 0.50398713, g: 0.71928746, b: 0.735849, a: 0.5019608}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

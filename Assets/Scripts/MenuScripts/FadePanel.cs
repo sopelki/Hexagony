@@ -77,7 +77,10 @@ namespace MenuScripts
             while (Time.unscaledTime - startTime < duration)
             {
                 var elapsed = Time.unscaledTime - startTime;
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / duration);
+                var t = Mathf.Clamp01(elapsed / duration);
+                var easedT = t * t * (3f - 2f * t);
+                // var easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, easedT);
                 yield return null;
             }
 

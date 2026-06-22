@@ -88,6 +88,9 @@ namespace UI
         {
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
             
+            if (hpPercent == 0 && model.Hp > 0)
+                hpPercent = 1;
+            
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
