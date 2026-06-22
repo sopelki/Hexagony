@@ -4,6 +4,7 @@ using Core;
 using Logic.Castle;
 using Logic.Monster;
 using Misc;
+using SaveSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -99,6 +100,7 @@ namespace MenuScripts
 
         public void RestartGame()
         {
+            SessionSaveManager.DeleteSession();
             SceneTransitions.LoadScene(SceneManager.GetActiveScene().name);
         }
 

@@ -80,14 +80,17 @@ namespace Logic.Monster
             }
         }
 
-        public void StartSavedGame(int savedWaveNumber)
+        public void StartSavedGame(int savedWaveNumber, InfiniteModeSettings infiniteSettings)
         {
             if (gameStarted) return;
 
             gameStarted = true;
-            currentWaveNumber = savedWaveNumber;
-
-            spawner.SetWaveIndex(savedWaveNumber - 1);
+            currentWaveNumber = savedWaveNumber; 
+            var maxNormalWaves = spawner.NormalWaves;
+            
+            if (savedWaveNumber >= maxNormalWaves)
+                spawner.EnableInfiniteMode(infiniteSettings);
+            spawner.SetWaveIndex(savedWaveNumber - 1); 
 
             waitingForNextWave = false;
             isDelaying = true;

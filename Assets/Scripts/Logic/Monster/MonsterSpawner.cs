@@ -30,6 +30,8 @@ namespace Logic.Monster
 
         private InfiniteModeSettings infiniteSettings;
         private bool isInfiniteMode;
+        
+        public int NormalWaves => waves.Count;
 
         public MonsterSpawner(
             List<Vector2Int> spawnHexes,
@@ -135,7 +137,7 @@ namespace Logic.Monster
             MonsterData data;
             float hMult, dMult, sMult;
 
-            if (currentWaveIndex < waves.Count)
+            if (currentWaveIndex < NormalWaves)
             {
                 var wave = waves[currentWaveIndex];
                 data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
@@ -145,7 +147,7 @@ namespace Logic.Monster
             }
             else
             {
-                var extraWaves = currentWaveIndex - waves.Count + 1;
+                var extraWaves = currentWaveIndex - NormalWaves + 1;
                 var wave = infiniteSettings.referenceWave;
                 data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
 

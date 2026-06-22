@@ -12,13 +12,15 @@ namespace SaveSystem
         private readonly TrapSystem trapSystem;
         private readonly CastleSystem castleSystem;
         private readonly WaveManager waveManager;
+        private readonly InfiniteModeSettings infiniteSettings;
         
-        public SessionController(TowerSystem towerSystem, TrapSystem trapSystem, CastleSystem castleSystem, WaveManager waveManager)
+        public SessionController(TowerSystem towerSystem, TrapSystem trapSystem, CastleSystem castleSystem, WaveManager waveManager, InfiniteModeSettings infiniteSettings)
         {
             this.towerSystem = towerSystem;
             this.trapSystem = trapSystem;
             this.castleSystem = castleSystem;
             this.waveManager = waveManager;
+            this.infiniteSettings = infiniteSettings;
             
             this.waveManager.OnWaveCleared += SaveCurrentState;
         }
@@ -69,7 +71,7 @@ namespace SaveSystem
             castleSystem.Model.Gold = data.gold;
             castleSystem.Model.Changed();
 
-            waveManager.StartSavedGame(data.currentWaveNumber);
+            waveManager.StartSavedGame(data.currentWaveNumber, infiniteSettings);
         }
     }
 }
