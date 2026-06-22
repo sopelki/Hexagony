@@ -22170,7 +22170,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6647511006896912986, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
-      propertyPath: m_ActiveFontFeatures.Array.data[1]
+      propertyPath: 'm_ActiveFontFeatures.Array.data[1]'
       value: 1818847073
       objectReference: {fileID: 0}
     - target: {fileID: 7771766130602506605, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
@@ -27045,9 +27045,9 @@ MonoBehaviour:
   hpText: {fileID: 982661179}
   goldText: {fileID: 175668063}
   foodText: {fileID: 1205989936}
+  inventoryItemPrefab: {fileID: 8398991809077642870, guid: bd2ee03be53b7c14ea9fd74bea7506e9, type: 3}
   damageColor: {r: 0.78867924, g: 0.20088992, b: 0.20088992, a: 1}
   flashDuration: 0.125
-  inventoryItemPrefab: {fileID: 8398991809077642870, guid: bd2ee03be53b7c14ea9fd74bea7506e9, type: 3}
 --- !u!4 &998659909
 Transform:
   m_ObjectHideFlags: 0
@@ -29714,6 +29714,7 @@ MonoBehaviour:
   trapViewManager: {fileID: 1805502348}
   soundData: {fileID: 11400000, guid: 46a3f0b4faf3c4447b41a4d4118726cc, type: 2}
   tutorialManager: {fileID: 1919606402}
+  infiniteSettings: {fileID: 11400000, guid: 1975ad1f325c4c74c99314323c153b44, type: 2}
   magnitudeScale: 256
   cameraShaker: {fileID: 519420036}
 --- !u!4 &1242743165

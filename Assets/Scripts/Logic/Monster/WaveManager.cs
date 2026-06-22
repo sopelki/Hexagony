@@ -72,9 +72,6 @@ namespace Logic.Monster
                 }
             }
         }
-
-        public event Action OnGameWon;
-        public event Action<int> OnWaveStarting;
         
         private static void SaveHighScore(int wave)
         {
@@ -86,13 +83,16 @@ namespace Logic.Monster
             }
         }
         
-        public void StartSavedGame(int savedWaveNumber)
+        public void StartSavedGame(int savedWaveNumber, InfiniteModeSettings infiniteSettings)
         {
             if (gameStarted) return;
 
             gameStarted = true;
             currentWaveNumber = savedWaveNumber; 
+            var maxNormalWaves = spawner.NormalWaves;
             
+            if (savedWaveNumber >= maxNormalWaves)
+                spawner.EnableInfiniteMode(infiniteSettings);
             spawner.SetWaveIndex(savedWaveNumber - 1); 
 
             waitingForNextWave = false;

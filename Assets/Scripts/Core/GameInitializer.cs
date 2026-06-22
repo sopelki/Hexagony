@@ -91,6 +91,10 @@ namespace Core
         private CastleView castleView;
         private Field.Field field;
         private GameFlowManager gameFlowManager;
+        
+        [Header("Infinite Mode")]
+        [SerializeField]
+        private InfiniteModeSettings infiniteSettings;
 
         [Header("CameraShake Settings")]
         [SerializeField]
@@ -204,7 +208,7 @@ namespace Core
             if (trapViewManager != null)
                 trapViewManager.Initialize(trapsModel, field, tilemap);
             
-            var sessionController = new SessionController(towerSystem, trapSystem, castleSystem, waveManager);
+            var sessionController = new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings);
             
             var isLoaded = false;
             if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())

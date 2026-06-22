@@ -26,7 +26,9 @@ namespace SaveSystem
         
         public static void DeleteSession()
         {
-            if (File.Exists(SaveFilePath)) File.Delete(SaveFilePath);
+            if (File.Exists(SaveFilePath)) 
+                File.Delete(SaveFilePath);
+            IsSaveLoaded = false;
         }
         
         public static bool HasSavedSession() => File.Exists(SaveFilePath);
