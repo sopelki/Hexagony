@@ -23,6 +23,7 @@ namespace SaveSystem
     public class TowerSaveData
     {
         public TowerType type;
+        public int level;
         public Vector3Int gridPosition;
         public Vector3 worldPosition;
     }

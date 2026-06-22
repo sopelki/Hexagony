@@ -35,7 +35,7 @@ namespace SaveSystem
             };
             
             foreach (var tower in towerSystem.GetTowers())
-                data.towers.Add(new TowerSaveData { type = tower.Data.type, gridPosition = tower.GridPosition, worldPosition = tower.WorldPosition });
+                data.towers.Add(new TowerSaveData { type = tower.Data.type, level = tower.Level, gridPosition = tower.GridPosition, worldPosition = tower.WorldPosition });
             
             foreach (var trap in trapSystem.GetTraps())
             {
@@ -60,7 +60,7 @@ namespace SaveSystem
                 castleSystem.TryBuyBuilding(GameData.Instance.GetBuildingData(b.type));
             
             foreach (var t in data.towers)
-                towerSystem.TryPlaceTower(GameData.Instance.GetTowerData(t.type), t.gridPosition, t.worldPosition);
+                towerSystem.TryPlaceTower(GameData.Instance.GetTowerData(t.type), t.gridPosition, t.worldPosition, t.level);
             
             foreach (var trap in data.traps)
                 trapSystem.TryPlaceTrap(GameData.Instance.GetTrapData(trap.type), trap.centerHex);

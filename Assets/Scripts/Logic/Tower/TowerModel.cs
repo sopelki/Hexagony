@@ -5,12 +5,12 @@ namespace Logic.Tower
 {
     public class TowerModel
     {
-        public TowerModel(TowerData data, Vector3Int gridPos, Vector3 worldPos)
+        public TowerModel(TowerData data, Vector3Int gridPos, Vector3 worldPos, int level = 1)
         {
             Data = data;
             GridPosition = gridPos;
             WorldPosition = worldPos;
-            Level = 1;
+            Level = level;
         }
 
         public TowerData Data { get; }

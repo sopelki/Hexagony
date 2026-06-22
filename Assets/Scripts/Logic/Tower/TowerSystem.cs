@@ -95,7 +95,7 @@ namespace Logic.Tower
             return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
         }
 
-        public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos)
+        public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos, int level = 1)
         {
             if (!CanAffordTower(data))
                 return false;
@@ -118,7 +118,7 @@ namespace Logic.Tower
             }
 
             castleSystem.TrySpendGold(data.baseCost);
-            var tower = new TowerModel(data, cellPos, worldPos);
+            var tower = new TowerModel(data, cellPos, worldPos, level);
             towersModel.AddTower(tower);
 
             if (soundData != null && soundData.towerPlaceSound != null)
