@@ -25,14 +25,17 @@ namespace UI
 
             while (elapsed < duration)
             {
-                var currentMagnitude = magnitude * (1f - elapsed / duration);
-                
+                if (Time.timeScale > 0)
+                    elapsed += Time.unscaledDeltaTime;
+
+                var t = elapsed / duration;
+                var currentMagnitude = magnitude * (1f - t);
+
                 var x = Random.Range(-1f, 1f) * currentMagnitude;
                 var y = Random.Range(-1f, 1f) * currentMagnitude;
 
                 transform.localPosition = originalPos + new Vector3(x, y, 0);
 
-                elapsed += Time.deltaTime;
                 yield return null;
             }
 

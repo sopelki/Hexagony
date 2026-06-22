@@ -19,7 +19,7 @@ namespace UI
         [SerializeField]
         private Color damageColor = new(0.8f, 0.2f, 0.2f);
         [SerializeField]
-        private float flashDuration = 0.125f;
+        private float flashDuration = 0.16f;
 
         private Color originalColor;
         private Coroutine flashCoroutine;
@@ -68,15 +68,19 @@ namespace UI
 
             while (elapsed < flashDuration)
             {
-                elapsed += Time.deltaTime;
+                if (Time.timeScale > 0)
+                    elapsed += Time.unscaledDeltaTime;
+
                 var t = elapsed / flashDuration;
+                
                 hpText.color = Color.Lerp(damageColor, originalColor, t);
                 hpText.transform.localScale = Vector3.Lerp(punchScale, originalScale, t);
 
                 yield return null;
             }
 
-            hpText.color = originalColor;
+            hpText.color = model.Hp <= 0 ? damageColor : originalColor;
+            hpText.transform.localScale = originalScale;
             flashCoroutine = null;
         }
 
@@ -87,6 +91,12 @@ namespace UI
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
+
+            if (model.Hp <= 0)
+                hpText.color = damageColor;
+            
+            else if (flashCoroutine == null)
+                hpText.color = originalColor;
         }
     }
 }
