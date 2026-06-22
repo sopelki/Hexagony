@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Logic.Castle;
 using TMPro;
 using UnityEngine;
@@ -13,22 +14,67 @@ namespace UI
         private TextMeshProUGUI goldText;
         [SerializeField]
         private TextMeshProUGUI foodText;
-        private CastleSystem castleSystem;
 
+        [Header("Effects")]
+        [SerializeField]
+        private Color damageColor = new(0.8f, 0.2f, 0.2f);
+        [SerializeField]
+        private float flashDuration = 0.125f;
+
+        private Color originalColor;
+        private Coroutine flashCoroutine;
+
+        private CastleSystem castleSystem;
         private CastleModel model;
+
+        private void Awake()
+        {
+            originalColor = hpText.color;
+        }
 
         private void OnDestroy()
         {
             if (model != null)
+            {
                 model.OnChanged -= UpdateUI;
+                model.OnDamaged -= HandleDamage;
+            }
         }
 
         public void Initialize(CastleSystem castleSystem)
         {
             model = castleSystem.Model;
             this.castleSystem = castleSystem;
+
             model.OnChanged += UpdateUI;
+            model.OnDamaged += HandleDamage;
+
             UpdateUI();
+        }
+
+        private void HandleDamage(int damage)
+        {
+            if (flashCoroutine != null)
+                StopCoroutine(flashCoroutine);
+
+            flashCoroutine = StartCoroutine(FlashHpRoutine());
+        }
+
+        private IEnumerator FlashHpRoutine()
+        {
+            var elapsed = 0f;
+
+            while (elapsed < flashDuration)
+            {
+                elapsed += Time.deltaTime;
+                var t = elapsed / flashDuration;
+                hpText.color = Color.Lerp(damageColor, originalColor, t);
+
+                yield return null;
+            }
+
+            hpText.color = originalColor;
+            flashCoroutine = null;
         }
 
         private void UpdateUI()
