@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Logic.Tower
@@ -9,12 +10,26 @@ namespace Logic.Tower
             Data = data;
             GridPosition = gridPos;
             WorldPosition = worldPos;
+            Level = 1;
         }
 
         public TowerData Data { get; }
         public Vector3Int GridPosition { get; }
         public Vector3 WorldPosition { get; }
+        public int Level { get; private set; }
         public float CooldownTimer { get; set; }
         public int ShotsLeft { get; set; }
+
+        public event Action<int> OnLevelUp;
+
+        public void Upgrade()
+        {
+            Level++;
+            OnLevelUp?.Invoke(Level);
+        }
+
+        public float CurrentRange => Data.range * Mathf.Pow(Data.rangeMultiplierPerLevel, Level - 1);
+        public float CurrentDamage => Data.projectileData.damage * Mathf.Pow(Data.damageMultiplierPerLevel, Level - 1);
+        public float CurrentFireRate => Data.fireRate * Mathf.Pow(Data.fireRateMultiplierPerLevel, Level - 1);
     }
 }

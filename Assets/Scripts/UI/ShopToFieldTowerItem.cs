@@ -352,7 +352,11 @@ namespace UI
             if (!TryFindValidSlot(eventData, cellPos, out var slotPos))
                 return false;
             if (towerSystem.IsCellOccupied(slotPos))
-                return false;
+            {
+                if (!towerSystem.CanPlaceTower(towerData, slotPos))
+                    return false;
+            }
+
             if (!TryGetSlotCanvasPosition(slotPos, eventData, out var slotCanvasLocal))
                 return false;
 

@@ -78,26 +78,47 @@ namespace Logic.Tower
 
         public event Action OnFirstTowerPlaced;
 
+        public bool CanAffordTower(TowerData data) => castleSystem.CanAfford(data.baseCost);
+
+        public bool IsCellOccupied(Vector3Int cellPos) => towersModel.Towers.Any(t => t.GridPosition == cellPos);
+
+        // public bool IsCellOccupiedBySameType(Vector3Int cellPos, TowerData data)
+        // {
+        //     var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+        //     return existingTower != null && existingTower.Data.type == data.type;
+        // }
+
         public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
         {
-            return !IsCellOccupied(cellPos) && CanAffordTower(data);
-        }
+            if (!CanAffordTower(data))
+                return false;
 
-        public bool CanAffordTower(TowerData data)
-        {
-            return castleSystem.CanAfford(data.baseCost);
-        }
+            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
 
-        public bool IsCellOccupied(Vector3Int cellPos)
-        {
-            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
+            return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
         }
 
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos)
         {
-            if (!CanPlaceTower(data, cellPos))
+            if (!CanAffordTower(data))
                 return false;
 
+            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+
+            if (existingTower != null)
+            {
+                if (existingTower.Data.type == data.type && existingTower.Level < data.maxLevel)
+                {
+                    castleSystem.TrySpendGold(data.baseCost);
+                    existingTower.Upgrade();
+
+                    if (soundData?.towerPlaceSound != null)
+                        AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
+
+                    return true;
+                }
+                return false;
+            }
 
             castleSystem.TrySpendGold(data.baseCost);
             var tower = new TowerModel(data, cellPos, worldPos);
@@ -151,7 +172,10 @@ namespace Logic.Tower
                 target,
                 tower.Data.projectileData,
                 interceptPoint
-            );
+            )
+            {
+                Damage = (int)tower.CurrentDamage
+            };
 
             projectileSystem.CreateProjectile(projectile);
         }
@@ -191,7 +215,7 @@ namespace Logic.Tower
             return monsters
                 .Where(m => !m.IsDead)
                 .Select(m => new { Monster = m, Distance = Vector3.Distance(tower.WorldPosition, m.WorldPosition) })
-                .Where(x => x.Distance <= tower.Data.range)
+                .Where(x => x.Distance <= tower.CurrentRange)
                 .OrderBy(x => x.Distance)
                 .Take(tower.Data.targetsCount)
                 .Select(x => x.Monster)
