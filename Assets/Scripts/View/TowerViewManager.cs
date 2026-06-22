@@ -36,9 +36,7 @@ namespace View
             foreach (var tower in model.Towers)
             {
                 if (!views.ContainsKey(tower))
-                {
                     HandleTowerAdded(tower);
-                }
             }
         }
 

@@ -21,14 +21,12 @@ namespace MenuScripts
         
         private void Start()
         {
-            Debug.Log("ПУТЬ К СОХРАНЕНИЮ: " + Application.persistentDataPath);
+            Debug.Log("Save path: " + Application.persistentDataPath);
             if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
             
             if (continueButton != null)
-            {
                 continueButton.interactable = SessionSaveManager.HasSavedSession();
-            }
         }
 
         public void PlayGame()

@@ -18,12 +18,9 @@ namespace Logic.Monster
         private bool isDelaying;
 
         private bool waitingForNextWave;
-        
-        public event Action<int> OnWaveCleared;
-
         private const string HighScoreKey = "MaxWaveReached";
-        public int HighScore => PlayerPrefs.GetInt(HighScoreKey, 0);
 
+        public event Action<int> OnWaveCleared;
         public event Action OnGameWon;
         public event Action<int> OnWaveStarting;
 
@@ -73,9 +70,6 @@ namespace Logic.Monster
             }
         }
 
-        public event Action OnGameWon;
-        public event Action<int> OnWaveStarting;
-        
         private static void SaveHighScore(int wave)
         {
             var currentBest = PlayerPrefs.GetInt(HighScoreKey, 0);
@@ -85,15 +79,15 @@ namespace Logic.Monster
                 PlayerPrefs.Save();
             }
         }
-        
+
         public void StartSavedGame(int savedWaveNumber)
         {
             if (gameStarted) return;
 
             gameStarted = true;
-            currentWaveNumber = savedWaveNumber; 
-            
-            spawner.SetWaveIndex(savedWaveNumber - 1); 
+            currentWaveNumber = savedWaveNumber;
+
+            spawner.SetWaveIndex(savedWaveNumber - 1);
 
             waitingForNextWave = false;
             isDelaying = true;

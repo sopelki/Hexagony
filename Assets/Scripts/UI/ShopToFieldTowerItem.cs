@@ -207,7 +207,7 @@ namespace UI
 
             CleanupGhost();
 
-            bool placed = TryPlaceTower(eventData);
+            var placed = TryPlaceTower(eventData);
 
             if (placed)
             {

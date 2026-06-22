@@ -59,7 +59,7 @@ namespace UI
         {
             var allSlots = FindObjectsByType<DropSlot>();
     
-            for (int i = 0; i < savedBuildings.Count; i++)
+            for (var i = 0; i < savedBuildings.Count; i++)
             {
                 if (i >= allSlots.Length) break;
         
