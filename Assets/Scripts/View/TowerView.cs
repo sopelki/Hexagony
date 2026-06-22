@@ -17,7 +17,7 @@ namespace View
 
         [Header("Animation")]
         [SerializeField]
-        private float animationDuration = 0.1f;
+        private float animationDuration = 0.5f;
 
         private Color originalColor;
         private Coroutine levelAnimation;
@@ -53,18 +53,22 @@ namespace View
         {
             var newRoman = level <= 1 ? "" : IntToRoman(level);
 
-            if (levelText.text == newRoman)
+            if (levelText.text == newRoman || string.IsNullOrEmpty(newRoman))
             {
                 float elapsed = 0;
                 var startColor = levelText.color;
                 var startScale = levelText.transform.localScale;
+
+                var finalTargetColor = targetColor;
+                if (string.IsNullOrEmpty(newRoman))
+                    finalTargetColor.a = 0;
 
                 while (elapsed < animationDuration)
                 {
                     elapsed += Time.unscaledDeltaTime;
                     var progress = elapsed / animationDuration;
 
-                    levelText.color = Color.Lerp(startColor, targetColor, progress);
+                    levelText.color = Color.Lerp(startColor, finalTargetColor, progress);
 
                     if (shadowLevelText)
                         shadowLevelText.color = new Color(0, 0, 0, levelText.color.a);
@@ -74,9 +78,10 @@ namespace View
                     yield return null;
                 }
 
-                levelText.color = targetColor;
-                if (shadowLevelText)
-                    shadowLevelText.color = new Color(0, 0, 0, targetColor.a);
+                levelText.text = newRoman;
+                if (shadowLevelText) shadowLevelText.text = newRoman;
+
+                levelText.color = finalTargetColor;
                 levelText.transform.localScale = originalTextScale;
                 yield break;
             }
@@ -97,7 +102,7 @@ namespace View
                     shadowLevelText.color = new Color(0, 0, 0, c.a);
 
                 var scaleEffect = Mathf.Sin(t * Mathf.PI * 0.5f);
-                levelText.transform.localScale = originalTextScale * Mathf.Lerp(0.5f, 1f, scaleEffect);
+                levelText.transform.localScale = originalTextScale * Mathf.Lerp(0.6f, 1f, scaleEffect);
 
                 yield return null;
             }

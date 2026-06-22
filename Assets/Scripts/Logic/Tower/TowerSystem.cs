@@ -150,8 +150,7 @@ namespace Logic.Tower
                 volume = soundData.archerShootVolume;
             }
 
-            if (soundData != null &&
-                soundData.archerTowerShootSounds is { Length: > 0 })
+            if (soundData != null && sound is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(sound, volume);
 
             var firePoint = tower.WorldPosition +
@@ -219,10 +218,7 @@ namespace Logic.Tower
                 .ToList();
         }
 
-        public List<TowerModel> GetTowers()
-        {
-            return (List<TowerModel>)towersModel.Towers;
-        }
+        public List<TowerModel> GetTowers() => towersModel.Towers.ToList();
 
         public void Clear()
         {
