@@ -71,7 +71,7 @@ namespace Logic.Tower
                 else
                 {
                     tower.ShotsLeft = tower.Data.targetsCount - 1;
-                    tower.CooldownTimer = 1f / tower.Data.fireRate;
+                    tower.CooldownTimer = 1f / tower.CurrentFireRate;
                 }
             }
         }

@@ -27,10 +27,10 @@ namespace Logic.Tower
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
             var stats =
-                $"Урон: <color=#EF5350>{projectileData.damage}/+{damageMultiplierPerLevel * 100 % 100}%</color>\n" +
+                $"Урон: <color=#EF5350>{projectileData.damage}</color>/<color=#EF5350>+{damageMultiplierPerLevel * 100 % 100}%</color>\n" +
                 $"Целей: <color=#AB47BC>{targetsCount}</color>\n" +
-                $"Скорость: <color=#FF7733>{fireRate}с/+{fireRateMultiplierPerLevel * 100 % 100}%</color>\n" +
-                $"Дальность: <color=#FFA726>{range}/+{rangeMultiplierPerLevel * 100 % 100}%</color>";
+                $"Скорость: <color=#FF7733>{fireRate}с</color>/<color=#FF7733>+{fireRateMultiplierPerLevel * 100 % 100}%</color>\n" +
+                $"Дальность: <color=#FFA726>{range}</color>/<color=#FFA726>+{rangeMultiplierPerLevel * 100 % 100}%</color>";
 
             return new TooltipContent
             {

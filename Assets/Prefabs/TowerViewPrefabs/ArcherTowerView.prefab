@@ -249,7 +249,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5080142134199866115}
   levelText: {fileID: 8009811756912018330}
   shadowLevelText: {fileID: 2784894264514027341}
-  previewColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.5019608}
+  previewColor: {r: 0.97735846, g: 0.7991865, b: 0.24894969, a: 0.5019608}
   animationDuration: 0.1
 --- !u!212 &5080142134199866115
 SpriteRenderer:
