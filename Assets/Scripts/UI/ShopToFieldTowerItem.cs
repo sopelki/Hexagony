@@ -203,11 +203,19 @@ namespace UI
                 return;
 
             isDragging = false;
-            ResetCurrentPreview();
             GlobalCursorManager.Instance.ReleaseHold(eventData);
 
             CleanupGhost();
-            TryPlaceTower(eventData);
+
+            bool placed = TryPlaceTower(eventData);
+
+            if (placed)
+            {
+                lastPreviewedModel = null;
+                lastPreviewedView = null;
+            }
+            else
+                ResetCurrentPreview();
 
             if (iconCanvasGroup != null)
             {
@@ -263,32 +271,32 @@ namespace UI
             towerSystem = system;
         }
 
-        private void TryPlaceTower(PointerEventData eventData)
+        private bool TryPlaceTower(PointerEventData eventData)
         {
             var cam = Camera.main;
             if (cam == null || mapViewport == null || fieldTilemap == null)
-                return;
+                return false;
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     mapViewport, eventData.position, eventData.pressEventCamera, out var local))
-                return;
+                return false;
 
             var u = local.x / mapViewport.rect.width + 0.5f;
             var v = local.y / mapViewport.rect.height + 0.5f;
             if (u < 0f || u > 1f || v < 0f || v > 1f)
-                return;
+                return false;
 
             var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
             var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
             var cellPos = fieldTilemap.WorldToCell(worldPos);
 
             if (!TryFindValidSlot(eventData, cellPos, out var closestSlotPos))
-                return;
+                return false;
 
             var spawnPos = fieldTilemap.GetCellCenterWorld(closestSlotPos);
             spawnPos.z = fieldTilemap.transform.position.z;
 
-            towerSystem.TryPlaceTower(towerData, closestSlotPos, spawnPos);
+            return towerSystem.TryPlaceTower(towerData, closestSlotPos, spawnPos);
         }
 
         private IEnumerator FadeInIcon()

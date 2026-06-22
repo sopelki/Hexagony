@@ -1,4 +1,4 @@
-using System.Collections; // Нужно для корутин
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ namespace View
 
         [Header("Animation")]
         [SerializeField]
-        private float animationDuration = 0.2f;
+        private float animationDuration = 0.1f;
 
         private Color originalColor;
         private Coroutine levelAnimation;
@@ -57,16 +57,27 @@ namespace View
             {
                 float elapsed = 0;
                 var startColor = levelText.color;
+                var startScale = levelText.transform.localScale;
+
                 while (elapsed < animationDuration)
                 {
                     elapsed += Time.unscaledDeltaTime;
-                    levelText.color = Color.Lerp(startColor, targetColor, elapsed / animationDuration);
+                    var progress = elapsed / animationDuration;
+
+                    levelText.color = Color.Lerp(startColor, targetColor, progress);
 
                     if (shadowLevelText)
                         shadowLevelText.color = new Color(0, 0, 0, levelText.color.a);
 
+                    levelText.transform.localScale = Vector3.Lerp(startScale, originalTextScale, progress);
+
                     yield return null;
                 }
+
+                levelText.color = targetColor;
+                if (shadowLevelText)
+                    shadowLevelText.color = new Color(0, 0, 0, targetColor.a);
+                levelText.transform.localScale = originalTextScale;
                 yield break;
             }
 
@@ -90,6 +101,9 @@ namespace View
 
                 yield return null;
             }
+
+            levelText.color = targetColor;
+            levelText.transform.localScale = originalTextScale;
         }
 
         private void SetLevelImmediate(int level)
