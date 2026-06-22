@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Audio;
 using Field;
 using Logic.Castle;
@@ -9,6 +10,7 @@ using Logic.Trap;
 using Logic.Unit;
 using MenuScripts;
 using Misc;
+using SaveSystem;
 using UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -185,6 +187,36 @@ namespace Core
 
             if (trapViewManager != null)
                 trapViewManager.Initialize(trapsModel, field, tilemap);
+            
+            var sessionController = new SessionController(towerSystem, trapSystem, castleSystem, waveManager);
+            
+            var isLoaded = false;
+            if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())
+            {
+                sessionController.LoadState();
+                towerViewManager.SyncWithModel();
+                isLoaded = true;
+                
+                var allSlots = FindObjectsByType<DropSlot>().ToList();
+                castleUI.SyncBuildingsUI(castleSystem.Model.Buildings);
+            }
+            
+            gameFlowManager = new GameFlowManager(
+                waveManager,
+                towerSystem,
+                trapSystem,
+                castleSystem,
+                startGameHintUI
+            );
+            
+            gameFlowManager.Initialize(); 
+            if (tutorialManager != null) 
+            {
+                if (isLoaded)
+                    tutorialManager.ForceStopTutorial();
+                else
+                    tutorialManager.Setup(gameFlowManager);
+            }
 
             var shopItems = FindObjectsByType<ShopToFieldTowerItem>();
             foreach (var item in shopItems)
@@ -200,22 +232,6 @@ namespace Core
 
             if (startGameHintUI != null)
                 startGameHintUI.Initialize();
-
-            gameFlowManager = new GameFlowManager(
-                waveManager,
-                towerSystem,
-                trapSystem,
-                castleSystem,
-                startGameHintUI
-            );
-
-            gameFlowManager.Initialize();
-
-            if (tutorialManager != null)
-                tutorialManager.Setup(gameFlowManager);
-
-            if (soundData != null && soundData.backgroundMusic != null)
-                AudioManager.Instance.PlayMusic(soundData.backgroundMusic);
         }
     }
 }

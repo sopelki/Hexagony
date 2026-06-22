@@ -30,6 +30,9 @@ namespace View
 
             model.OnTrapAdded += HandleTrapAdded;
             model.OnTrapRemoved += HandleTrapRemoved;
+            
+            foreach (var trap in model.Traps)
+                HandleTrapAdded(trap);
         }
 
         private void HandleTrapAdded(TrapModel trap)

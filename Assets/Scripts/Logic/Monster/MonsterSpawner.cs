@@ -94,6 +94,11 @@ namespace Logic.Monster
         }
 
         public event Action OnWaveSpawnCompleted;
+        
+        public void SetWaveIndex(int index)
+        {
+            currentWaveIndex = index;
+        }
 
         public void EnableInfiniteMode(InfiniteModeSettings settings)
         {

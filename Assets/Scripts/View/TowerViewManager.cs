@@ -19,6 +19,20 @@ namespace View
         {
             model = modelToInitialize;
             model.OnChanged += HandleTowerAdded;
+            
+            foreach (var tower in model.Towers)
+                HandleTowerAdded(tower);
+        }
+        
+        public void SyncWithModel()
+        {
+            foreach (var tower in model.Towers)
+            {
+                if (!views.ContainsKey(tower))
+                {
+                    HandleTowerAdded(tower);
+                }
+            }
         }
 
         private void HandleTowerAdded(TowerModel towerModel)
