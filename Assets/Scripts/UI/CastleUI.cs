@@ -63,12 +63,15 @@ namespace UI
         private IEnumerator FlashHpRoutine()
         {
             var elapsed = 0f;
+            var originalScale = Vector3.one;
+            var punchScale = new Vector3(1.075f, 1.075f, 1.075f);
 
             while (elapsed < flashDuration)
             {
                 elapsed += Time.deltaTime;
                 var t = elapsed / flashDuration;
                 hpText.color = Color.Lerp(damageColor, originalColor, t);
+                hpText.transform.localScale = Vector3.Lerp(punchScale, originalScale, t);
 
                 yield return null;
             }
@@ -80,7 +83,7 @@ namespace UI
         private void UpdateUI()
         {
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
-
+            
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
