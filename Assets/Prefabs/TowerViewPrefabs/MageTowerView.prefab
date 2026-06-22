@@ -5011,7 +5011,7 @@ MeshRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1841721055
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8763040173867173664
@@ -5177,7 +5177,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5080142134199866115}
   levelText: {fileID: 334778342772774804}
   shadowLevelText: {fileID: 8763040173867173664}
-  debugRange: 0
+  previewColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.627451}
+  animationDuration: 0.2
 --- !u!212 &5080142134199866115
 SpriteRenderer:
   serializedVersion: 2
@@ -5385,7 +5386,7 @@ MeshRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1841721055
   m_SortingLayer: 4
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &334778342772774804
@@ -5417,8 +5418,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3231422577
-  m_fontColor: {r: 0.44313726, g: 0.59607846, b: 0.60784316, a: 0.7529412}
+    rgba: 2696722305
+  m_fontColor: {r: 0.50398713, g: 0.71928746, b: 0.735849, a: 0.627451}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using View;
 
 namespace UI
 {
@@ -78,6 +79,10 @@ namespace UI
         private TowerSystem towerSystem;
         private bool wasSnapping;
 
+        private TowerModel lastPreviewedModel;
+        private TowerView lastPreviewedView;
+        private Vector3Int currentHoveredSlot;
+
         private void Awake()
         {
             if (canvas == null)
@@ -139,6 +144,7 @@ namespace UI
             if (isDragging)
             {
                 isDragging = false;
+                ResetCurrentPreview();
                 CleanupGhost();
                 GlobalCursorManager.Instance.ReleaseHold(null);
 
@@ -197,6 +203,7 @@ namespace UI
                 return;
 
             isDragging = false;
+            ResetCurrentPreview();
             GlobalCursorManager.Instance.ReleaseHold(eventData);
 
             CleanupGhost();
@@ -209,6 +216,40 @@ namespace UI
 
                 fadeCoroutine = StartCoroutine(FadeInIcon());
             }
+        }
+
+        private void UpdateLevelPreview(bool isSnapping, Vector3Int slotPos)
+        {
+            if (isSnapping)
+            {
+                var existingTower = towerSystem.GetTowerAt(slotPos);
+
+                if (existingTower != lastPreviewedModel)
+                {
+                    ResetCurrentPreview();
+
+                    if (existingTower != null && existingTower.Data.type == towerData.type)
+                    {
+                        var view = TowerViewManager.Instance.GetViewAtCell(slotPos);
+                        if (view != null)
+                        {
+                            view.ShowPreviewLevel(existingTower.Level + 1);
+                            lastPreviewedModel = existingTower;
+                            lastPreviewedView = view;
+                        }
+                    }
+                }
+            }
+            else
+                ResetCurrentPreview();
+        }
+
+        private void ResetCurrentPreview()
+        {
+            if (lastPreviewedView != null && lastPreviewedModel != null)
+                lastPreviewedView.ResetPreview(lastPreviewedModel.Level);
+            lastPreviewedModel = null;
+            lastPreviewedView = null;
         }
 
         private void CleanupGhost()
@@ -329,6 +370,7 @@ namespace UI
             }
 
             CheckPlacementValidity(eventData);
+            UpdateLevelPreview(isSnapping, currentHoveredSlot);
         }
 
         private bool TryGetSnapPosition(PointerEventData eventData, Vector2 basePosition, out Vector2 snapPosition)
@@ -393,13 +435,22 @@ namespace UI
 
             if (TryFindValidSlot(eventData, cellPos, out var slotPos))
             {
+                currentHoveredSlot = slotPos;
                 var isValid = towerSystem.CanPlaceTower(towerData, slotPos);
 
+                var existingTower = towerSystem.GetTowerAt(slotPos);
+                var isUpgrade = existingTower != null && existingTower.Data.type == towerData.type;
+
                 targetScale = isValid ? 1f : startScaleMultiplier;
-                targetColor = isValid ? ghostValidColor : ghostInvalidColor;
+
+                if (isValid && isUpgrade)
+                    targetColor = new Color(ghostValidColor.r, ghostValidColor.g, ghostValidColor.b, 0f);
+                else
+                    targetColor = isValid ? ghostValidColor : ghostInvalidColor;
             }
             else
             {
+                currentHoveredSlot = new Vector3Int(-999, -999, -999);
                 targetScale = startScaleMultiplier;
                 targetColor = ghostValidColor;
             }

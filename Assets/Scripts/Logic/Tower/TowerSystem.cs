@@ -82,11 +82,8 @@ namespace Logic.Tower
 
         public bool IsCellOccupied(Vector3Int cellPos) => towersModel.Towers.Any(t => t.GridPosition == cellPos);
 
-        // public bool IsCellOccupiedBySameType(Vector3Int cellPos, TowerData data)
-        // {
-        //     var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
-        //     return existingTower != null && existingTower.Data.type == data.type;
-        // }
+        public TowerModel GetTowerAt(Vector3Int cellPos) =>
+            towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
 
         public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
         {

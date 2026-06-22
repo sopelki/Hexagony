@@ -9,6 +9,9 @@ namespace View
     {
         private readonly Dictionary<TowerModel, TowerView> views = new();
         private TowersModel model;
+        public static TowerViewManager Instance { get; private set; }
+
+        private void Awake() => Instance = this;
 
         private void OnDestroy()
         {
@@ -49,6 +52,12 @@ namespace View
                 Destroy(pair.Value.gameObject);
             }
             views.Clear();
+        }
+
+        public TowerView GetViewAtCell(Vector3Int cellPos)
+        {
+            var towerModel = views.Keys.FirstOrDefault(t => t.GridPosition == cellPos);
+            return towerModel != null ? views[towerModel] : null;
         }
     }
 }
