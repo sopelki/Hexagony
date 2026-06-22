@@ -26,7 +26,10 @@ namespace MenuScripts
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
             
             if (continueButton != null)
-                continueButton.interactable = SessionSaveManager.HasSavedSession();
+            {
+                var hasSession = SessionSaveManager.HasSavedSession();
+                continueButton.gameObject.SetActive(hasSession);
+            }
         }
 
         public void PlayGame()
