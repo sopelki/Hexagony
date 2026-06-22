@@ -42,7 +42,9 @@ namespace UI
 
         private IEnumerator DisplayWaveCoroutine(int waveNumber)
         {
-            var text = $"Началась волна {waveNumber} из {wavesCount}";
+            var text = waveNumber <= wavesCount
+                ? $"Началась волна {waveNumber} из {wavesCount}"
+                : $"Началась волна {waveNumber}";
 
             if (waveText)
                 waveText.text = text;

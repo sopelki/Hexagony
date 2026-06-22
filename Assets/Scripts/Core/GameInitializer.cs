@@ -92,6 +92,12 @@ namespace Core
         private Field.Field field;
         private GameFlowManager gameFlowManager;
 
+        [Header("CameraShake Settings")]
+        [SerializeField]
+        private float magnitudeScale = 20f;
+        [SerializeField]
+        private CameraShaker cameraShaker;
+
         private bool gameStarted;
         private MonsterSpawner monsterSpawner;
 
@@ -156,7 +162,11 @@ namespace Core
             towersModel = new TowersModel();
             towerSystem = new TowerSystem(castleSystem, towersModel, monsterSystem, projectileSystem, soundData);
 
-            if (tickManager == null) return;
+            if (tickManager == null)
+                return;
+
+            if (cameraShaker == null)
+                return;
 
             tickManager.OnTick += castleSystem.Tick;
             tickManager.OnTick += towerSystem.Tick;
@@ -169,6 +179,12 @@ namespace Core
 
             monsterSystem.OnMonsterDied += monster => { castleSystem.AddGold(monster.GoldReward); };
             monsterSystem.SubscribeToCastle(castleModel);
+
+            castleModel.OnDamaged += damage =>
+            {
+                var intensity = Mathf.Clamp(damage / magnitudeScale, 0.1f, 0.5f);
+                cameraShaker.Shake(0.2f, intensity);
+            };
         }
 
         private void Start()

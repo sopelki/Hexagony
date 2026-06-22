@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using Logic.Castle;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
@@ -18,21 +17,41 @@ namespace UI
         private TextMeshProUGUI foodText;
         [SerializeField]
         private GameObject inventoryItemPrefab;
-        private CastleSystem castleSystem;
 
+        [Header("Effects")]
+        [SerializeField]
+        private Color damageColor = new(0.8f, 0.2f, 0.2f);
+        [SerializeField]
+        private float flashDuration = 0.16f;
+
+        private Color originalColor;
+        private Coroutine flashCoroutine;
+
+        private CastleSystem castleSystem;
         private CastleModel model;
+
+        private void Awake()
+        {
+            originalColor = hpText.color;
+        }
 
         private void OnDestroy()
         {
             if (model != null)
+            {
                 model.OnChanged -= UpdateUI;
+                model.OnDamaged -= HandleDamage;
+            }
         }
 
         public void Initialize(CastleSystem castleSystem)
         {
             model = castleSystem.Model;
             this.castleSystem = castleSystem;
+
             model.OnChanged += UpdateUI;
+            model.OnDamaged += HandleDamage;
+
             UpdateUI();
         }
         
@@ -56,13 +75,51 @@ namespace UI
         }
         
 
+        private void HandleDamage(int damage)
+        {
+            if (flashCoroutine != null)
+                StopCoroutine(flashCoroutine);
+
+            flashCoroutine = StartCoroutine(FlashHpRoutine());
+        }
+
+        private IEnumerator FlashHpRoutine()
+        {
+            var elapsed = 0f;
+            var originalScale = Vector3.one;
+            var punchScale = new Vector3(1.075f, 1.075f, 1.075f);
+
+            while (elapsed < flashDuration)
+            {
+                if (Time.timeScale > 0)
+                    elapsed += Time.unscaledDeltaTime;
+
+                var t = elapsed / flashDuration;
+                
+                hpText.color = Color.Lerp(damageColor, originalColor, t);
+                hpText.transform.localScale = Vector3.Lerp(punchScale, originalScale, t);
+
+                yield return null;
+            }
+
+            hpText.color = model.Hp <= 0 ? damageColor : originalColor;
+            hpText.transform.localScale = originalScale;
+            flashCoroutine = null;
+        }
+
         private void UpdateUI()
         {
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
-
+            
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
+
+            if (model.Hp <= 0)
+                hpText.color = damageColor;
+            
+            else if (flashCoroutine == null)
+                hpText.color = originalColor;
         }
     }
 }

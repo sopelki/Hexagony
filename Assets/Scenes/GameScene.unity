@@ -4333,6 +4333,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420036}
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
   m_Layer: 0
@@ -4514,6 +4515,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
+--- !u!114 &519420036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd13214e2d03426b913aa14f970bca67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.CameraShaker
 --- !u!1 &520034714
 GameObject:
   m_ObjectHideFlags: 0
@@ -22157,7 +22170,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6647511006896912986, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[1]'
+      propertyPath: m_ActiveFontFeatures.Array.data[1]
       value: 1818847073
       objectReference: {fileID: 0}
     - target: {fileID: 7771766130602506605, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
@@ -27032,6 +27045,8 @@ MonoBehaviour:
   hpText: {fileID: 982661179}
   goldText: {fileID: 175668063}
   foodText: {fileID: 1205989936}
+  damageColor: {r: 0.78867924, g: 0.20088992, b: 0.20088992, a: 1}
+  flashDuration: 0.125
   inventoryItemPrefab: {fileID: 8398991809077642870, guid: bd2ee03be53b7c14ea9fd74bea7506e9, type: 3}
 --- !u!4 &998659909
 Transform:
@@ -29671,7 +29686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.GameInitializer
   startGold: 150
   startSupply: 3
-  startHp: 300
+  startHp: 500
   castleUI: {fileID: 998659908}
   waveNotificationUI: {fileID: 1558017290}
   startGameHintUI: {fileID: 846591570}
@@ -29695,10 +29710,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df41df57ae0a8b046a0d38d0c10b6499, type: 2}
   - {fileID: 11400000, guid: e6708fdc62017ae4b91413643def6a11, type: 2}
   - {fileID: 11400000, guid: 27735b7dcf25f2342aec38897f2b4d94, type: 2}
-  wavesDelay: 5
+  wavesDelay: 4
   trapViewManager: {fileID: 1805502348}
   soundData: {fileID: 11400000, guid: 46a3f0b4faf3c4447b41a4d4118726cc, type: 2}
   tutorialManager: {fileID: 1919606402}
+  magnitudeScale: 256
+  cameraShaker: {fileID: 519420036}
 --- !u!4 &1242743165
 Transform:
   m_ObjectHideFlags: 0
