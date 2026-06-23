@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Audio;
 using Field;
 using Logic.Castle;
@@ -86,12 +85,7 @@ namespace Core
         [Header("Tutorial")]
         [SerializeField]
         private TutorialManager tutorialManager;
-        private CastleModel castleModel;
-        private CastleSystem castleSystem;
-        private CastleView castleView;
-        private Field.Field field;
-        private GameFlowManager gameFlowManager;
-        
+
         [Header("Infinite Mode")]
         [SerializeField]
         private InfiniteModeSettings infiniteSettings;
@@ -101,12 +95,18 @@ namespace Core
         private float magnitudeScale = 20f;
         [SerializeField]
         private CameraShaker cameraShaker;
+        private CastleModel castleModel;
+        private CastleSystem castleSystem;
+        private CastleView castleView;
+        private Field.Field field;
+        private GameFlowManager gameFlowManager;
 
         private bool gameStarted;
         private MonsterSpawner monsterSpawner;
 
         private MonsterSystem monsterSystem;
         private ProjectileSystem projectileSystem;
+        private ShopPriceManager shopPriceManager;
         private TowersModel towersModel;
         private TowerSystem towerSystem;
         private TrapsModel trapsModel;
@@ -166,29 +166,32 @@ namespace Core
             towersModel = new TowersModel();
             towerSystem = new TowerSystem(castleSystem, towersModel, monsterSystem, projectileSystem, soundData);
 
-            if (tickManager == null)
-                return;
+            var allPriceLabels = new List<ShopPriceLabel>(FindObjectsByType<ShopPriceLabel>());
+            shopPriceManager = new ShopPriceManager(castleModel, allPriceLabels);
 
-            if (cameraShaker == null)
-                return;
-
-            tickManager.OnTick += castleSystem.Tick;
-            tickManager.OnTick += towerSystem.Tick;
-            tickManager.OnTick += unitSystem.Tick;
-            tickManager.OnTick += monsterSystem.Tick;
-            tickManager.OnTick += monsterSpawner.Tick;
-            tickManager.OnTick += projectileSystem.Tick;
-            tickManager.OnTick += waveManager.Tick;
-            tickManager.OnTick += trapSystem.Tick;
+            if (tickManager != null)
+            {
+                tickManager.OnTick += castleSystem.Tick;
+                tickManager.OnTick += towerSystem.Tick;
+                tickManager.OnTick += unitSystem.Tick;
+                tickManager.OnTick += monsterSystem.Tick;
+                tickManager.OnTick += monsterSpawner.Tick;
+                tickManager.OnTick += projectileSystem.Tick;
+                tickManager.OnTick += waveManager.Tick;
+                tickManager.OnTick += trapSystem.Tick;
+            }
 
             monsterSystem.OnMonsterDied += monster => { castleSystem.AddGold(monster.GoldReward); };
             monsterSystem.SubscribeToCastle(castleModel);
 
-            castleModel.OnDamaged += damage =>
+            if (cameraShaker != null)
             {
-                var intensity = Mathf.Clamp(damage / magnitudeScale, 0.1f, 0.5f);
-                cameraShaker.Shake(0.2f, intensity);
-            };
+                castleModel.OnDamaged += damage =>
+                {
+                    var intensity = Mathf.Clamp(damage / magnitudeScale, 0.1f, 0.5f);
+                    cameraShaker.Shake(0.2f, intensity);
+                };
+            }
         }
 
         private void Start()
@@ -207,20 +210,19 @@ namespace Core
 
             if (trapViewManager != null)
                 trapViewManager.Initialize(trapsModel, field, tilemap);
-            
-            var sessionController = new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings);
-            
+
+            var sessionController =
+                new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings);
+
             var isLoaded = false;
             if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())
             {
-                sessionController.LoadState();
+                StartCoroutine(sessionController.LoadStateRoutine());
                 towerViewManager.SyncWithModel();
                 isLoaded = true;
-                
-                var allSlots = FindObjectsByType<DropSlot>().ToList();
                 castleUI.SyncBuildingsUI(castleSystem.Model.Buildings);
             }
-            
+
             gameFlowManager = new GameFlowManager(
                 waveManager,
                 towerSystem,
@@ -228,9 +230,9 @@ namespace Core
                 castleSystem,
                 startGameHintUI
             );
-            
-            gameFlowManager.Initialize(); 
-            if (tutorialManager != null) 
+
+            gameFlowManager.Initialize();
+            if (tutorialManager != null)
             {
                 if (isLoaded)
                     tutorialManager.ForceStopTutorial();
@@ -238,20 +240,36 @@ namespace Core
                     tutorialManager.Setup(gameFlowManager);
             }
 
-            var shopItems = FindObjectsByType<ShopToFieldTowerItem>();
-            foreach (var item in shopItems)
+            foreach (var item in FindObjectsByType<ShopToFieldTowerItem>())
                 item.Construct(towerSystem);
 
-            var slots = FindObjectsByType<DropSlot>();
-            foreach (var slot in slots)
+            foreach (var slot in FindObjectsByType<DropSlot>())
                 slot.Construct(castleSystem);
 
-            var trapShopItems = FindObjectsByType<ShopToFieldTrapItem>();
-            foreach (var item in trapShopItems)
+            foreach (var item in FindObjectsByType<ShopToFieldTrapItem>())
                 item.Construct(trapSystem, field);
 
             if (startGameHintUI != null)
                 startGameHintUI.Initialize();
+        }
+
+        private void OnDestroy()
+        {
+            shopPriceManager?.Cleanup();
+
+            if (tickManager != null)
+            {
+                tickManager.OnTick -= castleSystem.Tick;
+                tickManager.OnTick -= towerSystem.Tick;
+                tickManager.OnTick -= unitSystem.Tick;
+                tickManager.OnTick -= monsterSystem.Tick;
+                tickManager.OnTick -= monsterSpawner.Tick;
+                tickManager.OnTick -= projectileSystem.Tick;
+                tickManager.OnTick -= waveManager.Tick;
+                tickManager.OnTick -= trapSystem.Tick;
+            }
+
+            castleModel?.Cleanup();
         }
     }
 }

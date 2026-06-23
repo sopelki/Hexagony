@@ -6,7 +6,6 @@ namespace Logic.Projectile
     public class ProjectileModel
     {
         public ProjectileData Data;
-        public int Damage { get; set; }
         public Vector3 Direction;
         public Vector3 Position;
         public Vector3 StartPosition;
@@ -35,6 +34,8 @@ namespace Logic.Projectile
 
             TravelProgress = 0f;
         }
+
+        public int Damage { get; set; }
 
         public float TowerBaseY { get; private set; }
     }

@@ -105,11 +105,6 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
             if (TMP_TextUtilities.IsIntersectingRectTransform(m_TextComponent.rectTransform, Input.mousePosition,
                     m_Camera))
             {
-                #region Nearest Character
-
-                #endregion
-
-
                 #region Example of Character or Sprite Selection
 
                 var charIndex =

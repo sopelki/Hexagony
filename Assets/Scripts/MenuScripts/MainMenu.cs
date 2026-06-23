@@ -15,16 +15,16 @@ namespace MenuScripts
         private SoundData gameplaySoundData;
         [SerializeField]
         private SettingsMenu settingsMenu;
-        
+
         [SerializeField]
         private Button continueButton;
-        
+
         private void Start()
         {
             Debug.Log("Save path: " + Application.persistentDataPath);
             if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
                 AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
-            
+
             if (continueButton != null)
             {
                 var hasSession = SessionSaveManager.HasSavedSession();
@@ -38,7 +38,7 @@ namespace MenuScripts
             SessionSaveManager.DeleteSession();
             SceneTransitions.LoadScene("GameScene");
         }
-        
+
         public void ContinueGame()
         {
             if (SessionSaveManager.HasSavedSession())

@@ -9,8 +9,6 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI hintText;
         [SerializeField]
-        private TextMeshProUGUI shadowText;
-        [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
         private float fadeInDuration = 0.5f;
@@ -36,14 +34,10 @@ namespace UI
             if (hintText == null)
                 return;
 
-            if (shadowText == null)
-                return;
-
             if (fadeCoroutine != null)
                 StopCoroutine(fadeCoroutine);
 
             hintText.text = message;
-            shadowText.text = message;
 
             fadeCoroutine = StartCoroutine(ShowAndHideHintCycle());
         }
@@ -55,7 +49,6 @@ namespace UI
 
             canvasGroup.alpha = 0;
             hintText.text = "";
-            shadowText.text = "";
         }
 
         private IEnumerator ShowAndHideHintCycle()
@@ -94,7 +87,6 @@ namespace UI
 
             canvasGroup.alpha = 0;
             hintText.text = "";
-            shadowText.text = "";
         }
     }
 }

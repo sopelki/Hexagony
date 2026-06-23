@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using Logic.Castle;
 using TMPro;
 using UnityEngine;
@@ -24,11 +24,11 @@ namespace UI
         [SerializeField]
         private float flashDuration = 0.16f;
 
-        private Color originalColor;
-        private Coroutine flashCoroutine;
-
         private CastleSystem castleSystem;
+        private Coroutine flashCoroutine;
         private CastleModel model;
+
+        private Color originalColor;
 
         private void Awake()
         {
@@ -54,26 +54,26 @@ namespace UI
 
             UpdateUI();
         }
-        
+
         public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
         {
             var allSlots = FindObjectsByType<DropSlot>();
-    
+
             for (var i = 0; i < savedBuildings.Count; i++)
             {
                 if (i >= allSlots.Length) break;
-        
+
                 var buildingData = savedBuildings[i].Data;
-                
+
                 var itemGo = Instantiate(inventoryItemPrefab, allSlots[i].transform.Find("ItemContainer"));
                 var item = itemGo.GetComponent<InventoryItem>();
-                
+
                 item.SetData(buildingData, false);
                 item.ApplyBuildingVisual(buildingData);
                 item.Place(allSlots[i].transform.Find("ItemContainer"));
             }
         }
-        
+
 
         private void HandleDamage(int damage)
         {
@@ -95,7 +95,7 @@ namespace UI
                     elapsed += Time.unscaledDeltaTime;
 
                 var t = elapsed / flashDuration;
-                
+
                 hpText.color = Color.Lerp(damageColor, originalColor, t);
                 hpText.transform.localScale = Vector3.Lerp(punchScale, originalScale, t);
 
@@ -110,17 +110,17 @@ namespace UI
         private void UpdateUI()
         {
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
-            
+
             if (hpPercent == 0 && model.Hp > 0)
                 hpPercent = 1;
-            
+
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
 
             if (model.Hp <= 0)
                 hpText.color = damageColor;
-            
+
             else if (flashCoroutine == null)
                 hpText.color = originalColor;
         }

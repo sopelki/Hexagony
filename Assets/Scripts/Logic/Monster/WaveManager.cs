@@ -7,6 +7,7 @@ namespace Logic.Monster
 {
     public class WaveManager : ITickable
     {
+        private const string HighScoreKey = "MaxWaveReached";
         private readonly float delayBetweenWaves;
         private readonly MonsterSystem monsterSystem;
 
@@ -18,11 +19,6 @@ namespace Logic.Monster
         private bool isDelaying;
 
         private bool waitingForNextWave;
-        private const string HighScoreKey = "MaxWaveReached";
-
-        public event Action<int> OnWaveCleared;
-        public event Action OnGameWon;
-        public event Action<int> OnWaveStarting;
 
         public WaveManager(MonsterSpawner spawner, MonsterSystem monsterSystem, float delayBetweenWaves)
         {
@@ -70,6 +66,10 @@ namespace Logic.Monster
             }
         }
 
+        public event Action<int> OnWaveCleared;
+        public event Action OnGameWon;
+        public event Action<int> OnWaveStarting;
+
         private static void SaveHighScore(int wave)
         {
             var currentBest = PlayerPrefs.GetInt(HighScoreKey, 0);
@@ -85,12 +85,12 @@ namespace Logic.Monster
             if (gameStarted) return;
 
             gameStarted = true;
-            currentWaveNumber = savedWaveNumber; 
+            currentWaveNumber = savedWaveNumber;
             var maxNormalWaves = spawner.NormalWaves;
-            
+
             if (savedWaveNumber >= maxNormalWaves)
                 spawner.EnableInfiniteMode(infiniteSettings);
-            spawner.SetWaveIndex(savedWaveNumber - 1); 
+            spawner.SetWaveIndex(savedWaveNumber - 1);
 
             waitingForNextWave = false;
             isDelaying = true;

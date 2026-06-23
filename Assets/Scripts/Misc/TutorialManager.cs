@@ -141,7 +141,7 @@ namespace Misc
                 case TutorialStep.HelpExplanation:
                     currentStep = TutorialStep.ClickExplanation;
                     break;
-                
+
                 case TutorialStep.ClickExplanation:
                     currentStep = TutorialStep.PauseExplanation;
                     break;
@@ -224,7 +224,7 @@ namespace Misc
                     PrintPhrase(
                         "Изучите другие \u00A0постройки в магазине или прочтите <color=#FFEE58>Справку</color>.");
                     break;
-                
+
                 case TutorialStep.ClickExplanation:
                     ConfigureButton(true, "Далее");
                     PrintPhrase(
@@ -327,11 +327,14 @@ namespace Misc
 
         private void ClearHexHighlights()
         {
-            if (towerSlots == null) return;
+            if (towerSlots == null)
+                return;
 
             foreach (var slot in towerSlots)
             {
-                if (slot == null) continue;
+                if (slot == null)
+                    continue;
+
                 var highlight = slot.transform.Find("Highlight");
                 if (highlight != null)
                     highlight.gameObject.SetActive(false);
@@ -393,10 +396,10 @@ namespace Misc
 
             if (highlightEffect)
                 highlightEffect.SetActive(false);
-            
+
             if (highlightEffectCastle)
                 highlightEffectCastle.SetActive(false);
-            
+
             ClearHexHighlights();
         }
 

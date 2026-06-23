@@ -245,19 +245,6 @@ namespace TextMesh_Pro.Examples___Extras.Scripts
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            #region Character Selection Handling
-
-            #endregion
-
-
-            #region Word Selection Handling
-
-            #endregion
-
-
-            #region Link Selection Handling
-
-            #endregion
         }
 
 

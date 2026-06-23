@@ -72,14 +72,6 @@ namespace UI
             descriptionText.text = content.Description;
             statsText.text = content.SpecialInfo;
 
-            if (string.IsNullOrEmpty(content.Cost))
-                priceText.gameObject.SetActive(false);
-            else
-            {
-                priceText.gameObject.SetActive(true);
-                priceText.text = content.Cost;
-            }
-
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
 
             panel.SetActive(true);

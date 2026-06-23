@@ -33,14 +33,14 @@ namespace MenuScripts
         private GameInitializer gameInitializer;
         [SerializeField]
         private FadePanel menuBackground;
-        private AudioSource audioSource;
 
         [Header("Infinite Mode")]
         [SerializeField]
         private InfiniteModeSettings infiniteSettings;
-        private WaveManager waveManager;
+        private AudioSource audioSource;
 
         private CastleModel model;
+        private WaveManager waveManager;
 
         public bool IsGameOverOpen => gameOverPanel != null && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
         public bool IsGameWonOpen => gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.5f;

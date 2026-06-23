@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Logic.Trap
 {
     [CreateAssetMenu(menuName = "Trap/Trap Data")]
-    public class TrapData : ScriptableObject, ITooltipProvider
+    public class TrapData : ScriptableObject, ITooltipProvider, IPurchasable
     {
         public TrapType trapType;
 
@@ -31,6 +31,7 @@ namespace Logic.Trap
         [Header("Tooltip")]
         [TextArea]
         public string description;
+        public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
@@ -52,7 +53,6 @@ namespace Logic.Trap
             {
                 Title = trapType.GetRussianName(),
                 Description = description,
-                Cost = $"Цена: <color=#FFEE58>{baseCost} золота</color>",
                 SpecialInfo = stats
             };
         }

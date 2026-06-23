@@ -20,6 +20,10 @@ namespace Logic.Tower
         public float CooldownTimer { get; set; }
         public int ShotsLeft { get; set; }
 
+        public float CurrentRange => Data.range * Mathf.Pow(Data.rangeMultiplierPerLevel, Level - 1);
+        public float CurrentDamage => Data.projectileData.damage * Mathf.Pow(Data.damageMultiplierPerLevel, Level - 1);
+        public float CurrentFireRate => Data.fireRate * Mathf.Pow(Data.fireRateMultiplierPerLevel, Level - 1);
+
         public event Action<int> OnLevelUp;
 
         public void Upgrade()
@@ -27,9 +31,5 @@ namespace Logic.Tower
             Level++;
             OnLevelUp?.Invoke(Level);
         }
-
-        public float CurrentRange => Data.range * Mathf.Pow(Data.rangeMultiplierPerLevel, Level - 1);
-        public float CurrentDamage => Data.projectileData.damage * Mathf.Pow(Data.damageMultiplierPerLevel, Level - 1);
-        public float CurrentFireRate => Data.fireRate * Mathf.Pow(Data.fireRateMultiplierPerLevel, Level - 1);
     }
 }

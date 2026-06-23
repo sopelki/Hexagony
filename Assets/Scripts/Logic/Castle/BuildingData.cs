@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Logic.Castle
 {
     [CreateAssetMenu(menuName = "Buildings/Building Data")]
-    public class BuildingData : ScriptableObject, ITooltipProvider
+    public class BuildingData : ScriptableObject, ITooltipProvider, IPurchasable
     {
         public BuildingType type;
         public int baseProduction;
@@ -25,17 +25,13 @@ namespace Logic.Castle
         [SerializeField]
         private string effectLabel = "Производство ресурсов";
 
-        [Tooltip("Если заполнено, заменяет блок характеристик полностью")]
         [TextArea(2, 5)]
         [SerializeField]
         private string customSpecialInfo;
+        public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
-            var priceInfo = isBought
-                ? string.Empty
-                : $"Цена: <color=#FFEE58>{baseCost} золота</color>";
-
             string stats;
             if (!string.IsNullOrWhiteSpace(customSpecialInfo))
                 stats = customSpecialInfo;
@@ -44,9 +40,9 @@ namespace Logic.Castle
                 stats = type switch
                 {
                     BuildingType.Blacksmith or BuildingType.Hospital =>
-                        $"{effectLabel}: <color=#66BB6A>+{buffValue * 100f}%</color>",
-                    BuildingType.Farm => $"{effectLabel}: <color=#66BB6A>+{supplyProvided}</color>",
-                    _ => $"{effectLabel}: <color=#66BB6A>+{baseProduction}</color>"
+                        $"{effectLabel}: <color=#acbf67>+{buffValue * 100f}%</color>",
+                    BuildingType.Farm => $"{effectLabel}: <color=#acbf67>+{supplyProvided}</color>",
+                    _ => $"{effectLabel}: <color=#acbf67>+{baseProduction}</color>"
                 };
             }
 
@@ -54,7 +50,6 @@ namespace Logic.Castle
             {
                 Title = type.GetRussianName(),
                 Description = description,
-                Cost = priceInfo,
                 SpecialInfo = stats
             };
         }

@@ -11,7 +11,10 @@ namespace View
         private TowersModel model;
         public static TowerViewManager Instance { get; private set; }
 
-        private void Awake() => Instance = this;
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void OnDestroy()
         {
@@ -26,11 +29,11 @@ namespace View
         {
             model = modelToInitialize;
             model.OnChanged += HandleTowerAdded;
-            
+
             foreach (var tower in model.Towers)
                 HandleTowerAdded(tower);
         }
-        
+
         public void SyncWithModel()
         {
             foreach (var tower in model.Towers)

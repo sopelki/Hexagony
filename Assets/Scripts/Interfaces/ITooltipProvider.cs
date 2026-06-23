@@ -4,7 +4,6 @@ namespace Interfaces
     {
         public string Title;
         public string Description;
-        public string Cost;
         public string SpecialInfo;
     }
 

@@ -106,11 +106,11 @@ namespace UI
                     ReturnToStart();
             }
         }
-        
+
         public void ApplyBuildingVisual(BuildingData data)
         {
             var myImage = GetComponent<Image>();
-            
+
             if (data.viewPrefab != null)
             {
                 var sourceImage = data.viewPrefab.GetComponentInChildren<Image>();

@@ -18,9 +18,9 @@ namespace View
         [Header("Animation")]
         [SerializeField]
         private float animationDuration = 0.5f;
+        private Coroutine levelAnimation;
 
         private Color originalColor;
-        private Coroutine levelAnimation;
         private Vector3 originalTextScale;
 
         private void Awake()
@@ -36,11 +36,20 @@ namespace View
             SetLevelImmediate(1);
         }
 
-        public void ShowPreviewLevel(int level) => StartLevelAnimation(level, previewColor);
+        public void ShowPreviewLevel(int level)
+        {
+            StartLevelAnimation(level, previewColor);
+        }
 
-        public void ResetPreview(int actualLevel) => StartLevelAnimation(actualLevel, originalColor);
+        public void ResetPreview(int actualLevel)
+        {
+            StartLevelAnimation(actualLevel, originalColor);
+        }
 
-        public void SetLevel(int level) => StartLevelAnimation(level, originalColor);
+        public void SetLevel(int level)
+        {
+            StartLevelAnimation(level, originalColor);
+        }
 
         private void StartLevelAnimation(int level, Color targetColor)
         {
