@@ -50,11 +50,12 @@ namespace UI
 
         public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
         {
-            model = castleSystem.Model;
+            model = castleSystem.CastleModel;
             this.castleSystem = castleSystem;
             this.waveManager = waveManager;
 
             model.OnChanged += UpdateUI;
+            waveManager.OnWaveStarting += UpdateWaveUi;
             model.OnDamaged += HandleDamage;
 
             UpdateUI();
@@ -112,8 +113,15 @@ namespace UI
             flashCoroutine = null;
         }
 
+        public void UpdateWaveUi(int waveNumber)
+        {
+            Debug.Log($"Updating UI from action. Current wave: {waveNumber}");
+            waveText.text = $"{waveNumber}";
+        }
+
         private void UpdateUI()
         {
+            Debug.Log($"Updating UI. Current wave: {waveManager.CurrentWaveNumber}");
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
 
             if (hpPercent == 0 && model.Hp > 0)

@@ -55,10 +55,10 @@ namespace Logic.Monster
         {
             var castle = CastleSystem.Instance;
             var dt = TickManager.Instance.tickInterval;
-            if (castle == null || castle.Model.WallHexes.Count == 0)
+            if (castle == null || castle.CastleModel.WallHexes.Count == 0)
                 return;
 
-            if (castle.Model.WallHexes.Contains(monster.CurrentHex) || IsAdjacentToWall(monster.CurrentHex))
+            if (castle.CastleModel.WallHexes.Contains(monster.CurrentHex) || IsAdjacentToWall(monster.CurrentHex))
             {
                 currentPath = null;
                 ApplySeparation(dt);
@@ -135,11 +135,11 @@ namespace Logic.Monster
         private Vector2Int? GetBestSiegePosition()
         {
             var castle = CastleSystem.Instance;
-            if (castle == null || castle.Model.WallHexes.Count == 0) return null;
+            if (castle == null || castle.CastleModel.WallHexes.Count == 0) return null;
 
             var validSiegePositions = new HashSet<Vector2Int>();
 
-            foreach (var wallCoord in castle.Model.WallHexes)
+            foreach (var wallCoord in castle.CastleModel.WallHexes)
             {
                 var wallHex = field.GetHex(wallCoord);
                 if (wallHex == null) continue;
@@ -171,7 +171,7 @@ namespace Logic.Monster
             if (castle == null) return false;
 
             var neighbours = field.GetNeighbours(hex);
-            return neighbours.Any(n => castle.Model.WallHexes.Contains(n.coordinates));
+            return neighbours.Any(n => castle.CastleModel.WallHexes.Contains(n.coordinates));
         }
 
         private void ApplySeparation(float dt)

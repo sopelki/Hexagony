@@ -5,6 +5,7 @@ using Logic.Castle;
 using Logic.Monster;
 using Logic.Tower;
 using Logic.Trap;
+using UI;
 using UnityEngine;
 
 namespace SaveSystem
@@ -16,16 +17,18 @@ namespace SaveSystem
         private readonly TowerSystem towerSystem;
         private readonly TrapSystem trapSystem;
         private readonly WaveManager waveManager;
+        private readonly CastleUI castleUI;
 
         public SessionController(TowerSystem towerSystem, TrapSystem trapSystem, CastleSystem castleSystem,
-            WaveManager waveManager, InfiniteModeSettings infiniteSettings)
+            WaveManager waveManager, InfiniteModeSettings infiniteSettings,  CastleUI castleUI)
         {
             this.towerSystem = towerSystem;
             this.trapSystem = trapSystem;
             this.castleSystem = castleSystem;
             this.waveManager = waveManager;
             this.infiniteSettings = infiniteSettings;
-
+            this.castleUI = castleUI;
+            
             this.waveManager.OnWaveCleared += SaveCurrentState;
         }
 
@@ -34,8 +37,8 @@ namespace SaveSystem
             var data = new GameSessionData
             {
                 currentWaveNumber = currentWave,
-                castleHp = castleSystem.Model.Hp,
-                gold = castleSystem.Model.Gold
+                castleHp = castleSystem.CastleModel.Hp,
+                gold = castleSystem.CastleModel.Gold
             };
 
             foreach (var tower in towerSystem.GetTowers())
@@ -50,7 +53,7 @@ namespace SaveSystem
             foreach (var trap in trapSystem.GetTraps().Where(trap => trap.Hexes.Count > 0))
                 data.traps.Add(new TrapSaveData { type = trap.Data.trapType, centerHex = trap.Hexes[0] });
 
-            foreach (var building in castleSystem.Model.Buildings)
+            foreach (var building in castleSystem.CastleModel.Buildings)
                 data.buildings.Add(new BuildingSaveData { type = building.Data.type });
 
             SessionSaveManager.SaveSession(data);
@@ -65,7 +68,7 @@ namespace SaveSystem
             if (AudioManager.Instance != null)
                 AudioManager.Instance.MuteSfx = true;
 
-            castleSystem.Model.Gold = int.MaxValue;
+            castleSystem.CastleModel.Gold = int.MaxValue;
 
             try
             {
@@ -81,10 +84,10 @@ namespace SaveSystem
                 foreach (var trap in data.traps)
                     trapSystem.TryPlaceTrap(GameData.Instance.GetTrapData(trap.type), trap.centerHex);
 
-                castleSystem.Model.Hp = data.castleHp;
-                castleSystem.Model.Gold = data.gold;
-                castleSystem.Model.Changed();
-
+                castleSystem.CastleModel.Hp = data.castleHp;
+                castleSystem.CastleModel.Gold = data.gold;
+                castleSystem.CastleModel.Changed();
+                castleUI.UpdateWaveUi(data.currentWaveNumber);
                 waveManager.StartSavedGame(data.currentWaveNumber, infiniteSettings);
             }
             catch (System.Exception e)

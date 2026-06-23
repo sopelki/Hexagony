@@ -48,7 +48,7 @@ namespace Logic.Trap
 
         public bool CanPlaceTrap(TrapData data, Vector2Int axial)
         {
-            if (castleSystem.Model.Gold < data.baseCost) return false;
+            if (castleSystem.CastleModel.Gold < data.baseCost) return false;
             var hexes = GetTrapOccupiedHexes(axial);
 
             foreach (var h in hexes)
