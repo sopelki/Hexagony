@@ -13,28 +13,29 @@ namespace Logic.Castle
 {
     public class CastleSystem : ITickable
     {
-        private const float SpawnInterval = 3f;
-
         private static readonly Vector2Int spawnHex = new(-19, 14);
         private readonly Field.Field field;
         private readonly SoundData soundData;
         private readonly Tilemap tilemap;
         private readonly UnitData unitData;
         private readonly UnitSystem unitSystem;
-
+        private float currentSpawnInterval;
         private bool firstBuildingPlaced;
         private float spawnTimer;
+        public readonly CastleModel CastleModel;
+        public static CastleSystem Instance { get; private set; }
 
+        public event Action OnFirstBuildingPlaced;
 
         public CastleSystem(
-            CastleModel model,
+            CastleModel castleModel,
             UnitSystem unitSystem,
             UnitData unitData,
             Field.Field field,
             Tilemap tilemap,
             SoundData soundData)
         {
-            Model = model;
+            CastleModel = castleModel;
             this.unitSystem = unitSystem;
             this.unitData = unitData;
             this.field = field;
@@ -42,43 +43,58 @@ namespace Logic.Castle
             this.soundData = soundData;
             Instance = this;
             this.unitSystem.OnUnitDied += HandleUnitDied;
-        }
+            CastleModel.OnChanged += RecalculateSpawnSpeed;
 
-        public static CastleSystem Instance { get; private set; }
-        public CastleModel Model { get; }
+            RecalculateSpawnSpeed();
+        }
 
         public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
 
+
         public void Tick()
         {
-            var dt = TickManager.Instance.tickInterval;
+            if (currentSpawnInterval >= 1000f) return;
 
-            spawnTimer += dt;
+            spawnTimer += TickManager.Instance.tickInterval;
 
-            if (!(spawnTimer >= SpawnInterval))
-                return;
-            spawnTimer = 0f;
-            SpawnUnitsFromBarracks();
+            if (spawnTimer >= currentSpawnInterval)
+            {
+                spawnTimer = 0;
+                TrySpawnUnit();
+            }
         }
 
-        public event Action OnFirstBuildingPlaced;
+        private void RecalculateSpawnSpeed()
+        {
+            var barracksCount = CastleModel.Buildings.Count(building => building.Data.type == BuildingType.Barracks);
+
+            if (barracksCount <= 0)
+            {
+                currentSpawnInterval = float.MaxValue;
+                return;
+            }
+
+            currentSpawnInterval = unitData.baseSpawnInterval * Mathf.Pow(0.8f, barracksCount - 1);
+
+            Debug.Log($"UnitSystem: Barracks count: {barracksCount}, current interval: {currentSpawnInterval}s");
+        }
 
         private void HandleUnitDied(UnitModel unit)
         {
-            Model.Changed();
+            CastleModel.Changed();
         }
 
         public void RegisterCastleData(List<Vector3> worldPositions, List<Vector2Int> hexes)
 
         {
-            Model.WallWorldPositions = worldPositions;
-            Model.WallHexes = hexes;
+            CastleModel.WallWorldPositions = worldPositions;
+            CastleModel.WallHexes = hexes;
             Debug.Log($"Castle registered in logic. Wall hexes count: {hexes.Count}");
         }
 
         public bool CanAfford(int price)
         {
-            return Model.Gold >= price;
+            return CastleModel.Gold >= price;
         }
 
         public bool TrySpendGold(int price)
@@ -86,18 +102,18 @@ namespace Logic.Castle
             if (TutorialManager.IsTutorialActive())
                 return true;
 
-            if (Model.Gold < price)
+            if (CastleModel.Gold < price)
                 return false;
 
-            Model.Gold -= price;
-            Model.Changed();
+            CastleModel.Gold -= price;
+            CastleModel.Changed();
             return true;
         }
 
         public void AddGold(int amount)
         {
-            Model.Gold += amount;
-            Model.Changed();
+            CastleModel.Gold += amount;
+            CastleModel.Changed();
         }
 
 
@@ -107,10 +123,10 @@ namespace Logic.Castle
                 return false;
 
             var instance = new BuildingModel(data);
-            Model.Buildings.Add(instance);
+            CastleModel.Buildings.Add(instance);
 
             if (data.type == BuildingType.Farm)
-                Model.MaxSupply += data.supplyProvided;
+                CastleModel.MaxSupply += data.supplyProvided;
 
             ApplyBuff(data);
 
@@ -124,24 +140,16 @@ namespace Logic.Castle
                 Debug.Log("First building placed. Game can start.");
             }
 
-            Model.Changed();
+            CastleModel.Changed();
             return true;
         }
 
-        private void SpawnUnitsFromBarracks()
+        private void TrySpawnUnit()
         {
-            var barracksCount = Model.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
-
-            if (barracksCount == 0)
+            if (unitSystem.GetAllUnits().Count >= CastleModel.MaxSupply)
                 return;
 
-            for (var i = 0; i < barracksCount; i++)
-            {
-                if (unitSystem.GetAllUnits().Count >= Model.MaxSupply)
-                    return;
-
-                SpawnUnit();
-            }
+            SpawnUnit();
         }
 
         private void SpawnUnit()
@@ -153,7 +161,6 @@ namespace Logic.Castle
 
             var worldPos = tilemap.GetCellCenterWorld(hex.offset);
             unitSystem.SpawnUnit(worldPos, spawnHex, unitData);
-            Model.Changed();
         }
 
         private void ApplyBuff(BuildingData data)
@@ -178,10 +185,15 @@ namespace Logic.Castle
 
         public void Clear()
         {
-            Model.Buildings.Clear();
+            CastleModel.Buildings.Clear();
             firstBuildingPlaced = false;
             unitSystem?.ClearBuffs();
-            Model.Changed();
+
+            CastleModel.OnChanged -= RecalculateSpawnSpeed;
+            if (unitSystem != null)
+                unitSystem.OnUnitDied -= HandleUnitDied;
+
+            CastleModel.Changed();
         }
     }
 }

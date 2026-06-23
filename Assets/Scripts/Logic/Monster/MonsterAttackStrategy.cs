@@ -41,12 +41,12 @@ namespace Logic.Monster
                     targetPos = unit.WorldPosition;
                 else
                 {
-                    if (castle.Model.WallWorldPositions.Count == 0)
+                    if (castle.CastleModel.WallWorldPositions.Count == 0)
                     {
                         currentTarget = null;
                         return;
                     }
-                    targetPos = castle.Model.WallWorldPositions
+                    targetPos = castle.CastleModel.WallWorldPositions
                         .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p))
                         .First();
                 }
@@ -66,13 +66,13 @@ namespace Logic.Monster
 
                 if (nearbyUnit != null)
                     currentTarget = nearbyUnit;
-                else if (!castle.Model.IsDead && castle.Model.WallWorldPositions.Count > 0)
+                else if (!castle.CastleModel.IsDead && castle.CastleModel.WallWorldPositions.Count > 0)
                 {
-                    foreach (var wallPos in castle.Model.WallWorldPositions)
+                    foreach (var wallPos in castle.CastleModel.WallWorldPositions)
                     {
                         if (Vector3.Distance(wallPos, monsterModel.WorldPosition) <= monsterModel.AttackRadius)
                         {
-                            currentTarget = castle.Model;
+                            currentTarget = castle.CastleModel;
                             break;
                         }
                     }
@@ -100,7 +100,7 @@ namespace Logic.Monster
                 var targetPos = currentTarget is UnitModel u ? u.WorldPosition : monsterModel.WorldPosition;
                 if (currentTarget is CastleModel)
                 {
-                    targetPos = castle.Model.WallWorldPositions
+                    targetPos = castle.CastleModel.WallWorldPositions
                         .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p))
                         .First();
                 }

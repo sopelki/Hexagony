@@ -152,7 +152,7 @@ namespace Core
             castleView = FindAnyObjectByType<CastleView>();
 
             if (castleUI != null)
-                castleUI.Initialize(castleSystem);
+                castleUI.Initialize(castleSystem, waveManager);
 
             if (castleView != null)
                 castleView.Initialize(castleModel, tilemap, field);
@@ -212,7 +212,7 @@ namespace Core
                 trapViewManager.Initialize(trapsModel, field, tilemap);
 
             var sessionController =
-                new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings);
+                new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings, castleUI);
 
             var isLoaded = false;
             if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())
@@ -220,7 +220,7 @@ namespace Core
                 StartCoroutine(sessionController.LoadStateRoutine());
                 towerViewManager.SyncWithModel();
                 isLoaded = true;
-                castleUI.SyncBuildingsUI(castleSystem.Model.Buildings);
+                castleUI.SyncBuildingsUI(castleSystem.CastleModel.Buildings);
             }
 
             gameFlowManager = new GameFlowManager(

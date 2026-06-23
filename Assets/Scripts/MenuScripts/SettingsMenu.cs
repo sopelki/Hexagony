@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Misc;
+using UnityEngine;
 
 namespace MenuScripts
 {
@@ -35,6 +36,23 @@ namespace MenuScripts
                 settingsPanel.Show();
         }
 
+        public void OpenSettingsFromButton()
+        {
+            lastPanel = null;
+            
+            UIBlocker.BlockAll();
+
+            if (settingsPanel == null)
+                settingsPanel = GetComponent<FadePanel>();
+
+            if (menuBackground != null)
+                menuBackground.Show();
+
+            settingsPanel.Show();
+
+            Time.timeScale = 0f;
+        }
+
         public void CloseSettings()
         {
             PlayerPrefs.Save();
@@ -53,6 +71,15 @@ namespace MenuScripts
                 }
 
                 lastPanel.Show(lastPanel.FadeDuration);
+            }
+            else
+            {
+                UIBlocker.UnblockAll();
+                
+                if (menuBackground != null)
+                    menuBackground.Hide();
+                
+                Time.timeScale = 1f;
             }
         }
 

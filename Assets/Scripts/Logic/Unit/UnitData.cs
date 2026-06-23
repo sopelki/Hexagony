@@ -9,6 +9,7 @@ namespace Logic.Unit
         public int maxHealth = 100;
         public int attack = 10;
         public float moveSpeed = 6f;
+        public float baseSpawnInterval = 6f;
 
         [Header("Attack")]
         public float attackRadius = 1f;

@@ -12,7 +12,7 @@ namespace Logic.Monster
         private readonly MonsterSystem monsterSystem;
 
         private readonly MonsterSpawner spawner;
-        private int currentWaveNumber;
+        public int CurrentWaveNumber { get; private set; }
         private float delayTimer;
 
         private bool gameStarted;
@@ -47,7 +47,7 @@ namespace Logic.Monster
 
                 isDelaying = true;
                 delayTimer = delayBetweenWaves;
-                OnWaveCleared?.Invoke(currentWaveNumber);
+                OnWaveCleared?.Invoke(CurrentWaveNumber);
                 Debug.Log($"WaveManager: Wave cleared. Delaying for {delayBetweenWaves}s...");
             }
 
@@ -58,9 +58,9 @@ namespace Logic.Monster
                 if (delayTimer <= 0f)
                 {
                     isDelaying = false;
-                    currentWaveNumber++;
-                    SaveHighScore(currentWaveNumber);
-                    OnWaveStarting?.Invoke(currentWaveNumber);
+                    CurrentWaveNumber++;
+                    SaveHighScore(CurrentWaveNumber);
+                    OnWaveStarting?.Invoke(CurrentWaveNumber);
                     spawner.StartNextWave();
                 }
             }
@@ -85,7 +85,7 @@ namespace Logic.Monster
             if (gameStarted) return;
 
             gameStarted = true;
-            currentWaveNumber = savedWaveNumber;
+            CurrentWaveNumber = savedWaveNumber;
             var maxNormalWaves = spawner.NormalWaves;
 
             if (savedWaveNumber >= maxNormalWaves)
@@ -106,9 +106,9 @@ namespace Logic.Monster
             }
 
             gameStarted = true;
-            currentWaveNumber = 1;
-            SaveHighScore(currentWaveNumber);
-            OnWaveStarting?.Invoke(currentWaveNumber);
+            CurrentWaveNumber = 1;
+            SaveHighScore(CurrentWaveNumber);
+            OnWaveStarting?.Invoke(CurrentWaveNumber);
             spawner.StartNextWave();
             Debug.Log("Game started! First wave incoming...");
         }

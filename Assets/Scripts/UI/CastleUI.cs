@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Logic.Castle;
+using Logic.Monster;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI foodText;
         [SerializeField]
+        private TextMeshProUGUI waveText;
+        [SerializeField]
         private GameObject inventoryItemPrefab;
 
         [Header("Effects")]
@@ -25,6 +28,7 @@ namespace UI
         private float flashDuration = 0.16f;
 
         private CastleSystem castleSystem;
+        private WaveManager waveManager;
         private Coroutine flashCoroutine;
         private CastleModel model;
 
@@ -44,12 +48,14 @@ namespace UI
             }
         }
 
-        public void Initialize(CastleSystem castleSystem)
+        public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
         {
-            model = castleSystem.Model;
+            model = castleSystem.CastleModel;
             this.castleSystem = castleSystem;
+            this.waveManager = waveManager;
 
             model.OnChanged += UpdateUI;
+            waveManager.OnWaveStarting += UpdateWaveUi;
             model.OnDamaged += HandleDamage;
 
             UpdateUI();
@@ -107,8 +113,15 @@ namespace UI
             flashCoroutine = null;
         }
 
+        public void UpdateWaveUi(int waveNumber)
+        {
+            Debug.Log($"Updating UI from action. Current wave: {waveNumber}");
+            waveText.text = $"{waveNumber}";
+        }
+
         private void UpdateUI()
         {
+            Debug.Log($"Updating UI. Current wave: {waveManager.CurrentWaveNumber}");
             var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
 
             if (hpPercent == 0 && model.Hp > 0)
@@ -117,6 +130,7 @@ namespace UI
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
+            waveText.text = $"{waveManager.CurrentWaveNumber}";
 
             if (model.Hp <= 0)
                 hpText.color = damageColor;

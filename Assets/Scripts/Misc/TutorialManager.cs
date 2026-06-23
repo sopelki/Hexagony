@@ -76,8 +76,8 @@ namespace Misc
             {
                 case TutorialStep.BuildBarrack:
                     if (CastleSystem.Instance != null &&
-                        CastleSystem.Instance.Model.Buildings.Count > 0 &&
-                        CastleSystem.Instance.Model.Buildings.Any(b => b.Data.type == BuildingType.Barracks))
+                        CastleSystem.Instance.CastleModel.Buildings.Count > 0 &&
+                        CastleSystem.Instance.CastleModel.Buildings.Any(b => b.Data.type == BuildingType.Barracks))
                     {
                         currentStep = TutorialStep.BarrackSuccess;
                         UpdateTutorialState();
@@ -408,7 +408,7 @@ namespace Misc
             if (CastleSystem.Instance == null)
                 return;
 
-            var hasBuildings = CastleSystem.Instance != null && CastleSystem.Instance.Model.Buildings.Count > 0 ||
+            var hasBuildings = CastleSystem.Instance != null && CastleSystem.Instance.CastleModel.Buildings.Count > 0 ||
                                TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0 ||
                                TrapSystem.Instance != null && TrapSystem.Instance.GetTraps().Count > 0;
 
