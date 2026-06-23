@@ -55,6 +55,7 @@ MonoBehaviour:
   priceText: {fileID: 494650740245465619}
   enoughGoldColor: {r: 0.7882353, g: 0.64705884, b: 0.2, a: 1}
   notEnoughGoldColor: {r: 0.81886786, g: 0.010815193, b: 0.07004411, a: 1}
+  fadeDuration: 0.2
 --- !u!222 &7994640375753735494
 CanvasRenderer:
   m_ObjectHideFlags: 0
