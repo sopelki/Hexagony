@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace View
@@ -14,32 +15,44 @@ namespace View
         [SerializeField]
         private Animator animator;
 
+        private HashSet<Collider2D> overlappingTowers = new HashSet<Collider2D>();
         private int occludersCount;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Tower"))
-            {
-                if (transform.position.y > other.transform.position.y)
-                {
-                    occludersCount++;
-                    SetOutlineVisible(occludersCount > 0);
-                }
-            }
+                overlappingTowers.Add(other);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             if (other.CompareTag("Tower"))
+                overlappingTowers.Remove(other);
+        }
+        
+        private void Update()
+        {
+            if (overlappingTowers.Count == 0)
             {
-                if (transform.position.y > other.transform.position.y)
+                SetOutlineVisible(false);
+                return;
+            }
+
+            var isOccluded = false;
+            var centerPoint = spriteRenderer.bounds.center;
+
+            foreach (var tower in overlappingTowers)
+            {
+                if (transform.position.y > tower.transform.position.y)
                 {
-                    occludersCount--;
-                    if (occludersCount < 0)
-                        occludersCount = 0;
-                    SetOutlineVisible(occludersCount > 0);
+                    if (tower.OverlapPoint(centerPoint))
+                    {
+                        isOccluded = true;
+                        break;
+                    }
                 }
             }
+            SetOutlineVisible(isOccluded);
         }
 
         public void Initialize(Sprite sprite)
