@@ -129,7 +129,7 @@ namespace UI
 
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
-            foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
+            foodText.text = $"{castleSystem.CurrentUnitsCount}/{model.MaxSupply}";
             waveText.text = $"{waveManager.CurrentWaveNumber}";
 
             if (model.Hp <= 0)

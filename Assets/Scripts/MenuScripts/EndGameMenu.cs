@@ -21,6 +21,8 @@ namespace MenuScripts
         private float fadeDuration = 0.2f;
         [SerializeField]
         private float startDelay = 0.2f;
+        [SerializeField]
+        private float volume = 0.5f;
 
         [Header("Audio")]
         [SerializeField]
@@ -86,7 +88,7 @@ namespace MenuScripts
             if (clip && audioSource)
             {
                 AudioManager.Instance.StopMusic();
-                audioSource.PlayOneShot(clip);
+                audioSource.PlayOneShot(clip, volume);
             }
 
             UIBlocker.BlockAll();
