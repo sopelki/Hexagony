@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: 8df5cd9826401af4bbbcbc65875cce6a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2355327998031923341
+    second: GoblinBeastLeftAttack03_0
+  - first:
+      213: 7374560276572886362
+    second: GoblinBeastLeftAttack03_1
+  - first:
+      213: -5202891022398191570
+    second: GoblinBeastLeftAttack03_2
+  - first:
+      213: 8856819365056271224
+    second: GoblinBeastLeftAttack03_3
+  - first:
+      213: -2419338464850400129
+    second: GoblinBeastLeftAttack03_4
+  - first:
+      213: -2234395570510728654
+    second: GoblinBeastLeftAttack03_5
+  - first:
+      213: 6012548634640870899
+    second: GoblinBeastLeftAttack03_6
+  - first:
+      213: 2464311031525205263
+    second: GoblinBeastLeftAttack03_7
+  - first:
+      213: -4567217245436476769
+    second: GoblinBeastLeftAttack03_8
+  - first:
+      213: -3717283993983517428
+    second: GoblinBeastLeftAttack03_9
+  - first:
+      213: -4812009259937186300
+    second: GoblinBeastLeftAttack03_10
+  - first:
+      213: 2112145318564713229
+    second: GoblinBeastLeftAttack03_11
+  - first:
+      213: 6855726894887884640
+    second: GoblinBeastLeftAttack03_12
+  - first:
+      213: 2544456609025212922
+    second: GoblinBeastLeftAttack03_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d88893cc55ecfa020800000000000000
+      internalID: 2355327998031923341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_1
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5555dbdf73b75660800000000000000
+      internalID: 7374560276572886362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_2
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2803e46e2e9bc7b0800000000000000
+      internalID: -5202891022398191570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 6
+        width: 29
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 873dafd794eb9ea70800000000000000
+      internalID: 8856819365056271224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_4
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 6
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7c27230c78cc6ed0800000000000000
+      internalID: -2419338464850400129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_5
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23270042115ddf0e0800000000000000
+      internalID: -2234395570510728654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_6
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 6
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fd678a902dd07350800000000000000
+      internalID: 6012548634640870899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_7
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f05e222a3ddf23220800000000000000
+      internalID: 2464311031525205263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_8
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9288b90d1cfd90c0800000000000000
+      internalID: -4567217245436476769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_9
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0dfd5907ed896cc0800000000000000
+      internalID: -3717283993983517428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_10
+      rect:
+        serializedVersion: 2
+        x: 486
+        y: 6
+        width: 29
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40ebd8db21f483db0800000000000000
+      internalID: -4812009259937186300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_11
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 6
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d03dd030af8df4d10800000000000000
+      internalID: 2112145318564713229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_12
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 6
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06752e6a94f642f50800000000000000
+      internalID: 6855726894887884640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoblinBeastLeftAttack03_13
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 6
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af1c7570ec9bf4320800000000000000
+      internalID: 2544456609025212922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GoblinBeastLeftAttack03_0: 2355327998031923341
+      GoblinBeastLeftAttack03_1: 7374560276572886362
+      GoblinBeastLeftAttack03_10: -4812009259937186300
+      GoblinBeastLeftAttack03_11: 2112145318564713229
+      GoblinBeastLeftAttack03_12: 6855726894887884640
+      GoblinBeastLeftAttack03_13: 2544456609025212922
+      GoblinBeastLeftAttack03_2: -5202891022398191570
+      GoblinBeastLeftAttack03_3: 8856819365056271224
+      GoblinBeastLeftAttack03_4: -2419338464850400129
+      GoblinBeastLeftAttack03_5: -2234395570510728654
+      GoblinBeastLeftAttack03_6: 6012548634640870899
+      GoblinBeastLeftAttack03_7: 2464311031525205263
+      GoblinBeastLeftAttack03_8: -4567217245436476769
+      GoblinBeastLeftAttack03_9: -3717283993983517428
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
