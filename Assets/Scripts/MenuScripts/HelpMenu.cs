@@ -43,7 +43,7 @@ namespace MenuScripts
 
             if (tabFieldButton != null)
                 tabFieldButton.onClick.AddListener(ShowField);
-            
+
             if (tabMonsterButton != null)
                 tabMonsterButton.onClick.AddListener(ShowMonsters);
         }
@@ -134,7 +134,7 @@ namespace MenuScripts
                 "▪ <color=#dfe88b><b>Колья:</b></color> Наносят стабильный <b>урон </b><nobr>всем, кто</nobr> стоит на них.\n" +
                 "▪ <color=#dfe88b><b>Капкан:</b></color> Наносит <b>критический удар </b><nobr>и исчезает.</nobr>\n";
         }
-        
+
         public void ShowMonsters()
         {
             UpdateTabs(tabMonsterButton);

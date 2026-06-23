@@ -5,8 +5,8 @@ namespace UI
 {
     public class CameraShaker : MonoBehaviour
     {
-        private Vector3 originalPos;
         private Coroutine currentShake;
+        private Vector3 originalPos;
 
         public void Shake(float duration, float magnitude)
         {

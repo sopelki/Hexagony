@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 795620476663013013}
   - component: {fileID: 2165089604719921017}
   - component: {fileID: 677828758188158482}
+  - component: {fileID: 1532733080786182469}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -96,6 +97,21 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1532733080786182469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828571262631121318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.93333334}
+  m_EffectDistance: {x: 1.72, y: -1.72}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4634460147883942156
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +270,10 @@ PrefabInstance:
       value: 'LABEL:'
       objectReference: {fileID: 0}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6ae68a078165b754887a39a10c49cfd3, type: 2}
+    - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_fontColor.b
       value: 0.6
       objectReference: {fileID: 0}
@@ -268,7 +288,7 @@ PrefabInstance:
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -4395061001812844211, guid: e1e3ac0c1dc82b34a94bcf637dd3bded, type: 2}
+      objectReference: {fileID: 2100000, guid: 983be656536766f4490002dc77a8c9ab, type: 2}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4288255339
@@ -420,6 +440,10 @@ PrefabInstance:
       value: '***'
       objectReference: {fileID: 0}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6ae68a078165b754887a39a10c49cfd3, type: 2}
+    - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_fontColor.b
       value: 0.6
       objectReference: {fileID: 0}
@@ -434,7 +458,7 @@ PrefabInstance:
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -4395061001812844211, guid: e1e3ac0c1dc82b34a94bcf637dd3bded, type: 2}
+      objectReference: {fileID: 2100000, guid: 983be656536766f4490002dc77a8c9ab, type: 2}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4288255339

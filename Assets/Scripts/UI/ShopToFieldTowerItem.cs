@@ -60,6 +60,7 @@ namespace UI
         [SerializeField]
         private float fadeDuration = 0.1f;
         private Vector2 currentGhostPosition;
+        private Vector3Int currentHoveredSlot;
         private float currentScale;
         private Coroutine fadeCoroutine;
         private GameObject ghost;
@@ -71,6 +72,9 @@ namespace UI
         private bool isDragging;
 
         private bool isSnapping;
+
+        private TowerModel lastPreviewedModel;
+        private TowerView lastPreviewedView;
         private Color targetColor;
 
         private Vector2 targetGhostPosition;
@@ -78,10 +82,6 @@ namespace UI
 
         private TowerSystem towerSystem;
         private bool wasSnapping;
-
-        private TowerModel lastPreviewedModel;
-        private TowerView lastPreviewedView;
-        private Vector3Int currentHoveredSlot;
 
         private void Awake()
         {

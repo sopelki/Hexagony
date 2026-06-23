@@ -135,7 +135,7 @@ Shader "Retro/CRTEffectURP"
                                            uv + float2(texelSize.x * bleedAmount, 0)).r;
                 float g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv).g;
                 float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                            uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
+                                           uv - float2(texelSize.x * bleedAmount * 0.5, 0)).b;
 
                 return float3(r, g, b);
             }
@@ -168,11 +168,11 @@ Shader "Retro/CRTEffectURP"
                 {
                     float2 chromaOffset = float2(_ChromaticAberration, 0);
                     col.r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                                 curveUV(pixelate(uv + chromaOffset, screenSize))).r;
+                                            curveUV(pixelate(uv + chromaOffset, screenSize))).r;
                     col.g = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                  curvedPixelUV).g;
+                                       curvedPixelUV).g;
                     col.b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                              curveUV(pixelate(uv - chromaOffset, screenSize))).b;
+                                            curveUV(pixelate(uv - chromaOffset, screenSize))).b;
                 }
                 else
                 {
@@ -186,13 +186,13 @@ Shader "Retro/CRTEffectURP"
                     float bleedAmount = _ColorBleedIntensity * _PixelSize;
 
                     float r = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                                                         curveUV(pixelate(uv + float2(texelSize.x *
-                                                                                 bleedAmount, 0),
-                                                                             screenSize))).r;
+                                            curveUV(pixelate(uv + float2(texelSize.x *
+                                                    bleedAmount, 0),
+                                                screenSize))).r;
                     float g = col.g;
                     float b = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp,
-                                                 curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0),
-                                                     screenSize))).b;
+                        curveUV(pixelate(uv - float2(texelSize.x * bleedAmount * 0.5, 0),
+                            screenSize))).b;
 
                     col = lerp(col, float3(r, g, b), _ColorBleedIntensity);
                 }
@@ -213,10 +213,10 @@ Shader "Retro/CRTEffectURP"
                     float sharp = 2.0;
 
                     float scanlineR = pow(sin((pixelUV.y + _ScanlineRGBShift) * _ScanlineCount * 3.14159) * 0.5 + 0.5,
-                                                     sharp);
+         sharp);
                     float scanlineG = pow(sin(pixelUV.y * _ScanlineCount * 3.14159) * 0.5 + 0.5, sharp);
                     float scanlineB = pow(sin((pixelUV.y - _ScanlineRGBShift) * _ScanlineCount * 3.14159) * 0.5 + 0.5,
-                            sharp);
+                        sharp);
 
                     scanlineR = pow(scanlineR, 0.5);
                     scanlineG = pow(scanlineG, 0.5);

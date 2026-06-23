@@ -24,14 +24,12 @@ namespace Logic.Monster
         private readonly List<WaveData> waves;
 
         private int currentWaveIndex = -1;
-        private int spawnedInCurrentWave;
-        private float spawnTimer;
-        private bool waveSpawnFinished;
 
         private InfiniteModeSettings infiniteSettings;
         private bool isInfiniteMode;
-        
-        public int NormalWaves => waves.Count;
+        private int spawnedInCurrentWave;
+        private float spawnTimer;
+        private bool waveSpawnFinished;
 
         public MonsterSpawner(
             List<Vector2Int> spawnHexes,
@@ -53,6 +51,8 @@ namespace Logic.Monster
             this.soundData = soundData;
         }
 
+        public int NormalWaves => waves.Count;
+
         public bool IsLastWave => !isInfiniteMode && currentWaveIndex == waves.Count - 1;
 
         public void Tick()
@@ -71,9 +71,9 @@ namespace Logic.Monster
             {
                 var extraWaves = currentWaveIndex - waves.Count + 1;
                 totalMonsters = infiniteSettings.referenceWave.totalMonsters +
-                                (extraWaves * infiniteSettings.monstersCountStep);
+                                extraWaves * infiniteSettings.monstersCountStep;
                 spawnInterval = Mathf.Max(infiniteSettings.minSpawnInterval,
-                    infiniteSettings.referenceWave.spawnInterval - (extraWaves * infiniteSettings.spawnIntervalStep));
+                    infiniteSettings.referenceWave.spawnInterval - extraWaves * infiniteSettings.spawnIntervalStep);
             }
             else
                 return;
@@ -96,7 +96,7 @@ namespace Logic.Monster
         }
 
         public event Action OnWaveSpawnCompleted;
-        
+
         public void SetWaveIndex(int index)
         {
             currentWaveIndex = index;

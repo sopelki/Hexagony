@@ -31,12 +31,6 @@ namespace Logic.Castle
 
         public bool IsDead => Hp <= 0;
 
-        public event Action OnCastleDestroyed;
-
-        public event Action OnChanged;
-
-        public event Action<int> OnDamaged;
-
         public void TakeDamage(int damage)
         {
             if (IsDead)
@@ -54,10 +48,23 @@ namespace Logic.Castle
                 OnCastleDestroyed?.Invoke();
         }
 
+        public event Action OnCastleDestroyed;
+
+        public event Action OnChanged;
+
+        public event Action<int> OnDamaged;
+
         public void Changed()
         {
             Debug.Log("Castle Changed");
             OnChanged?.Invoke();
+        }
+
+        public void Cleanup()
+        {
+            OnChanged = null;
+            OnDamaged = null;
+            OnCastleDestroyed = null;
         }
     }
 }

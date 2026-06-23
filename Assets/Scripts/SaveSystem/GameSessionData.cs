@@ -13,7 +13,7 @@ namespace SaveSystem
         public int currentWaveNumber;
         public int castleHp;
         public int gold;
-        
+
         public List<TowerSaveData> towers = new();
         public List<TrapSaveData> traps = new();
         public List<BuildingSaveData> buildings = new();

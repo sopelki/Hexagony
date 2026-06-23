@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Logic.Tower
 {
     [CreateAssetMenu(menuName = "Towers/Tower Data")]
-    public class TowerData : ScriptableObject, ITooltipProvider
+    public class TowerData : ScriptableObject, ITooltipProvider, IPurchasable
     {
         public TowerType type;
         public int baseCost;
@@ -23,6 +23,7 @@ namespace Logic.Tower
         public float rangeMultiplierPerLevel = 1.1f;
         public float fireRateMultiplierPerLevel = 1.25f;
         public int maxLevel = 5;
+        public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {

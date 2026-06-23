@@ -9,8 +9,6 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI waveText;
         [SerializeField]
-        private TextMeshProUGUI shadowText;
-        [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
         private float displayDuration = 3f;
@@ -48,8 +46,6 @@ namespace UI
 
             if (waveText)
                 waveText.text = text;
-            if (shadowText)
-                shadowText.text = text;
 
             yield return FadeCanvasGroup(0, targetOpacity, fadeDuration);
 

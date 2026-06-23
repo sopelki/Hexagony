@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Logic.Castle
 {
     [CreateAssetMenu(menuName = "Buildings/Building Data")]
-    public class BuildingData : ScriptableObject, ITooltipProvider
+    public class BuildingData : ScriptableObject, ITooltipProvider, IPurchasable
     {
         public BuildingType type;
         public int baseProduction;
@@ -25,10 +25,10 @@ namespace Logic.Castle
         [SerializeField]
         private string effectLabel = "Производство ресурсов";
 
-        [Tooltip("Если заполнено, заменяет блок характеристик полностью")]
         [TextArea(2, 5)]
         [SerializeField]
         private string customSpecialInfo;
+        public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
