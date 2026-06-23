@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace View
@@ -15,8 +16,8 @@ namespace View
         [SerializeField]
         private Animator animator;
 
-        private HashSet<Collider2D> overlappingTowers = new HashSet<Collider2D>();
-        private int occludersCount;
+        private readonly HashSet<Collider2D> overlappingTowers = new();
+        // private int occludersCount;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -29,7 +30,7 @@ namespace View
             if (other.CompareTag("Tower"))
                 overlappingTowers.Remove(other);
         }
-        
+
         private void Update()
         {
             if (overlappingTowers.Count == 0)
@@ -38,20 +39,10 @@ namespace View
                 return;
             }
 
-            var isOccluded = false;
             var centerPoint = spriteRenderer.bounds.center;
 
-            foreach (var tower in overlappingTowers)
-            {
-                if (transform.position.y > tower.transform.position.y)
-                {
-                    if (tower.OverlapPoint(centerPoint))
-                    {
-                        isOccluded = true;
-                        break;
-                    }
-                }
-            }
+            var isOccluded = overlappingTowers.Where(tower => transform.position.y > tower.transform.position.y)
+                .Any(tower => tower.OverlapPoint(centerPoint));
             SetOutlineVisible(isOccluded);
         }
 
@@ -59,7 +50,7 @@ namespace View
         {
             spriteRenderer.sprite = sprite;
             SetOutlineVisible(false);
-            occludersCount = 0;
+            // occludersCount = 0;
         }
 
         public void SetOutlineVisible(bool value)
