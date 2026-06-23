@@ -152,7 +152,7 @@ namespace Core
             castleView = FindAnyObjectByType<CastleView>();
 
             if (castleUI != null)
-                castleUI.Initialize(castleSystem);
+                castleUI.Initialize(castleSystem, waveManager);
 
             if (castleView != null)
                 castleView.Initialize(castleModel, tilemap, field);

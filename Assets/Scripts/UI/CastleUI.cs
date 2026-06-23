@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Logic.Castle;
+using Logic.Monster;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI foodText;
         [SerializeField]
+        private TextMeshProUGUI waveText;
+        [SerializeField]
         private GameObject inventoryItemPrefab;
 
         [Header("Effects")]
@@ -25,6 +28,7 @@ namespace UI
         private float flashDuration = 0.16f;
 
         private CastleSystem castleSystem;
+        private WaveManager waveManager;
         private Coroutine flashCoroutine;
         private CastleModel model;
 
@@ -44,10 +48,11 @@ namespace UI
             }
         }
 
-        public void Initialize(CastleSystem castleSystem)
+        public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
         {
             model = castleSystem.Model;
             this.castleSystem = castleSystem;
+            this.waveManager = waveManager;
 
             model.OnChanged += UpdateUI;
             model.OnDamaged += HandleDamage;
@@ -117,6 +122,7 @@ namespace UI
             hpText.text = $"{hpPercent}%";
             goldText.text = model.Gold.ToString();
             foodText.text = $"{castleSystem.CurrentUnitsCount} / {model.MaxSupply}";
+            waveText.text = $"{waveManager.CurrentWaveNumber}";
 
             if (model.Hp <= 0)
                 hpText.color = damageColor;
