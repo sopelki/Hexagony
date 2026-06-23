@@ -13,7 +13,7 @@ namespace Audio
         [SerializeField]
         private AudioSource sfxSource;
 
-        [Header("Master Scales (Твои внутренние ограничения)")]
+        [Header("Master Scales")]
         [Range(0f, 1f)]
         [SerializeField]
         private float musicMasterScale = 0.5f;
@@ -22,6 +22,7 @@ namespace Audio
         private float sfxMasterScale = 0.5f;
 
         public static AudioManager Instance { get; private set; }
+        public bool MuteSfx { get; set; }
 
         private void Awake()
         {
@@ -86,15 +87,17 @@ namespace Audio
 
         public void PlaySfx(AudioClip clip, float volumeMultiplier = 1f)
         {
-            if (!clip)
+            if (MuteSfx || !clip)
                 return;
+
             sfxSource.PlayOneShot(clip, volumeMultiplier);
         }
 
         public void PlayRandomSfx(AudioClip[] clips, float volumeMultiplier = 1f)
         {
-            if (clips == null || clips.Length == 0)
+            if (MuteSfx || clips == null || clips.Length == 0)
                 return;
+
             PlaySfx(clips[Random.Range(0, clips.Length)], volumeMultiplier);
         }
     }

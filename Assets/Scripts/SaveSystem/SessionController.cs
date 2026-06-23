@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
+using Audio;
 using Logic.Castle;
 using Logic.Monster;
 using Logic.Tower;
@@ -54,33 +56,50 @@ namespace SaveSystem
             SessionSaveManager.SaveSession(data);
         }
 
-        public void LoadState()
+        public IEnumerator LoadStateRoutine()
         {
             var data = SessionSaveManager.LoadSession();
             if (data == null)
-                return;
+                yield break;
+
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.MuteSfx = true;
 
             castleSystem.Model.Gold = int.MaxValue;
 
-            foreach (var b in data.buildings)
-                castleSystem.TryBuyBuilding(GameData.Instance.GetBuildingData(b.type));
-
-            foreach (var t in data.towers)
+            try
             {
-                towerSystem.TryPlaceTower(GameData.Instance.GetTowerData(t.type), t.gridPosition, t.worldPosition,
-                    t.level);
+                foreach (var b in data.buildings)
+                    castleSystem.TryBuyBuilding(GameData.Instance.GetBuildingData(b.type));
+
+                foreach (var t in data.towers)
+                {
+                    towerSystem.TryPlaceTower(GameData.Instance.GetTowerData(t.type), t.gridPosition, t.worldPosition,
+                        t.level);
+                }
+
+                foreach (var trap in data.traps)
+                    trapSystem.TryPlaceTrap(GameData.Instance.GetTrapData(trap.type), trap.centerHex);
+
+                castleSystem.Model.Hp = data.castleHp;
+                castleSystem.Model.Gold = data.gold;
+                castleSystem.Model.Changed();
+
+                waveManager.StartSavedGame(data.currentWaveNumber, infiniteSettings);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error during loading: {e.Message}");
             }
 
-            foreach (var trap in data.traps)
-                trapSystem.TryPlaceTrap(GameData.Instance.GetTrapData(trap.type), trap.centerHex);
+            yield return null;
+            yield return null;
+            yield return null;
 
-            castleSystem.Model.Changed();
-            Canvas.ForceUpdateCanvases();
-            castleSystem.Model.Hp = data.castleHp;
-            castleSystem.Model.Gold = data.gold;
-            castleSystem.Model.Changed();
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.MuteSfx = false;
 
-            waveManager.StartSavedGame(data.currentWaveNumber, infiniteSettings);
+            Debug.Log("Session loaded. Silence mode finished after 3 frames.");
         }
     }
 }

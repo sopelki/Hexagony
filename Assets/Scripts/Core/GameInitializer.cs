@@ -217,7 +217,7 @@ namespace Core
             var isLoaded = false;
             if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())
             {
-                sessionController.LoadState();
+                StartCoroutine(sessionController.LoadStateRoutine());
                 towerViewManager.SyncWithModel();
                 isLoaded = true;
                 castleUI.SyncBuildingsUI(castleSystem.Model.Buildings);
