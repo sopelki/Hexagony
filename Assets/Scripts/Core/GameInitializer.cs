@@ -21,10 +21,11 @@ namespace Core
     {
         private static readonly List<Vector2Int> spawnHexes = new()
         {
-            new Vector2Int(2, -23),
-            new Vector2Int(27, -23),
-            new Vector2Int(20, -4),
-            new Vector2Int(8, 20)
+            new Vector2Int(-17, -16),
+            new Vector2Int(9, -31),
+            new Vector2Int(31, -31),
+            new Vector2Int(28, -3),
+            new Vector2Int(-3, 30),
         };
         [Header("Castle Settings")]
         [SerializeField]

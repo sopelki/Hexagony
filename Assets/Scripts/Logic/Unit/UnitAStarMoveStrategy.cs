@@ -18,7 +18,7 @@ namespace Logic.Unit
         private readonly Vector3 formationOffset;
         private readonly MonsterSystem monsterSystem;
         private readonly HexAStarPathfinder pathfinder;
-        private readonly Vector2Int spawnHex = new(-12, 9);
+        private readonly Vector2Int baseHex = new(-15, 11);
         private readonly Tilemap tilemap;
         private readonly UnitModel unit;
 
@@ -186,7 +186,7 @@ namespace Logic.Unit
                 return;
             }
 
-            var distanceToRallyPoint = Vector2Int.Distance(unit.CurrentHex, spawnHex);
+            var distanceToRallyPoint = Vector2Int.Distance(unit.CurrentHex, baseHex);
             if (distanceToRallyPoint > 10f)
             {
                 currentPath = null;
@@ -201,7 +201,7 @@ namespace Logic.Unit
             var radius = 2;
             var randomX = Random.Range(-radius, radius + 1);
             var randomY = Random.Range(-radius, radius + 1);
-            var potentialHex = spawnHex + new Vector2Int(randomX, randomY);
+            var potentialHex = baseHex + new Vector2Int(randomX, randomY);
 
             var hexObj = field.GetHex(potentialHex);
 

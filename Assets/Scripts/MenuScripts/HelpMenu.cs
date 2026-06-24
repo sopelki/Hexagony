@@ -144,26 +144,43 @@ namespace MenuScripts
                 "<color=#90CAF9><b>ГОБЛИН</b></color>: Базовый враг и основная ударная сила нечисти." +
                 "<line-height=20px>\n</line-height>" +
                 "<line-height=60%>" +
-                "▪ <color=#dfe88b><b>Здоровье:</b></color> 55\n" +
-                "▪ <color=#dfe88b><b>Урон:</b></color> 20\n" +
-                "▪ <color=#dfe88b><b>Награда:</b></color> 8\n" +
+                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 55\n" +
+                "▪️ <color=#dfe88b><b>Урон:</b></color> 20\n" +
+                "▪️ <color=#dfe88b><b>Награда:</b></color> 8\n" +
                 "</line-height>" +
                 "<line-height=-15px>\n</line-height>" +
                 "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
                 "<line-height=20px>\n</line-height>" +
                 "<line-height=60%>" +
-                "▪ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
-                "▪ <color=#dfe88b><b>Урон:</b></color> 10\n" +
-                "▪ <color=#dfe88b><b>Награда:</b></color> 12\n" +
+                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
+                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
+                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
                 "</line-height>" +
                 "<line-height=-15px>\n</line-height>" +
                 "<color=#90CAF9><b>СКЕЛЕТ</b></color>: Тяжеловес и самый опасный <nobr>из врагов.</nobr>" +
                 "<line-height=20px>\n</line-height>" +
                 "<line-height=60%>" +
-                "▪ <color=#dfe88b><b>Здоровье:</b></color> 65\n" +
-                "▪ <color=#dfe88b><b>Урон:</b></color> 35\n" +
-                "▪ <color=#dfe88b><b>Награда:</b></color> 16\n" +
+                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 65\n" +
+                "▪️ <color=#dfe88b><b>Урон:</b></color> 35\n" +
+                "▪️ <color=#dfe88b><b>Награда:</b></color> 16\n" +
+                "</line-height>"+
+                "<line-height=-15px>\n</line-height>" +
+                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
+                "<line-height=20px>\n</line-height>" +
+                "<line-height=60%>" +
+                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
+                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
+                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
+                "</line-height>"+
+                "<line-height=-15px>\n</line-height>" +
+                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
+                "<line-height=20px>\n</line-height>" +
+                "<line-height=60%>" +
+                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
+                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
+                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
                 "</line-height>";
+            Canvas.ForceUpdateCanvases();
         }
     }
 }

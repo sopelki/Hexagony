@@ -13,7 +13,7 @@ namespace Logic.Castle
 {
     public class CastleSystem : ITickable
     {
-        private static readonly Vector2Int spawnHex = new(-19, 14);
+        private static readonly Vector2Int spawnHex = new(-26, 19);
         private readonly Field.Field field;
         private readonly SoundData soundData;
         private readonly Tilemap tilemap;
