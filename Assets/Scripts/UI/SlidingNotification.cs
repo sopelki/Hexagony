@@ -7,22 +7,32 @@ namespace UI
     public class SlidingNotificationUI : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private RectTransform panelRect;
-        [SerializeField] private TextMeshProUGUI textElement;
-        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField]
+        private RectTransform panelRect;
+        [SerializeField]
+        private TextMeshProUGUI textElement;
+        [SerializeField]
+        private CanvasGroup canvasGroup;
 
         [Header("Position Settings")]
-        [SerializeField] private Vector2 hiddenPosition = new(0, 200);
-        [SerializeField] private Vector2 visiblePosition = new(0, -100);
+        [SerializeField]
+        private Vector2 hiddenPosition = new(0, 250);
+        [SerializeField]
+        private Vector2 visiblePosition = new(0, -100);
 
         [Header("Animation Curves")]
-        [SerializeField] private AnimationCurve entranceCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField] private AnimationCurve exitCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField]
+        private AnimationCurve entranceCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField]
+        private AnimationCurve exitCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         [Header("Durations")]
-        [SerializeField] private float slideInDuration = 0.6f;
-        [SerializeField] private float slideOutDuration = 0.3f;
-        [SerializeField] private float displayDuration = 3f;
+        [SerializeField]
+        private float slideInDuration = 0.6f;
+        [SerializeField]
+        private float slideOutDuration = 0.3f;
+        [SerializeField]
+        private float displayDuration = 3f;
 
         private Coroutine activeCoroutine;
         private int totalWavesCount;
@@ -35,6 +45,7 @@ namespace UI
             if (panelRect == null) panelRect = GetComponent<RectTransform>();
 
             totalWavesCount = totalWaves;
+
             panelRect.anchoredPosition = hiddenPosition;
             canvasGroup.alpha = 0;
         }
@@ -44,8 +55,9 @@ namespace UI
         public void ShowWaveNotification(int waveNumber)
         {
             var message = waveNumber <= totalWavesCount
-                ? $"Началась волна {waveNumber} из {totalWavesCount}"
-                : $"Началась волна {waveNumber}";
+                ? $"Началась волна</color>\n<color=#A10009>{waveNumber} из {totalWavesCount}"
+                : $"Началась волна\n<color=#A10009>{waveNumber}";
+
             Show(message);
         }
 
@@ -58,7 +70,9 @@ namespace UI
 
         private void Show(string message)
         {
-            if (activeCoroutine != null) StopCoroutine(activeCoroutine);
+            if (activeCoroutine != null)
+                StopCoroutine(activeCoroutine);
+
             textElement.text = message;
             activeCoroutine = StartCoroutine(NotificationCycle());
         }
@@ -75,6 +89,7 @@ namespace UI
             }
 
             yield return MovePanel(visiblePosition, hiddenPosition, slideOutDuration, exitCurve, false);
+
             activeCoroutine = null;
         }
 
@@ -91,6 +106,7 @@ namespace UI
                 canvasGroup.alpha = fadeIn ? Mathf.Lerp(0, 1, t * 2) : Mathf.Lerp(1, 0, t);
                 yield return null;
             }
+
             panelRect.anchoredPosition = end;
             canvasGroup.alpha = fadeIn ? 1 : 0;
         }

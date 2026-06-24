@@ -9,8 +9,8 @@ namespace Core
 {
     public class GameFlowManager
     {
-        private const float HintStartDelay = 10f;
-        private const float HintCycleInterval = 10f;
+        private const float HintStartDelay = 2f;
+        private const float HintCycleInterval = 4f;
         private const float StartGameDelay = 0.5f;
         private readonly CastleSystem castleSystem;
         private readonly SlidingNotificationUI hintUI;
@@ -30,7 +30,7 @@ namespace Core
             TowerSystem towerSystem,
             TrapSystem trapSystem,
             CastleSystem castleSystem,
-            SlidingNotificationUI  hintUI)
+            SlidingNotificationUI hintUI)
         {
             this.waveManager = waveManager;
             this.towerSystem = towerSystem;
@@ -84,20 +84,21 @@ namespace Core
                     return;
                 }
 
-                if (!hintCycleStarted && timeSinceStart >= HintStartDelay)
+                switch (hintCycleStarted)
                 {
-                    hintCycleStarted = true;
-                    if (hintUI)
-                        hintUI.ShowHint("Сначала защититесь от монстров");
-                    
-                    timeSinceLastHint = hintUI != null ? -hintUI.DisplayDuration : 0f;
+                    case false when timeSinceStart >= HintStartDelay:
+                        hintCycleStarted = true;
+                        ShowHintWindow();
+                        break;
+                    case true when timeSinceLastHint >= HintCycleInterval:
+                        ShowHintWindow();
+                        break;
                 }
 
-                if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
+                void ShowHintWindow()
                 {
                     if (hintUI)
-                        hintUI.ShowHint("Сначала защититесь от монстров");
-
+                        hintUI.ShowHint("Сначала\nзащитите замок!");
                     timeSinceLastHint = hintUI != null ? -hintUI.DisplayDuration : 0f;
                 }
             }
