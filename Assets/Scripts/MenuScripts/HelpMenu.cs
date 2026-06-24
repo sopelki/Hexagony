@@ -1,35 +1,32 @@
-﻿using Misc;
+﻿using System.Collections.Generic;
+using Misc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace MenuScripts
 {
     public class HelpMenu : MonoBehaviour
     {
-        [Header("Панель справки")]
-        [SerializeField]
+        [Header("Панель справки")] [SerializeField]
         private FadePanel helpPanel;
-        [SerializeField]
-        private FadePanel menuBackground;
-        [SerializeField]
-        private FadePanel textBackground;
 
-        [Header("Текстовые поля (TextMeshPro)")]
-        [SerializeField]
+        [SerializeField] private FadePanel menuBackground;
+        [SerializeField] private FadePanel textBackground;
+
+        [Header("Текстовые поля (TextMeshPro)")] [SerializeField]
         private TextMeshProUGUI titleText;
-        [SerializeField]
-        private TextMeshProUGUI descriptionText;
 
-        [Header("Кнопки вкладок (Ярлычки)")]
-        [SerializeField]
+        [SerializeField] private TextMeshProUGUI descriptionText;
+
+        [Header("Кнопки вкладок (Ярлычки)")] [SerializeField]
         private Button tabMechanicsButton;
-        [SerializeField]
-        private Button tabCastleButton;
-        [SerializeField]
-        private Button tabFieldButton;
-        [SerializeField]
-        private Button tabMonsterButton;
+
+        [SerializeField] private Button tabCastleButton;
+        [SerializeField] private Button tabFieldButton;
+        [SerializeField] private Button tabMonsterButton;
 
         public bool IsOpen => helpPanel != null && helpPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
@@ -58,10 +55,8 @@ namespace MenuScripts
             if (menuBackground != null)
                 menuBackground.Show();
 
-            titleText.text = "";
-            descriptionText.text = "";
-
             helpPanel.Show();
+            ShowMechanics();
 
             Time.timeScale = 0f;
         }
@@ -163,7 +158,7 @@ namespace MenuScripts
                 "▪️ <color=#dfe88b><b>Здоровье:</b></color> 65\n" +
                 "▪️ <color=#dfe88b><b>Урон:</b></color> 35\n" +
                 "▪️ <color=#dfe88b><b>Награда:</b></color> 16\n" +
-                "</line-height>"+
+                "</line-height>" +
                 "<line-height=-15px>\n</line-height>" +
                 "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
                 "<line-height=20px>\n</line-height>" +
@@ -171,7 +166,7 @@ namespace MenuScripts
                 "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
                 "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
                 "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
-                "</line-height>"+
+                "</line-height>" +
                 "<line-height=-15px>\n</line-height>" +
                 "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
                 "<line-height=20px>\n</line-height>" +
