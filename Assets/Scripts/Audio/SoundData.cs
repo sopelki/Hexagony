@@ -63,5 +63,13 @@ namespace Audio
         public AudioClip[] typingSounds;
         [Range(0f, 1f)]
         public float typingVolume = 0.3f;
+        
+        public AudioClip notificationSound;
+        [Range(0f, 1f)]
+        public float notificationVolume = 0.3f;
+        
+        public AudioClip waveNotificationSound;
+        [Range(0f, 1f)]
+        public float waveNotificationVolume = 0.3f;
     }
 }

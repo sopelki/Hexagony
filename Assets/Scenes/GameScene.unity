@@ -440,6 +440,7 @@ MonoBehaviour:
   panelRect: {fileID: 22880453}
   textElement: {fileID: 302570036}
   canvasGroup: {fileID: 22880457}
+  soundData: {fileID: 11400000, guid: 46a3f0b4faf3c4447b41a4d4118726cc, type: 2}
   hiddenPosition: {x: 577.8066, y: 127}
   visiblePosition: {x: 577.8066, y: 37}
   entranceCurve:
@@ -490,9 +491,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  slideInDuration: 0.4
-  slideOutDuration: 0.3
-  displayDuration: 3
+  slideInDuration: 0.5
+  slideOutDuration: 0.4
+  displayDuration: 4
 --- !u!114 &22880456
 MonoBehaviour:
   m_ObjectHideFlags: 0

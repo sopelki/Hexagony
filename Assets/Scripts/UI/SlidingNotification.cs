@@ -1,4 +1,5 @@
 using System.Collections;
+using Audio;
 using TMPro;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace UI
         private TextMeshProUGUI textElement;
         [SerializeField]
         private CanvasGroup canvasGroup;
+        [SerializeField]
+        private SoundData soundData;
 
         [Header("Position Settings")]
         [SerializeField]
@@ -50,7 +53,12 @@ namespace UI
             canvasGroup.alpha = 0;
         }
 
-        public void ShowHint(string message) => Show(message);
+        public void ShowHint(string message)
+        {
+            Show(message);
+            if (soundData != null)
+                AudioManager.Instance.PlaySfx(soundData.notificationSound, soundData.notificationVolume);
+        }
 
         public void ShowWaveNotification(int waveNumber)
         {
@@ -59,6 +67,8 @@ namespace UI
                 : $"Началась волна\n<color=#A10009>{waveNumber}";
 
             Show(message);
+            if (soundData != null)
+                AudioManager.Instance.PlaySfx(soundData.waveNotificationSound, soundData.waveNotificationVolume);
         }
 
         public void HideHint()

@@ -9,8 +9,8 @@ namespace Core
 {
     public class GameFlowManager
     {
-        private const float HintStartDelay = 2f;
-        private const float HintCycleInterval = 4f;
+        private const float HintStartDelay = 5f;
+        private const float HintCycleInterval = 20f;
         private const float StartGameDelay = 0.5f;
         private readonly CastleSystem castleSystem;
         private readonly SlidingNotificationUI hintUI;
@@ -66,41 +66,43 @@ namespace Core
 
             if (Time.timeScale > 0)
             {
-                var deltaTime = Time.unscaledDeltaTime;
-
+                var deltaTime = TickManager.Instance.tickInterval / Time.timeScale;
+                
                 timeSinceStart += deltaTime;
                 timeSinceLastHint += deltaTime;
-
+                Debug.Log($"Time since start {timeSinceStart}s; Time since last hint: {timeSinceLastHint}s; TimeScale: {Time.timeScale}");
+                
                 if (waitingToStart)
                 {
                     timeSinceObjectPlaced += deltaTime;
-
                     if (timeSinceObjectPlaced >= StartGameDelay)
-                    {
-                        Debug.Log("GameFlowManager: Game started.");
                         StartGame();
-                    }
-
                     return;
                 }
 
-                switch (hintCycleStarted)
+                if (!hintCycleStarted)
                 {
-                    case false when timeSinceStart >= HintStartDelay:
+                    if (timeSinceStart >= HintStartDelay)
+                    {
                         hintCycleStarted = true;
                         ShowHintWindow();
-                        break;
-                    case true when timeSinceLastHint >= HintCycleInterval:
-                        ShowHintWindow();
-                        break;
+                    }
                 }
-
-                void ShowHintWindow()
+                else
                 {
-                    if (hintUI)
-                        hintUI.ShowHint("Сначала\nзащитите замок!");
-                    timeSinceLastHint = hintUI != null ? -hintUI.DisplayDuration : 0f;
+                    if (timeSinceLastHint >= HintCycleInterval)
+                        ShowHintWindow();
                 }
+            }
+            return;
+
+            void ShowHintWindow()
+            {
+                if (hintUI)
+                    hintUI.ShowHint("Сначала\nзащитите замок!");
+                Debug.Log($"Showing hint. Time since start {timeSinceStart}s; Time since last hint: {timeSinceLastHint}s");
+
+                timeSinceLastHint = 0f;
             }
         }
 
