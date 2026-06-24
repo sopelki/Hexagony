@@ -35661,14 +35661,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuScripts.EndGameMenu
   gameOverPanel: {fileID: 1715936214}
   gameWonPanel: {fileID: 82437799}
-  fadeDuration: 0.2
-  startDelay: 1
+  fadeDuration: 0.3
+  startDelay: 0
   volume: 0.4
   gameOverSound: {fileID: 8300000, guid: f7ad4128574548a48985b2a7a15df610, type: 3}
   gameWonSound: {fileID: 8300000, guid: 2352210a849a0204495091212e40c113, type: 3}
   gameInitializer: {fileID: 1242743164}
   menuBackground: {fileID: 669311201}
+  pauseMenu: {fileID: 1825367179}
   infiniteSettings: {fileID: 11400000, guid: 1975ad1f325c4c74c99314323c153b44, type: 2}
+  endGameSequenceStarted: 0
 --- !u!4 &1302547645
 Transform:
   m_ObjectHideFlags: 0
@@ -41078,7 +41080,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 111, y: -355}
+  m_AnchoredPosition: {x: 130.01921, y: -370.85962}
   m_SizeDelta: {x: 898.955, y: 307.5459}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1742947265
@@ -42382,6 +42384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuScripts.PauseMenu
   menuBackground: {fileID: 669311201}
   pausePanel: {fileID: 1825367180}
+  endGameMenu: {fileID: 1302547644}
 --- !u!114 &1825367180
 MonoBehaviour:
   m_ObjectHideFlags: 0

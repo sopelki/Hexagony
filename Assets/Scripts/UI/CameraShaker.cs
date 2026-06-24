@@ -25,8 +25,14 @@ namespace UI
 
             while (elapsed < duration)
             {
-                if (Time.timeScale > 0)
-                    elapsed += Time.unscaledDeltaTime;
+                if (Time.timeScale == 0)
+                {
+                    transform.localPosition = originalPos;
+                    currentShake = null;
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
 
                 var t = elapsed / duration;
                 var currentMagnitude = magnitude * (1f - t);

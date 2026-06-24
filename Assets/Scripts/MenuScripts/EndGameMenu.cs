@@ -35,6 +35,8 @@ namespace MenuScripts
         private GameInitializer gameInitializer;
         [SerializeField]
         private FadePanel menuBackground;
+        [SerializeField]
+        private PauseMenu pauseMenu;
 
         [Header("Infinite Mode")]
         [SerializeField]
@@ -48,6 +50,8 @@ namespace MenuScripts
         public bool IsGameWonOpen => gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
         public bool IsAnyEndGameOpen => IsGameOverOpen || IsGameWonOpen;
+
+        public bool endGameSequenceStarted;
 
         private void Awake()
         {
@@ -82,16 +86,18 @@ namespace MenuScripts
         {
             if (!panel)
                 yield break;
-
+    
+            endGameSequenceStarted = true;
+            UIBlocker.BlockAll();
+    
             yield return new WaitForSeconds(startDelay);
-
+    
             if (clip && audioSource)
             {
                 AudioManager.Instance.StopMusic();
                 audioSource.PlayOneShot(clip, volume);
             }
 
-            UIBlocker.BlockAll();
             Time.timeScale = 0f;
 
             if (menuBackground)

@@ -10,11 +10,16 @@ namespace MenuScripts
         private FadePanel menuBackground;
         [SerializeField]
         private FadePanel pausePanel;
+        [SerializeField]
+        private EndGameMenu endGameMenu;
 
         public bool IsOpen => pausePanel != null && pausePanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
         public void OpenPause()
         {
+            if (endGameMenu != null && (endGameMenu.endGameSequenceStarted || endGameMenu.IsAnyEndGameOpen))
+                return;
+
             UIBlocker.BlockAll();
 
             if (pausePanel == null)
