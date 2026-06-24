@@ -10,6 +10,25 @@ namespace UI
 {
     public class CastleUI : MonoBehaviour
     {
+        [Serializable]
+        public class StatRow
+        {
+            public RectTransform icon;
+            public RectTransform label;
+            public RectTransform value;
+        }
+
+        [Header("Stat Rows")]
+        [SerializeField]
+        private StatRow hpRow;
+        [SerializeField]
+        private StatRow goldRow;
+        [SerializeField]
+        private StatRow foodRow;
+        [SerializeField]
+        private StatRow waveRow;
+
+        [Header("Text Values (TMPro)")]
         [SerializeField]
         private TextMeshProUGUI hpText;
         [SerializeField]
@@ -18,10 +37,22 @@ namespace UI
         private TextMeshProUGUI foodText;
         [SerializeField]
         private TextMeshProUGUI waveText;
+
+        [Header("Inventory Settings")]
         [SerializeField]
         private GameObject inventoryItemPrefab;
 
-        [Header("Effects")]
+        [Header("Animation Settings")]
+        [SerializeField]
+        private float shakeDuration = 0.15f;
+        [SerializeField]
+        private float iconPunchScale = 1.05f;
+        [SerializeField]
+        private float labelPunchScale = 1.02f;
+        [SerializeField]
+        private float valuePunchScale = 1.15f;
+
+        [Header("HP Flash Effects")]
         [SerializeField]
         private Color damageColor = new(0.8f, 0.2f, 0.2f);
         [SerializeField]
@@ -29,23 +60,21 @@ namespace UI
 
         private CastleSystem castleSystem;
         private WaveManager waveManager;
-        private Coroutine flashCoroutine;
         private CastleModel model;
 
+        private Coroutine flashCoroutine;
         private Color originalColor;
+
+        private int lastGold;
+        private int lastUnits;
+        private int lastMaxSupply;
+        private int lastWave;
+
+        private readonly Dictionary<RectTransform, Coroutine> activeShakes = new();
 
         private void Awake()
         {
             originalColor = hpText.color;
-        }
-
-        private void OnDestroy()
-        {
-            if (model != null)
-            {
-                model.OnChanged -= UpdateUI;
-                model.OnDamaged -= HandleDamage;
-            }
         }
 
         public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
@@ -54,6 +83,11 @@ namespace UI
             this.castleSystem = castleSystem;
             this.waveManager = waveManager;
 
+            lastGold = model.Gold;
+            lastUnits = castleSystem.CurrentUnitsCount;
+            lastMaxSupply = model.MaxSupply;
+            lastWave = waveManager.CurrentWaveNumber;
+
             model.OnChanged += UpdateUI;
             waveManager.OnWaveStarting += UpdateWaveUi;
             model.OnDamaged += HandleDamage;
@@ -61,28 +95,94 @@ namespace UI
             UpdateUI();
         }
 
-        public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
+        private void ShakeGroup(StatRow row)
         {
-            var allSlots = FindObjectsByType<DropSlot>();
+            if (row == null) return;
 
-            for (var i = 0; i < savedBuildings.Count; i++)
-            {
-                if (i >= allSlots.Length) break;
-
-                var buildingData = savedBuildings[i].Data;
-
-                var itemGo = Instantiate(inventoryItemPrefab, allSlots[i].transform.Find("ItemContainer"));
-                var item = itemGo.GetComponent<InventoryItem>();
-
-                item.SetData(buildingData, false);
-                item.ApplyBuildingVisual(buildingData);
-                item.Place(allSlots[i].transform.Find("ItemContainer"));
-            }
+            ShakeElement(row.icon, iconPunchScale);
+            ShakeElement(row.label, labelPunchScale);
+            ShakeElement(row.value, valuePunchScale);
         }
 
+        private void ShakeElement(RectTransform target, float punchAmount)
+        {
+            if (target == null) return;
+
+            if (activeShakes.TryGetValue(target, out var routine) && routine != null)
+                StopCoroutine(routine);
+
+            activeShakes[target] = StartCoroutine(SingleElementShakeRoutine(target, punchAmount));
+        }
+
+        private IEnumerator SingleElementShakeRoutine(RectTransform target, float punchAmount)
+        {
+            var elapsed = 0f;
+            var originalScale = Vector3.one;
+            var punchScale = new Vector3(punchAmount, punchAmount, punchAmount);
+
+            while (elapsed < shakeDuration)
+            {
+                if (Time.timeScale == 0)
+                {
+                    target.localScale = originalScale;
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = elapsed / shakeDuration;
+
+                target.localScale = Vector3.Lerp(punchScale, originalScale, t);
+                yield return null;
+            }
+
+            target.localScale = originalScale;
+            activeShakes[target] = null;
+        }
+
+        public void UpdateWaveUi(int waveNumber)
+        {
+            if (waveNumber != lastWave)
+            {
+                ShakeGroup(waveRow);
+                lastWave = waveNumber;
+            }
+            waveText.text = $"{waveNumber}";
+        }
+
+        private void UpdateUI()
+        {
+            if (model.Gold != lastGold)
+            {
+                ShakeGroup(goldRow);
+                lastGold = model.Gold;
+            }
+
+            var currentUnits = castleSystem.CurrentUnitsCount;
+            if (currentUnits != lastUnits || model.MaxSupply != lastMaxSupply)
+            {
+                ShakeGroup(foodRow);
+                lastUnits = currentUnits;
+                lastMaxSupply = model.MaxSupply;
+            }
+
+            var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
+            if (hpPercent == 0 && model.Hp > 0) hpPercent = 1;
+
+            hpText.text = $"{hpPercent}%";
+            goldText.text = model.Gold.ToString();
+            foodText.text = $"{currentUnits}/{model.MaxSupply}";
+            waveText.text = $"{waveManager.CurrentWaveNumber}";
+
+            if (model.Hp <= 0)
+                hpText.color = damageColor;
+            else if (flashCoroutine == null)
+                hpText.color = originalColor;
+        }
 
         private void HandleDamage(int damage)
         {
+            ShakeGroup(hpRow);
+
             if (flashCoroutine != null)
                 StopCoroutine(flashCoroutine);
 
@@ -93,18 +193,15 @@ namespace UI
         {
             var elapsed = 0f;
             var originalScale = Vector3.one;
-            var punchScale = new Vector3(1.075f, 1.075f, 1.075f);
+            var punchScale = new Vector3(1.1f, 1.1f, 1.1f);
 
             while (elapsed < flashDuration)
             {
-                if (Time.timeScale > 0)
-                    elapsed += Time.unscaledDeltaTime;
+                if (Time.timeScale > 0) elapsed += Time.unscaledDeltaTime;
 
                 var t = elapsed / flashDuration;
-
                 hpText.color = Color.Lerp(damageColor, originalColor, t);
                 hpText.transform.localScale = Vector3.Lerp(punchScale, originalScale, t);
-
                 yield return null;
             }
 
@@ -113,30 +210,38 @@ namespace UI
             flashCoroutine = null;
         }
 
-        public void UpdateWaveUi(int waveNumber)
+        public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
         {
-            Debug.Log($"Updating UI from action. Current wave: {waveNumber}");
-            waveText.text = $"{waveNumber}";
+            var allSlots = FindObjectsByType<DropSlot>();
+            for (var i = 0; i < savedBuildings.Count; i++)
+            {
+                if (i >= allSlots.Length) break;
+
+                var buildingData = savedBuildings[i].Data;
+                var container = allSlots[i].transform.Find("ItemContainer");
+                if (container == null) continue;
+
+                var itemGo = Instantiate(inventoryItemPrefab, container);
+                var item = itemGo.GetComponent<InventoryItem>();
+
+                if (item != null)
+                {
+                    item.SetData(buildingData, false);
+                    item.ApplyBuildingVisual(buildingData);
+                    item.Place(container);
+                }
+            }
         }
 
-        private void UpdateUI()
+        private void OnDestroy()
         {
-            Debug.Log($"Updating UI. Current wave: {waveManager.CurrentWaveNumber}");
-            var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
-
-            if (hpPercent == 0 && model.Hp > 0)
-                hpPercent = 1;
-
-            hpText.text = $"{hpPercent}%";
-            goldText.text = model.Gold.ToString();
-            foodText.text = $"{castleSystem.CurrentUnitsCount}/{model.MaxSupply}";
-            waveText.text = $"{waveManager.CurrentWaveNumber}";
-
-            if (model.Hp <= 0)
-                hpText.color = damageColor;
-
-            else if (flashCoroutine == null)
-                hpText.color = originalColor;
+            if (model != null)
+            {
+                model.OnChanged -= UpdateUI;
+                model.OnDamaged -= HandleDamage;
+            }
+            if (waveManager != null)
+                waveManager.OnWaveStarting -= UpdateWaveUi;
         }
     }
 }
