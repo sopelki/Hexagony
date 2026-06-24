@@ -24,7 +24,7 @@ namespace Misc
                         break;
 
                     case IBeginDragHandler or IDragHandler or IEndDragHandler:
-                        if (mb is not Slider)
+                        if (mb is not Slider and not ScrollRect and not Scrollbar)
                             mb.enabled = false;
                         break;
                 }
@@ -38,7 +38,7 @@ namespace Misc
             foreach (var mb in allComponents)
             {
                 if (mb is (TooltipTrigger or IBeginDragHandler or IDragHandler or IEndDragHandler)
-                    and not Slider)
+                    and not (Slider or ScrollRect or Scrollbar))
                     mb.enabled = true;
             }
         }
