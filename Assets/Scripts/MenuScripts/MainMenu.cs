@@ -33,6 +33,9 @@ namespace MenuScripts
 
         public void PlayGame()
         {
+            if (gameplaySoundData?.gameStartSound)
+                AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
+
             SessionSaveManager.IsSaveLoaded = false;
             SessionSaveManager.DeleteSession();
             SceneTransitions.LoadScene("GameScene");
@@ -42,6 +45,9 @@ namespace MenuScripts
         {
             if (SessionSaveManager.HasSavedSession())
             {
+                if (gameplaySoundData?.gameStartSound)
+                    AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
+                
                 SessionSaveManager.IsSaveLoaded = true;
                 SceneTransitions.LoadScene("GameScene");
             }

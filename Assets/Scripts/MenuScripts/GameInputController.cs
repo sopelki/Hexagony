@@ -8,7 +8,7 @@ namespace MenuScripts
 {
     public class GameInputController : MonoBehaviour
     {
-        [Header("Ссылки на меню")]
+        [Header("References")]
         [SerializeField]
         private PauseMenu pauseMenu;
         [SerializeField]
@@ -18,13 +18,13 @@ namespace MenuScripts
         [SerializeField]
         private EndGameMenu endGameMenu;
 
-        [Header("Настройки скорости")]
+        [Header("Speed Settings")]
         [SerializeField]
-        private float speedUpMultiplier = 3.0f;
+        private float speedUpMultiplier = 5.0f;
         [SerializeField]
         private FadePanel speedUpIcon;
 
-        [Header("Эффекты (URP)")]
+        [Header("Effects (URP)")]
         [SerializeField]
         private Renderer2DData rendererData;
         [SerializeField]

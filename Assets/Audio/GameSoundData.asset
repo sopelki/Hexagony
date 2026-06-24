@@ -74,7 +74,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 780e1351bd4e11d4c9ba19bc1a1b9cd7, type: 3}
   - {fileID: 8300000, guid: 81120c0f643196c4bb2298762b10c38d, type: 3}
   typingVolume: 0.15
-  notificationSound: {fileID: 8300000, guid: 31e10240e64af2e4c849e50c0cf289f1, type: 3}
-  notificationVolume: 0.35
-  waveNotificationSound: {fileID: 8300000, guid: 31e10240e64af2e4c849e50c0cf289f1, type: 3}
-  waveNotificationVolume: 0.35
+  notificationSound: {fileID: 8300000, guid: 28e59b5b59967de46a1eb15718433da8, type: 3}
+  notificationVolume: 0.5
+  waveNotificationSound: {fileID: 8300000, guid: 156a93b1cdd489648815b1b9970acc19, type: 3}
+  waveNotificationVolume: 0.5
+  gameStartSound: {fileID: 8300000, guid: 73df019b21543514990dd110b172d27f, type: 3}
+  gameStartVolume: 0.5

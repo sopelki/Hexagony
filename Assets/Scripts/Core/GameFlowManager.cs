@@ -12,6 +12,7 @@ namespace Core
         private const float HintStartDelay = 5f;
         private const float HintCycleInterval = 20f;
         private const float StartGameDelay = 0.5f;
+
         private readonly CastleSystem castleSystem;
         private readonly SlidingNotificationUI hintUI;
         private readonly TowerSystem towerSystem;
@@ -24,6 +25,8 @@ namespace Core
         private float timeSinceObjectPlaced;
         private float timeSinceStart;
         private bool waitingToStart;
+
+        public bool IsTutorialActive { get; set; } = true;
 
         public GameFlowManager(
             WaveManager waveManager,
@@ -39,8 +42,6 @@ namespace Core
             this.hintUI = hintUI;
         }
 
-        public bool IsTutorialActive { get; set; } = true;
-
         public void Initialize()
         {
             towerSystem.OnFirstTowerPlaced += OnFirstObjectPlaced;
@@ -55,8 +56,7 @@ namespace Core
             waitingToStart = false;
 
             TickManager.Instance.OnTick += Tick;
-
-            Debug.Log("GameFlowManager: Waiting for player action...");
+            Debug.Log("[GameFlow] Waiting for player to build something...");
         }
 
         private void Tick()
@@ -67,11 +67,7 @@ namespace Core
             if (Time.timeScale > 0)
             {
                 var deltaTime = TickManager.Instance.tickInterval / Time.timeScale;
-                
-                timeSinceStart += deltaTime;
-                timeSinceLastHint += deltaTime;
-                Debug.Log($"Time since start {timeSinceStart}s; Time since last hint: {timeSinceLastHint}s; TimeScale: {Time.timeScale}");
-                
+
                 if (waitingToStart)
                 {
                     timeSinceObjectPlaced += deltaTime;
@@ -79,6 +75,9 @@ namespace Core
                         StartGame();
                     return;
                 }
+
+                timeSinceStart += deltaTime;
+                timeSinceLastHint += deltaTime;
 
                 if (!hintCycleStarted)
                 {
@@ -94,33 +93,28 @@ namespace Core
                         ShowHintWindow();
                 }
             }
-            return;
+        }
 
-            void ShowHintWindow()
-            {
-                if (hintUI)
-                    hintUI.ShowHint("Сначала\nзащитите замок!");
-                Debug.Log($"Showing hint. Time since start {timeSinceStart}s; Time since last hint: {timeSinceLastHint}s");
+        private void ShowHintWindow()
+        {
+            if (hintUI)
+                hintUI.ShowHint("Для начала\nзащитите замок!");
 
-                timeSinceLastHint = 0f;
-            }
+            timeSinceLastHint = 0f;
         }
 
         private void OnFirstObjectPlaced()
         {
-            if (IsTutorialActive)
-                return;
-
-            if (gameStarted || waitingToStart)
+            if (IsTutorialActive || gameStarted || waitingToStart)
                 return;
 
             waitingToStart = true;
             timeSinceObjectPlaced = 0f;
 
-            if (hintUI != null)
+            if (hintUI)
                 hintUI.HideHint();
 
-            Debug.Log($"First object placed. Starting game in {StartGameDelay}s...");
+            Debug.Log("[GameFlow] First object placed! Starting engine...");
         }
 
         private void StartGame()
@@ -128,19 +122,20 @@ namespace Core
             gameStarted = true;
 
             TickManager.Instance.OnTick -= Tick;
-
             towerSystem.OnFirstTowerPlaced -= OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced -= OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced -= OnFirstObjectPlaced;
 
             waveManager.StartGame();
-
-            Debug.Log("GameFlowManager: Game started.");
         }
 
         public void ResetToStandardMode()
         {
             IsTutorialActive = false;
+            gameStarted = false;
+            waitingToStart = false;
+            hintCycleStarted = false;
+            timeSinceStart = 0f;
 
             towerSystem.OnFirstTowerPlaced -= OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced -= OnFirstObjectPlaced;
@@ -149,13 +144,6 @@ namespace Core
             towerSystem.OnFirstTowerPlaced += OnFirstObjectPlaced;
             trapSystem.OnFirstTrapPlaced += OnFirstObjectPlaced;
             castleSystem.OnFirstBuildingPlaced += OnFirstObjectPlaced;
-
-            gameStarted = false;
-            waitingToStart = false;
-            hintCycleStarted = false;
-            timeSinceStart = 0f;
-
-            Debug.Log("GameFlowManager: Сброшен в режим чистой игры.");
         }
     }
 }

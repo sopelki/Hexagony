@@ -71,5 +71,9 @@ namespace Audio
         public AudioClip waveNotificationSound;
         [Range(0f, 1f)]
         public float waveNotificationVolume = 0.3f;
+        
+        public AudioClip gameStartSound;
+        [Range(0f, 1f)]
+        public float gameStartVolume = 0.3f;
     }
 }
