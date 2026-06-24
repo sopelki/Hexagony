@@ -18,6 +18,8 @@ namespace UI
         public float displayDuration = 3f;
         [SerializeField]
         private float targetOpacity = 0.75f;
+        [SerializeField]
+        private SlidingNotificationUI slidingUI;
 
         private Coroutine fadeCoroutine;
 
@@ -27,6 +29,14 @@ namespace UI
                 canvasGroup = GetComponent<CanvasGroup>();
 
             canvasGroup.alpha = 0;
+        }
+        
+        public void ShowHintNotification()
+        {
+            if (hintText == null)
+                return;
+
+            slidingUI.Show(hintText); 
         }
 
         public void ShowHint(string message)

@@ -39,9 +39,7 @@ namespace Core
         [SerializeField]
         private CastleUI castleUI;
         [SerializeField]
-        private WaveNotificationUI waveNotificationUI;
-        [SerializeField]
-        private HintUI startGameHintUI;
+        private SlidingNotificationUI notificationUI;
         [SerializeField]
         private TickManager tickManager;
         [SerializeField]
@@ -158,11 +156,12 @@ namespace Core
             if (castleView != null)
                 castleView.Initialize(castleModel, tilemap, field);
 
-            if (waveNotificationUI != null)
+            if (notificationUI != null)
             {
-                waveNotificationUI.Initialize(waves.Count);
-                waveManager.OnWaveStarting += waveNotificationUI.ShowWaveNotification;
+                notificationUI.Initialize(waves.Count);
+                waveManager.OnWaveStarting += notificationUI.ShowWaveNotification;
             }
+
 
             towersModel = new TowersModel();
             towerSystem = new TowerSystem(castleSystem, towersModel, monsterSystem, projectileSystem, soundData);
@@ -229,7 +228,7 @@ namespace Core
                 towerSystem,
                 trapSystem,
                 castleSystem,
-                startGameHintUI
+                notificationUI
             );
 
             gameFlowManager.Initialize();
@@ -241,6 +240,9 @@ namespace Core
                     tutorialManager.Setup(gameFlowManager);
             }
 
+            if (notificationUI != null)
+                notificationUI.Initialize(waves.Count);
+
             foreach (var item in FindObjectsByType<ShopToFieldTowerItem>())
                 item.Construct(towerSystem);
 
@@ -249,9 +251,6 @@ namespace Core
 
             foreach (var item in FindObjectsByType<ShopToFieldTrapItem>())
                 item.Construct(trapSystem, field);
-
-            if (startGameHintUI != null)
-                startGameHintUI.Initialize();
         }
 
         private void OnDestroy()

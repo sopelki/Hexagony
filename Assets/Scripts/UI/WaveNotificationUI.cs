@@ -7,8 +7,6 @@ namespace UI
     public class WaveNotificationUI : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI waveText;
-        [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
         private float displayDuration = 3f;
@@ -16,6 +14,9 @@ namespace UI
         private float fadeDuration = 0.5f;
         [SerializeField]
         private float targetOpacity = 0.75f;
+        [SerializeField]
+        private SlidingNotificationUI slidingUI;
+        
         private Coroutine displayCoroutine;
 
         private int wavesCount;
@@ -32,49 +33,11 @@ namespace UI
 
         public void ShowWaveNotification(int waveNumber)
         {
-            if (displayCoroutine != null)
-                StopCoroutine(displayCoroutine);
-
-            displayCoroutine = StartCoroutine(DisplayWaveCoroutine(waveNumber));
-        }
-
-        private IEnumerator DisplayWaveCoroutine(int waveNumber)
-        {
-            var text = waveNumber <= wavesCount
+            var message = waveNumber <= wavesCount
                 ? $"Началась волна {waveNumber} из {wavesCount}"
                 : $"Началась волна {waveNumber}";
 
-            if (waveText)
-                waveText.text = text;
-
-            yield return FadeCanvasGroup(0, targetOpacity, fadeDuration);
-
-            float timer = 0;
-            while (timer < displayDuration)
-            {
-                if (Time.timeScale > 0)
-                    timer += Time.unscaledDeltaTime;
-                yield return null;
-            }
-
-            yield return FadeCanvasGroup(targetOpacity, 0, fadeDuration);
-        }
-
-        private IEnumerator FadeCanvasGroup(float startAlpha, float endAlpha, float duration)
-        {
-            var elapsed = 0f;
-
-            while (elapsed < duration)
-            {
-                if (Time.timeScale > 0)
-                {
-                    elapsed += Time.unscaledDeltaTime;
-                    canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
-                }
-                yield return null;
-            }
-
-            canvasGroup.alpha = endAlpha;
+            slidingUI.Show(message); 
         }
     }
 }

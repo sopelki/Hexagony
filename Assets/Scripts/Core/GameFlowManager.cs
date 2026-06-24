@@ -13,7 +13,7 @@ namespace Core
         private const float HintCycleInterval = 10f;
         private const float StartGameDelay = 0.5f;
         private readonly CastleSystem castleSystem;
-        private readonly HintUI hintUI;
+        private readonly SlidingNotificationUI hintUI;
         private readonly TowerSystem towerSystem;
         private readonly TrapSystem trapSystem;
         private readonly WaveManager waveManager;
@@ -30,7 +30,7 @@ namespace Core
             TowerSystem towerSystem,
             TrapSystem trapSystem,
             CastleSystem castleSystem,
-            HintUI hintUI)
+            SlidingNotificationUI  hintUI)
         {
             this.waveManager = waveManager;
             this.towerSystem = towerSystem;
@@ -88,17 +88,17 @@ namespace Core
                 {
                     hintCycleStarted = true;
                     if (hintUI)
-                        hintUI.ShowHint("Защититесь от монстров до начала первой волны");
-
-                    timeSinceLastHint = hintUI != null ? -hintUI.displayDuration : 0f;
+                        hintUI.ShowHint("Сначала защититесь от монстров");
+                    
+                    timeSinceLastHint = hintUI != null ? -hintUI.DisplayDuration : 0f;
                 }
 
                 if (hintCycleStarted && timeSinceLastHint >= HintCycleInterval)
                 {
                     if (hintUI)
-                        hintUI.ShowHint("Пока вы не поставите башню, ловушку или здание игра не начнется");
+                        hintUI.ShowHint("Сначала защититесь от монстров");
 
-                    timeSinceLastHint = hintUI != null ? -hintUI.displayDuration : 0f;
+                    timeSinceLastHint = hintUI != null ? -hintUI.DisplayDuration : 0f;
                 }
             }
         }
