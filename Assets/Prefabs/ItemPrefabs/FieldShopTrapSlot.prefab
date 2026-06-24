@@ -95,7 +95,8 @@ MonoBehaviour:
   canvas: {fileID: 0}
   mapViewport: {fileID: 0}
   fieldTilemap: {fileID: 0}
-  startScaleMultiplier: 1.3
+  startScaleMultiplier: 1.6
+  validSizeScale: 1
   scaleSpeed: 15
   colorLerpSpeed: 15
   trapData: {fileID: 0}
@@ -104,8 +105,6 @@ MonoBehaviour:
   ghostInvalidColor: {r: 1, g: 0.2396226, b: 0.2396226, a: 0.50980395}
   highlightValidColor: {r: 0, g: 0.4415095, b: 0.000000026316016, a: 0.7529412}
   highlightInvalidColor: {r: 0.6603774, g: 0, b: 0, a: 0.7529412}
-  targetScale: 0
-  validSizeScale: 0.5
   snapSpeed: 20
   unSnapSpeed: 15
   ghostOffset: {x: 0, y: 0}

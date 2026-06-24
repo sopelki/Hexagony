@@ -3500,10 +3500,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 537554929}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
-      propertyPath: validSizeScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
@@ -3529,7 +3525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
-      value: 1
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 2125372117984546056, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: data
@@ -43801,10 +43797,6 @@ PrefabInstance:
       propertyPath: ghostInvalidColor.r
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2273944330815825048, guid: 435707ed8aa3cdc43b143f69ac8f2a03, type: 3}
-      propertyPath: startScaleMultiplier
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2677504928031555092, guid: 435707ed8aa3cdc43b143f69ac8f2a03, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -49777,10 +49769,6 @@ PrefabInstance:
       propertyPath: ghostInvalidColor.r
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2273944330815825048, guid: 435707ed8aa3cdc43b143f69ac8f2a03, type: 3}
-      propertyPath: startScaleMultiplier
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2677504928031555092, guid: 435707ed8aa3cdc43b143f69ac8f2a03, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -54422,10 +54410,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 537554929}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
-      propertyPath: validSizeScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
@@ -54451,7 +54435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2125372117984546056, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: data
@@ -62829,10 +62813,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 537554929}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
-      propertyPath: validSizeScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
@@ -62858,7 +62838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: startScaleMultiplier
-      value: 1
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 2125372117984546056, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: data

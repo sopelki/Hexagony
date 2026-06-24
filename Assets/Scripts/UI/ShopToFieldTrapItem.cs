@@ -25,6 +25,8 @@ namespace UI
         [SerializeField]
         private float startScaleMultiplier = 0.75f;
         [SerializeField]
+        private float validSizeScale = 1f;
+        [SerializeField]
         private float scaleSpeed = 15f;
         [SerializeField]
         private float colorLerpSpeed = 15f;
@@ -47,12 +49,6 @@ namespace UI
         [SerializeField]
         private Color highlightInvalidColor = new(1f, 0f, 0f, 0.5f);
 
-        [Header("Animation State")]
-        [SerializeField]
-        private float targetScale;
-        [SerializeField]
-        private float validSizeScale = 1f;
-
         [Header("Animation & Speeds")]
         [SerializeField]
         private float snapSpeed = 20f;
@@ -66,6 +62,7 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+
         private readonly List<GameObject> highlights = new();
         private Vector2 currentGhostPosition;
         private float currentScale;
@@ -80,6 +77,7 @@ namespace UI
         private bool isSnapping;
         private Color targetColor;
         private Vector2 targetGhostPosition;
+        private float targetScale;
         private TrapSystem trapSystem;
         private bool wasSnapping;
 
@@ -103,6 +101,7 @@ namespace UI
         {
             if (!ghost)
                 return;
+
             if (isSnapping)
             {
                 currentGhostPosition =
@@ -118,9 +117,12 @@ namespace UI
             }
             else
                 currentGhostPosition = targetGhostPosition;
+
             ghostRect.localPosition = currentGhostPosition;
+
             currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
             ghostRect.localScale = Vector3.one * currentScale;
+
             ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
         }
 
@@ -197,6 +199,7 @@ namespace UI
             currentGhostPosition = localPoint;
             targetGhostPosition = localPoint;
             ghostRect.localPosition = currentGhostPosition;
+            ghostRect.localScale = Vector3.one * currentScale;
 
             for (var i = 0; i < 3; i++)
             {
@@ -210,13 +213,6 @@ namespace UI
         {
             if (ghostRect == null || !isDragging)
                 return;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var localPoint);
-            ghostRect.localPosition = localPoint;
 
             UpdatePlacementFeedback(eventData);
         }
@@ -259,7 +255,6 @@ namespace UI
             this.trapSystem = trapSystem;
             this.field = field;
         }
-
 
         private void UpdatePlacementFeedback(PointerEventData eventData)
         {
