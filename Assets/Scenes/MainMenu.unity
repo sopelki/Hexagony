@@ -3298,6 +3298,10 @@ PrefabInstance:
       value: PlayButton
       objectReference: {fileID: 0}
     - target: {fileID: 4748470915983087717, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748470915983087717, guid: 4e5376d26ab9a85498c1605c9d1649b7, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
       value: 0.5
       objectReference: {fileID: 0}

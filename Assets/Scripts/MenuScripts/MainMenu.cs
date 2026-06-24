@@ -15,7 +15,6 @@ namespace MenuScripts
         private SoundData gameplaySoundData;
         [SerializeField]
         private SettingsMenu settingsMenu;
-
         [SerializeField]
         private Button continueButton;
 
@@ -28,7 +27,7 @@ namespace MenuScripts
             if (continueButton != null)
             {
                 var hasSession = SessionSaveManager.HasSavedSession();
-                continueButton.gameObject.SetActive(hasSession);
+                continueButton.interactable = hasSession;
             }
         }
 
