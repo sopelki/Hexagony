@@ -8,14 +8,27 @@ namespace View
 {
     public class CastleView : MonoBehaviour
     {
-        [Header("Castle wall settings")]
-        [SerializeField]
-        private List<Vector2Int> castleHexes = new();
+        private readonly List<Vector2Int> castleHexes = new()
+        {
+            new Vector2Int(-27, 22),
+            new Vector2Int(-27, 21),
+            new Vector2Int(-27, 20),
+            new Vector2Int(-27, 19),
+            new Vector2Int(-26, 21),
+            new Vector2Int(-28, 20),
+            new Vector2Int(-28, 19),
+            new Vector2Int(-28, 21),
+            new Vector2Int(-28, 22),
+            new Vector2Int(-27, 23),
+            new Vector2Int(-28, 23),
+            new Vector2Int(-29, 22),
+            new Vector2Int(-29, 21),
+            new Vector2Int(-29, 20)
+        };
 
         public List<Vector3> WallWorldPositions { get; } = new();
         public CastleModel Model { get; private set; }
         public Field.Field Field { get; private set; }
-
 
         private void OnDrawGizmos()
         {
