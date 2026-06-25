@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac51071bacc04f829073f3768d19c9ad, type: 3}
   m_Name: SkeletonBossData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
-  maxHealth: 300
-  damage: 10
-  moveSpeed: 0.5
+  maxHealth: 600
+  damage: 45
+  moveSpeed: 1
   goldReward: 40
   attackRadius: 1
   attackCooldown: 2
