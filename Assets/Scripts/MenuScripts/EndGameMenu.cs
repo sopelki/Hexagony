@@ -102,8 +102,9 @@ namespace MenuScripts
 
             if (menuBackground)
                 menuBackground.Show(fadeDuration);
-
+            
             panel.Show();
+            endGameSequenceStarted = false; 
         }
 
         public void RestartGame()

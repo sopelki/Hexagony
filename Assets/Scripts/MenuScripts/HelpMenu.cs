@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Misc;
+﻿using Misc;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace MenuScripts

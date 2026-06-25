@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac51071bacc04f829073f3768d19c9ad, type: 3}
   m_Name: SkeletonBossData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
-  maxHealth: 100
-  damage: 10
-  moveSpeed: 4
-  goldReward: 20
+  maxHealth: 600
+  damage: 45
+  moveSpeed: 1
+  goldReward: 40
   attackRadius: 1
-  attackCooldown: 1
+  attackCooldown: 2
   attackType: 1
   prefab: {fileID: 6346340308779131127, guid: dc86d8581cbbb134cb2ea13338a44e8a, type: 3}
   hitOffsetY: 0

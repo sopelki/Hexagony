@@ -48,7 +48,9 @@ namespace Logic.Trap
 
         public bool CanPlaceTrap(TrapData data, Vector2Int axial)
         {
-            if (castleSystem.CastleModel.Gold < data.baseCost) return false;
+            if (castleSystem.CastleModel.Gold < data.baseCost)
+                return false;
+
             var hexes = GetTrapOccupiedHexes(axial);
 
             foreach (var h in hexes)
@@ -57,6 +59,7 @@ namespace Logic.Trap
 
                 if (hexObj == null)
                     return false;
+
                 if (hexObj.type != HexagonType.Path)
                     return false;
 
@@ -108,9 +111,10 @@ namespace Logic.Trap
         public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
         {
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
-            if (trap == null || trap.IsTriggered) return;
+            if (trap == null || trap.IsTriggered)
+                return;
 
-            if (trap.Data.trapType == TrapType.SlowZone)
+            if (trap.Data.trapType is TrapType.SlowZone or TrapType.DamageZone)
             {
                 if (!trap.ActiveSlowDebuffs.ContainsKey(monster))
                 {
@@ -124,8 +128,12 @@ namespace Logic.Trap
         public void OnMonsterExitedCell(Vector2Int hex, MonsterModel monster)
         {
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
-            if (trap == null) return;
-            if (trap.Hexes.Contains(monster.CurrentHex)) return;
+
+            if (trap == null)
+                return;
+
+            if (trap.Hexes.Contains(monster.CurrentHex))
+                return;
 
             if (trap.Data.trapType == TrapType.SlowZone && trap.ActiveSlowDebuffs.TryGetValue(monster, out var slow))
             {
@@ -159,7 +167,8 @@ namespace Logic.Trap
         private static void HandleDamageZone(TrapModel trap, IReadOnlyList<MonsterModel> monsters, float delta)
         {
             trap.TickTimer += delta;
-            if (trap.TickTimer < trap.Data.tickInterval) return;
+            if (trap.TickTimer < trap.Data.tickInterval)
+                return;
             while (trap.TickTimer >= trap.Data.tickInterval)
             {
                 trap.TickTimer -= trap.Data.tickInterval;

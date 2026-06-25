@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac51071bacc04f829073f3768d19c9ad, type: 3}
   m_Name: GoblinRiderData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
-  maxHealth: 100
-  damage: 10
-  moveSpeed: 4
+  maxHealth: 60
+  damage: 20
+  moveSpeed: 3
   goldReward: 20
   attackRadius: 1
   attackCooldown: 1

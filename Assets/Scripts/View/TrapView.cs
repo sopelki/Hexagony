@@ -17,7 +17,6 @@ namespace View
         private Animator animator;
 
         private readonly HashSet<Collider2D> overlappingTowers = new();
-        // private int occludersCount;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -50,7 +49,6 @@ namespace View
         {
             spriteRenderer.sprite = sprite;
             SetOutlineVisible(false);
-            // occludersCount = 0;
         }
 
         public void SetOutlineVisible(bool value)
