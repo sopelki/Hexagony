@@ -121,6 +121,7 @@ namespace MenuScripts
         public void ContinueInfinite()
         {
             Time.timeScale = 1f;
+            endGameSequenceStarted = false; 
             UIBlocker.UnblockAll();
 
             gameWonPanel.Hide();
