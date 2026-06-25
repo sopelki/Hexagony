@@ -59,7 +59,6 @@ namespace UI
             queue.Clear();
 
             panelRect.anchoredPosition = hiddenPosition;
-            canvasGroup.alpha = 0;
         }
 
         public void ShowHint(string message)
@@ -88,7 +87,6 @@ namespace UI
             queue.Clear();
             isProcessing = false;
             panelRect.anchoredPosition = hiddenPosition;
-            canvasGroup.alpha = 0;
         }
 
         private void Enqueue(string message, AudioClip clip, float volume)
@@ -118,8 +116,8 @@ namespace UI
 
                 if (request.Clip)
                     AudioManager.Instance.PlaySfx(request.Clip, request.Volume);
-                
-                yield return MovePanel(hiddenPosition, visiblePosition, slideInDuration, entranceCurve, true);
+
+                yield return MovePanel(hiddenPosition, visiblePosition, slideInDuration, entranceCurve);
 
                 float timer = 0;
                 while (timer < displayDuration)
@@ -129,14 +127,14 @@ namespace UI
                     yield return null;
                 }
 
-                yield return MovePanel(visiblePosition, hiddenPosition, slideOutDuration, exitCurve, false);
+                yield return MovePanel(visiblePosition, hiddenPosition, slideOutDuration, exitCurve);
                 yield return new WaitForSecondsRealtime(queueDelay);
             }
 
             isProcessing = false;
         }
 
-        private IEnumerator MovePanel(Vector2 start, Vector2 end, float duration, AnimationCurve curve, bool fadeIn)
+        private IEnumerator MovePanel(Vector2 start, Vector2 end, float duration, AnimationCurve curve)
         {
             float elapsed = 0;
             while (elapsed < duration)
@@ -146,13 +144,11 @@ namespace UI
                 var curveValue = curve.Evaluate(t);
 
                 panelRect.anchoredPosition = Vector2.LerpUnclamped(start, end, curveValue);
-                canvasGroup.alpha = fadeIn ? Mathf.Lerp(0, 1, t * 2) : Mathf.Lerp(1, 0, t);
 
                 yield return null;
             }
 
             panelRect.anchoredPosition = end;
-            canvasGroup.alpha = fadeIn ? 1 : 0;
         }
     }
 }
