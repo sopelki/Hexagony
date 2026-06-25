@@ -17,7 +17,7 @@ MonoBehaviour:
   viewPrefab: {fileID: 4790872506747466711, guid: 56a420a6b8ae90745ba15c3b3ad106cc, type: 3}
   tickInterval: 0.25
   tickDamage: 16
-  slowPercent: 0
+  slowPercent: 0.4
   criticalDamage: 0
   requiredMonsters: 3
   triggerRadius: 5

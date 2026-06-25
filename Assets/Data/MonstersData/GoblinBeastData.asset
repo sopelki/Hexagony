@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac51071bacc04f829073f3768d19c9ad, type: 3}
   m_Name: GoblinBeastData
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
-  maxHealth: 100
-  damage: 10
-  moveSpeed: 4
+  maxHealth: 75
+  damage: 40
+  moveSpeed: 1
   goldReward: 20
   attackRadius: 1
-  attackCooldown: 1
+  attackCooldown: 1.5
   attackType: 0
   prefab: {fileID: 6346340308779131127, guid: 83faa41ba479eed429f7917e820a69df, type: 3}
   hitOffsetY: 0
