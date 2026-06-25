@@ -18,7 +18,7 @@ namespace Logic.Unit
         private readonly Vector3 formationOffset;
         private readonly MonsterSystem monsterSystem;
         private readonly HexAStarPathfinder pathfinder;
-        private readonly Vector2Int baseHex = new(-15, 11);
+        private readonly Vector2Int baseHex = new(-16, 12);
         private readonly Tilemap tilemap;
         private readonly UnitModel unit;
 
@@ -187,7 +187,7 @@ namespace Logic.Unit
             }
 
             var distanceToRallyPoint = Vector2Int.Distance(unit.CurrentHex, baseHex);
-            if (distanceToRallyPoint > 10f)
+            if (distanceToRallyPoint > 15f)
             {
                 currentPath = null;
                 unit.CurrentDirection = Vector3.zero;
