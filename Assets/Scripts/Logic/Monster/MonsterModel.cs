@@ -28,6 +28,7 @@ namespace Logic.Monster
             float healthMultiplier,
             float damageMultiplier,
             float speedMultiplier,
+            float goldMultiplier,
             SoundData soundData)
         {
             WorldPosition = startWorldPos;
@@ -40,7 +41,7 @@ namespace Logic.Monster
 
             AttackRadius = data.attackRadius;
             AttackCooldown = data.attackCooldown;
-            GoldReward = data.goldReward;
+            GoldReward = Mathf.RoundToInt(data.goldReward * goldMultiplier);
             DebuffSystem = new MonsterDebuffSystem(this);
 
             currentHealth = MaxHealth;

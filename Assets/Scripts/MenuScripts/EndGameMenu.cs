@@ -108,8 +108,9 @@ namespace MenuScripts
 
         public void RestartGame()
         {
-            SessionSaveManager.DeleteSession();
-            SceneTransitions.LoadScene(SceneManager.GetActiveScene().name);
+            MainMenu.ShouldOpenDifficultyOnStart = true;
+            Time.timeScale = 1f;
+            SceneTransitions.LoadScene("MainMenu");
         }
 
         public void LoadMainMenu()

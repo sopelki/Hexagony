@@ -17,6 +17,10 @@ namespace MenuScripts
         private SettingsMenu settingsMenu;
         [SerializeField]
         private Button continueButton;
+        [SerializeField]
+        private DifficultyMenu difficultyMenu;
+        
+        public static bool ShouldOpenDifficultyOnStart = false;
 
         private void Start()
         {
@@ -29,16 +33,21 @@ namespace MenuScripts
                 var hasSession = SessionSaveManager.HasSavedSession();
                 continueButton.interactable = hasSession;
             }
+            
+            if (difficultyMenu != null)
+                difficultyMenu.gameObject.SetActive(false);
+            
+            if (ShouldOpenDifficultyOnStart)
+            {
+                ShouldOpenDifficultyOnStart = false;
+                PlayGame();
+            }
         }
-
+        
         public void PlayGame()
         {
-            if (gameplaySoundData?.gameStartSound)
-                AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
-
-            SessionSaveManager.IsSaveLoaded = false;
-            SessionSaveManager.DeleteSession();
-            SceneTransitions.LoadScene("GameScene");
+            if (difficultyMenu != null)
+                difficultyMenu.OpenMenu();
         }
 
         public void ContinueGame()
