@@ -117,7 +117,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -163,7 +163,7 @@ TextureImporter:
         width: 37
         height: 57
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -185,7 +185,7 @@ TextureImporter:
         width: 50
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -207,7 +207,7 @@ TextureImporter:
         width: 56
         height: 79
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -221,125 +221,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_3
-      rect:
-        serializedVersion: 2
-        x: 268
-        y: 46
-        width: 24
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ee262790bba029c80800000000000000
-      internalID: -8317573763366231314
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonDownDeath_4
-      rect:
-        serializedVersion: 2
-        x: 348
-        y: 59
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4fcea773a4f03d5e0800000000000000
-      internalID: -1886147007505306380
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonDownDeath_5
-      rect:
-        serializedVersion: 2
-        x: 365
-        y: 70
-        width: 7
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 29f3bdada829b9140800000000000000
-      internalID: 4727533358930411410
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: AncientSkeletonDownDeath_6
       rect:
         serializedVersion: 2
-        x: 430
-        y: 68
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a4dc71266c75b70e0800000000000000
-      internalID: -2271125077517415094
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonDownDeath_7
-      rect:
-        serializedVersion: 2
-        x: 441
-        y: 73
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 56a2085e32952aba0800000000000000
-      internalID: -6079198536287638939
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonDownDeath_8
-      rect:
-        serializedVersion: 2
-        x: 506
+        x: 507
         y: 0
         width: 27
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -353,37 +243,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_9
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 65
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d2697e628c0b12f40800000000000000
-      internalID: 5702032976920417837
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonDownDeath_10
+      name: AncientSkeletonDownDeath_3
       rect:
         serializedVersion: 2
         x: 266
         y: 0
         width: 27
-        height: 50
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -397,15 +265,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_11
+      name: AncientSkeletonDownDeath_4
       rect:
         serializedVersion: 2
         x: 346
         y: 0
         width: 27
-        height: 44
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -419,15 +287,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_12
+      name: AncientSkeletonDownDeath_5
       rect:
         serializedVersion: 2
-        x: 426
+        x: 427
         y: 0
         width: 27
-        height: 44
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -441,7 +309,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_13
+      name: AncientSkeletonDownDeath_7
       rect:
         serializedVersion: 2
         x: 586
@@ -449,7 +317,7 @@ TextureImporter:
         width: 27
         height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -463,15 +331,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonDownDeath_14
+      name: AncientSkeletonDownDeath_8
       rect:
         serializedVersion: 2
         x: 666
-        y: 0
+        y: 1
         width: 27
         height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -488,7 +356,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 2b5ffb2d5b77130408dc9f99d59658c3
     internalID: 0
     vertices: []
     indices: 
@@ -500,18 +368,13 @@ TextureImporter:
     nameFileIdTable:
       AncientSkeletonDownDeath_0: 6185369676582319462
       AncientSkeletonDownDeath_1: -9210604495168621816
-      AncientSkeletonDownDeath_10: -1385510015214804066
-      AncientSkeletonDownDeath_11: -1806529482837587663
-      AncientSkeletonDownDeath_12: -5682593538345577753
-      AncientSkeletonDownDeath_13: 7477726510087092348
-      AncientSkeletonDownDeath_14: -967807912810768180
       AncientSkeletonDownDeath_2: -7580182372910798246
-      AncientSkeletonDownDeath_3: -8317573763366231314
-      AncientSkeletonDownDeath_4: -1886147007505306380
-      AncientSkeletonDownDeath_5: 4727533358930411410
-      AncientSkeletonDownDeath_6: -2271125077517415094
-      AncientSkeletonDownDeath_7: -6079198536287638939
-      AncientSkeletonDownDeath_8: 8378337792768236956
+      AncientSkeletonDownDeath_3: -1385510015214804066
+      AncientSkeletonDownDeath_4: -1806529482837587663
+      AncientSkeletonDownDeath_5: -5682593538345577753
+      AncientSkeletonDownDeath_6: 8378337792768236956
+      AncientSkeletonDownDeath_7: 7477726510087092348
+      AncientSkeletonDownDeath_8: -967807912810768180
       AncientSkeletonDownDeath_9: 5702032976920417837
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
