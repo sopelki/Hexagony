@@ -19,6 +19,7 @@ MonoBehaviour:
   attackRadius: 1
   attackCooldown: 2
   attackType: 1
+  immuneTraps: 0100000002000000
   prefab: {fileID: 6346340308779131127, guid: dc86d8581cbbb134cb2ea13338a44e8a, type: 3}
   hitOffsetY: 0
   visualOffsetY: 0.6

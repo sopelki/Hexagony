@@ -113,6 +113,9 @@ namespace Logic.Trap
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
             if (trap == null || trap.IsTriggered)
                 return;
+            
+            if (monster.HasImmunity(trap.Data.trapType))
+                return;
 
             if (trap.Data.trapType is TrapType.SlowZone or TrapType.DamageZone)
             {
@@ -175,7 +178,10 @@ namespace Logic.Trap
                 foreach (var monster in monsters)
                 {
                     if (!monster.IsDead && trap.Hexes.Contains(monster.CurrentHex))
-                        monster.TakeDamage(trap.Data.tickDamage);
+                    {
+                        if (!monster.HasImmunity(trap.Data.trapType))
+                            monster.TakeDamage(trap.Data.tickDamage);
+                    }
                 }
             }
         }
@@ -183,9 +189,11 @@ namespace Logic.Trap
         private void HandleBearTrap(TrapModel trap, IReadOnlyList<MonsterModel> monsters)
         {
             var inZone = monsters.Where(m => !m.IsDead && trap.Hexes.Contains(m.CurrentHex)).ToList();
-            if (inZone.Count >= trap.Data.requiredMonsters)
+            var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
+            if (weakMonsters.Count >= trap.Data.requiredMonsters)
             {
-                foreach (var m in inZone) m.TakeDamage(trap.Data.criticalDamage);
+                foreach (var m in weakMonsters) 
+                    m.TakeDamage(trap.Data.criticalDamage);
                 trap.Trigger();
                 Debug.Log("Bear trap triggered.");
                 trapsModel.RemoveTrap(trap);

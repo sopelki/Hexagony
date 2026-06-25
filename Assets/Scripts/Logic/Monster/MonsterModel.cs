@@ -2,6 +2,7 @@
 using Audio;
 using Core;
 using Interfaces;
+using Logic.Trap;
 using UnityEngine;
 
 namespace Logic.Monster
@@ -28,6 +29,7 @@ namespace Logic.Monster
             float healthMultiplier,
             float damageMultiplier,
             float speedMultiplier,
+            float goldMultiplier,
             SoundData soundData)
         {
             WorldPosition = startWorldPos;
@@ -40,7 +42,7 @@ namespace Logic.Monster
 
             AttackRadius = data.attackRadius;
             AttackCooldown = data.attackCooldown;
-            GoldReward = data.goldReward;
+            GoldReward = Mathf.RoundToInt(data.goldReward * goldMultiplier);
             DebuffSystem = new MonsterDebuffSystem(this);
 
             currentHealth = MaxHealth;
@@ -77,6 +79,14 @@ namespace Logic.Monster
                 AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
             if (currentHealth <= 0)
                 Die();
+        }
+        
+        public bool HasImmunity(TrapType trapType)
+        {
+            // return Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
+            bool immune = Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
+            Debug.Log($"Проверка иммунитета для {Data.name} к {trapType}: {immune}");
+            return immune;
         }
 
         public event Action OnAttack;

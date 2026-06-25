@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Logic.Trap;
+using UnityEngine;
 
 namespace Logic.Monster
 {
@@ -15,6 +17,9 @@ namespace Logic.Monster
         public float attackRadius = 1f;
         public float attackCooldown = 1f;
         public AttackType attackType = AttackType.Radius;
+        
+        [Header("Trap Immune")]
+        public List<TrapType> immuneTraps;
 
         [Header("View")]
         public GameObject prefab;
