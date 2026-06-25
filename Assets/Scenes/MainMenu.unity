@@ -2099,6 +2099,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7127299810648882642, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1785487190}
+    - targetCorrespondingSourceObject: {fileID: 7127299810648882642, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1785487193}
   m_SourcePrefab: {fileID: 100100000, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
 --- !u!224 &1785487188 stripped
 RectTransform:
@@ -2124,6 +2127,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &1785487193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785487189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7cd0f24a8114e83bf5667383ee1f8cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.WobbleText
+  rotationSpeed: 6
+  maxRotationAngle: 0.5
+  scaleSpeed: 6
+  breathingAmount: 0.01
+  waveOffset: 1
+  randomness: 5
+  breathingPhaseOffset: 1.1
 --- !u!1 &1791779488
 GameObject:
   m_ObjectHideFlags: 0
