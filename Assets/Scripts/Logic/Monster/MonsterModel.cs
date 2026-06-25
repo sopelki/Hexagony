@@ -2,6 +2,7 @@
 using Audio;
 using Core;
 using Interfaces;
+using Logic.Trap;
 using UnityEngine;
 
 namespace Logic.Monster
@@ -78,6 +79,14 @@ namespace Logic.Monster
                 AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
             if (currentHealth <= 0)
                 Die();
+        }
+        
+        public bool HasImmunity(TrapType trapType)
+        {
+            // return Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
+            bool immune = Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
+            Debug.Log($"Проверка иммунитета для {Data.name} к {trapType}: {immune}");
+            return immune;
         }
 
         public event Action OnAttack;
