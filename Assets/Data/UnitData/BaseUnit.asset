@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Unit.UnitData
   maxHealth: 75
   attack: 15
-  moveSpeed: 2
+  moveSpeed: 2.5
   baseSpawnInterval: 5
   attackRadius: 1
   attackCooldown: 1

@@ -29,7 +29,7 @@ MonoBehaviour:
     colorTemperature: 0.5
     pixelPerfectSnapping: 0
     paletteReduction: 0
-    lcdGhosting: 0.3
+    lcdGhosting: 0
     pixelGridIntensity: 0
     pixelGridSize: 1.5
     gameBoyMode: 0
@@ -107,13 +107,13 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     pixelSize: 1
-    scanlineIntensity: 0.35
-    scanlineCount: 267
-    scanlineRGBShift: 0.05
+    scanlineIntensity: 0.108
+    scanlineCount: 331
+    scanlineRGBShift: 0.044
     curvature: 0.02
-    chromaticAberration: 0
-    vignette: 0.059
-    brightness: 1
+    chromaticAberration: 0.02
+    vignette: 0.027
+    brightness: 1.013
     phosphorIntensity: 0.02
     flickerIntensity: 0
     rollingScanlineIntensity: 0
@@ -121,5 +121,5 @@ MonoBehaviour:
     glowIntensity: 0.005
     glowSpread: 3
     noiseIntensity: 0
-    colorBleedIntensity: 0.5
+    colorBleedIntensity: 1
     interlacingIntensity: 0
