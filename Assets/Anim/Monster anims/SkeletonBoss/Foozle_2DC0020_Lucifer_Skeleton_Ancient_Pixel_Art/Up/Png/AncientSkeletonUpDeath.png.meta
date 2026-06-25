@@ -117,7 +117,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -163,7 +163,7 @@ TextureImporter:
         width: 37
         height: 57
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -185,7 +185,7 @@ TextureImporter:
         width: 50
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -202,12 +202,12 @@ TextureImporter:
       name: AncientSkeletonUpDeath_2
       rect:
         serializedVersion: 2
-        x: 172
-        y: 1
+        x: 173
+        y: 0
         width: 56
         height: 79
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -221,117 +221,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_3
-      rect:
-        serializedVersion: 2
-        x: 268
-        y: 46
-        width: 24
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a047a4706ec70a360800000000000000
-      internalID: 7178875133435212810
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonUpDeath_4
-      rect:
-        serializedVersion: 2
-        x: 348
-        y: 70
-        width: 7
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dfbbd8bf60e20b6a0800000000000000
-      internalID: -6435593259987387395
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonUpDeath_5
-      rect:
-        serializedVersion: 2
-        x: 352
-        y: 59
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7982e8b320e51e410800000000000000
-      internalID: 1504587114200574103
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: AncientSkeletonUpDeath_6
-      rect:
-        serializedVersion: 2
-        x: 433
-        y: 73
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 72e3d67e8f0648ac0800000000000000
-      internalID: -3853848758971449817
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonUpDeath_7
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 68
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7dbc2b64683b4bc80800000000000000
-      internalID: -8307818023298610217
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonUpDeath_8
       rect:
         serializedVersion: 2
         x: 507
@@ -339,7 +229,7 @@ TextureImporter:
         width: 27
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -353,37 +243,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_9
-      rect:
-        serializedVersion: 2
-        x: 434
-        y: 65
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ae6716fd4cfb70ec0800000000000000
-      internalID: -3600698524777220374
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AncientSkeletonUpDeath_10
+      name: AncientSkeletonUpDeath_3
       rect:
         serializedVersion: 2
         x: 267
         y: 0
         width: 27
-        height: 50
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -397,15 +265,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_11
+      name: AncientSkeletonUpDeath_4
       rect:
         serializedVersion: 2
-        x: 347
+        x: 346
         y: 0
         width: 27
-        height: 44
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -419,15 +287,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_12
+      name: AncientSkeletonUpDeath_5
       rect:
         serializedVersion: 2
         x: 427
         y: 0
         width: 27
-        height: 44
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -441,7 +309,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_13
+      name: AncientSkeletonUpDeath_7
       rect:
         serializedVersion: 2
         x: 587
@@ -449,7 +317,7 @@ TextureImporter:
         width: 27
         height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -463,7 +331,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AncientSkeletonUpDeath_14
+      name: AncientSkeletonUpDeath_8
       rect:
         serializedVersion: 2
         x: 667
@@ -471,7 +339,7 @@ TextureImporter:
         width: 27
         height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -488,7 +356,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 048ca24de4dcbd14f9ae59e90bd59b02
     internalID: 0
     vertices: []
     indices: 
@@ -500,18 +368,13 @@ TextureImporter:
     nameFileIdTable:
       AncientSkeletonUpDeath_0: 166813445054402031
       AncientSkeletonUpDeath_1: 7970839195639639153
-      AncientSkeletonUpDeath_10: 1225075076738103816
-      AncientSkeletonUpDeath_11: 8002012142473835395
-      AncientSkeletonUpDeath_12: 6974008119673668541
-      AncientSkeletonUpDeath_13: -3065806826168991609
-      AncientSkeletonUpDeath_14: -94146168491972953
       AncientSkeletonUpDeath_2: -697507747190961750
-      AncientSkeletonUpDeath_3: 7178875133435212810
-      AncientSkeletonUpDeath_4: -6435593259987387395
-      AncientSkeletonUpDeath_5: 1504587114200574103
-      AncientSkeletonUpDeath_6: -3853848758971449817
-      AncientSkeletonUpDeath_7: -8307818023298610217
-      AncientSkeletonUpDeath_8: 5976724068291896757
+      AncientSkeletonUpDeath_3: 1225075076738103816
+      AncientSkeletonUpDeath_4: 8002012142473835395
+      AncientSkeletonUpDeath_5: 6974008119673668541
+      AncientSkeletonUpDeath_6: 5976724068291896757
+      AncientSkeletonUpDeath_7: -3065806826168991609
+      AncientSkeletonUpDeath_8: -94146168491972953
       AncientSkeletonUpDeath_9: -3600698524777220374
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

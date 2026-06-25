@@ -53998,6 +53998,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5954e1eb0b7b920469221f137f5954fa, type: 2}
   - {fileID: 11400000, guid: 28eaee259108e2d47b2ac99833aca557, type: 2}
   - {fileID: 11400000, guid: da2be5bd7bd17d34283390c93fb813a3, type: 2}
+  - {fileID: 11400000, guid: 7346e77628aaa9040a4e46f05eb46a21, type: 2}
+  - {fileID: 11400000, guid: bd0b7b9a953aa384f8c2e0062fe4b878, type: 2}
+  - {fileID: 11400000, guid: cf778f71d43ef1142845b4d4cdc04b41, type: 2}
   monsterViewManager: {fileID: 382416967}
   waves:
   - {fileID: 11400000, guid: cbd5739e87e7dbc46819a70dd6dbc57d, type: 2}
