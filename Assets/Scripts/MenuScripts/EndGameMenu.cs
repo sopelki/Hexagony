@@ -4,9 +4,7 @@ using Core;
 using Logic.Castle;
 using Logic.Monster;
 using Misc;
-using SaveSystem;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MenuScripts
 {
@@ -23,6 +21,12 @@ namespace MenuScripts
         private float startDelay = 0.2f;
         [SerializeField]
         private float volume = 0.5f;
+
+        [Header("Effects")]
+        [SerializeField]
+        private ParticleSystem leftWinConfetti;
+        [SerializeField]
+        private ParticleSystem rightWinConfetti;
 
         [Header("Audio")]
         [SerializeField]
@@ -74,24 +78,24 @@ namespace MenuScripts
 
         public void OpenGameOver()
         {
-            StartCoroutine(EndGameSequence(gameOverPanel, gameOverSound));
+            StartCoroutine(EndGameSequence(gameOverPanel, gameOverSound, false));
         }
 
         public void OpenWinMenu()
         {
-            StartCoroutine(EndGameSequence(gameWonPanel, gameWonSound));
+            StartCoroutine(EndGameSequence(gameWonPanel, gameWonSound, true));
         }
 
-        private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip)
+        private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip, bool isWin)
         {
             if (!panel)
                 yield break;
-    
+
             endGameSequenceStarted = true;
             UIBlocker.BlockAll();
-    
+
             yield return new WaitForSeconds(startDelay);
-    
+
             if (clip && audioSource)
             {
                 AudioManager.Instance.StopMusic();
@@ -102,9 +106,16 @@ namespace MenuScripts
 
             if (menuBackground)
                 menuBackground.Show(fadeDuration);
-            
+
             panel.Show();
-            endGameSequenceStarted = false; 
+
+            if (isWin && leftWinConfetti && rightWinConfetti)
+            {
+                leftWinConfetti.Play();
+                rightWinConfetti.Play();
+            }
+
+            endGameSequenceStarted = false;
         }
 
         public void RestartGame()
@@ -123,6 +134,12 @@ namespace MenuScripts
         {
             Time.timeScale = 1f;
             UIBlocker.UnblockAll();
+
+            if (leftWinConfetti && rightWinConfetti)
+            {
+                leftWinConfetti.Stop();
+                rightWinConfetti.Stop();
+            }
 
             gameWonPanel.Hide();
             if (menuBackground)
