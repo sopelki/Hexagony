@@ -5633,7 +5633,6 @@ RectTransform:
   - {fileID: 1744383307}
   - {fileID: 2001405272}
   - {fileID: 592480457}
-  - {fileID: 1094405601}
   m_Father: {fileID: 1340545267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -50289,7 +50288,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1933876823}
+  - {fileID: 1094405601}
   m_Father: {fileID: 372089350}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -50367,7 +50368,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592480456}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
@@ -50379,10 +50380,10 @@ MonoBehaviour:
     m_Bottom: 48
   m_ChildAlignment: 0
   m_Spacing: 32
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -52270,7 +52271,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 731557296}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6603373
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -55360,13 +55361,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1933876823}
   - {fileID: 1148212440}
   m_Father: {fileID: 1196698381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00045776367, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0.00048828125, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &962399839
@@ -55382,12 +55382,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
   m_Padding:
-    m_Left: 48
-    m_Right: 48
-    m_Top: 48
-    m_Bottom: 48
+    m_Left: 0
+    m_Right: 24
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 32
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -62230,6 +62230,7 @@ GameObject:
   - component: {fileID: 1094405604}
   - component: {fileID: 1094405603}
   - component: {fileID: 1094405602}
+  - component: {fileID: 1094405605}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -62244,19 +62245,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094405600}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1196698381}
   - {fileID: 715016507}
-  m_Father: {fileID: 372089350}
+  m_Father: {fileID: 592480457}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 201, y: 10}
-  m_SizeDelta: {x: 1006.9161, y: 840.6426}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1094405602
 MonoBehaviour:
@@ -62326,6 +62327,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094405600}
   m_CullTransparentMesh: 1
+--- !u!114 &1094405605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094405600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
 --- !u!1 &1111826741
 GameObject:
   m_ObjectHideFlags: 0
@@ -62800,7 +62821,7 @@ PrefabInstance:
       value: "<color=#90CAF9><b>\u0413\u041E\u0411\u041B\u0418\u041D</b></color>:
         \u0411\u0430\u0437\u043E\u0432\u044B\u0439 \u0432\u0440\u0430\u0433 \u0438
         \u043E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u0443\u0434\u0430\u0440\u043D\u0430\u044F
-        \u0441\u0438\u043B\u0430 \u043D\u0435\u0447\u0438\u0441\u0442\u0438.<line-height=20px>\n\u0410\u0411\u0412\\n\\n\u0413\u0414\u0415\\n\u0415\u0401\u0416\r\n</line-height><line-height=60%>\u25AA\uFE0F
+        \u0441\u0438\u043B\u0430 \u043D\u0435\u0447\u0438\u0441\u0442\u0438.<line-height=20px>\r\n</line-height><line-height=60%>\u25AA\uFE0F
         <color=#dfe88b><b>\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435:</b></color>
         55\r\n\u25AA\uFE0F <color=#dfe88b><b>\u0423\u0440\u043E\u043D:</b></color>
         20\r\n\u25AA\uFE0F <color=#dfe88b><b>\u041D\u0430\u0433\u0440\u0430\u0434\u0430:</b></color>
@@ -62818,23 +62839,7 @@ PrefabInstance:
         <color=#dfe88b><b>\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435:</b></color>
         65\r\n\u25AA\uFE0F <color=#dfe88b><b>\u0423\u0440\u043E\u043D:</b></color>
         35\r\n\u25AA\uFE0F <color=#dfe88b><b>\u041D\u0430\u0433\u0440\u0430\u0434\u0430:</b></color>
-        16\r\n</line-height><line-height=-15px>\r\n</line-height><color=#90CAF9><b>\u0413\u041E\u0411\u041B\u0418\u041D
-        \u0421 \u0420\u041E\u0413\u0410\u0422\u041A\u041E\u0419</b></color>: <nobr>\u041C\u043E\u043D\u0441\u0442\u0440,
-        \u043A\u043E\u0442\u043E\u0440\u044B\u0439</nobr> \u0431\u0443\u0434\u0435\u0442
-        \u043E\u0442\u0432\u043B\u0435\u043A\u0430\u0442\u044C \u0432\u0430\u0448\u0438\u0445
-        \u0440\u044B\u0446\u0430\u0440\u0435\u0439.<line-height=20px>\r\n</line-height><line-height=60%>\u25AA\uFE0F
-        <color=#dfe88b><b>\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435:</b></color>
-        45\r\n\u25AA\uFE0F <color=#dfe88b><b>\u0423\u0440\u043E\u043D:</b></color>
-        10\r\n\u25AA\uFE0F <color=#dfe88b><b>\u041D\u0430\u0433\u0440\u0430\u0434\u0430:</b></color>
-        12\r\n</line-height><line-height=-15px>\r\n</line-height><color=#90CAF9><b>\u0413\u041E\u0411\u041B\u0418\u041D
-        \u0421 \u0420\u041E\u0413\u0410\u0422\u041A\u041E\u0419</b></color>: <nobr>\u041C\u043E\u043D\u0441\u0442\u0440,
-        \u043A\u043E\u0442\u043E\u0440\u044B\u0439</nobr> \u0431\u0443\u0434\u0435\u0442
-        \u043E\u0442\u0432\u043B\u0435\u043A\u0430\u0442\u044C \u0432\u0430\u0448\u0438\u0445
-        \u0440\u044B\u0446\u0430\u0440\u0435\u0439.<line-height=20px>\r\n</line-height><line-height=60%>\u25AA\uFE0F
-        <color=#dfe88b><b>\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435:</b></color>
-        45\r\n\u25AA\uFE0F <color=#dfe88b><b>\u0423\u0440\u043E\u043D:</b></color>
-        10\r\n\u25AA\uFE0F <color=#dfe88b><b>\u041D\u0430\u0433\u0440\u0430\u0434\u0430:</b></color>
-        12\r\n</line-height>"
+        16\r\n</line-height><line-height=-15px>"
       objectReference: {fileID: 0}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_fontSize
@@ -66519,6 +66524,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cf778f71d43ef1142845b4d4cdc04b41, type: 2}
   - {fileID: 11400000, guid: bd0b7b9a953aa384f8c2e0062fe4b878, type: 2}
   - {fileID: 11400000, guid: 7346e77628aaa9040a4e46f05eb46a21, type: 2}
+  helpScrollRect: {fileID: 1094405602}
 --- !u!222 &1340545270
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -73647,7 +73653,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 962399838}
+    m_TransformParent: {fileID: 592480457}
     m_Modifications:
     - target: {fileID: 1547800107940688592, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_Pivot.x
@@ -73691,7 +73697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1547800107940688592, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -47.87071
+      value: -47.87072
       objectReference: {fileID: 0}
     - target: {fileID: 1547800107940688592, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -73768,7 +73774,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7127299810648882642, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1933876826}
   m_SourcePrefab: {fileID: 100100000, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
 --- !u!224 &1933876823 stripped
 RectTransform:
@@ -73780,12 +73789,37 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
   m_PrefabInstance: {fileID: 1933876822}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1933876825}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1933876825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7127299810648882642, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
+  m_PrefabInstance: {fileID: 1933876822}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1933876826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933876825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 60
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 0
+  m_LayoutPriority: 1
 --- !u!1001 &1938218637
 PrefabInstance:
   m_ObjectHideFlags: 0
