@@ -20,7 +20,7 @@ namespace MenuScripts
         [SerializeField]
         private DifficultyMenu difficultyMenu;
         
-        public static bool ShouldOpenDifficultyOnStart = false;
+        public static bool ShouldOpenDifficultyOnStart;
 
         private void Start()
         {

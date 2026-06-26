@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using Audio;
 using Logic.Castle;
@@ -90,7 +91,7 @@ namespace SaveSystem
                 castleUI.UpdateWaveUi(data.currentWaveNumber);
                 waveManager.StartSavedGame(data.currentWaveNumber, infiniteSettings);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Debug.LogError($"Error during loading: {e.Message}");
             }

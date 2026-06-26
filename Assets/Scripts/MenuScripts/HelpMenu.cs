@@ -151,11 +151,11 @@ namespace MenuScripts
 
                 resultText += $"<color=#90CAF9><b>{monster.monsterName.ToUpper()}</b></color>\n" +
                               $"<b>{monster.monsterDescription}</b>\n" +
-                              $"<line-height=60%>" +
+                              "<line-height=60%>" +
                               $"▪️ <color=#dfe88b><b>Здоровье:</b></color> {hp}\n" +
                               $"▪️ <color=#dfe88b><b>Урон:</b></color> {dmg}\n" +
                               $"▪️ <color=#dfe88b><b>Награда:</b></color> {reward}\n" +
-                              $"</line-height>" +
+                              "</line-height>" +
                               "<line-height=-15px>\n</line-height>";
             }
 
