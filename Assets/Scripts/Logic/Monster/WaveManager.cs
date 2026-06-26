@@ -70,8 +70,7 @@ namespace Logic.Monster
             CurrentWaveNumber = savedWaveNumber;
             var maxNormalWaves = spawner.NormalWaves;
 
-            if (savedWaveNumber >= maxNormalWaves)
-                spawner.EnableInfiniteMode(infiniteSettings);
+            if (savedWaveNumber >= maxNormalWaves) spawner.EnableInfiniteMode(infiniteSettings);
             spawner.SetWaveIndex(savedWaveNumber - 1);
 
             waitingForNextWave = false;
@@ -81,8 +80,7 @@ namespace Logic.Monster
 
         public void Tick()
         {
-            if (!gameStarted)
-                return;
+            if (!gameStarted) return;
 
             if (waitingForNextWave && monsterSystem.GetAllMonsters().Count == 0)
             {

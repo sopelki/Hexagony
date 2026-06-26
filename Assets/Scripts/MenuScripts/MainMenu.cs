@@ -24,8 +24,7 @@ namespace MenuScripts
 
         public void PlayGame()
         {
-            if (difficultyMenu != null)
-                difficultyMenu.OpenMenu();
+            if (difficultyMenu != null) difficultyMenu.OpenMenu();
         }
 
         public void ContinueGame()
@@ -51,10 +50,8 @@ namespace MenuScripts
 
         public void OpenSettings()
         {
-            if (settingsMenu != null)
-                settingsMenu.OpenSettings();
-            else
-                Debug.LogError("SettingsMenu reference is missing in MainMenu script!");
+            if (settingsMenu != null) settingsMenu.OpenSettings();
+            else Debug.LogError("SettingsMenu reference is missing in MainMenu script!");
         }
 
         private void Start()
@@ -69,8 +66,7 @@ namespace MenuScripts
                 continueButton.interactable = hasSession;
             }
 
-            if (difficultyMenu != null)
-                difficultyMenu.gameObject.SetActive(false);
+            if (difficultyMenu != null) difficultyMenu.gameObject.SetActive(false);
 
             if (ShouldOpenDifficultyOnStart)
             {

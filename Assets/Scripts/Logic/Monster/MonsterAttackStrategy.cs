@@ -10,10 +10,7 @@ namespace Logic.Monster
 {
     public class MonsterAttackStrategy : IAttackStrategy
     {
-        public MonsterAttackStrategy(
-            MonsterModel monsterModel,
-            UnitSystem unitSystem,
-            SoundData soundData)
+        public MonsterAttackStrategy(MonsterModel monsterModel, UnitSystem unitSystem, SoundData soundData)
         {
             this.monsterModel = monsterModel;
             this.unitSystem = unitSystem;
@@ -36,8 +33,7 @@ namespace Logic.Monster
             if (currentTarget != null)
             {
                 Vector3 targetPos;
-                if (currentTarget is UnitModel unit)
-                    targetPos = unit.WorldPosition;
+                if (currentTarget is UnitModel unit) targetPos = unit.WorldPosition;
                 else
                 {
                     if (castle.CastleModel.WallWorldPositions.Count == 0)
@@ -46,8 +42,7 @@ namespace Logic.Monster
                         return;
                     }
                     targetPos = castle.CastleModel.WallWorldPositions
-                        .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p))
-                        .First();
+                        .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p)).First();
                 }
 
                 if (currentTarget.IsDead ||
@@ -57,14 +52,10 @@ namespace Logic.Monster
 
             if (currentTarget == null)
             {
-                var nearbyUnit = unitSystem
-                    .GetAllUnits()
-                    .Where(u => !u.IsDead)
-                    .FirstOrDefault(u =>
-                        Vector3.Distance(u.WorldPosition, monsterModel.WorldPosition) <= monsterModel.AttackRadius);
+                var nearbyUnit = unitSystem.GetAllUnits().Where(u => !u.IsDead).FirstOrDefault(u =>
+                    Vector3.Distance(u.WorldPosition, monsterModel.WorldPosition) <= monsterModel.AttackRadius);
 
-                if (nearbyUnit != null)
-                    currentTarget = nearbyUnit;
+                if (nearbyUnit != null) currentTarget = nearbyUnit;
                 else if (!castle.CastleModel.IsDead && castle.CastleModel.WallWorldPositions.Count > 0)
                 {
                     foreach (var wallPos in castle.CastleModel.WallWorldPositions)
@@ -77,8 +68,7 @@ namespace Logic.Monster
                     }
                 }
 
-                if (currentTarget == null)
-                    return;
+                if (currentTarget == null) return;
             }
 
             if (currentCooldown > 0f)
@@ -92,16 +82,14 @@ namespace Logic.Monster
             if (soundData != null && soundData.monsterAttackSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(soundData.monsterAttackSounds, soundData.monsterAttackVolume);
 
-            if (monsterModel.Data.attackType == AttackType.SingleClosest)
-                currentTarget.TakeDamage(monsterModel.Damage);
+            if (monsterModel.Data.attackType == AttackType.SingleClosest) currentTarget.TakeDamage(monsterModel.Damage);
             else if (monsterModel.Data.attackType == AttackType.Radius)
             {
                 var targetPos = currentTarget is UnitModel u ? u.WorldPosition : monsterModel.WorldPosition;
                 if (currentTarget is CastleModel)
                 {
                     targetPos = castle.CastleModel.WallWorldPositions
-                        .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p))
-                        .First();
+                        .OrderBy(p => Vector3.Distance(monsterModel.WorldPosition, p)).First();
                 }
 
                 var viewDirection = (targetPos - monsterModel.WorldPosition).normalized;
@@ -109,21 +97,17 @@ namespace Logic.Monster
                     viewDirection = (targetPos - monsterModel.WorldPosition).normalized;
 
 
-                var allUnitsInRadius = unitSystem.GetAllUnits()
-                    .Where(unitModel => !unitModel.IsDead)
-                    .Where(unitModel => Vector3.Distance(unitModel.WorldPosition, monsterModel.WorldPosition) <=
-                                        monsterModel.AttackRadius);
+                var allUnitsInRadius = unitSystem.GetAllUnits().Where(unitModel => !unitModel.IsDead).Where(unitModel =>
+                    Vector3.Distance(unitModel.WorldPosition, monsterModel.WorldPosition) <= monsterModel.AttackRadius);
 
                 foreach (var unitModel in allUnitsInRadius)
                 {
                     var directionToUnit = (unitModel.WorldPosition - monsterModel.WorldPosition).normalized;
                     var dotProduct = Vector3.Dot(viewDirection, directionToUnit);
 
-                    if (dotProduct >= 0.5f || unitModel == currentTarget)
-                        unitModel.TakeDamage(monsterModel.Damage);
+                    if (dotProduct >= 0.5f || unitModel == currentTarget) unitModel.TakeDamage(monsterModel.Damage);
                 }
-                if (currentTarget is CastleModel)
-                    currentTarget.TakeDamage(monsterModel.Damage);
+                if (currentTarget is CastleModel) currentTarget.TakeDamage(monsterModel.Damage);
             }
             currentCooldown = monsterModel.AttackCooldown;
         }

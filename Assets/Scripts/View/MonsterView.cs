@@ -39,8 +39,7 @@ namespace View
             model.OnDied += HandleDeath;
             model.OnDamaged += HandleDamaged;
 
-            if (TryGetComponent<MonsterInteractionHandler>(out var handler))
-                handler.Setup(model);
+            if (TryGetComponent<MonsterInteractionHandler>(out var handler)) handler.Setup(model);
         }
 
         public void UpdateView()
@@ -95,10 +94,7 @@ namespace View
             if (!animator || isDeadAnimationPlaying) return;
 
             currentSmoothDirection = Vector2.Lerp(
-                currentSmoothDirection,
-                targetDirection,
-                Time.deltaTime * smoothingSpeed
-            );
+                currentSmoothDirection, targetDirection, Time.deltaTime * smoothingSpeed);
 
             animator.SetFloat(moveX, currentSmoothDirection.x);
             animator.SetFloat(moveY, currentSmoothDirection.y);

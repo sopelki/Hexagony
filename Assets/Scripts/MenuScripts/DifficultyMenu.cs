@@ -25,8 +25,7 @@ namespace MenuScripts
         {
             lastPanel = mainMenuPanel;
 
-            if (lastPanel != null)
-                lastPanel.Hide(lastPanel.FadeDuration);
+            if (lastPanel != null) lastPanel.Hide(lastPanel.FadeDuration);
 
             gameObject.SetActive(true);
             difficultyPanel.Show();
@@ -36,8 +35,7 @@ namespace MenuScripts
         {
             difficultyPanel.Hide();
 
-            if (lastPanel != null)
-                lastPanel.Show(lastPanel.FadeDuration);
+            if (lastPanel != null) lastPanel.Show(lastPanel.FadeDuration);
 
             Invoke(nameof(DeactivatePanel), difficultyPanel.FadeDuration);
         }

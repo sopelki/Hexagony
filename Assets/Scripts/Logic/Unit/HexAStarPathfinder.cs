@@ -24,8 +24,7 @@ namespace Logic.Unit
             var startHex = field.GetHex(start);
             var goalHex = field.GetHex(goal);
 
-            if (start == goal || !field.IsWalkable(startHex) || !field.IsWalkable(goalHex))
-                return null;
+            if (start == goal || !field.IsWalkable(startHex) || !field.IsWalkable(goalHex)) return null;
 
             var openSet = new PriorityQueue<Vector2Int>();
             openSet.Enqueue(start, 0);
@@ -37,8 +36,7 @@ namespace Logic.Unit
             {
                 var current = openSet.Dequeue();
 
-                if (current == goal)
-                    return ReconstructPath(cameFrom, current);
+                if (current == goal) return ReconstructPath(cameFrom, current);
 
                 var currentHex = field.GetHex(current);
                 if (currentHex == null) continue;

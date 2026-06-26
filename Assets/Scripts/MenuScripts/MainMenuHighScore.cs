@@ -24,8 +24,7 @@ namespace MenuScripts
             PlayerPrefs.DeleteKey("MaxWaveReached");
             PlayerPrefs.Save();
 
-            if (splashText != null)
-                splashText.gameObject.SetActive(false);
+            if (splashText != null) splashText.gameObject.SetActive(false);
 
             Debug.Log("High Score Cleared!");
         }
@@ -41,8 +40,7 @@ namespace MenuScripts
                 splashText.gameObject.SetActive(true);
                 originalScale = splashText.transform.localScale;
             }
-            else
-                splashText.gameObject.SetActive(false);
+            else splashText.gameObject.SetActive(false);
         }
 
         private void Update()

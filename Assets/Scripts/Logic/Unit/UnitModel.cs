@@ -90,9 +90,7 @@ namespace Logic.Unit
             WorldPosition = newPosition;
         }
 
-        public void SetStrategies(
-            IMovementStrategy movement,
-            IAttackStrategy attack)
+        public void SetStrategies(IMovementStrategy movement, IAttackStrategy attack)
         {
             movementStrategy = movement;
             attackStrategy = attack;
@@ -105,17 +103,14 @@ namespace Logic.Unit
             OnDamaged?.Invoke();
             CurrentHealth -= damage;
 
-            if (soundData != null &&
-                soundData.unitDamageSounds is { Length: > 0 })
+            if (soundData != null && soundData.unitDamageSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(soundData.unitDamageSounds, soundData.unitDamageVolume);
-            if (CurrentHealth <= 0)
-                Die();
+            if (CurrentHealth <= 0) Die();
         }
 
         public void Tick()
         {
-            if (IsDead)
-                return;
+            if (IsDead) return;
 
             attackStrategy?.Tick();
 

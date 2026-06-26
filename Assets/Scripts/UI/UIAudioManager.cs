@@ -35,8 +35,7 @@ namespace UI
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            if (audioSource == null)
-                audioSource = gameObject.AddComponent<AudioSource>();
+            if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 }

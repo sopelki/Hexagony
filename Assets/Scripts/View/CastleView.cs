@@ -57,8 +57,7 @@ namespace View
             Gizmos.color = Color.red;
             if (WallWorldPositions != null)
             {
-                foreach (var pos in WallWorldPositions)
-                    Gizmos.DrawSphere(pos, 0.3f);
+                foreach (var pos in WallWorldPositions) Gizmos.DrawSphere(pos, 0.3f);
             }
         }
     }

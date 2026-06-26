@@ -25,8 +25,7 @@ namespace UI
         private void UpdateAllLabels()
         {
             var gold = castleModel.Gold;
-            foreach (var label in labels.Where(label => label != null))
-                label.Refresh(gold);
+            foreach (var label in labels.Where(label => label != null)) label.Refresh(gold);
         }
     }
 }

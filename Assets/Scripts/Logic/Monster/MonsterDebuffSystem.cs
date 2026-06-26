@@ -15,8 +15,7 @@ namespace Logic.Monster
 
         public void AddBuff(MonsterDebuff buff)
         {
-            if (buff == null)
-                return;
+            if (buff == null) return;
 
             buffs.Add(buff);
             buff.OnApply(monster);
@@ -24,23 +23,19 @@ namespace Logic.Monster
 
         public float ModifyMoveSpeed(float baseSpeed)
         {
-            return buffs.Aggregate(baseSpeed,
-                (current, buff) => buff.ModifyMoveSpeed(current));
+            return buffs.Aggregate(baseSpeed, (current, buff) => buff.ModifyMoveSpeed(current));
         }
 
         public int ModifyOutgoingDamage(int baseValue)
         {
-            return buffs.Aggregate(baseValue,
-                (current, buff) => buff.ModifyOutgoingDamage(current));
+            return buffs.Aggregate(baseValue, (current, buff) => buff.ModifyOutgoingDamage(current));
         }
 
         public void RemoveBuff(MonsterDebuff buff)
         {
-            if (buff == null)
-                return;
+            if (buff == null) return;
 
-            if (buffs.Remove(buff))
-                buff.OnRemove(monster);
+            if (buffs.Remove(buff)) buff.OnRemove(monster);
         }
 
         public void Tick(float deltaTime)

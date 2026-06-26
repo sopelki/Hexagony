@@ -116,13 +116,11 @@ namespace MenuScripts
             textBackground.Show();
             titleText.text = $"<color={CDmg}>ОБОРОНА ПОЛЯ</color>";
 
-            descriptionText.text = StartLh +
-                                   $"<color={CUpgrade}><b>БАШНИ</b></color>" + "\n" +
+            descriptionText.text = StartLh + $"<color={CUpgrade}><b>БАШНИ</b></color>" + "\n" +
                                    $"▪ <color={CKey}><b>Лучник:\n</b></color> Недорогое здание с высокой <color={CSpd}>скорострельностью</color>. Идеально против одиночных целей." +
                                    "\n" +
                                    $"▪ <color={CKey}><b>Маг:\n</b></color> Выпускает сферы, наносящие <color={CMag}>урон по области</color>. Эффективен против плотных скоплений врага." +
-                                   ParaGap +
-                                   $"<color={CUpgrade}><b>ЛОВУШКИ</b></color>" + "\n" +
+                                   ParaGap + $"<color={CUpgrade}><b>ЛОВУШКИ</b></color>" + "\n" +
                                    $"▪ <color={CKey}><b>Лоза:\n</b></color> Поле магических растений, которые <color={CUpgrade}>замедляют</color> всех монстров, проходящих сквозь них." +
                                    "\n" +
                                    $"▪ <color={CKey}><b>Колья:\n</b></color> Ряды острых шипов. Наносят <color={CDmg}>периодический урон</color> любому, кто наступит на клетку." +

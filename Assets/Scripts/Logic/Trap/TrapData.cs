@@ -52,9 +52,7 @@ namespace Logic.Trap
 
             return new TooltipContent
             {
-                Title = trapType.GetRussianName(),
-                Description = description,
-                SpecialInfo = stats
+                Title = trapType.GetRussianName(), Description = description, SpecialInfo = stats
             };
         }
     }

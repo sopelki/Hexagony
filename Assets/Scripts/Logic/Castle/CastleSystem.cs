@@ -13,13 +13,8 @@ namespace Logic.Castle
 {
     public class CastleSystem : ITickable
     {
-        public CastleSystem(
-            CastleModel castleModel,
-            UnitSystem unitSystem,
-            UnitData unitData,
-            Field.Field field,
-            Tilemap tilemap,
-            SoundData soundData)
+        public CastleSystem(CastleModel castleModel, UnitSystem unitSystem, UnitData unitData, Field.Field field,
+            Tilemap tilemap, SoundData soundData)
         {
             CastleModel = castleModel;
             this.unitSystem = unitSystem;
@@ -96,8 +91,7 @@ namespace Logic.Castle
             var instance = new BuildingModel(data);
             CastleModel.Buildings.Add(instance);
 
-            if (data.type == BuildingType.Farm)
-                CastleModel.MaxSupply += data.supplyProvided;
+            if (data.type == BuildingType.Farm) CastleModel.MaxSupply += data.supplyProvided;
 
             ApplyBuff(data);
 
@@ -110,8 +104,7 @@ namespace Logic.Castle
                 OnFirstBuildingPlaced?.Invoke();
             }
 
-            if (data.type == BuildingType.Barracks)
-                RecalculateSpawnInterval();
+            if (data.type == BuildingType.Barracks) RecalculateSpawnInterval();
 
             CastleModel.Changed();
             return true;
@@ -131,17 +124,11 @@ namespace Logic.Castle
         {
             switch (data.type)
             {
-                case BuildingType.Blacksmith:
-                    unitSystem.AddBuff(new AttackPercentBuff(data.buffValue));
-                    break;
-                case BuildingType.Hospital:
-                    unitSystem.AddBuff(new HealthPercentBuff(data.buffValue));
-                    break;
+                case BuildingType.Blacksmith: unitSystem.AddBuff(new AttackPercentBuff(data.buffValue)); break;
+                case BuildingType.Hospital: unitSystem.AddBuff(new HealthPercentBuff(data.buffValue)); break;
                 case BuildingType.Farm:
-                case BuildingType.Barracks:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case BuildingType.Barracks: break;
+                default: throw new ArgumentOutOfRangeException();
             }
         }
 

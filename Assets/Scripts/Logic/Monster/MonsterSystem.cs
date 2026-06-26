@@ -25,8 +25,7 @@ namespace Logic.Monster
 
         public void SubscribeToCastle(CastleModel castle)
         {
-            if (castle != null)
-                castle.OnCastleDestroyed += HandleCastleDestroyed;
+            if (castle != null) castle.OnCastleDestroyed += HandleCastleDestroyed;
         }
 
         public void Tick()
@@ -37,8 +36,7 @@ namespace Logic.Monster
 
                 monster.Tick();
 
-                if (!monster.IsDead)
-                    continue;
+                if (!monster.IsDead) continue;
                 OnMonsterDied?.Invoke(monster);
                 monsters.RemoveAt(i);
             }
@@ -46,8 +44,7 @@ namespace Logic.Monster
 
         private void HandleCastleDestroyed()
         {
-            foreach (var monster in monsters.Where(monster => !monster.IsDead))
-                monster.StopAndIdle();
+            foreach (var monster in monsters.Where(monster => !monster.IsDead)) monster.StopAndIdle();
         }
     }
 }

@@ -18,16 +18,14 @@ namespace View
             model = modelToInitialize;
             model.OnChanged += HandleTowerAdded;
 
-            foreach (var tower in model.Towers)
-                HandleTowerAdded(tower);
+            foreach (var tower in model.Towers) HandleTowerAdded(tower);
         }
 
         public void SyncWithModel()
         {
             foreach (var tower in model.Towers)
             {
-                if (!views.ContainsKey(tower))
-                    HandleTowerAdded(tower);
+                if (!views.ContainsKey(tower)) HandleTowerAdded(tower);
             }
         }
 
@@ -54,11 +52,9 @@ namespace View
 
         private void OnDestroy()
         {
-            if (model != null)
-                model.OnChanged -= HandleTowerAdded;
+            if (model != null) model.OnChanged -= HandleTowerAdded;
 
-            foreach (var pair in views)
-                pair.Key.OnLevelUp -= pair.Value.SetLevel;
+            foreach (var pair in views) pair.Key.OnLevelUp -= pair.Value.SetLevel;
         }
 
         private void HandleTowerAdded(TowerModel towerModel)

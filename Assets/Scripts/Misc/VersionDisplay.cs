@@ -13,8 +13,7 @@ namespace Misc
 
         private void Start()
         {
-            if (versionText != null)
-                versionText.text = prefix + Application.version;
+            if (versionText != null) versionText.text = prefix + Application.version;
         }
     }
 }

@@ -86,8 +86,7 @@ namespace UI
         {
             Animate();
 
-            if (panel.activeSelf)
-                UpdatePosition();
+            if (panel.activeSelf) UpdatePosition();
         }
 
         private void Animate()
@@ -99,19 +98,15 @@ namespace UI
             rectTransform.localScale =
                 Vector3.Lerp(rectTransform.localScale, targetScale, Time.unscaledDeltaTime * currentSpeed);
 
-            if (!isVisible && canvasGroup.alpha < 0.01f)
-                panel.SetActive(false);
+            if (!isVisible && canvasGroup.alpha < 0.01f) panel.SetActive(false);
         }
 
         private void UpdatePosition()
         {
             var mousePos = Mouse.current.position.ReadValue();
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                mousePos,
-                canvas.worldCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, mousePos,
+                canvas.worldCamera, out var localPoint);
 
             var panelWidth = rectTransform.rect.width;
             var panelHeight = rectTransform.rect.height;
@@ -119,11 +114,9 @@ namespace UI
             float finalOffsetX = offsetX;
             float finalOffsetY = offsetY;
 
-            if (mousePos.x + panelWidth + offsetX > Screen.width)
-                finalOffsetX = -panelWidth - offsetX;
+            if (mousePos.x + panelWidth + offsetX > Screen.width) finalOffsetX = -panelWidth - offsetX;
 
-            if (mousePos.y - panelHeight + offsetY < 0)
-                finalOffsetY = panelHeight - offsetY;
+            if (mousePos.y - panelHeight + offsetY < 0) finalOffsetY = panelHeight - offsetY;
 
             rectTransform.anchoredPosition = localPoint + new Vector2(finalOffsetX, finalOffsetY);
         }

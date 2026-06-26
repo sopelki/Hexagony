@@ -13,21 +13,16 @@ namespace UI
 
         private void OnEnable()
         {
-            if (button == null)
-                button = GetComponent<Button>();
+            if (button == null) button = GetComponent<Button>();
 
             if (!isInitialized)
             {
                 button.onClick.AddListener(PlayClickSound);
 
                 var eventTrigger = gameObject.GetComponent<EventTrigger>();
-                if (eventTrigger == null)
-                    eventTrigger = gameObject.AddComponent<EventTrigger>();
+                if (eventTrigger == null) eventTrigger = gameObject.AddComponent<EventTrigger>();
 
-                var pointerEnter = new EventTrigger.Entry
-                {
-                    eventID = EventTriggerType.PointerEnter
-                };
+                var pointerEnter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
                 pointerEnter.callback.AddListener(_ => PlayHoverSound());
                 eventTrigger.triggers.Add(pointerEnter);
 
@@ -37,20 +32,17 @@ namespace UI
 
         private void OnDisable()
         {
-            if (button != null)
-                button.onClick.RemoveListener(PlayClickSound);
+            if (button != null) button.onClick.RemoveListener(PlayClickSound);
         }
 
         private static void PlayClickSound()
         {
-            if (UIAudioManager.Instance != null)
-                UIAudioManager.Instance.PlayButtonClick();
+            if (UIAudioManager.Instance != null) UIAudioManager.Instance.PlayButtonClick();
         }
 
         private static void PlayHoverSound()
         {
-            if (UIAudioManager.Instance != null)
-                UIAudioManager.Instance.PlayButtonHover();
+            if (UIAudioManager.Instance != null) UIAudioManager.Instance.PlayButtonHover();
         }
     }
 }

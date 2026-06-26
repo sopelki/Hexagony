@@ -17,8 +17,7 @@ namespace Field
         [ContextMenu("Fit Camera to Grid")]
         public void FitToGrid()
         {
-            if (myCamera == null)
-                myCamera = GetComponent<Camera>();
+            if (myCamera == null) myCamera = GetComponent<Camera>();
 
             if (tilemap == null)
             {

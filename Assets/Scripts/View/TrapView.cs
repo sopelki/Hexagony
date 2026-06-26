@@ -27,8 +27,7 @@ namespace View
 
         public void SetOutlineVisible(bool value)
         {
-            if (outline != null)
-                outline.SetActive(value);
+            if (outline != null) outline.SetActive(value);
         }
 
         public void AnimateAndDestroy()
@@ -38,8 +37,7 @@ namespace View
                 animator.SetTrigger(close);
                 StartCoroutine(WaitAnimationAndDestroyRoutine());
             }
-            else
-                Destroy(gameObject);
+            else Destroy(gameObject);
         }
 
         private void Update()
@@ -59,14 +57,12 @@ namespace View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Tower"))
-                overlappingTowers.Add(other);
+            if (other.CompareTag("Tower")) overlappingTowers.Add(other);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.CompareTag("Tower"))
-                overlappingTowers.Remove(other);
+            if (other.CompareTag("Tower")) overlappingTowers.Remove(other);
         }
 
         private IEnumerator WaitAnimationAndDestroyRoutine()

@@ -52,19 +52,16 @@ namespace Logic.Castle
 
         public void TakeDamage(int damage)
         {
-            if (IsDead)
-                return;
+            if (IsDead) return;
             Debug.Log("Castle Damage took " + damage);
             Hp -= damage;
             OnDamaged?.Invoke(damage);
             Changed();
 
-            if (soundData != null &&
-                soundData.castleDamageSounds is { Length: > 0 })
+            if (soundData != null && soundData.castleDamageSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(soundData.castleDamageSounds, soundData.castleDamageVolume);
 
-            if (Hp <= 0)
-                OnCastleDestroyed?.Invoke();
+            if (Hp <= 0) OnCastleDestroyed?.Invoke();
         }
     }
 }

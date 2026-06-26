@@ -10,11 +10,7 @@ namespace Logic.Unit
 {
     public class UnitSystem
     {
-        public UnitSystem(
-            MonsterSystem monsterSystem,
-            Field.Field field,
-            Tilemap tilemap,
-            SoundData soundData)
+        public UnitSystem(MonsterSystem monsterSystem, Field.Field field, Tilemap tilemap, SoundData soundData)
         {
             this.monsterSystem = monsterSystem;
             this.field = field;
@@ -69,18 +65,12 @@ namespace Logic.Unit
         {
             var unit = new UnitModel(worldPos, hexPos, stats, soundData);
 
-            foreach (var buff in buffs)
-                unit.AddBuff(buff);
+            foreach (var buff in buffs) unit.AddBuff(buff);
 
             unit.ResetHealth();
 
             var attack = new UnitAttackStrategy(unit, monsterSystem, soundData);
-            var movement = new UnitAStarMoveStrategy(
-                unit,
-                monsterSystem,
-                field,
-                tilemap
-            );
+            var movement = new UnitAStarMoveStrategy(unit, monsterSystem, field, tilemap);
 
             unit.SetStrategies(movement, attack);
             units.Add(unit);
@@ -93,8 +83,7 @@ namespace Logic.Unit
 
         public void Tick()
         {
-            foreach (var unit in units.Where(unit => !unit.IsDead))
-                unit.Tick();
+            foreach (var unit in units.Where(unit => !unit.IsDead)) unit.Tick();
         }
     }
 }

@@ -11,8 +11,7 @@ namespace SaveSystem
 
         public static void DeleteSession()
         {
-            if (File.Exists(SaveFilePath))
-                File.Delete(SaveFilePath);
+            if (File.Exists(SaveFilePath)) File.Delete(SaveFilePath);
             IsSaveLoaded = false;
         }
 
@@ -23,8 +22,7 @@ namespace SaveSystem
 
         public static GameSessionData LoadSession()
         {
-            if (!File.Exists(SaveFilePath))
-                return null;
+            if (!File.Exists(SaveFilePath)) return null;
 
             var json = File.ReadAllText(SaveFilePath);
             return JsonUtility.FromJson<GameSessionData>(json);

@@ -81,44 +81,27 @@ namespace Misc
 
         public void OnActionButtonClick()
         {
-            if (Time.time - lastClickTime < clickCooldown)
-                return;
+            if (Time.time - lastClickTime < clickCooldown) return;
 
             lastClickTime = Time.time;
 
             switch (currentStep)
             {
-                case TutorialStep.Greeting:
-                    currentStep = TutorialStep.BuildBarrack;
-                    break;
+                case TutorialStep.Greeting: currentStep = TutorialStep.BuildBarrack; break;
 
-                case TutorialStep.BarrackSuccess:
-                    currentStep = TutorialStep.BuildTower;
-                    break;
+                case TutorialStep.BarrackSuccess: currentStep = TutorialStep.BuildTower; break;
 
-                case TutorialStep.TowerSuccess:
-                    currentStep = TutorialStep.UpgradeTower;
-                    break;
+                case TutorialStep.TowerSuccess: currentStep = TutorialStep.UpgradeTower; break;
 
-                case TutorialStep.UpgradeTowerSuccess:
-                    currentStep = TutorialStep.BuildTrap;
-                    break;
+                case TutorialStep.UpgradeTowerSuccess: currentStep = TutorialStep.BuildTrap; break;
 
-                case TutorialStep.HelpExplanation:
-                    currentStep = TutorialStep.ClickExplanation;
-                    break;
+                case TutorialStep.HelpExplanation: currentStep = TutorialStep.ClickExplanation; break;
 
-                case TutorialStep.ClickExplanation:
-                    currentStep = TutorialStep.PauseExplanation;
-                    break;
+                case TutorialStep.ClickExplanation: currentStep = TutorialStep.PauseExplanation; break;
 
-                case TutorialStep.PauseExplanation:
-                    currentStep = TutorialStep.SpeedExplanation;
-                    break;
+                case TutorialStep.PauseExplanation: currentStep = TutorialStep.SpeedExplanation; break;
 
-                case TutorialStep.SpeedExplanation:
-                    currentStep = TutorialStep.Finish;
-                    break;
+                case TutorialStep.SpeedExplanation: currentStep = TutorialStep.Finish; break;
 
                 case TutorialStep.Finish:
                     FinishTutorialAndStartRealGame();
@@ -127,11 +110,9 @@ namespace Misc
                 case TutorialStep.BuildBarrack:
                 case TutorialStep.BuildTower:
                 case TutorialStep.UpgradeTower:
-                case TutorialStep.BuildTrap:
-                    return;
+                case TutorialStep.BuildTrap: return;
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                default: throw new ArgumentOutOfRangeException();
             }
 
             UpdateTutorialState();
@@ -150,25 +131,20 @@ namespace Misc
                 gameFlowManager?.ResetToStandardMode();
             }
 
-            if (dialogueAnimator)
-                dialogueAnimator.StopDialogue();
+            if (dialogueAnimator) dialogueAnimator.StopDialogue();
 
-            if (tutorialFadePanel)
-                tutorialFadePanel.Hide();
+            if (tutorialFadePanel) tutorialFadePanel.Hide();
 
-            if (highlightEffect)
-                highlightEffect.SetActive(false);
+            if (highlightEffect) highlightEffect.SetActive(false);
 
-            if (highlightEffectCastle)
-                highlightEffectCastle.SetActive(false);
+            if (highlightEffectCastle) highlightEffectCastle.SetActive(false);
 
             ClearHexHighlights();
         }
 
         public void TryStartTutorialFromScratch()
         {
-            if (CastleSystem.Instance == null)
-                return;
+            if (CastleSystem.Instance == null) return;
 
             var hasBuildings = CastleSystem.Instance != null && CastleSystem.Instance.CastleModel.Buildings.Count > 0 ||
                                TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0 ||
@@ -189,8 +165,7 @@ namespace Misc
 
                 currentStep = TutorialStep.Greeting;
 
-                if (transform.parent != null)
-                    transform.parent.gameObject.SetActive(true);
+                if (transform.parent != null) transform.parent.gameObject.SetActive(true);
 
                 gameObject.SetActive(true);
 
@@ -205,27 +180,22 @@ namespace Misc
             towerSlots = foundSlots.ToList();
             highlightImage = highlightEffect.GetComponent<Image>();
 
-            if (actionButton)
-                actionButton.onClick.AddListener(OnActionButtonClick);
+            if (actionButton) actionButton.onClick.AddListener(OnActionButtonClick);
 
-            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 1)
-                TryStartTutorialFromScratch();
-            else
-                ForceStopTutorial();
+            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 1) TryStartTutorialFromScratch();
+            else ForceStopTutorial();
         }
 
         private void Update()
         {
-            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 0)
-                return;
+            if (PlayerPrefs.GetInt("ShowTutorial", 1) == 0) return;
 
             AnimateHighlight();
 
             switch (currentStep)
             {
                 case TutorialStep.BuildBarrack:
-                    if (CastleSystem.Instance != null &&
-                        CastleSystem.Instance.CastleModel.Buildings.Count > 0 &&
+                    if (CastleSystem.Instance != null && CastleSystem.Instance.CastleModel.Buildings.Count > 0 &&
                         CastleSystem.Instance.CastleModel.Buildings.Any(b => b.Data.type == BuildingType.Barracks))
                     {
                         currentStep = TutorialStep.BarrackSuccess;
@@ -234,8 +204,7 @@ namespace Misc
                     break;
 
                 case TutorialStep.BuildTower:
-                    if (TowerSystem.Instance != null &&
-                        TowerSystem.Instance.GetTowers().Count > 0 &&
+                    if (TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0 &&
                         TowerSystem.Instance.GetTowers().Any(t => t.Data.type == TowerType.Archer))
                     {
                         currentStep = TutorialStep.TowerSuccess;
@@ -244,8 +213,7 @@ namespace Misc
                     break;
 
                 case TutorialStep.UpgradeTower:
-                    if (TowerSystem.Instance != null &&
-                        TowerSystem.Instance.GetTowers().Any(t => t.Level >= 2))
+                    if (TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Any(t => t.Level >= 2))
                     {
                         currentStep = TutorialStep.UpgradeTowerSuccess;
                         UpdateTutorialState();
@@ -253,8 +221,7 @@ namespace Misc
                     break;
 
                 case TutorialStep.BuildTrap:
-                    if (TrapSystem.Instance != null &&
-                        TrapSystem.Instance.GetTraps().Count > 0 &&
+                    if (TrapSystem.Instance != null && TrapSystem.Instance.GetTraps().Count > 0 &&
                         TrapSystem.Instance.GetTraps().Any(t => t.Data.trapType == TrapType.SlowZone))
                     {
                         currentStep = TutorialStep.HelpExplanation;
@@ -266,18 +233,15 @@ namespace Misc
 
         private static void ApplyHexHighlight(List<GameObject> slots)
         {
-            if (slots == null || slots.Count == 0)
-                return;
+            if (slots == null || slots.Count == 0) return;
 
             foreach (var slot in slots)
             {
-                if (slot == null)
-                    continue;
+                if (slot == null) continue;
 
                 var highlight = slot.transform.Find("Highlight");
 
-                if (highlight != null)
-                    highlight.gameObject.SetActive(true);
+                if (highlight != null) highlight.gameObject.SetActive(true);
             }
         }
 
@@ -301,17 +265,14 @@ namespace Misc
             if (CastleSystem.Instance != null)
             {
                 CastleSystem.Instance.Clear();
-                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude))
-                    Destroy(b.gameObject);
+                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude)) Destroy(b.gameObject);
             }
         }
 
         private void UpdateTutorialState()
         {
-            if (highlightEffect)
-                highlightEffect.SetActive(false);
-            if (highlightEffectCastle)
-                highlightEffectCastle.SetActive(false);
+            if (highlightEffect) highlightEffect.SetActive(false);
+            if (highlightEffectCastle) highlightEffectCastle.SetActive(false);
             ClearHexHighlights();
 
             switch (currentStep)
@@ -376,8 +337,7 @@ namespace Misc
 
                 case TutorialStep.ClickExplanation:
                     ConfigureButton(true, "Далее");
-                    PrintPhrase(
-                        "Вы также можете наносить урон монстрам, кликая <nobr>по ним.</nobr>");
+                    PrintPhrase("Вы также можете наносить урон монстрам, кликая <nobr>по ним.</nobr>");
                     break;
 
                 case TutorialStep.PauseExplanation:
@@ -389,8 +349,7 @@ namespace Misc
 
                 case TutorialStep.SpeedExplanation:
                     ConfigureButton(true, "Далее");
-                    PrintPhrase(
-                        "Кстати, вы можете ускорить время,\u00A0нажав клавишу <color=#FFEE58>Пробел</color>.");
+                    PrintPhrase("Кстати, вы можете ускорить время,\u00A0нажав клавишу <color=#FFEE58>Пробел</color>.");
                     break;
 
                 case TutorialStep.Finish:
@@ -398,23 +357,19 @@ namespace Misc
                     PrintPhrase("Теперь вы готовы защищать замок. Начнём\u00A0настоящий бой!");
                     break;
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                default: throw new ArgumentOutOfRangeException();
             }
         }
 
         private void ConfigureButton(bool isVisible, string text = "")
         {
-            if (actionButton)
-                actionButton.gameObject.SetActive(isVisible);
-            if (actionButtonText && isVisible)
-                actionButtonText.text = text;
+            if (actionButton) actionButton.gameObject.SetActive(isVisible);
+            if (actionButtonText && isVisible) actionButtonText.text = text;
         }
 
         private void PrintPhrase(string text)
         {
-            if (dialogueAnimator)
-                dialogueAnimator.PrintPhrase(text);
+            if (dialogueAnimator) dialogueAnimator.PrintPhrase(text);
         }
 
         private void ApplyHighlight(GameObject slot)
@@ -428,8 +383,7 @@ namespace Misc
 
         private void AnimateHighlight()
         {
-            if (highlightEffect == null || !highlightEffect.activeSelf || highlightImage == null)
-                return;
+            if (highlightEffect == null || !highlightEffect.activeSelf || highlightImage == null) return;
 
             var color = highlightImage.color;
             var t = Mathf.PingPong(Time.time * highlightPulseSpeed, 1f);
@@ -459,17 +413,14 @@ namespace Misc
 
         private void ClearHexHighlights()
         {
-            if (towerSlots == null)
-                return;
+            if (towerSlots == null) return;
 
             foreach (var slot in towerSlots)
             {
-                if (slot == null)
-                    continue;
+                if (slot == null) continue;
 
                 var highlight = slot.transform.Find("Highlight");
-                if (highlight != null)
-                    highlight.gameObject.SetActive(false);
+                if (highlight != null) highlight.gameObject.SetActive(false);
             }
         }
 
@@ -484,8 +435,7 @@ namespace Misc
 
         private void BeginTutorialDisplay()
         {
-            if (tutorialFadePanel)
-                tutorialFadePanel.Show();
+            if (tutorialFadePanel) tutorialFadePanel.Show();
 
             UpdateTutorialState();
         }

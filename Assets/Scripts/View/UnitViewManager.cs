@@ -27,8 +27,7 @@ namespace View
         {
             foreach (var view in views.Values)
             {
-                if (view != null)
-                    Destroy(view.gameObject);
+                if (view != null) Destroy(view.gameObject);
             }
             views.Clear();
         }
@@ -42,8 +41,7 @@ namespace View
 
         private void Update()
         {
-            foreach (var pair in views.ToList())
-                pair.Value.UpdateView();
+            foreach (var pair in views.ToList()) pair.Value.UpdateView();
         }
 
         private void HandleUnitCreated(UnitModel model)

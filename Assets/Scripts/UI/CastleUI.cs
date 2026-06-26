@@ -127,8 +127,7 @@ namespace UI
                 model.OnChanged -= UpdateUI;
                 model.OnDamaged -= HandleDamage;
             }
-            if (waveManager != null)
-                waveManager.OnWaveStarting -= UpdateWaveUi;
+            if (waveManager != null) waveManager.OnWaveStarting -= UpdateWaveUi;
         }
 
         private void UpdateUI()
@@ -155,18 +154,15 @@ namespace UI
             foodText.text = $"{currentUnits}/{model.MaxSupply}";
             waveText.text = $"{waveManager.CurrentWaveNumber}";
 
-            if (model.Hp <= 0)
-                hpText.color = damageColor;
-            else if (flashCoroutine == null)
-                hpText.color = originalColor;
+            if (model.Hp <= 0) hpText.color = damageColor;
+            else if (flashCoroutine == null) hpText.color = originalColor;
         }
 
         private void HandleDamage(int damage)
         {
             ShakeGroup(hpRow);
 
-            if (flashCoroutine != null)
-                StopCoroutine(flashCoroutine);
+            if (flashCoroutine != null) StopCoroutine(flashCoroutine);
 
             flashCoroutine = StartCoroutine(FlashHpRoutine());
         }
@@ -184,8 +180,7 @@ namespace UI
         {
             if (target == null) return;
 
-            if (activeShakes.TryGetValue(target, out var routine) && routine != null)
-                StopCoroutine(routine);
+            if (activeShakes.TryGetValue(target, out var routine) && routine != null) StopCoroutine(routine);
 
             activeShakes[target] = StartCoroutine(SingleElementShakeRoutine(target, punchAmount));
         }

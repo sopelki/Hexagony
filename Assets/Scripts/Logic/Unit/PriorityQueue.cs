@@ -13,8 +13,7 @@ namespace Logic.Unit
         {
             var first = queues.First();
             var item = first.Value.Dequeue();
-            if (first.Value.Count == 0)
-                queues.Remove(first.Key);
+            if (first.Value.Count == 0) queues.Remove(first.Key);
             Count--;
             return item;
         }

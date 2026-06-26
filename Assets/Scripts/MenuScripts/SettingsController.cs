@@ -64,8 +64,7 @@ namespace MenuScripts
             PlayerPrefs.Save();
 
             var tutorial = FindAnyObjectByType<TutorialManager>(FindObjectsInactive.Include);
-            if (tutorial == null)
-                return;
+            if (tutorial == null) return;
 
             if (value) tutorial.TryStartTutorialFromScratch();
             else tutorial.ForceStopTutorial();
@@ -86,9 +85,7 @@ namespace MenuScripts
         {
             if (rendererData != null)
             {
-                crtFeature = rendererData.rendererFeatures
-                    .OfType<CrtRendererFeature>()
-                    .FirstOrDefault();
+                crtFeature = rendererData.rendererFeatures.OfType<CrtRendererFeature>().FirstOrDefault();
             }
 
             LoadUIValues();
@@ -98,16 +95,14 @@ namespace MenuScripts
         {
             var val = PlayerPrefs.GetFloat(key, defaultValue);
 
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.SetMixerVolume(key, val);
+            if (AudioManager.Instance != null) AudioManager.Instance.SetMixerVolume(key, val);
 
             return val;
         }
 
         private static void UpdateVolume(string key, float val)
         {
-            if (!AudioManager.Instance)
-                return;
+            if (!AudioManager.Instance) return;
 
             AudioManager.Instance.SetMixerVolume(key, val);
             PlayerPrefs.SetFloat(key, val);
@@ -120,11 +115,9 @@ namespace MenuScripts
             sfxSlider.SetValueWithoutNotify(LoadAndApply("SfxVol", 0.75f));
             uiSlider.SetValueWithoutNotify(LoadAndApply("UiVol", 0.75f));
 
-            if (tutorialToggle)
-                tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
+            if (tutorialToggle) tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
 
-            if (fullscreenToggle)
-                fullscreenToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("Fullscreen", 1) == 1);
+            if (fullscreenToggle) fullscreenToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("Fullscreen", 1) == 1);
 
             if (crtToggle)
             {

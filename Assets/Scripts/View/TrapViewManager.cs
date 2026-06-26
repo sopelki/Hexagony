@@ -23,16 +23,14 @@ namespace View
             model.OnTrapAdded += HandleTrapAdded;
             model.OnTrapRemoved += HandleTrapRemoved;
 
-            foreach (var trap in model.Traps)
-                HandleTrapAdded(trap);
+            foreach (var trap in model.Traps) HandleTrapAdded(trap);
         }
 
         public void DestroyAllTraps()
         {
             foreach (var view in views.Values)
             {
-                if (view != null)
-                    Destroy(view.gameObject);
+                if (view != null) Destroy(view.gameObject);
             }
             views.Clear();
         }
@@ -58,8 +56,7 @@ namespace View
 
         private void HandleTrapRemoved(TrapModel trap)
         {
-            if (views.Remove(trap, out var view))
-                view.AnimateAndDestroy();
+            if (views.Remove(trap, out var view)) view.AnimateAndDestroy();
         }
     }
 }

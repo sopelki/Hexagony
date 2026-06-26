@@ -52,8 +52,7 @@ namespace View
 
         public void UpdateView()
         {
-            if (model == null)
-                return;
+            if (model == null) return;
             if (model.IsDead && !isDeadAnimationPlaying)
             {
                 isDeadAnimationPlaying = true;
@@ -83,8 +82,7 @@ namespace View
 
         private void Update()
         {
-            if (model == null || !animator || isDeadAnimationPlaying || model.IsDead)
-                return;
+            if (model == null || !animator || isDeadAnimationPlaying || model.IsDead) return;
 
             var targetPos = model.WorldPosition + visualOffset;
             var positionBeforeMove = transform.position;
@@ -103,11 +101,8 @@ namespace View
                 animator.SetFloat(lastMoveY, targetDirection.y);
             }
 
-            currentSmoothDirection = Vector2.Lerp(
-                currentSmoothDirection,
-                moving ? targetDirection : Vector2.zero,
-                Time.deltaTime * smoothingSpeed
-            );
+            currentSmoothDirection = Vector2.Lerp(currentSmoothDirection, moving ? targetDirection : Vector2.zero,
+                Time.deltaTime * smoothingSpeed);
 
             animator.SetFloat(moveX, currentSmoothDirection.x);
             animator.SetFloat(moveY, currentSmoothDirection.y);

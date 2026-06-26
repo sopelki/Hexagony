@@ -29,11 +29,9 @@ namespace MenuScripts
         {
             lastPanel = FindActivePanel();
 
-            if (lastPanel)
-                lastPanel.Hide(lastPanel.FadeDuration);
+            if (lastPanel) lastPanel.Hide(lastPanel.FadeDuration);
 
-            if (settingsPanel)
-                settingsPanel.Show();
+            if (settingsPanel) settingsPanel.Show();
         }
 
         public void OpenSettingsFromButton()
@@ -42,11 +40,9 @@ namespace MenuScripts
 
             UIBlocker.BlockAll();
 
-            if (settingsPanel == null)
-                settingsPanel = GetComponent<FadePanel>();
+            if (settingsPanel == null) settingsPanel = GetComponent<FadePanel>();
 
-            if (menuBackground != null)
-                menuBackground.Show();
+            if (menuBackground != null) menuBackground.Show();
 
             settingsPanel.Show();
 
@@ -57,8 +53,7 @@ namespace MenuScripts
         {
             PlayerPrefs.Save();
 
-            if (settingsPanel)
-                settingsPanel.Hide();
+            if (settingsPanel) settingsPanel.Hide();
 
             if (lastPanel)
             {
@@ -66,8 +61,7 @@ namespace MenuScripts
                 {
                     var bgCanvas = menuBackground.GetComponent<CanvasGroup>();
 
-                    if (bgCanvas && bgCanvas.alpha <= 0)
-                        menuBackground.Show(lastPanel.FadeDuration);
+                    if (bgCanvas && bgCanvas.alpha <= 0) menuBackground.Show(lastPanel.FadeDuration);
                 }
 
                 lastPanel.Show(lastPanel.FadeDuration);
@@ -76,8 +70,7 @@ namespace MenuScripts
             {
                 UIBlocker.UnblockAll();
 
-                if (menuBackground != null)
-                    menuBackground.Hide();
+                if (menuBackground != null) menuBackground.Hide();
 
                 Time.timeScale = 1f;
             }
@@ -85,17 +78,13 @@ namespace MenuScripts
 
         private FadePanel FindActivePanel()
         {
-            if (gameOverPanel && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
-                return gameOverPanel;
+            if (gameOverPanel && gameOverPanel.GetComponent<CanvasGroup>().alpha > 0.1f) return gameOverPanel;
 
-            if (gameWonPanel && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
-                return gameWonPanel;
+            if (gameWonPanel && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.1f) return gameWonPanel;
 
-            if (pausePanel && pausePanel.GetComponent<CanvasGroup>().alpha > 0.1f)
-                return pausePanel;
+            if (pausePanel && pausePanel.GetComponent<CanvasGroup>().alpha > 0.1f) return pausePanel;
 
-            if (mainMenuPanel && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0.1f)
-                return mainMenuPanel;
+            if (mainMenuPanel && mainMenuPanel.GetComponent<CanvasGroup>().alpha > 0.1f) return mainMenuPanel;
 
             return null;
         }

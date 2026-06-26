@@ -36,11 +36,9 @@ namespace SaveSystem
         public IEnumerator LoadStateRoutine()
         {
             var data = SessionSaveManager.LoadSession();
-            if (data == null)
-                yield break;
+            if (data == null) yield break;
 
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.MuteSfx = true;
+            if (AudioManager.Instance != null) AudioManager.Instance.MuteSfx = true;
 
             castleSystem.CastleModel.Gold = int.MaxValue;
 
@@ -73,8 +71,7 @@ namespace SaveSystem
             yield return null;
             yield return null;
 
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.MuteSfx = false;
+            if (AudioManager.Instance != null) AudioManager.Instance.MuteSfx = false;
 
             Debug.Log("Session loaded. Silence mode finished after 3 frames.");
         }
@@ -92,7 +89,9 @@ namespace SaveSystem
             {
                 data.towers.Add(new TowerSaveData
                 {
-                    type = tower.Data.type, level = tower.Level, gridPosition = tower.GridPosition,
+                    type = tower.Data.type,
+                    level = tower.Level,
+                    gridPosition = tower.GridPosition,
                     worldPosition = tower.WorldPosition
                 });
             }

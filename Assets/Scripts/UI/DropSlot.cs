@@ -26,8 +26,7 @@ namespace UI
         public void OnDrop(PointerEventData eventData)
         {
             var draggingItem = eventData.pointerDrag?.GetComponent<InventoryItem>();
-            if (draggingItem == null)
-                return;
+            if (draggingItem == null) return;
 
             draggingItem.SetDraggingScale(1.0f);
             draggingItem.SetValidationState(true);
@@ -42,17 +41,14 @@ namespace UI
                     return;
                 }
 
-                if (castleSystem.TryBuyBuilding(draggingItem.BuildingData))
-                    draggingItem.Place(itemContainer);
-                else
-                    Destroy(draggingItem.gameObject);
+                if (castleSystem.TryBuyBuilding(draggingItem.BuildingData)) draggingItem.Place(itemContainer);
+                else Destroy(draggingItem.gameObject);
 
                 ResetSlotState();
                 return;
             }
 
-            if (existingItem != null)
-                existingItem.Place(draggingItem.OriginalParent);
+            if (existingItem != null) existingItem.Place(draggingItem.OriginalParent);
 
             draggingItem.Place(itemContainer);
             ResetSlotState();
@@ -60,12 +56,10 @@ namespace UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerDrag == null)
-                return;
+            if (eventData.pointerDrag == null) return;
 
             var draggingItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-            if (draggingItem == null)
-                return;
+            if (draggingItem == null) return;
 
             currentOverlappingItem = draggingItem;
             UpdateItemVisualState(currentOverlappingItem);
@@ -73,8 +67,7 @@ namespace UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (eventData.pointerDrag == null)
-                return;
+            if (eventData.pointerDrag == null) return;
 
             var draggingItem = eventData.pointerDrag.GetComponent<InventoryItem>();
             if (draggingItem != null && draggingItem == currentOverlappingItem)
@@ -92,8 +85,7 @@ namespace UI
 
         private void Update()
         {
-            if (!currentOverlappingItem)
-                return;
+            if (!currentOverlappingItem) return;
 
             if (!EventSystem.current)
             {

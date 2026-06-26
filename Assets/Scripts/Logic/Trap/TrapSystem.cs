@@ -39,8 +39,7 @@ namespace Logic.Trap
 
         public bool CanPlaceTrap(TrapData data, Vector2Int axial)
         {
-            if (castleSystem.CastleModel.Gold < data.baseCost)
-                return false;
+            if (castleSystem.CastleModel.Gold < data.baseCost) return false;
 
             var hexes = GetTrapOccupiedHexes(axial);
 
@@ -48,14 +47,11 @@ namespace Logic.Trap
             {
                 var hexObj = field.GetHex(h);
 
-                if (hexObj == null)
-                    return false;
+                if (hexObj == null) return false;
 
-                if (hexObj.type != HexagonType.Path)
-                    return false;
+                if (hexObj.type != HexagonType.Path) return false;
 
-                if (trapsModel.Traps.Any(t => t.Hexes.Contains(h)))
-                    return false;
+                if (trapsModel.Traps.Any(t => t.Hexes.Contains(h))) return false;
             }
             return true;
         }
@@ -70,9 +66,7 @@ namespace Logic.Trap
         {
             return new List<Vector2Int>
             {
-                centerHex,
-                centerHex + new Vector2Int(0, -1),
-                centerHex + new Vector2Int(1, -1)
+                centerHex, centerHex + new Vector2Int(0, -1), centerHex + new Vector2Int(1, -1)
             };
         }
 
@@ -84,11 +78,9 @@ namespace Logic.Trap
         public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
         {
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
-            if (trap == null || trap.IsTriggered)
-                return;
+            if (trap == null || trap.IsTriggered) return;
 
-            if (monster.HasImmunity(trap.Data.trapType))
-                return;
+            if (monster.HasImmunity(trap.Data.trapType)) return;
 
             if (trap.Data.trapType is TrapType.SlowZone or TrapType.DamageZone)
             {
@@ -105,11 +97,9 @@ namespace Logic.Trap
         {
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
 
-            if (trap == null)
-                return;
+            if (trap == null) return;
 
-            if (trap.Hexes.Contains(monster.CurrentHex))
-                return;
+            if (trap.Hexes.Contains(monster.CurrentHex)) return;
 
             if (trap.Data.trapType == TrapType.SlowZone && trap.ActiveSlowDebuffs.TryGetValue(monster, out var slow))
             {
@@ -126,30 +116,22 @@ namespace Logic.Trap
             {
                 switch (trap.Data.trapType)
                 {
-                    case TrapType.DamageZone:
-                        HandleDamageZone(trap, monsters, delta);
-                        break;
-                    case TrapType.BearTrap:
-                        HandleBearTrap(trap, monsters);
-                        break;
-                    case TrapType.SlowZone:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    case TrapType.DamageZone: HandleDamageZone(trap, monsters, delta); break;
+                    case TrapType.BearTrap: HandleBearTrap(trap, monsters); break;
+                    case TrapType.SlowZone: break;
+                    default: throw new ArgumentOutOfRangeException();
                 }
             }
         }
 
         public bool TryPlaceTrap(TrapData data, Vector2Int hex)
         {
-            if (!CanPlaceTrap(data, hex))
-                return false;
+            if (!CanPlaceTrap(data, hex)) return false;
 
             var occupied = GetTrapOccupiedHexes(hex);
 
             Debug.Log($"Placing trap at center AXIAL: {hex}");
-            foreach (var h in occupied)
-                Debug.Log($"Trap occupies AXIAL: {h}");
+            foreach (var h in occupied) Debug.Log($"Trap occupies AXIAL: {h}");
 
             if (castleSystem.TrySpendGold(data.baseCost))
             {
@@ -179,8 +161,7 @@ namespace Logic.Trap
             var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
             if (weakMonsters.Count >= trap.Data.requiredMonsters)
             {
-                foreach (var m in weakMonsters)
-                    m.TakeDamage(trap.Data.criticalDamage);
+                foreach (var m in weakMonsters) m.TakeDamage(trap.Data.criticalDamage);
                 trap.Trigger();
                 Debug.Log("Bear trap triggered.");
                 trapsModel.RemoveTrap(trap);
@@ -190,8 +171,7 @@ namespace Logic.Trap
         private static void HandleDamageZone(TrapModel trap, IReadOnlyList<MonsterModel> monsters, float delta)
         {
             trap.TickTimer += delta;
-            if (trap.TickTimer < trap.Data.tickInterval)
-                return;
+            if (trap.TickTimer < trap.Data.tickInterval) return;
             while (trap.TickTimer >= trap.Data.tickInterval)
             {
                 trap.TickTimer -= trap.Data.tickInterval;
@@ -199,8 +179,7 @@ namespace Logic.Trap
                 {
                     if (!monster.IsDead && trap.Hexes.Contains(monster.CurrentHex))
                     {
-                        if (!monster.HasImmunity(trap.Data.trapType))
-                            monster.TakeDamage(trap.Data.tickDamage);
+                        if (!monster.HasImmunity(trap.Data.trapType)) monster.TakeDamage(trap.Data.tickDamage);
                     }
                 }
             }

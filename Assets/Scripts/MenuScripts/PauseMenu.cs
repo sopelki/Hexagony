@@ -17,16 +17,13 @@ namespace MenuScripts
 
         public void OpenPause()
         {
-            if (endGameMenu != null && (endGameMenu.endGameSequenceStarted || endGameMenu.IsAnyEndGameOpen))
-                return;
+            if (endGameMenu != null && (endGameMenu.endGameSequenceStarted || endGameMenu.IsAnyEndGameOpen)) return;
 
             UIBlocker.BlockAll();
 
-            if (pausePanel == null)
-                pausePanel = GetComponent<FadePanel>();
+            if (pausePanel == null) pausePanel = GetComponent<FadePanel>();
 
-            if (menuBackground != null)
-                menuBackground.Show();
+            if (menuBackground != null) menuBackground.Show();
 
             pausePanel.Show();
 
@@ -37,11 +34,9 @@ namespace MenuScripts
         {
             UIBlocker.UnblockAll();
 
-            if (menuBackground != null)
-                menuBackground.Hide();
+            if (menuBackground != null) menuBackground.Hide();
 
-            if (pausePanel != null)
-                pausePanel.Hide();
+            if (pausePanel != null) pausePanel.Hide();
 
             Time.timeScale = 1f;
         }

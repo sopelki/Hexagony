@@ -9,8 +9,7 @@ namespace Misc
     {
         public static void BlockAll()
         {
-            if (TooltipUI.Instance != null)
-                TooltipUI.Instance.Hide();
+            if (TooltipUI.Instance != null) TooltipUI.Instance.Hide();
 
             var allComponents = Object.FindObjectsByType<MonoBehaviour>();
 
@@ -24,8 +23,7 @@ namespace Misc
                         break;
 
                     case IBeginDragHandler or IDragHandler or IEndDragHandler:
-                        if (mb is not Slider and not ScrollRect and not Scrollbar)
-                            mb.enabled = false;
+                        if (mb is not Slider and not ScrollRect and not Scrollbar) mb.enabled = false;
                         break;
                 }
             }
@@ -38,8 +36,7 @@ namespace Misc
             foreach (var mb in allComponents)
             {
                 if (mb is (TooltipTrigger or IBeginDragHandler or IDragHandler or IEndDragHandler)
-                    and not (Slider or ScrollRect or Scrollbar))
-                    mb.enabled = true;
+                    and not (Slider or ScrollRect or Scrollbar)) mb.enabled = true;
             }
         }
     }

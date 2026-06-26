@@ -5,11 +5,7 @@ namespace Logic.Projectile
 {
     public class ProjectileModel
     {
-        public ProjectileModel(
-            Vector3 startPos,
-            MonsterModel target,
-            ProjectileData data,
-            Vector3 interceptPoint)
+        public ProjectileModel(Vector3 startPos, MonsterModel target, ProjectileData data, Vector3 interceptPoint)
         {
             var spawnPoint = startPos + new Vector3(data.xOffset, data.yOffset, 0);
 

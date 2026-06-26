@@ -13,15 +13,8 @@ namespace Logic.Monster
 {
     public class MonsterSpawner : ITickable
     {
-        public MonsterSpawner(
-            List<Vector2Int> spawnHexes,
-            Field.Field field,
-            MonsterSystem monsterSystem,
-            UnitSystem unitSystem,
-            List<WaveData> waves,
-            Tilemap tilemap,
-            TrapSystem trapSystem,
-            SoundData soundData)
+        public MonsterSpawner(List<Vector2Int> spawnHexes, Field.Field field, MonsterSystem monsterSystem,
+            UnitSystem unitSystem, List<WaveData> waves, Tilemap tilemap, TrapSystem trapSystem, SoundData soundData)
         {
             this.spawnHexes = spawnHexes;
             this.field = field;
@@ -104,8 +97,7 @@ namespace Logic.Monster
                 spawnInterval = Mathf.Max(infiniteSettings.minSpawnInterval,
                     infiniteSettings.referenceWave.spawnInterval - extraWaves * infiniteSettings.spawnIntervalStep);
             }
-            else
-                return;
+            else return;
 
             if (waveSpawnFinished) return;
 

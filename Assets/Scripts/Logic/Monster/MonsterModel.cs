@@ -9,15 +9,8 @@ namespace Logic.Monster
 {
     public class MonsterModel : IDamageable
     {
-        public MonsterModel(
-            Vector3 startWorldPos,
-            Vector2Int startHex,
-            MonsterData data,
-            float healthMultiplier,
-            float damageMultiplier,
-            float speedMultiplier,
-            float goldMultiplier,
-            SoundData soundData)
+        public MonsterModel(Vector3 startWorldPos, Vector2Int startHex, MonsterData data, float healthMultiplier,
+            float damageMultiplier, float speedMultiplier, float goldMultiplier, SoundData soundData)
         {
             WorldPosition = startWorldPos;
             CurrentHex = startHex;
@@ -80,8 +73,7 @@ namespace Logic.Monster
 
         public void Die()
         {
-            if (deathEventSent)
-                return;
+            if (deathEventSent) return;
 
             deathEventSent = true;
             OnDied?.Invoke();
@@ -128,17 +120,14 @@ namespace Logic.Monster
 
         public void TakeDamage(int damage)
         {
-            if (IsDead)
-                return;
+            if (IsDead) return;
             currentHealth -= damage;
 
             OnDamaged?.Invoke();
 
-            if (soundData != null &&
-                soundData.monsterDamageSounds is { Length: > 0 })
+            if (soundData != null && soundData.monsterDamageSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
-            if (currentHealth <= 0)
-                Die();
+            if (currentHealth <= 0) Die();
         }
 
         public void Tick()
@@ -154,8 +143,7 @@ namespace Logic.Monster
             DebuffSystem.Tick(TickManager.Instance.tickInterval);
             attackStrategy?.Tick();
 
-            if (attackStrategy?.IsAttacking == true)
-                return;
+            if (attackStrategy?.IsAttacking == true) return;
 
             movementStrategy?.Tick();
         }

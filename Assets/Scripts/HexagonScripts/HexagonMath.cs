@@ -19,9 +19,7 @@ namespace HexagonScripts
             var dq = a.x - b.x;
             var dr = a.y - b.y;
 
-            return (Mathf.Abs(dq)
-                    + Mathf.Abs(dq + dr)
-                    + Mathf.Abs(dr)) / 2;
+            return (Mathf.Abs(dq) + Mathf.Abs(dq + dr) + Mathf.Abs(dr)) / 2;
         }
 
         public static Vector2Int OffsetToAxial(int x, int y)
@@ -39,8 +37,7 @@ namespace HexagonScripts
 
         public static Vector2Int WorldToAxial(Vector3 worldPos)
         {
-            var q = (Mathf.Sqrt(3f) / 3f * worldPos.x -
-                     1f / 3f * worldPos.y) / HexSize;
+            var q = (Mathf.Sqrt(3f) / 3f * worldPos.x - 1f / 3f * worldPos.y) / HexSize;
 
             var r = 2f / 3f * worldPos.y / HexSize;
 
@@ -61,12 +58,9 @@ namespace HexagonScripts
             var yDiff = Mathf.Abs(ry - y);
             var zDiff = Mathf.Abs(rz - z);
 
-            if (xDiff > yDiff && xDiff > zDiff)
-                rx = -ry - rz;
-            else if (yDiff > zDiff)
-                ry = -rx - rz;
-            else
-                rz = -rx - ry;
+            if (xDiff > yDiff && xDiff > zDiff) rx = -ry - rz;
+            else if (yDiff > zDiff) ry = -rx - rz;
+            else rz = -rx - ry;
 
             return new Vector2Int(rx, rz);
         }

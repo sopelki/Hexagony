@@ -11,16 +11,14 @@ namespace MenuScripts
 
         private void Update()
         {
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-                HandleEscape();
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) HandleEscape();
         }
 
         private void HandleEscape()
         {
             if (settingsMenu == null) return;
 
-            if (settingsMenu.IsOpen)
-                settingsMenu.CloseSettings();
+            if (settingsMenu.IsOpen) settingsMenu.CloseSettings();
             else
             {
 #if UNITY_EDITOR

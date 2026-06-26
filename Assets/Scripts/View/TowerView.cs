@@ -48,8 +48,7 @@ namespace View
 
         private void Awake()
         {
-            if (levelText != null)
-                originalTextScale = levelText.transform.localScale;
+            if (levelText != null) originalTextScale = levelText.transform.localScale;
         }
 
         private static string IntToRoman(int number)
@@ -72,8 +71,7 @@ namespace View
 
         private void StartLevelAnimation(int level, Color targetColor)
         {
-            if (levelAnimation != null)
-                StopCoroutine(levelAnimation);
+            if (levelAnimation != null) StopCoroutine(levelAnimation);
             levelAnimation = StartCoroutine(AnimateLevelIn(level, targetColor));
         }
 
@@ -88,8 +86,7 @@ namespace View
                 var startScale = levelText.transform.localScale;
 
                 var finalTargetColor = targetColor;
-                if (string.IsNullOrEmpty(newRoman))
-                    finalTargetColor.a = 0;
+                if (string.IsNullOrEmpty(newRoman)) finalTargetColor.a = 0;
 
                 while (elapsed < animationDuration)
                 {
@@ -98,8 +95,7 @@ namespace View
 
                     levelText.color = Color.Lerp(startColor, finalTargetColor, progress);
 
-                    if (shadowLevelText)
-                        shadowLevelText.color = new Color(0, 0, 0, levelText.color.a);
+                    if (shadowLevelText) shadowLevelText.color = new Color(0, 0, 0, levelText.color.a);
 
                     levelText.transform.localScale = Vector3.Lerp(startScale, originalTextScale, progress);
 
@@ -115,8 +111,7 @@ namespace View
             }
 
             levelText.text = newRoman;
-            if (shadowLevelText)
-                shadowLevelText.text = newRoman;
+            if (shadowLevelText) shadowLevelText.text = newRoman;
 
             float t = 0;
             while (t < 1f)
@@ -126,8 +121,7 @@ namespace View
                 var c = targetColor;
                 c.a = Mathf.Lerp(0, targetColor.a, t);
                 levelText.color = c;
-                if (shadowLevelText)
-                    shadowLevelText.color = new Color(0, 0, 0, c.a);
+                if (shadowLevelText) shadowLevelText.color = new Color(0, 0, 0, c.a);
 
                 var scaleEffect = Mathf.Sin(t * Mathf.PI * 0.5f);
                 levelText.transform.localScale = originalTextScale * Mathf.Lerp(0.6f, 1f, scaleEffect);
@@ -143,8 +137,7 @@ namespace View
         {
             var roman = level <= 1 ? "" : IntToRoman(level);
             levelText.text = roman;
-            if (shadowLevelText)
-                shadowLevelText.text = roman;
+            if (shadowLevelText) shadowLevelText.text = roman;
             levelText.color = originalColor;
             levelText.transform.localScale = originalTextScale;
         }

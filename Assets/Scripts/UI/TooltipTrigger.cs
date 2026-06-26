@@ -15,11 +15,9 @@ namespace UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerDrag != null)
-                return;
+            if (eventData.pointerDrag != null) return;
 
-            if (provider == null)
-                return;
+            if (provider == null) return;
 
             delayCoroutine = StartCoroutine(ShowWithDelay());
         }
@@ -37,11 +35,9 @@ namespace UI
 
         public void StopDisplay()
         {
-            if (delayCoroutine != null)
-                StopCoroutine(delayCoroutine);
+            if (delayCoroutine != null) StopCoroutine(delayCoroutine);
 
-            if (TooltipUI.Instance != null)
-                TooltipUI.Instance.Hide();
+            if (TooltipUI.Instance != null) TooltipUI.Instance.Hide();
         }
 
         private void OnDisable()

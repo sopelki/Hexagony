@@ -38,12 +38,10 @@ namespace MenuScripts
         private void SnapToPointer(PointerEventData eventData)
         {
             var containerRectTransform = transform as RectTransform;
-            if (containerRectTransform == null)
-                return;
+            if (containerRectTransform == null) return;
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    containerRectTransform, eventData.position, eventData.pressEventCamera, out var localMouse))
-                return;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRectTransform, eventData.position,
+                    eventData.pressEventCamera, out var localMouse)) return;
 
             var rect = containerRectTransform.rect;
             var unclamped = (localMouse.x - rect.xMin) / rect.width;

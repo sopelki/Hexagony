@@ -9,12 +9,8 @@ namespace Core
 {
     public class GameFlowManager
     {
-        public GameFlowManager(
-            WaveManager waveManager,
-            TowerSystem towerSystem,
-            TrapSystem trapSystem,
-            CastleSystem castleSystem,
-            SlidingNotificationUI hintUI)
+        public GameFlowManager(WaveManager waveManager, TowerSystem towerSystem, TrapSystem trapSystem,
+            CastleSystem castleSystem, SlidingNotificationUI hintUI)
         {
             this.waveManager = waveManager;
             this.towerSystem = towerSystem;
@@ -77,22 +73,19 @@ namespace Core
 
         private void OnFirstObjectPlaced()
         {
-            if (IsTutorialActive || gameStarted || waitingToStart)
-                return;
+            if (IsTutorialActive || gameStarted || waitingToStart) return;
 
             waitingToStart = true;
             timeSinceObjectPlaced = 0f;
 
-            if (hintUI)
-                hintUI.HideHint();
+            if (hintUI) hintUI.HideHint();
 
             Debug.Log("[GameFlow] First object placed! Starting engine...");
         }
 
         private void ShowHintWindow()
         {
-            if (hintUI)
-                hintUI.ShowHint("Для начала\nзащитите замок!");
+            if (hintUI) hintUI.ShowHint("Для начала\nзащитите замок!");
 
             timeSinceLastHint = 0f;
         }
@@ -111,8 +104,7 @@ namespace Core
 
         private void Tick()
         {
-            if (gameStarted || IsTutorialActive)
-                return;
+            if (gameStarted || IsTutorialActive) return;
 
             if (Time.timeScale > 0)
             {
@@ -121,8 +113,7 @@ namespace Core
                 if (waitingToStart)
                 {
                     timeSinceObjectPlaced += deltaTime;
-                    if (timeSinceObjectPlaced >= StartGameDelay)
-                        StartGame();
+                    if (timeSinceObjectPlaced >= StartGameDelay) StartGame();
                     return;
                 }
 
@@ -139,8 +130,7 @@ namespace Core
                 }
                 else
                 {
-                    if (timeSinceLastHint >= HintCycleInterval)
-                        ShowHintWindow();
+                    if (timeSinceLastHint >= HintCycleInterval) ShowHintWindow();
                 }
             }
         }

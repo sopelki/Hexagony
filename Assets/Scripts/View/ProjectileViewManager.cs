@@ -20,12 +20,7 @@ namespace View
 
         private void HandleCreated(ProjectileModel model)
         {
-            var go = Instantiate(
-                model.Data.prefab,
-                model.Position,
-                Quaternion.identity,
-                parent
-            );
+            var go = Instantiate(model.Data.prefab, model.Position, Quaternion.identity, parent);
 
             var view = go.GetComponent<ProjectileView>();
             view.Initialize(model);
@@ -35,8 +30,7 @@ namespace View
 
         private void HandleDestroyed(ProjectileModel model)
         {
-            if (!views.TryGetValue(model, out var view))
-                return;
+            if (!views.TryGetValue(model, out var view)) return;
 
             Destroy(view.gameObject);
             views.Remove(model);

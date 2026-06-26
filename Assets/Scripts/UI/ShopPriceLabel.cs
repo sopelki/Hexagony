@@ -28,15 +28,11 @@ namespace UI
 
         public void Refresh(int currentGold)
         {
-            if (purchasable == null)
-                return;
+            if (purchasable == null) return;
 
-            var targetColor = currentGold >= purchasable.BaseCost
-                ? enoughGoldColor
-                : notEnoughGoldColor;
+            var targetColor = currentGold >= purchasable.BaseCost ? enoughGoldColor : notEnoughGoldColor;
 
-            if (colorCoroutine != null)
-                StopCoroutine(colorCoroutine);
+            if (colorCoroutine != null) StopCoroutine(colorCoroutine);
             colorCoroutine = StartCoroutine(AnimateColor(targetColor));
         }
 
@@ -57,13 +53,11 @@ namespace UI
             var startColor = priceText.color;
             var elapsed = 0f;
 
-            if (startColor == targetColor)
-                yield break;
+            if (startColor == targetColor) yield break;
 
             while (elapsed < fadeDuration)
             {
-                if (Time.timeScale > 0)
-                    elapsed += Time.unscaledDeltaTime;
+                if (Time.timeScale > 0) elapsed += Time.unscaledDeltaTime;
 
                 var t = elapsed / fadeDuration;
 

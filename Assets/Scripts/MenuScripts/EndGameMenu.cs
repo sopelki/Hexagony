@@ -99,8 +99,7 @@ namespace MenuScripts
             }
 
             gameWonPanel.Hide();
-            if (menuBackground)
-                menuBackground.Hide(fadeDuration);
+            if (menuBackground) menuBackground.Hide(fadeDuration);
 
             waveManager.StartInfiniteMode(infiniteSettings);
         }
@@ -113,14 +112,12 @@ namespace MenuScripts
 
         private void CheckGameOver()
         {
-            if (model.IsDead)
-                OpenGameOver();
+            if (model.IsDead) OpenGameOver();
         }
 
         private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip, bool isWin)
         {
-            if (!panel)
-                yield break;
+            if (!panel) yield break;
 
             endGameSequenceStarted = true;
             UIBlocker.BlockAll();
@@ -135,8 +132,7 @@ namespace MenuScripts
 
             Time.timeScale = 0f;
 
-            if (menuBackground)
-                menuBackground.Show(fadeDuration);
+            if (menuBackground) menuBackground.Show(fadeDuration);
 
             panel.Show();
 

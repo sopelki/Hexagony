@@ -12,11 +12,7 @@ namespace Logic.Monster
 {
     public class HexMoveToTargetStrategy : IMovementStrategy
     {
-        public HexMoveToTargetStrategy(
-            MonsterModel monster,
-            Field.Field field,
-            Tilemap tilemap,
-            TrapSystem trapSystem,
+        public HexMoveToTargetStrategy(MonsterModel monster, Field.Field field, Tilemap tilemap, TrapSystem trapSystem,
             MonsterSystem monsterSystem)
         {
             this.monster = monster;
@@ -27,10 +23,7 @@ namespace Logic.Monster
 
             pathfinder = new HexAStarPathfinder(field);
 
-            formationOffset = new Vector3(
-                Random.Range(-0.2f, 0.2f),
-                Random.Range(-0.2f, 0.2f),
-                0f);
+            formationOffset = new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f), 0f);
         }
 
         private List<Vector2Int> currentPath;
@@ -54,8 +47,7 @@ namespace Logic.Monster
         {
             var castle = CastleSystem.Instance;
             var dt = TickManager.Instance.tickInterval;
-            if (castle == null || castle.CastleModel.WallHexes.Count == 0)
-                return;
+            if (castle == null || castle.CastleModel.WallHexes.Count == 0) return;
 
             if (castle.CastleModel.WallHexes.Contains(monster.CurrentHex) || IsAdjacentToWall(monster.CurrentHex))
             {
@@ -72,8 +64,7 @@ namespace Logic.Monster
                 repathTimer = RepathDelay;
             }
 
-            if (currentPath != null && pathIndex < currentPath.Count)
-                MoveAlongPath();
+            if (currentPath != null && pathIndex < currentPath.Count) MoveAlongPath();
 
             ApplySeparation(dt);
         }
@@ -86,8 +77,7 @@ namespace Logic.Monster
 
             foreach (var otherMonster in allMonsters)
             {
-                if (otherMonster == monster || otherMonster.IsDead)
-                    continue;
+                if (otherMonster == monster || otherMonster.IsDead) continue;
 
                 var distance = Vector3.Distance(monster.WorldPosition, otherMonster.WorldPosition);
 
@@ -125,8 +115,7 @@ namespace Logic.Monster
                 else
                 {
                     var currentCell = tilemap.WorldToCell(monster.WorldPosition);
-                    if (cellPos == currentCell)
-                        monster.SetPosition(newPosition);
+                    if (cellPos == currentCell) monster.SetPosition(newPosition);
                 }
             }
         }
@@ -152,8 +141,7 @@ namespace Logic.Monster
             currentPath = pathfinder.FindPath(monster.CurrentHex, goal.Value);
             pathIndex = 1;
 
-            if (currentPath is not { Count: > 1 })
-                currentPath = null;
+            if (currentPath is not { Count: > 1 }) currentPath = null;
         }
 
         private Vector2Int? GetBestSiegePosition()
@@ -168,20 +156,15 @@ namespace Logic.Monster
                 var wallHex = field.GetHex(wallCoord);
                 if (wallHex == null) continue;
 
-                var walkableNeighbours = field.GetNeighbours(wallHex)
-                    .Where(n => field.IsWalkable(n))
+                var walkableNeighbours = field.GetNeighbours(wallHex).Where(n => field.IsWalkable(n))
                     .Select(n => n.coordinates);
 
-                foreach (var pos in walkableNeighbours)
-                    validSiegePositions.Add(pos);
+                foreach (var pos in walkableNeighbours) validSiegePositions.Add(pos);
             }
 
-            if (validSiegePositions.Count == 0)
-                return null;
+            if (validSiegePositions.Count == 0) return null;
 
-            var topPositions = validSiegePositions
-                .OrderBy(p => Vector2Int.Distance(monster.CurrentHex, p))
-                .Take(4)
+            var topPositions = validSiegePositions.OrderBy(p => Vector2Int.Distance(monster.CurrentHex, p)).Take(4)
                 .ToList();
             return topPositions[Random.Range(0, topPositions.Count)];
         }
@@ -203,8 +186,7 @@ namespace Logic.Monster
             var nextHex = currentPath[pathIndex];
             var hexObj = field.GetHex(nextHex);
 
-            if (hexObj == null)
-                return;
+            if (hexObj == null) return;
 
             var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
             var directionVector = targetWorld - monster.WorldPosition;
@@ -222,8 +204,7 @@ namespace Logic.Monster
 
                 pathIndex++;
             }
-            else
-                monster.Move(directionVector.normalized);
+            else monster.Move(directionVector.normalized);
         }
     }
 }

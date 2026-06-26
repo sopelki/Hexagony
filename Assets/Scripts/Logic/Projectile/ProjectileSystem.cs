@@ -36,10 +36,8 @@ namespace Logic.Projectile
             {
                 var p = projectiles[i];
 
-                if (p.Data.isHoming)
-                    UpdateHoming(p, step, i);
-                else
-                    UpdateStraight(p, step, i);
+                if (p.Data.isHoming) UpdateHoming(p, step, i);
+                else UpdateStraight(p, step, i);
             }
         }
 
@@ -59,8 +57,7 @@ namespace Logic.Projectile
                 volume = soundData.archerHitVolume;
             }
 
-            if (soundData != null &&
-                soundData.archerTowerHitSounds is { Length: > 0 })
+            if (soundData != null && soundData.archerTowerHitSounds is { Length: > 0 })
                 AudioManager.Instance.PlayRandomSfx(sound, volume);
         }
 
@@ -74,8 +71,7 @@ namespace Logic.Projectile
 
         private void TryApplyDamage(ProjectileModel p)
         {
-            if (p.Target == null)
-                return;
+            if (p.Target == null) return;
 
             if (p.Data.aoeRadius <= 0f)
             {
@@ -90,14 +86,11 @@ namespace Logic.Projectile
 
             foreach (var monster in monsterSystem.GetAllMonsters())
             {
-                if (monster.IsDead)
-                    continue;
+                if (monster.IsDead) continue;
 
-                var dist =
-                    Vector3.Distance(monster.WorldPosition, p.Position);
+                var dist = Vector3.Distance(monster.WorldPosition, p.Position);
 
-                if (!(dist <= p.Data.aoeRadius))
-                    continue;
+                if (!(dist <= p.Data.aoeRadius)) continue;
 
                 Debug.Log("ApplyDamage: " + p.Damage);
                 monster.TakeDamage(p.Damage);
@@ -121,8 +114,7 @@ namespace Logic.Projectile
             }
 
             if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance) Remove(index);
         }
 
         private void UpdateStraight(ProjectileModel p, float step, int index)
@@ -149,8 +141,7 @@ namespace Logic.Projectile
             }
 
             if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance) Remove(index);
         }
     }
 }

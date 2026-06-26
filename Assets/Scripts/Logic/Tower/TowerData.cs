@@ -34,12 +34,7 @@ namespace Logic.Tower
                 $"Скорость: <color=#FF7733>{fireRate}с</color> (<color=#FF7733>+{fireRateMultiplierPerLevel * 100 % 100}%</color>)\n" +
                 $"Дальность: <color=#FFA726>{range}</color> (<color=#FFA726>+{rangeMultiplierPerLevel * 100 % 100}%</color>)";
 
-            return new TooltipContent
-            {
-                Title = type.GetRussianName(),
-                Description = description,
-                SpecialInfo = stats
-            };
+            return new TooltipContent { Title = type.GetRussianName(), Description = description, SpecialInfo = stats };
         }
     }
 }

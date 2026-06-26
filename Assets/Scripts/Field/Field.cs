@@ -14,12 +14,7 @@ namespace Field
 
         private static readonly Vector2Int[] neighborDirections =
         {
-            new(0, +1),
-            new(+1, 0),
-            new(+1, -1),
-            new(0, -1),
-            new(-1, 0),
-            new(-1, +1)
+            new(0, +1), new(+1, 0), new(+1, -1), new(0, -1), new(-1, 0), new(-1, +1)
         };
 
         public void AddHexagon(int x, int y, HexagonType type)
@@ -37,8 +32,7 @@ namespace Field
         {
             var data = new FieldData
             {
-                savedHexes = new List<Hexagon>(Hexagons.Values),
-                savedObjects = new List<MapObjectData>(MapObjects)
+                savedHexes = new List<Hexagon>(Hexagons.Values), savedObjects = new List<MapObjectData>(MapObjects)
             };
             Debug.Log($"Exported {data.savedHexes.Count} hexagons, {data.savedObjects.Count} objects.");
             return data;
@@ -56,11 +50,8 @@ namespace Field
 
         public List<Hexagon> GetNeighbours(Hexagon currentHex)
         {
-            return neighborDirections
-                .Select(direction => currentHex.coordinates + direction)
-                .Select(GetHex)
-                .Where(neighbor => neighbor != null)
-                .ToList();
+            return neighborDirections.Select(direction => currentHex.coordinates + direction).Select(GetHex)
+                .Where(neighbor => neighbor != null).ToList();
         }
 
         public void ImportFromFieldData(FieldData data)

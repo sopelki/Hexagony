@@ -10,21 +10,14 @@ namespace Logic.Unit
 {
     public class UnitAStarMoveStrategy : IMovementStrategy
     {
-        public UnitAStarMoveStrategy(
-            UnitModel unit,
-            MonsterSystem monsterSystem,
-            Field.Field field,
-            Tilemap tilemap)
+        public UnitAStarMoveStrategy(UnitModel unit, MonsterSystem monsterSystem, Field.Field field, Tilemap tilemap)
         {
             this.unit = unit;
             this.monsterSystem = monsterSystem;
             this.field = field;
             this.tilemap = tilemap;
             pathfinder = new HexAStarPathfinder(field);
-            formationOffset = new Vector3(
-                Random.Range(-0.15f, 0.15f),
-                Random.Range(-0.15f, 0.15f),
-                0f);
+            formationOffset = new Vector3(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f), 0f);
         }
 
         private readonly Vector2Int baseHex = new(-16, 12);
@@ -53,16 +46,13 @@ namespace Logic.Unit
         {
             var dt = TickManager.Instance.tickInterval;
             repathTimer -= dt;
-            var monsters = monsterSystem.GetAllMonsters()
-                .Where(m => !m.IsDead)
-                .ToList();
+            var monsters = monsterSystem.GetAllMonsters().Where(m => !m.IsDead).ToList();
 
             if (monsters.Count == 0)
             {
                 if (currentTarget != null)
                 {
-                    currentTarget.TargetedByUnits =
-                        Mathf.Max(0, currentTarget.TargetedByUnits - 1);
+                    currentTarget.TargetedByUnits = Mathf.Max(0, currentTarget.TargetedByUnits - 1);
                     currentTarget = null;
                 }
 
@@ -80,27 +70,21 @@ namespace Logic.Unit
 
             const float crowdPenalty = 2f;
 
-            var target = monsters
-                .OrderBy(m =>
-                    Vector3.Distance(m.WorldPosition, unit.WorldPosition) +
-                    m.TargetedByUnits * crowdPenalty)
-                .First();
+            var target = monsters.OrderBy(m =>
+                Vector3.Distance(m.WorldPosition, unit.WorldPosition) + m.TargetedByUnits * crowdPenalty).First();
 
-            if (Vector3.Distance(target.WorldPosition, unit.WorldPosition)
-                <= unit.UnitData.attackRadius)
+            if (Vector3.Distance(target.WorldPosition, unit.WorldPosition) <= unit.UnitData.attackRadius)
             {
                 currentPath = null;
                 ApplySeparation(dt);
                 return;
             }
             if (repathTimer <= 0f &&
-                (currentTarget != target ||
-                 Vector2Int.Distance(currentTargetHex, target.CurrentHex) > 1))
+                (currentTarget != target || Vector2Int.Distance(currentTargetHex, target.CurrentHex) > 1))
             {
                 if (currentTarget != null && currentTarget != target)
                 {
-                    currentTarget.TargetedByUnits =
-                        Mathf.Max(0, currentTarget.TargetedByUnits - 1);
+                    currentTarget.TargetedByUnits = Mathf.Max(0, currentTarget.TargetedByUnits - 1);
                 }
                 if (currentTarget != target)
                 {
@@ -111,10 +95,8 @@ namespace Logic.Unit
                 BuildNewPath(target);
                 repathTimer = RepathDelay;
             }
-            if (currentPath != null && pathIndex < currentPath.Count)
-                MoveAlongPath();
-            else
-                currentPath = null;
+            if (currentPath != null && pathIndex < currentPath.Count) MoveAlongPath();
+            else currentPath = null;
 
             ApplySeparation(dt);
         }
@@ -127,8 +109,7 @@ namespace Logic.Unit
 
             foreach (var otherUnit in allUnits)
             {
-                if (otherUnit == unit || otherUnit.IsDead)
-                    continue;
+                if (otherUnit == unit || otherUnit.IsDead) continue;
 
                 var distance = Vector3.Distance(unit.WorldPosition, otherUnit.WorldPosition);
 
@@ -158,8 +139,7 @@ namespace Logic.Unit
                 else
                 {
                     var currentCell = tilemap.WorldToCell(unit.WorldPosition);
-                    if (cellPos == currentCell)
-                        unit.SetPosition(newPosition);
+                    if (cellPos == currentCell) unit.SetPosition(newPosition);
                 }
             }
         }
@@ -171,25 +151,19 @@ namespace Logic.Unit
             currentPath = pathfinder.FindPath(unit.CurrentHex, currentTargetHex);
             pathIndex = 1;
 
-            if (currentPath == null || currentPath.Count <= 1)
-                currentPath = null;
+            if (currentPath == null || currentPath.Count <= 1) currentPath = null;
         }
 
         private Vector2Int GetRandomizedGoal(Vector2Int center)
         {
             var centerHex = field.GetHex(center);
-            if (centerHex == null)
-                return center;
+            if (centerHex == null) return center;
 
-            var neighbours = field.GetNeighbours(centerHex)
-                .Where(h => field.IsWalkable(h))
-                .ToList();
+            var neighbours = field.GetNeighbours(centerHex).Where(h => field.IsWalkable(h)).ToList();
 
-            if (neighbours.Count == 0)
-                return center;
+            if (neighbours.Count == 0) return center;
 
-            if (Random.value < 0.5f)
-                return center;
+            if (Random.value < 0.5f) return center;
 
             return neighbours[Random.Range(0, neighbours.Count)].coordinates;
         }
@@ -211,8 +185,7 @@ namespace Logic.Unit
             }
 
             patrolWaitTimer -= dt;
-            if (patrolWaitTimer > 0f)
-                return;
+            if (patrolWaitTimer > 0f) return;
 
             var radius = 2;
             var randomX = Random.Range(-radius, radius + 1);
@@ -226,8 +199,7 @@ namespace Logic.Unit
                 currentPath = pathfinder.FindPath(unit.CurrentHex, potentialHex);
                 pathIndex = 1;
 
-                if (currentPath == null || currentPath.Count <= 1)
-                    currentPath = null;
+                if (currentPath == null || currentPath.Count <= 1) currentPath = null;
 
                 patrolWaitTimer = Random.Range(2f, 5f);
             }
@@ -238,8 +210,7 @@ namespace Logic.Unit
             var nextHex = currentPath[pathIndex];
             var hexObj = field.GetHex(nextHex);
 
-            if (hexObj == null)
-                return;
+            if (hexObj == null) return;
 
             var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
             var currentPosition = unit.WorldPosition;

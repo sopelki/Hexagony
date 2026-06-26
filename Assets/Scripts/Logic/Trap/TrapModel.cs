@@ -26,8 +26,7 @@ namespace Logic.Trap
 
         public void Trigger()
         {
-            if (IsTriggered)
-                return;
+            if (IsTriggered) return;
 
             IsTriggered = true;
             OnTriggered?.Invoke(this);

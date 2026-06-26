@@ -127,8 +127,7 @@ namespace Core
 
             cameraSetup.FitToGrid();
 
-            if (fieldGenerator != null)
-                fieldGenerator.Initialize(field);
+            if (fieldGenerator != null) fieldGenerator.Initialize(field);
 
             castleModel = new CastleModel(startHp, startGold, startSupply, soundData);
             monsterSystem = new MonsterSystem();
@@ -152,11 +151,9 @@ namespace Core
 
             castleView = FindAnyObjectByType<CastleView>();
 
-            if (castleUI != null)
-                castleUI.Initialize(castleSystem, waveManager);
+            if (castleUI != null) castleUI.Initialize(castleSystem, waveManager);
 
-            if (castleView != null)
-                castleView.Initialize(castleModel, tilemap, field);
+            if (castleView != null) castleView.Initialize(castleModel, tilemap, field);
 
             if (notificationUI != null)
             {
@@ -199,23 +196,18 @@ namespace Core
 
         private void Start()
         {
-            if (unitViewManager != null)
-                unitViewManager.Initialize(unitSystem);
+            if (unitViewManager != null) unitViewManager.Initialize(unitSystem);
 
-            if (towerViewManager != null)
-                towerViewManager.Initialize(towersModel);
+            if (towerViewManager != null) towerViewManager.Initialize(towersModel);
 
-            if (monsterViewManager != null)
-                monsterViewManager.Initialize(monsterSystem);
+            if (monsterViewManager != null) monsterViewManager.Initialize(monsterSystem);
 
-            if (projectileViewManager != null)
-                projectileViewManager.Initialize(projectileSystem);
+            if (projectileViewManager != null) projectileViewManager.Initialize(projectileSystem);
 
-            if (trapViewManager != null)
-                trapViewManager.Initialize(trapsModel, field, tilemap);
+            if (trapViewManager != null) trapViewManager.Initialize(trapsModel, field, tilemap);
 
-            var sessionController =
-                new SessionController(towerSystem, trapSystem, castleSystem, waveManager, infiniteSettings, castleUI);
+            var sessionController = new SessionController(towerSystem, trapSystem, castleSystem, waveManager,
+                infiniteSettings, castleUI);
 
             var isLoaded = false;
             if (SessionSaveManager.IsSaveLoaded && SessionSaveManager.HasSavedSession())
@@ -226,34 +218,22 @@ namespace Core
                 castleUI.SyncBuildingsUI(castleSystem.CastleModel.Buildings);
             }
 
-            gameFlowManager = new GameFlowManager(
-                waveManager,
-                towerSystem,
-                trapSystem,
-                castleSystem,
-                notificationUI
-            );
+            gameFlowManager = new GameFlowManager(waveManager, towerSystem, trapSystem, castleSystem, notificationUI);
 
             gameFlowManager.Initialize();
             if (tutorialManager != null)
             {
-                if (isLoaded)
-                    tutorialManager.ForceStopTutorial();
-                else
-                    tutorialManager.Setup(gameFlowManager);
+                if (isLoaded) tutorialManager.ForceStopTutorial();
+                else tutorialManager.Setup(gameFlowManager);
             }
 
-            if (notificationUI != null)
-                notificationUI.Initialize(waves.Count);
+            if (notificationUI != null) notificationUI.Initialize(waves.Count);
 
-            foreach (var item in FindObjectsByType<ShopToFieldTowerItem>())
-                item.Construct(towerSystem);
+            foreach (var item in FindObjectsByType<ShopToFieldTowerItem>()) item.Construct(towerSystem);
 
-            foreach (var slot in FindObjectsByType<DropSlot>())
-                slot.Construct(castleSystem);
+            foreach (var slot in FindObjectsByType<DropSlot>()) slot.Construct(castleSystem);
 
-            foreach (var item in FindObjectsByType<ShopToFieldTrapItem>())
-                item.Construct(trapSystem, field);
+            foreach (var item in FindObjectsByType<ShopToFieldTrapItem>()) item.Construct(trapSystem, field);
         }
 
         private void OnDestroy()

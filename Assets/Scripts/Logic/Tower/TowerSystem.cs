@@ -13,12 +13,8 @@ namespace Logic.Tower
 {
     public class TowerSystem : ITickable
     {
-        public TowerSystem(
-            CastleSystem castleSystem,
-            TowersModel towersModel,
-            MonsterSystem monsterSystem,
-            ProjectileSystem projectileSystem,
-            SoundData soundData)
+        public TowerSystem(CastleSystem castleSystem, TowersModel towersModel, MonsterSystem monsterSystem,
+            ProjectileSystem projectileSystem, SoundData soundData)
         {
             this.castleSystem = castleSystem;
             this.towersModel = towersModel;
@@ -48,8 +44,7 @@ namespace Logic.Tower
 
         public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
         {
-            if (!CanAffordTower(data))
-                return false;
+            if (!CanAffordTower(data)) return false;
 
             var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
 
@@ -84,11 +79,9 @@ namespace Logic.Tower
 
             foreach (var tower in towersModel.Towers)
             {
-                if (tower.CooldownTimer > 0)
-                    tower.CooldownTimer -= step;
+                if (tower.CooldownTimer > 0) tower.CooldownTimer -= step;
 
-                if (tower.CooldownTimer > 0)
-                    continue;
+                if (tower.CooldownTimer > 0) continue;
 
                 var targets = FindTargets(tower, monsters);
                 if (targets.Count == 0)
@@ -115,8 +108,7 @@ namespace Logic.Tower
 
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos, int level = 1)
         {
-            if (!CanAffordTower(data))
-                return false;
+            if (!CanAffordTower(data)) return false;
 
             var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
 
@@ -127,8 +119,7 @@ namespace Logic.Tower
                     castleSystem.TrySpendGold(data.baseCost);
                     existingTower.Upgrade();
 
-                    if (soundData?.towerPlaceSound != null)
-                        AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
+                    if (soundData?.towerPlaceSound != null) AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
 
                     return true;
                 }
@@ -163,8 +154,7 @@ namespace Logic.Tower
 
             var discriminant = b * b - 4f * a * c;
 
-            if (discriminant < 0f || Mathf.Abs(a) < 0.001f)
-                return targetPos;
+            if (discriminant < 0f || Mathf.Abs(a) < 0.001f) return targetPos;
 
             var sqrt = Mathf.Sqrt(discriminant);
 
@@ -173,25 +163,19 @@ namespace Logic.Tower
 
             var t = Mathf.Min(t1, t2);
 
-            if (t < 0f)
-                t = Mathf.Max(t1, t2);
+            if (t < 0f) t = Mathf.Max(t1, t2);
 
-            if (t < 0f)
-                return targetPos;
+            if (t < 0f) return targetPos;
 
             return targetPos + targetVelocity * t;
         }
 
         private static List<MonsterModel> FindTargets(TowerModel tower, IReadOnlyList<MonsterModel> monsters)
         {
-            return monsters
-                .Where(m => !m.IsDead)
+            return monsters.Where(m => !m.IsDead)
                 .Select(m => new { Monster = m, Distance = Vector3.Distance(tower.WorldPosition, m.WorldPosition) })
-                .Where(x => x.Distance <= tower.CurrentRange)
-                .OrderBy(x => x.Distance)
-                .Take(tower.Data.targetsCount)
-                .Select(x => x.Monster)
-                .ToList();
+                .Where(x => x.Distance <= tower.CurrentRange).OrderBy(x => x.Distance).Take(tower.Data.targetsCount)
+                .Select(x => x.Monster).ToList();
         }
 
         private void Shoot(TowerModel tower, MonsterModel target)
@@ -210,28 +194,19 @@ namespace Logic.Tower
                 volume = soundData.archerShootVolume;
             }
 
-            if (soundData != null && sound is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(sound, volume);
+            if (soundData != null && sound is { Length: > 0 }) AudioManager.Instance.PlayRandomSfx(sound, volume);
 
             var firePoint = tower.WorldPosition +
                             new Vector3(tower.Data.projectileData.xOffset, tower.Data.projectileData.yOffset, 0);
 
-            var interceptPoint = CalculateInterceptPoint(
-                firePoint,
-                target.HitPosition,
-                target.CurrentVelocity,
-                tower.Data.projectileData.speed
-            );
+            var interceptPoint = CalculateInterceptPoint(firePoint, target.HitPosition, target.CurrentVelocity,
+                tower.Data.projectileData.speed);
 
-            var projectile = new ProjectileModel(
-                tower.WorldPosition,
-                target,
-                tower.Data.projectileData,
-                interceptPoint
-            )
-            {
-                Damage = (int)tower.CurrentDamage
-            };
+            var projectile =
+                new ProjectileModel(tower.WorldPosition, target, tower.Data.projectileData, interceptPoint)
+                {
+                    Damage = (int)tower.CurrentDamage
+                };
 
             projectileSystem.CreateProjectile(projectile);
         }

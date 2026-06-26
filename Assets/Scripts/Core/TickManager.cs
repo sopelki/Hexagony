@@ -21,8 +21,7 @@ namespace Core
         private void OnDestroy()
         {
             OnTick = null;
-            if (Instance == this)
-                Instance = null;
+            if (Instance == this) Instance = null;
         }
 
         private void Update()

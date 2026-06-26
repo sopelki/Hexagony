@@ -30,10 +30,8 @@ namespace MenuScripts
 
             if (currentFade != null) StopCoroutine(currentFade);
 
-            if (duration <= 0)
-                canvasGroup.alpha = 1f;
-            else
-                currentFade = StartCoroutine(FadeRoutine(1f, duration));
+            if (duration <= 0) canvasGroup.alpha = 1f;
+            else currentFade = StartCoroutine(FadeRoutine(1f, duration));
         }
 
         public void Hide()
@@ -47,16 +45,12 @@ namespace MenuScripts
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            if (canvasGroup.alpha <= 0f && currentFade == null)
-                return;
+            if (canvasGroup.alpha <= 0f && currentFade == null) return;
 
-            if (currentFade != null)
-                StopCoroutine(currentFade);
+            if (currentFade != null) StopCoroutine(currentFade);
 
-            if (duration <= 0)
-                canvasGroup.alpha = 0f;
-            else
-                currentFade = StartCoroutine(FadeRoutine(0f, duration));
+            if (duration <= 0) canvasGroup.alpha = 0f;
+            else currentFade = StartCoroutine(FadeRoutine(0f, duration));
         }
 
         private void Awake()
@@ -66,8 +60,7 @@ namespace MenuScripts
 
         private void EnsureCanvasGroup()
         {
-            if (canvasGroup == null)
-                canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         }
 
         private IEnumerator FadeRoutine(float targetAlpha, float duration)

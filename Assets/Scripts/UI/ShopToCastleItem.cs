@@ -26,18 +26,14 @@ namespace UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (inventoryItemPrefab == null || canvas == null)
-                return;
+            if (inventoryItemPrefab == null || canvas == null) return;
 
             iconCanvasGroup.alpha = 0f;
 
             var itemGo = Instantiate(inventoryItemPrefab, canvas.transform);
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform,
+                eventData.position, eventData.pressEventCamera, out var localPoint);
 
             itemGo.GetComponent<RectTransform>().localPosition = localPoint;
 
@@ -79,12 +75,10 @@ namespace UI
             if (buildingData != null && buildingData.viewPrefab != null)
                 sourceImage = buildingData.viewPrefab.GetComponentInChildren<Image>();
 
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = GetComponentInParent<Canvas>();
 
             iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-            if (iconCanvasGroup == null)
-                iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            if (iconCanvasGroup == null) iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
 
             var trigger = gameObject.AddComponent<TooltipTrigger>();
             trigger.SetContent(buildingData);

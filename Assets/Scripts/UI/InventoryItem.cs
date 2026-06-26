@@ -53,8 +53,7 @@ namespace UI
             canvasGroup.blocksRaycasts = false;
             targetColor = invalidColor;
 
-            if (!IsFromShop)
-                CaptureState();
+            if (!IsFromShop) CaptureState();
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -63,8 +62,7 @@ namespace UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging)
-                return;
+            if (!isDragging) return;
 
             GlobalCursorManager.Instance.ReleaseHold(eventData);
             isDragging = false;
@@ -77,10 +75,8 @@ namespace UI
 
             if (transform.parent == dragHandler.MainCanvas.transform)
             {
-                if (IsFromShop)
-                    Destroy(gameObject);
-                else
-                    ReturnToStart();
+                if (IsFromShop) Destroy(gameObject);
+                else ReturnToStart();
             }
         }
 
@@ -150,8 +146,7 @@ namespace UI
 
         private void OnDisable()
         {
-            if (isDragging)
-                OnEndDrag(null);
+            if (isDragging) OnEndDrag(null);
         }
 
         private void Update()

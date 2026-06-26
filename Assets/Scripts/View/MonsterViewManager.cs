@@ -21,17 +21,14 @@ namespace View
 
             system.OnMonsterCreated += HandleCreated;
 
-            if (TickManager.Instance != null)
-                TickManager.Instance.OnTick += HandleTick;
+            if (TickManager.Instance != null) TickManager.Instance.OnTick += HandleTick;
         }
 
         private void OnDestroy()
         {
-            if (system != null)
-                system.OnMonsterCreated -= HandleCreated;
+            if (system != null) system.OnMonsterCreated -= HandleCreated;
 
-            if (TickManager.Instance != null)
-                TickManager.Instance.OnTick -= HandleTick;
+            if (TickManager.Instance != null) TickManager.Instance.OnTick -= HandleTick;
         }
 
         private void HandleDeathAnimationFinished(MonsterModel model)
@@ -47,12 +44,7 @@ namespace View
         {
             var prefab = model.Data.prefab;
 
-            var go = Instantiate(
-                prefab,
-                model.WorldPosition,
-                Quaternion.identity,
-                parent
-            );
+            var go = Instantiate(prefab, model.WorldPosition, Quaternion.identity, parent);
 
             var view = go.GetComponent<MonsterView>();
             view.Initialize(model, model.Data.visualOffsetY);
@@ -63,8 +55,7 @@ namespace View
 
         private void HandleTick()
         {
-            foreach (var pair in views.ToList())
-                pair.Value.UpdateView();
+            foreach (var pair in views.ToList()) pair.Value.UpdateView();
         }
     }
 }

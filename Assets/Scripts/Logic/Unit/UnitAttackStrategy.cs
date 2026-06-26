@@ -9,10 +9,7 @@ namespace Logic.Unit
 {
     public class UnitAttackStrategy : IAttackStrategy
     {
-        public UnitAttackStrategy(
-            UnitModel unit,
-            MonsterSystem monsterSystem,
-            SoundData soundData)
+        public UnitAttackStrategy(UnitModel unit, MonsterSystem monsterSystem, SoundData soundData)
         {
             this.unit = unit;
             this.monsterSystem = monsterSystem;
@@ -38,20 +35,12 @@ namespace Logic.Unit
             IsAttacking = false;
             unit.AttackType = 0;
 
-            var targets = monsterSystem.GetAllMonsters()
-                .Where(m => !m.IsDead)
-                .Where(m =>
-                    Vector3.Distance(
-                        m.WorldPosition,
-                        unit.WorldPosition) <= unit.UnitData.attackRadius)
-                .ToList();
+            var targets = monsterSystem.GetAllMonsters().Where(m => !m.IsDead).Where(m =>
+                Vector3.Distance(m.WorldPosition, unit.WorldPosition) <= unit.UnitData.attackRadius).ToList();
 
-            if (targets.Count == 0)
-                return;
+            if (targets.Count == 0) return;
 
-            var sortedTargets = targets
-                .OrderBy(m => Vector3.Distance(m.WorldPosition, unit.WorldPosition))
-                .ToList();
+            var sortedTargets = targets.OrderBy(m => Vector3.Distance(m.WorldPosition, unit.WorldPosition)).ToList();
 
             var closest = sortedTargets.First();
             var distance = Vector3.Distance(closest.WorldPosition, unit.WorldPosition);
@@ -62,14 +51,12 @@ namespace Logic.Unit
 
             if (soundData != null)
             {
-                if (distance <= meleeRange &&
-                    soundData.unitMeleeAttackSounds is { Length: > 0 })
+                if (distance <= meleeRange && soundData.unitMeleeAttackSounds is { Length: > 0 })
                 {
                     AudioManager.Instance.PlayRandomSfx(soundData.unitMeleeAttackSounds,
                         soundData.unitMeleeAttackVolume);
                 }
-                else if (distance > meleeRange &&
-                         soundData.unitRangeAttackSounds is { Length: > 0 })
+                else if (distance > meleeRange && soundData.unitRangeAttackSounds is { Length: > 0 })
                 {
                     AudioManager.Instance.PlayRandomSfx(soundData.unitRangeAttackSounds,
                         soundData.unitRangeAttackVolume);
@@ -84,8 +71,7 @@ namespace Logic.Unit
             {
                 var directionToMonster = (monster.WorldPosition - unit.WorldPosition).normalized;
                 var dotProduct = Vector3.Dot(viewDirection, directionToMonster);
-                if (dotProduct >= 0.5f || monster == closest)
-                    monster.TakeDamage(unit.GetAttack());
+                if (dotProduct >= 0.5f || monster == closest) monster.TakeDamage(unit.GetAttack());
             }
 
             currentCooldown = unit.UnitData.attackCooldown;

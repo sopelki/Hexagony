@@ -9,8 +9,7 @@ using View;
 
 namespace UI
 {
-    public class ShopToFieldTowerItem : MonoBehaviour,
-        IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class ShopToFieldTowerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("UI & Scene")]
         [SerializeField]
@@ -88,24 +87,20 @@ namespace UI
         {
             if (iconCanvasGroup != null)
             {
-                if (fadeCoroutine != null)
-                    StopCoroutine(fadeCoroutine);
+                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
 
                 iconCanvasGroup.alpha = 0f;
             }
 
-            if (TryGetComponent<TooltipTrigger>(out var trigger))
-                trigger.StopDisplay();
+            if (TryGetComponent<TooltipTrigger>(out var trigger)) trigger.StopDisplay();
 
-            if (towerSystem == null)
-                return;
+            if (towerSystem == null) return;
 
             isDragging = true;
             GlobalCursorManager.Instance.SetHold();
 
             var prefabRenderer = towerData.viewPrefab.GetComponentInChildren<SpriteRenderer>();
-            if (prefabRenderer == null)
-                return;
+            if (prefabRenderer == null) return;
 
             CreateGhost(prefabRenderer);
 
@@ -124,14 +119,12 @@ namespace UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (ghostRect != null && isDragging)
-                UpdateGhostPosition(eventData);
+            if (ghostRect != null && isDragging) UpdateGhostPosition(eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging)
-                return;
+            if (!isDragging) return;
 
             isDragging = false;
             GlobalCursorManager.Instance.ReleaseHold(eventData);
@@ -145,13 +138,11 @@ namespace UI
                 lastPreviewedModel = null;
                 lastPreviewedView = null;
             }
-            else
-                ResetCurrentPreview();
+            else ResetCurrentPreview();
 
             if (iconCanvasGroup != null)
             {
-                if (fadeCoroutine != null)
-                    StopCoroutine(fadeCoroutine);
+                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
 
                 fadeCoroutine = StartCoroutine(FadeInIcon());
             }
@@ -164,8 +155,7 @@ namespace UI
 
         private void Awake()
         {
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = GetComponentInParent<Canvas>();
 
             var trigger = gameObject.AddComponent<TooltipTrigger>();
             trigger.SetContent(towerData);
@@ -173,8 +163,7 @@ namespace UI
             if (iconImage != null)
             {
                 iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-                if (iconCanvasGroup == null)
-                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+                if (iconCanvasGroup == null) iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
             }
         }
 
@@ -187,49 +176,35 @@ namespace UI
                 CleanupGhost();
                 GlobalCursorManager.Instance.ReleaseHold(null);
 
-                if (iconCanvasGroup != null)
-                    iconCanvasGroup.alpha = 1f;
+                if (iconCanvasGroup != null) iconCanvasGroup.alpha = 1f;
             }
         }
 
         private void Update()
         {
-            if (!ghostRect)
-                return;
+            if (!ghostRect) return;
 
             if (isSnapping)
             {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.unscaledDeltaTime * snapSpeed
-                );
+                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition,
+                    Time.unscaledDeltaTime * snapSpeed);
                 wasSnapping = true;
             }
             else if (wasSnapping)
             {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.unscaledDeltaTime * unSnapSpeed
-                );
+                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition,
+                    Time.unscaledDeltaTime * unSnapSpeed);
 
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f) wasSnapping = false;
             }
-            else
-                currentGhostPosition = targetGhostPosition;
+            else currentGhostPosition = targetGhostPosition;
 
             ghostRect.localPosition = currentGhostPosition;
 
             currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
             ghostRect.localScale = Vector3.one * currentScale;
 
-            ghostImage.color = Color.Lerp(
-                ghostImage.color,
-                targetColor,
-                Time.unscaledDeltaTime * colorLerpSpeed
-            );
+            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
         }
 
         private void UpdateLevelPreview(bool isSnapping, Vector3Int slotPos)
@@ -254,8 +229,7 @@ namespace UI
                     }
                 }
             }
-            else
-                ResetCurrentPreview();
+            else ResetCurrentPreview();
         }
 
         private void ResetCurrentPreview()
@@ -268,31 +242,26 @@ namespace UI
 
         private void CleanupGhost()
         {
-            if (ghost != null)
-                Destroy(ghost);
+            if (ghost != null) Destroy(ghost);
         }
 
         private bool TryPlaceTower(PointerEventData eventData)
         {
             var cam = Camera.main;
-            if (cam == null || mapViewport == null || fieldTilemap == null)
-                return false;
+            if (cam == null || mapViewport == null || fieldTilemap == null) return false;
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
-                return false;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(mapViewport, eventData.position,
+                    eventData.pressEventCamera, out var local)) return false;
 
             var u = local.x / mapViewport.rect.width + 0.5f;
             var v = local.y / mapViewport.rect.height + 0.5f;
-            if (u < 0f || u > 1f || v < 0f || v > 1f)
-                return false;
+            if (u < 0f || u > 1f || v < 0f || v > 1f) return false;
 
             var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
             var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
             var cellPos = fieldTilemap.WorldToCell(worldPos);
 
-            if (!TryFindValidSlot(eventData, cellPos, out var closestSlotPos))
-                return false;
+            if (!TryFindValidSlot(eventData, cellPos, out var closestSlotPos)) return false;
 
             var spawnPos = fieldTilemap.GetCellCenterWorld(closestSlotPos);
             spawnPos.z = fieldTilemap.transform.position.z;
@@ -329,18 +298,13 @@ namespace UI
             ghostImage.color = ghostValidColor;
 
             var sprite = prefabRenderer.sprite;
-            ghostRect.pivot = new Vector2(
-                sprite.pivot.x / sprite.rect.width,
-                sprite.pivot.y / sprite.rect.height
-            );
+            ghostRect.pivot = new Vector2(sprite.pivot.x / sprite.rect.width, sprite.pivot.y / sprite.rect.height);
 
             if (Camera.main != null)
             {
                 var pixelsPerUnit = Screen.height / (Camera.main.orthographicSize * 2f);
-                var spriteSize = new Vector2(
-                    sprite.rect.width / sprite.pixelsPerUnit,
-                    sprite.rect.height / sprite.pixelsPerUnit
-                );
+                var spriteSize = new Vector2(sprite.rect.width / sprite.pixelsPerUnit,
+                    sprite.rect.height / sprite.pixelsPerUnit);
 
                 var prefabScale = prefabRenderer.transform.localScale;
                 spriteSize.x *= prefabScale.x;
@@ -354,11 +318,8 @@ namespace UI
 
         private void UpdateGhostPosition(PointerEventData eventData)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform, eventData.position,
+                eventData.pressEventCamera, out var localPoint);
 
             var basePosition = localPoint + ghostOffset;
 
@@ -386,12 +347,10 @@ namespace UI
         {
             snapPosition = basePosition;
             var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return false;
+            if (!cam || !mapViewport || !fieldTilemap) return false;
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
-                return false;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(mapViewport, eventData.position,
+                    eventData.pressEventCamera, out var local)) return false;
 
             var u = local.x / mapViewport.rect.width + 0.5f;
             var v = local.y / mapViewport.rect.height + 0.5f;
@@ -400,16 +359,13 @@ namespace UI
             var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
             var cellPos = fieldTilemap.WorldToCell(worldPos);
 
-            if (!TryFindValidSlot(eventData, cellPos, out var slotPos))
-                return false;
+            if (!TryFindValidSlot(eventData, cellPos, out var slotPos)) return false;
             if (towerSystem.IsCellOccupied(slotPos))
             {
-                if (!towerSystem.CanPlaceTower(towerData, slotPos))
-                    return false;
+                if (!towerSystem.CanPlaceTower(towerData, slotPos)) return false;
             }
 
-            if (!TryGetSlotCanvasPosition(slotPos, eventData, out var slotCanvasLocal))
-                return false;
+            if (!TryGetSlotCanvasPosition(slotPos, eventData, out var slotCanvasLocal)) return false;
 
             snapPosition = slotCanvasLocal + ghostOffset;
             return true;
@@ -418,8 +374,7 @@ namespace UI
         private void CheckPlacementValidity(PointerEventData eventData)
         {
             var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return;
+            if (!cam || !mapViewport || !fieldTilemap) return;
 
             if (!towerSystem.CanAffordTower(towerData))
             {
@@ -428,8 +383,8 @@ namespace UI
                 return;
             }
 
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    mapViewport, eventData.position, eventData.pressEventCamera, out var local))
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(mapViewport, eventData.position,
+                    eventData.pressEventCamera, out var local))
             {
                 targetScale = startScaleMultiplier;
                 targetColor = ghostValidColor;
@@ -454,8 +409,7 @@ namespace UI
 
                 if (isValid && isUpgrade)
                     targetColor = new Color(ghostValidColor.r, ghostValidColor.g, ghostValidColor.b, 0f);
-                else
-                    targetColor = isValid ? ghostValidColor : ghostInvalidColor;
+                else targetColor = isValid ? ghostValidColor : ghostInvalidColor;
             }
             else
             {
@@ -468,16 +422,11 @@ namespace UI
         private bool TryFindValidSlot(PointerEventData eventData, Vector3Int centerCell, out Vector3Int validSlot)
         {
             validSlot = Vector3Int.zero;
-            if (!FindNearestSlotTile(centerCell, searchRadius, out var nearestSlot))
-                return false;
-            if (!TryGetSlotCanvasPosition(nearestSlot, eventData, out var slotCanvasPos))
-                return false;
+            if (!FindNearestSlotTile(centerCell, searchRadius, out var nearestSlot)) return false;
+            if (!TryGetSlotCanvasPosition(nearestSlot, eventData, out var slotCanvasPos)) return false;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var cursorCanvasPos);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform, eventData.position,
+                eventData.pressEventCamera, out var cursorCanvasPos);
 
             var cursorPosition = cursorCanvasPos + ghostOffset;
             var distance = Vector2.Distance(cursorPosition, slotCanvasPos + ghostOffset);
@@ -495,25 +444,19 @@ namespace UI
         {
             canvasPosition = Vector2.zero;
             var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return false;
+            if (!cam || !mapViewport || !fieldTilemap) return false;
 
             var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
             var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
 
-            var slotLocalInViewport = new Vector2(
-                (slotViewport.x - 0.5f) * mapViewport.rect.width,
-                (slotViewport.y - 0.5f) * mapViewport.rect.height
-            );
+            var slotLocalInViewport = new Vector2((slotViewport.x - 0.5f) * mapViewport.rect.width,
+                (slotViewport.y - 0.5f) * mapViewport.rect.height);
 
             var slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
                 mapViewport.TransformPoint(slotLocalInViewport));
 
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                slotScreenPos,
-                eventData.pressEventCamera,
-                out canvasPosition);
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform,
+                slotScreenPos, eventData.pressEventCamera, out canvasPosition);
         }
 
         private bool FindNearestSlotTile(Vector3Int centerPos, int slotSearchRadius, out Vector3Int cellPos)
@@ -529,8 +472,7 @@ namespace UI
                     var checkPos = new Vector3Int(x, y, centerPos.z);
                     var tile = fieldTilemap.GetTile(checkPos);
 
-                    if (tile == null || slotTile == null || tile.name != slotTile.name)
-                        continue;
+                    if (tile == null || slotTile == null || tile.name != slotTile.name) continue;
 
                     var distance = Vector3Int.Distance(checkPos, centerPos);
                     if (distance < nearestDistance)

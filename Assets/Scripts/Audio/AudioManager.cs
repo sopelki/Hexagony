@@ -26,8 +26,7 @@ namespace Audio
 
         public void SetMixerVolume(string parameterName, float sliderValue)
         {
-            if (!audioMixer)
-                return;
+            if (!audioMixer) return;
 
             var dB = Mathf.Log10(Mathf.Clamp(sliderValue, 0.0001f, 1f)) * 20;
             audioMixer.SetFloat(parameterName, dB);
@@ -35,8 +34,7 @@ namespace Audio
 
         public void PlayMusic(AudioClip clip, bool loop = true)
         {
-            if (musicSource.clip == clip && musicSource.isPlaying)
-                StopMusic();
+            if (musicSource.clip == clip && musicSource.isPlaying) StopMusic();
 
             musicSource.clip = clip;
             musicSource.loop = loop;
@@ -50,16 +48,14 @@ namespace Audio
 
         public void PlaySfx(AudioClip clip, float volumeMultiplier = 1f)
         {
-            if (MuteSfx || !clip)
-                return;
+            if (MuteSfx || !clip) return;
 
             sfxSource.PlayOneShot(clip, volumeMultiplier);
         }
 
         public void PlayRandomSfx(AudioClip[] clips, float volumeMultiplier = 1f)
         {
-            if (MuteSfx || clips == null || clips.Length == 0)
-                return;
+            if (MuteSfx || clips == null || clips.Length == 0) return;
 
             PlaySfx(clips[Random.Range(0, clips.Length)], volumeMultiplier);
         }
@@ -93,10 +89,8 @@ namespace Audio
 
         private void InitializeSources()
         {
-            if (!musicSource)
-                musicSource = gameObject.AddComponent<AudioSource>();
-            if (!sfxSource)
-                sfxSource = gameObject.AddComponent<AudioSource>();
+            if (!musicSource) musicSource = gameObject.AddComponent<AudioSource>();
+            if (!sfxSource) sfxSource = gameObject.AddComponent<AudioSource>();
 
             musicSource.volume = musicMasterScale;
             sfxSource.volume = sfxMasterScale;

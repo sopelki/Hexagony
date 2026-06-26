@@ -37,8 +37,7 @@ namespace UI
         public void StopDialogue()
         {
             StopAllCoroutines();
-            if (audioSource != null)
-                audioSource.Stop();
+            if (audioSource != null) audioSource.Stop();
         }
 
         private IEnumerator TypeText(string phrase)
@@ -64,8 +63,7 @@ namespace UI
                 float timer = 0;
                 while (timer < textSpeed)
                 {
-                    if (Time.timeScale > 0)
-                        timer += Time.unscaledDeltaTime;
+                    if (Time.timeScale > 0) timer += Time.unscaledDeltaTime;
 
                     yield return null;
                 }
@@ -74,8 +72,7 @@ namespace UI
 
         private void TryPlayTypingSound(char currentLetter)
         {
-            if (char.IsWhiteSpace(currentLetter) || currentLetter == '\0')
-                return;
+            if (char.IsWhiteSpace(currentLetter) || currentLetter == '\0') return;
 
             if (Time.unscaledTime - lastSoundTime >= minTimeBetweenSounds)
             {
