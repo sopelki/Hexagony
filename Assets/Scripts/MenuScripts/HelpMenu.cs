@@ -46,6 +46,8 @@ namespace MenuScripts
         private Button tabFieldButton;
         [SerializeField]
         private Button tabMonsterButton;
+        [SerializeField]
+        private Button tabControlButton;
 
         [Header("Monsters")]
         [SerializeField]
@@ -91,6 +93,7 @@ namespace MenuScripts
             tabCastleButton.interactable = true;
             tabFieldButton.interactable = true;
             tabMonsterButton.interactable = true;
+            tabControlButton.interactable = true;
             if (activeButton) activeButton.interactable = false;
         }
         
@@ -189,14 +192,18 @@ namespace MenuScripts
         
         public void ShowControl()
         {
-            UpdateTabs(tabFieldButton);
+            UpdateTabs(tabControlButton);
             textBackground.Show();
             titleText.text = $"<color={CDmg}>УПРАВЛЕНИЕ</color>";
         
             descriptionText.text = StartLh +
-                                   $"▪ <color={CKey}><b>Клики по монстрам:\nВы можете навестись на монстра и " +
-                                   ParaGap +
                                    $"▪ <color={CKey}><b>Управление временем:\n</b></color>Клавиша <color={CUpgrade}><b>Пробел</b></color> <nobr>позволяет ускорить</nobr> игру в 2 раза, если ситуация на поле <nobr>под контролем.</nobr>" +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Подсказки:\n</b></color>Наведитесь на любой предмет <nobr>в магазине</nobr> и прочитайте его характеристики и краткое описание. " +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Клики по монстрам:\n</b></color>Наведитесь на врага и кликайте, он будет получать урон." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Кнопки:\n</b></color>Чтобы остановить игру, вернуться <nobr>в главное</nobr> меню или начать заново нажмите кнопку <color={CUpgrade}><b>Пауза</b></color>.\nОткройте <color={CUpgrade}><b>Настройки</b></color>, чтобы включить или отключить проигрывание туториала, настроить звук и визуал игры." +
                                    EndLh;
             ResetScroll();
         }
