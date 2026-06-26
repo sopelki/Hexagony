@@ -68382,6 +68382,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 537554929}
     - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: ghostOffset.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791082414744095116, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 1496325250390802473, guid: b6b7da43fc390df4d84b23e35ab2d1e6, type: 3}
@@ -68454,12 +68458,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -6318553853447144698, guid: 2930ac359e81002449927d7d94d6c670, type: 3}
     - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
+      propertyPath: m_Color.b
+      value: 0.9245283
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Color.g
-      value: 0.8901961
+      value: 0.8006764
       objectReference: {fileID: 0}
     - target: {fileID: 5749159570408318314, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_Color.r
-      value: 0.96862745
+      value: 0.8832443
       objectReference: {fileID: 0}
     - target: {fileID: 5788103701376740331, guid: 4fcdc88ea46553148b69eb0e352e703a, type: 3}
       propertyPath: m_LocalScale.x
