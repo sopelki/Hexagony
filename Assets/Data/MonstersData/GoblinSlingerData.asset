@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Logic.Monster.MonsterData
   maxHealth: 45
   damage: 10
-  moveSpeed: 2.5
+  moveSpeed: 2.75
   goldReward: 10
   monsterName: "\u0413\u041E\u0411\u041B\u0418\u041D \u0421 \u0420\u041E\u0413\u0410\u0422\u041A\u041E\u0419"
   monsterDescription: "<nobr>\u041C\u043E\u043D\u0441\u0442\u0440, \u043A\u043E\u0442\u043E\u0440\u044B\u0439</nobr>
