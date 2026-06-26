@@ -21,10 +21,7 @@ namespace View
             model = monsterModel;
         }
 
-        public bool IsModelDead()
-        {
-            return model == null || model.IsDead;
-        }
+        public bool IsModelDead() => model == null || model.IsDead;
 
         public void OnPointerClick(PointerEventData eventData)
         {

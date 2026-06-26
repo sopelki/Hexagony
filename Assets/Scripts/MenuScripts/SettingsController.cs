@@ -84,9 +84,7 @@ namespace MenuScripts
         private void Start()
         {
             if (rendererData != null)
-            {
                 crtFeature = rendererData.rendererFeatures.OfType<CrtRendererFeature>().FirstOrDefault();
-            }
 
             LoadUIValues();
         }

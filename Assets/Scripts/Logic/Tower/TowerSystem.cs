@@ -37,10 +37,7 @@ namespace Logic.Tower
 
         public event Action OnFirstTowerPlaced;
 
-        public bool CanAffordTower(TowerData data)
-        {
-            return castleSystem.CanAfford(data.baseCost);
-        }
+        public bool CanAffordTower(TowerData data) => castleSystem.CanAfford(data.baseCost);
 
         public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
         {
@@ -62,10 +59,7 @@ namespace Logic.Tower
             return towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
         }
 
-        public List<TowerModel> GetTowers()
-        {
-            return towersModel.Towers.ToList();
-        }
+        public List<TowerModel> GetTowers() => towersModel.Towers.ToList();
 
         public bool IsCellOccupied(Vector3Int cellPos)
         {

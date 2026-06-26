@@ -5,10 +5,7 @@ namespace Logic.Monster
 {
     public class MonsterDebuffSystem
     {
-        public MonsterDebuffSystem(MonsterModel monster)
-        {
-            this.monster = monster;
-        }
+        public MonsterDebuffSystem(MonsterModel monster) => this.monster = monster;
 
         private readonly List<MonsterDebuff> buffs = new();
         private readonly MonsterModel monster;

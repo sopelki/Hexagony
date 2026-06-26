@@ -62,13 +62,9 @@ namespace UI
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
-        public void OnEndDrag(PointerEventData eventData)
-        {
-        }
+        public void OnEndDrag(PointerEventData eventData) { }
 
         private void Awake()
         {

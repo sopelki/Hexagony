@@ -50,10 +50,7 @@ namespace Logic.Castle
             CastleModel.Changed();
         }
 
-        public bool CanAfford(int price)
-        {
-            return CastleModel.Gold >= price;
-        }
+        public bool CanAfford(int price) => CastleModel.Gold >= price;
 
         public void Clear()
         {

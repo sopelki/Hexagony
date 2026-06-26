@@ -24,9 +24,8 @@ namespace View
         public void SyncWithModel()
         {
             foreach (var tower in model.Towers)
-            {
-                if (!views.ContainsKey(tower)) HandleTowerAdded(tower);
-            }
+                if (!views.ContainsKey(tower))
+                    HandleTowerAdded(tower);
         }
 
         public void DestroyAllTowers()

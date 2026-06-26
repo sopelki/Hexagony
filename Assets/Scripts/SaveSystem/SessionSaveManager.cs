@@ -15,10 +15,7 @@ namespace SaveSystem
             IsSaveLoaded = false;
         }
 
-        public static bool HasSavedSession()
-        {
-            return File.Exists(SaveFilePath);
-        }
+        public static bool HasSavedSession() => File.Exists(SaveFilePath);
 
         public static GameSessionData LoadSession()
         {

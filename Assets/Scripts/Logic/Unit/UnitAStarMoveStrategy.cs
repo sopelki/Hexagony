@@ -83,9 +83,7 @@ namespace Logic.Unit
                 (currentTarget != target || Vector2Int.Distance(currentTargetHex, target.CurrentHex) > 1))
             {
                 if (currentTarget != null && currentTarget != target)
-                {
                     currentTarget.TargetedByUnits = Mathf.Max(0, currentTarget.TargetedByUnits - 1);
-                }
                 if (currentTarget != target)
                 {
                     currentTarget = target;
@@ -151,7 +149,7 @@ namespace Logic.Unit
             currentPath = pathfinder.FindPath(unit.CurrentHex, currentTargetHex);
             pathIndex = 1;
 
-            if (currentPath == null || currentPath.Count <= 1) currentPath = null;
+            if (currentPath is not { Count: > 1 }) currentPath = null;
         }
 
         private Vector2Int GetRandomizedGoal(Vector2Int center)
@@ -161,9 +159,7 @@ namespace Logic.Unit
 
             var neighbours = field.GetNeighbours(centerHex).Where(h => field.IsWalkable(h)).ToList();
 
-            if (neighbours.Count == 0) return center;
-
-            if (Random.value < 0.5f) return center;
+            if (neighbours.Count == 0 || Random.value < 0.5f) return center;
 
             return neighbours[Random.Range(0, neighbours.Count)].coordinates;
         }
@@ -187,7 +183,7 @@ namespace Logic.Unit
             patrolWaitTimer -= dt;
             if (patrolWaitTimer > 0f) return;
 
-            var radius = 2;
+            const int radius = 2;
             var randomX = Random.Range(-radius, radius + 1);
             var randomY = Random.Range(-radius, radius + 1);
             var potentialHex = baseHex + new Vector2Int(randomX, randomY);
@@ -199,7 +195,7 @@ namespace Logic.Unit
                 currentPath = pathfinder.FindPath(unit.CurrentHex, potentialHex);
                 pathIndex = 1;
 
-                if (currentPath == null || currentPath.Count <= 1) currentPath = null;
+                if (currentPath is not { Count: > 1 }) currentPath = null;
 
                 patrolWaitTimer = Random.Range(2f, 5f);
             }

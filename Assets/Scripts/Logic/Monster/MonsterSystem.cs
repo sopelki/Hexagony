@@ -18,10 +18,7 @@ namespace Logic.Monster
             OnMonsterCreated?.Invoke(monster);
         }
 
-        public IReadOnlyList<MonsterModel> GetAllMonsters()
-        {
-            return monsters;
-        }
+        public IReadOnlyList<MonsterModel> GetAllMonsters() => monsters;
 
         public void SubscribeToCastle(CastleModel castle)
         {

@@ -62,18 +62,10 @@ namespace Logic.Trap
             firstTrapPlaced = false;
         }
 
-        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex)
-        {
-            return new List<Vector2Int>
-            {
-                centerHex, centerHex + new Vector2Int(0, -1), centerHex + new Vector2Int(1, -1)
-            };
-        }
+        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex) =>
+            new() { centerHex, centerHex + new Vector2Int(0, -1), centerHex + new Vector2Int(1, -1) };
 
-        public List<TrapModel> GetTraps()
-        {
-            return (List<TrapModel>)trapsModel.Traps;
-        }
+        public List<TrapModel> GetTraps() => (List<TrapModel>)trapsModel.Traps;
 
         public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
         {
@@ -178,9 +170,8 @@ namespace Logic.Trap
                 foreach (var monster in monsters)
                 {
                     if (!monster.IsDead && trap.Hexes.Contains(monster.CurrentHex))
-                    {
-                        if (!monster.HasImmunity(trap.Data.trapType)) monster.TakeDamage(trap.Data.tickDamage);
-                    }
+                        if (!monster.HasImmunity(trap.Data.trapType))
+                            monster.TakeDamage(trap.Data.tickDamage);
                 }
             }
         }

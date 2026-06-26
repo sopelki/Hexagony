@@ -56,9 +56,7 @@ namespace UI
             if (!IsFromShop) CaptureState();
         }
 
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
         public void OnEndDrag(PointerEventData eventData)
         {

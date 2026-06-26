@@ -19,9 +19,7 @@ namespace UI
 
         private InventoryItem currentOverlappingItem;
 
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
         public void OnDrop(PointerEventData eventData)
         {
@@ -130,9 +128,6 @@ namespace UI
             currentOverlappingItem = null;
         }
 
-        private InventoryItem GetStoredItem()
-        {
-            return itemContainer.GetComponentInChildren<InventoryItem>();
-        }
+        private InventoryItem GetStoredItem() => itemContainer.GetComponentInChildren<InventoryItem>();
     }
 }

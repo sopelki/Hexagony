@@ -24,9 +24,7 @@ namespace UI
             rectTransform.anchoredPosition += eventData.delta / MainCanvas.scaleFactor;
         }
 
-        public void OnEndDrag(PointerEventData eventData)
-        {
-        }
+        public void OnEndDrag(PointerEventData eventData) { }
 
         public void ResetPosition()
         {

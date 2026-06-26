@@ -47,10 +47,7 @@ namespace Logic.Unit
             buffs.Clear();
         }
 
-        public IReadOnlyList<UnitModel> GetAllUnits()
-        {
-            return units;
-        }
+        public IReadOnlyList<UnitModel> GetAllUnits() => units;
 
         public void RemoveUnit(UnitModel unit)
         {

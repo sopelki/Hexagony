@@ -38,15 +38,9 @@ namespace Field
             return data;
         }
 
-        public Hexagon GetHex(Vector2Int axialCoords)
-        {
-            return Hexagons.GetValueOrDefault(axialCoords);
-        }
+        public Hexagon GetHex(Vector2Int axialCoords) => Hexagons.GetValueOrDefault(axialCoords);
 
-        public Hexagon GetHexByOffset(Vector3Int offsetCoords)
-        {
-            return hexagonsByOffset.GetValueOrDefault(offsetCoords);
-        }
+        public Hexagon GetHexByOffset(Vector3Int offsetCoords) => hexagonsByOffset.GetValueOrDefault(offsetCoords);
 
         public List<Hexagon> GetNeighbours(Hexagon currentHex)
         {
@@ -68,9 +62,6 @@ namespace Field
                 : new List<MapObjectData>();
         }
 
-        public bool IsWalkable(Hexagon hex)
-        {
-            return hex.type == HexagonType.Path;
-        }
+        public bool IsWalkable(Hexagon hex) => hex.type == HexagonType.Path;
     }
 }
