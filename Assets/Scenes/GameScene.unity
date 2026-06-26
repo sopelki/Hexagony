@@ -52269,7 +52269,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 731557296}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5841811
+  m_Size: 0.6603373
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -62799,7 +62799,7 @@ PrefabInstance:
       value: "<color=#90CAF9><b>\u0413\u041E\u0411\u041B\u0418\u041D</b></color>:
         \u0411\u0430\u0437\u043E\u0432\u044B\u0439 \u0432\u0440\u0430\u0433 \u0438
         \u043E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u0443\u0434\u0430\u0440\u043D\u0430\u044F
-        \u0441\u0438\u043B\u0430 \u043D\u0435\u0447\u0438\u0441\u0442\u0438.<line-height=20px>\r\n</line-height><line-height=60%>\u25AA\uFE0F
+        \u0441\u0438\u043B\u0430 \u043D\u0435\u0447\u0438\u0441\u0442\u0438.<line-height=20px>\n\u0410\u0411\u0412\\n\\n\u0413\u0414\u0415\\n\u0415\u0401\u0416\r\n</line-height><line-height=60%>\u25AA\uFE0F
         <color=#dfe88b><b>\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435:</b></color>
         55\r\n\u25AA\uFE0F <color=#dfe88b><b>\u0423\u0440\u043E\u043D:</b></color>
         20\r\n\u25AA\uFE0F <color=#dfe88b><b>\u041D\u0430\u0433\u0440\u0430\u0434\u0430:</b></color>
@@ -62885,7 +62885,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_paragraphSpacing
-      value: 96
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 2118764960772319183, guid: 727a86d465113fb4e8336b11b0aec4d5, type: 3}
       propertyPath: m_VerticalAlignment

@@ -10,13 +10,17 @@ namespace MenuScripts
 {
     public class HelpMenu : MonoBehaviour
     {
-        private const string CGold = "#FFD54F"; // Заголовки
-        private const string CKey = "#dfe88b"; // Ключевые слова / Подзаголовки
-        private const string CDmg = "#EF5350"; // Урон / Опасность
-        private const string CSpd = "#FF7733"; // Скорость
-        private const string CHlp = "#66BB6A"; // Здоровье / Фермы
-        private const string CMag = "#AB47BC"; // Магия / Область
-        private const string CUpgrade = "#90CAF9"; // Улучшения / Синее
+        private const string CGold = "#FFD54F";
+        private const string CKey = "#dfe88b";
+        private const string CDmg = "#EF5350";
+        private const string CSpd = "#FF7733";
+        private const string CHlp = "#66BB6A";
+        private const string CMag = "#AB47BC";
+        private const string CUpgrade = "#90CAF9";
+
+        private const string StartLh = "<line-height=115%>";
+        private const string EndLh = "</line-height>";
+        private const string ParaGap = "\n\n";
 
         [Header("Panel")]
         [SerializeField]
@@ -82,8 +86,7 @@ namespace MenuScripts
             tabCastleButton.interactable = true;
             tabFieldButton.interactable = true;
             tabMonsterButton.interactable = true;
-            if (activeButton)
-                activeButton.interactable = false;
+            if (activeButton) activeButton.interactable = false;
         }
 
         public void ShowMechanics()
@@ -91,12 +94,18 @@ namespace MenuScripts
             UpdateTabs(tabMechanicsButton);
             textBackground.Show();
             titleText.text = $"<color={CGold}>ОСНОВЫ ИГРЫ</color>";
-            descriptionText.text =
-                $"<b>Ваша миссия:</b> Защитить ворота замка. Каждый прорвавшийся монстр наносит урон стенам. Если прочность упадет до нуля — <color={CDmg}>игра будет окончена</color>.\n\n" +
-                $"▪ <color={CKey}><b>Подготовка:</b></color> В начале игры время застыло. Это ваш шанс обдумать стратегию. Игра начнется автоматически, как только вы <color={CKey}><nobr>разместите первый объект</nobr></color>.\n\n" +
-                $"▪ <color={CKey}><b>Улучшение башен:</b></color> Вы можете повышать уровень ваших башен (макс. 5 уровень). Для этого <color={CKey}>перетащите новую башню</color> из магазина прямо на уже <nobr>установленную того же типа</nobr>. Улучшенная башня получает значительный <nobr>бонус к <color={CDmg}>урону</color></nobr>, <color={CSpd}>скорострельности</color> и дальности.\n\n" +
-                $"▪ <color={CKey}><b>Экономика:</b></color> <b>Золото</b> — ваш главный ресурс. Оно добывается <nobr>за уничтожение</nobr> врагов и необходимо для <nobr>строительства и улучшений</nobr>.\n\n" +
-                $"▪ <color={CKey}><b>Ускорение:</b></color> Если оборона надежна и вы не хотите ждать, нажмите <color={CKey}>Пробел</color>, чтобы <nobr>ускорить течение времени</nobr>. Повторное нажатие вернет обычную скорость.";
+
+            descriptionText.text = StartLh +
+                                   $"<b>Ваша миссия:\n</b> Не дать врагам прорваться к замку. Каждый монстр, достигший цели, снижает прочность врат. Если замок падет - <color={CDmg}>игра будет окончена</color>." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Подготовка:\n</b></color> В начале игры время остановлено. Вы можете спокойно изучить карту. Как только вы <color={CKey}><nobr>разместите первый объект</nobr></color>, начнется отсчет до первой волны." +
+                                   ParaGap +
+                                   $"▪ <color={CUpgrade}><b>УЛУЧШЕНИЕ БАШЕН:\n</b></color> Мощь вашей обороны можно наращивать. Чтобы повысить уровень башни (до 5-го), <color={CKey}>купите в магазине</color> такую же и <nobr>перетащите её сверху</nobr> на уже установленную. Это значительно <nobr>увеличит <color={CDmg}>урон</color></nobr> и дальность стрельбы." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Ресурсы:\n</b></color> <b>Золото</b> - валюта для всех построек. Оно выдается мгновенно <nobr>за каждого</nobr> убитого монстра." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Управление временем:\n</b></color> Клавиша <color={CUpgrade}><b>Пробел</b></color> позволяет <nobr>ускорить игру в 2 раза</nobr>, если ситуация на поле под контролем." +
+                                   EndLh;
         }
 
         public void ShowCastle()
@@ -104,12 +113,18 @@ namespace MenuScripts
             UpdateTabs(tabCastleButton);
             textBackground.Show();
             titleText.text = $"<color={CHlp}>ЭКОНОМИКА ЗАМКА</color>";
-            descriptionText.text =
-                $"Внутренний двор замка (сетка 4х4) предназначен для тыловых зданий. Они не атакуют сами, но дают <color={CUpgrade}>усиления</color>:\n\n" +
-                $"▪ <color={CKey}><b>Казарма:</b></color> Тренирует рыцарей, которые атакуют врагов. Каждая новая казарма <nobr>сокращает <color={CSpd}>время появления</color></nobr> новых бойцов.\n\n" +
-                $"▪ <color={CKey}><b>Ферма:</b></color> Обеспечивает провизию. Увеличивает <b>лимит населения</b>, позволяя вам <nobr>содержать более многочисленную</nobr> армию.\n\n" +
-                $"▪ <color={CKey}><b>Кузница:</b></color> Улучшает снаряжение. Дает <nobr>постоянную прибавку</nobr> к <color={CDmg}>силе атаки</color> для всех ваших воинов.\n\n" +
-                $"▪ <color={CKey}><b>Алхимик:</b></color> Варит зелья, увеличивающие <color={CHlp}>максимальный запас здоровья</color> <nobr>всех живых защитников</nobr> на поле.";
+
+            descriptionText.text = StartLh +
+                                   $"Здания во внутреннем дворе (сетка 4х4) обеспечивают вашу армию пассивными бонусами и подкреплением" +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Казарма:\n</b></color> Автоматически призывает рыцарей. Каждая новая казарма значительно <color={CSpd}>ускоряет время появления</color> новых воинов." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Ферма:\n</b></color> Поставляет провизию. Каждая ферма <nobr>увеличивает <b>лимит населения</b></nobr>, позволяя содержать больше рыцарей на поле." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Кузница:\n</b></color> Кует превосходное оружие. Дает <nobr>постоянную прибавку</nobr> к <color={CDmg}>силе атаки</color> для всей вашей армии." +
+                                   ParaGap +
+                                   $"▪ <color={CKey}><b>Алхимик:\n</b></color> Готовит целебные отвары, повышая <color={CHlp}>максимальное здоровье</color> <nobr>всех живых защитников</nobr>." +
+                                   EndLh;
         }
 
         public void ShowField()
@@ -117,14 +132,20 @@ namespace MenuScripts
             UpdateTabs(tabFieldButton);
             textBackground.Show();
             titleText.text = $"<color={CDmg}>ОБОРОНА ПОЛЯ</color>";
-            descriptionText.text =
-                $"<color={CUpgrade}><b>БАШНИ</b></color> (Можно улучшать до 5 уровня):\n" +
-                $"▪ <color={CKey}><b>Лучник:</b></color> Базовая оборона. Обладает отличной <color={CSpd}>скорострельностью</color> и эффективно <nobr>устраняет одиночные цели</nobr>.\n" +
-                $"▪ <color={CKey}><b>Маг:</b></color> Обрушивает на врагов магические сферы. Наносит <color={CMag}>урон по области (AoE)</color>, что незаменимо против толп мелких монстров.\n\n" +
-                $"<color={CUpgrade}><b>ЛОВУШКИ</b></color> (Размещаются на пути следования):\n" +
-                $"▪ <color={CKey}><b>Лоза:</b></color> Магические растения, которые <nobr>значительно <color={CUpgrade}>замедляют</color></nobr> монстров, подставляя их под стрелы башен.\n" +
-                $"▪ <color={CKey}><b>Колья:</b></color> Преграда, которая наносит урон <nobr>всем противникам</nobr>, пока они находятся на этой клетке.\n" +
-                $"▪ <color={CKey}><b>Капкан:</b></color> Механическая ловушка. Срабатывает один раз, нанося <color={CDmg}>огромный критический урон</color> одиночной цели, после чего исчезает.";
+
+            descriptionText.text = StartLh +
+                                   $"<color={CUpgrade}><b>БАШНИ</b></color>" + "\n" +
+                                   $"▪ <color={CKey}><b>Лучник:\n</b></color> Недорогое здание с высокой <color={CSpd}>скорострельностью</color>. Идеально против одиночных целей." +
+                                   "\n" +
+                                   $"▪ <color={CKey}><b>Маг:\n</b></color> Выпускает сферы, наносящие <color={CMag}>урон по области (AoE)</color>. Эффективен против плотных скоплений врага." +
+                                   ParaGap +
+                                   $"<color={CUpgrade}><b>ЛОВУШКИ</b></color>" + "\n" +
+                                   $"▪ <color={CKey}><b>Лоза:\n</b></color> Поле магических растений, которые <color={CUpgrade}>замедляют</color> всех монстров, проходящих сквозь них." +
+                                   "\n" +
+                                   $"▪ <color={CKey}><b>Колья:\n</b></color> Ряды острых шипов. Наносят <color={CDmg}>периодический урон</color> любому, кто наступит на клетку." +
+                                   "\n" +
+                                   $"▪ <color={CKey}><b>Капкан:\n</b></color> Мощное механическое устройство. Наносит <color={CDmg}>критический урон</color> одной цели и требует времени на перезарядку." +
+                                   EndLh;
         }
 
         public void ShowMonsters()
@@ -134,7 +155,7 @@ namespace MenuScripts
             titleText.text = $"<color={CDmg}>БЕСТИАРИЙ</color>";
 
             var (hMult, dMult, gMult) = DifficultyManager.GetCurrentMultipliers();
-            var resultText = "<size=80%><i>Показатели монстров адаптированы под текущую сложность:</i></size>\n\n";
+            var resultText = StartLh + "<size=80%><i>Текущие характеристики врагов:</i></size>" + ParaGap;
 
             foreach (var monster in monstersList)
             {
@@ -144,10 +165,11 @@ namespace MenuScripts
 
                 resultText += $"<color={CUpgrade}><b>{monster.monsterName.ToUpper()}</b></color>\n" +
                               $"<size=90%>{monster.monsterDescription}</size>\n" +
-                              $"▪️ <color={CKey}>Здоровье:</color> {hp} | <color={CKey}>Урон:</color> {dmg} | <color={CKey}>Награда:</color> {reward}\n\n";
+                              $"▪️ <color={CKey}>HP:</color> {hp} | <color={CKey}>ATK:</color> {dmg} | <color={CKey}>GOLD:</color> {reward}" +
+                              ParaGap;
             }
 
-            descriptionText.text = resultText;
+            descriptionText.text = resultText + EndLh;
             Canvas.ForceUpdateCanvases();
         }
     }

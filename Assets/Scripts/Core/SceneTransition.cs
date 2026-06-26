@@ -9,7 +9,7 @@ namespace Core
     {
         [Header("Settings")]
         [SerializeField]
-        private float fadeDuration = 0.1f;
+        private float fadeDuration = 0.2f;
         [SerializeField]
         private Color fadeColor = Color.black;
 
