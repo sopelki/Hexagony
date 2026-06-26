@@ -93,6 +93,15 @@ namespace Misc
                         UpdateTutorialState();
                     }
                     break;
+                
+                case TutorialStep.UpgradeTower:
+                    if (TowerSystem.Instance != null &&
+                        TowerSystem.Instance.GetTowers().Any(t => t.Level >= 2))
+                    {
+                        currentStep = TutorialStep.UpgradeTowerSuccess;
+                        UpdateTutorialState();
+                    }
+                    break;
 
                 case TutorialStep.BuildTrap:
                     if (TrapSystem.Instance != null &&
@@ -135,6 +144,10 @@ namespace Misc
                     break;
 
                 case TutorialStep.TowerSuccess:
+                    currentStep = TutorialStep.UpgradeTower;
+                    break;
+                
+                case TutorialStep.UpgradeTowerSuccess:
                     currentStep = TutorialStep.BuildTrap;
                     break;
 
@@ -160,6 +173,7 @@ namespace Misc
 
                 case TutorialStep.BuildBarrack:
                 case TutorialStep.BuildTower:
+                case TutorialStep.UpgradeTower:
                 case TutorialStep.BuildTrap:
                     return;
 
@@ -211,6 +225,18 @@ namespace Misc
                     ConfigureButton(true, "Далее");
                     PrintPhrase("Защита установлена! Милорд,\u00A0вы отлично справляетесь.");
                     break;
+                
+                case TutorialStep.UpgradeTower:
+                    ConfigureButton(false);
+                    //PrintPhrase("Перетяните <color=#FFEE58>Башню</color> на то же самое место, чтобы повысить её уровень.");
+                    PrintPhrase("Чтобы повысить уровень <color=#FFEE58>Башни</color>, перетяните ещё одну на\u00A0то\u00A0же место.");
+                    ApplyHighlight(towerSlot);
+                    break;
+                
+                case TutorialStep.UpgradeTowerSuccess:
+                    ConfigureButton(true, "Далее");
+                    PrintPhrase("Отлично! Теперь эта башня стреляет дальше и быстрее и наносит больше урона.");
+                    break;
 
                 case TutorialStep.BuildTrap:
                     ConfigureButton(false);
@@ -235,7 +261,7 @@ namespace Misc
                     ConfigureButton(true, "Далее");
                     ApplyHighlight(pauseButton);
                     PrintPhrase(
-                        "Для настройки или выхода из игры нажмите <nobr><color=#FFEE58>Паузу</color> или <color=#FFEE58>Esc</color>.</nobr>");
+                        "Для выхода из игры нажмите <nobr><color=#FFEE58>Паузу</color> или <color=#FFEE58>Esc</color>.</nobr>");
                     break;
 
                 case TutorialStep.SpeedExplanation:
@@ -452,6 +478,8 @@ namespace Misc
             BarrackSuccess,
             BuildTower,
             TowerSuccess,
+            UpgradeTower,
+            UpgradeTowerSuccess,
             BuildTrap,
             HelpExplanation,
             PauseExplanation,
