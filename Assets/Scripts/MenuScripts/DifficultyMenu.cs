@@ -73,14 +73,17 @@ namespace MenuScripts
         {
             if (gameplaySoundData?.gameStartSound)
                 AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
+            
+            SceneTransitions.LoadScene(gameSceneName, () =>
+            {
+                if (gameplaySoundData?.backgroundMusic)
+                    AudioManager.Instance.PlayMusic(gameplaySoundData.backgroundMusic);
 
-            if (gameplaySoundData?.backgroundMusic)
-                AudioManager.Instance.PlayMusic(gameplaySoundData.backgroundMusic);
+                SessionSaveManager.IsSaveLoaded = false;
+                SessionSaveManager.DeleteSession();
 
-            SessionSaveManager.IsSaveLoaded = false;
-            SessionSaveManager.DeleteSession();
-
-            SceneTransitions.LoadScene(gameSceneName);
+                System.GC.Collect();
+            });
         }
     }
 }

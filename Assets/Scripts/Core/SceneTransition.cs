@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,14 +8,12 @@ namespace Core
 {
     public class SceneTransitions : MonoBehaviour
     {
-        [Header("Settings")]
-        [SerializeField]
-        private float fadeDuration = 0.2f;
-        [SerializeField]
-        private Color fadeColor = Color.black;
+        [SerializeField] private float fadeDuration = 0.4f;
+        [SerializeField] private Color fadeColor = Color.black;
 
         private CanvasGroup canvasGroup;
         private bool isTransitioning;
+
         public static SceneTransitions Instance { get; private set; }
 
         private void Awake()
@@ -47,6 +46,7 @@ namespace Core
 
             var imgObj = new GameObject("FullImage");
             imgObj.transform.SetParent(g.transform);
+
             var img = imgObj.AddComponent<Image>();
             img.color = fadeColor;
 
@@ -54,28 +54,45 @@ namespace Core
             rt.anchorMin = Vector2.zero;
             rt.anchorMax = Vector2.one;
             rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.one;
+            rt.offsetMax = Vector2.zero;
         }
 
-        public static void LoadScene(string sceneName)
+        public static void LoadScene(string sceneName, Action onBlackoutTask = null)
         {
-            if (Instance.isTransitioning)
+            if (Instance == null || Instance.isTransitioning)
                 return;
 
-            Instance.StartCoroutine(Instance.FadeSequence(sceneName));
+            Instance.StartCoroutine(Instance.FadeSequence(sceneName, onBlackoutTask));
         }
 
-        private IEnumerator FadeSequence(string sceneName)
+        private IEnumerator FadeSequence(string sceneName, Action onBlackoutTask)
         {
             isTransitioning = true;
             canvasGroup.blocksRaycasts = true;
 
             yield return Fade(1f);
 
+            onBlackoutTask?.Invoke();
+
+            yield return null;
+
             var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 
-            while (asyncLoad is not { isDone: true })
-                yield return null;
+            if (asyncLoad != null)
+            {
+                asyncLoad.allowSceneActivation = false;
+
+                while (asyncLoad.progress < 0.9f)
+                    yield return null;
+
+                asyncLoad.allowSceneActivation = true;
+
+                while (!asyncLoad.isDone)
+                    yield return null;
+            }
+
+            for (var i = 0; i < 5; i++)
+                yield return new WaitForEndOfFrame();
 
             yield return new WaitForSecondsRealtime(0.1f);
 
@@ -83,14 +100,12 @@ namespace Core
 
             canvasGroup.blocksRaycasts = false;
             isTransitioning = false;
-
-            Time.timeScale = 1f;
         }
 
         private IEnumerator Fade(float targetAlpha)
         {
             var startAlpha = canvasGroup.alpha;
-            float elapsed = 0;
+            var elapsed = 0f;
 
             while (elapsed < fadeDuration)
             {

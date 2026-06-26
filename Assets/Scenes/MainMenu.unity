@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae080bc2faa5460fbb52e175eefd549d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.SceneTransitions
-  fadeDuration: 0.25
+  fadeDuration: 0.2
   fadeColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!4 &83543683
 Transform:
