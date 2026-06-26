@@ -188,7 +188,7 @@ namespace Misc
                 case TutorialStep.BuildBarrack:
                     ConfigureButton(false);
                     PrintPhrase(
-                        "Давайте начнём строить! Перетяните <color=#FFEE58>Казарму</color> в\u00A0замок <size=65%>(сетка 3x3)</size>.");
+                        "Давайте начнём строить! Перетяните <color=#FFEE58>Казарму</color> в\u00A0замок <size=65%>(сетка 4x4)</size>.");
                     ApplyHighlight(barrackSlot);
                     ApplyCastleHighlight(castleGrid);
                     break;
