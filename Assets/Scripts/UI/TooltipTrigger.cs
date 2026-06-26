@@ -19,6 +19,8 @@ namespace UI
 
             if (provider == null) return;
 
+            if (isBought) return;
+
             delayCoroutine = StartCoroutine(ShowWithDelay());
         }
 
