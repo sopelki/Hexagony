@@ -66,8 +66,6 @@ namespace MenuScripts
                 continueButton.interactable = hasSession;
             }
 
-            if (difficultyMenu != null) difficultyMenu.gameObject.SetActive(false);
-
             if (ShouldOpenDifficultyOnStart)
             {
                 ShouldOpenDifficultyOnStart = false;
