@@ -45,6 +45,8 @@ namespace MenuScripts
         [Header("Infinite Mode")]
         [SerializeField]
         private InfiniteModeSettings infiniteSettings;
+
+        public bool endGameSequenceStarted;
         private AudioSource audioSource;
 
         private CastleModel model;
@@ -54,8 +56,6 @@ namespace MenuScripts
         public bool IsGameWonOpen => gameWonPanel != null && gameWonPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
         public bool IsAnyEndGameOpen => IsGameOverOpen || IsGameWonOpen;
-
-        public bool endGameSequenceStarted;
 
         private void Awake()
         {

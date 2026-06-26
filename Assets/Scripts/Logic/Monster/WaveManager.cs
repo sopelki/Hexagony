@@ -12,7 +12,6 @@ namespace Logic.Monster
         private readonly MonsterSystem monsterSystem;
 
         private readonly MonsterSpawner spawner;
-        public int CurrentWaveNumber { get; private set; }
         private float delayTimer;
 
         private bool gameStarted;
@@ -28,6 +27,8 @@ namespace Logic.Monster
 
             this.spawner.OnWaveSpawnCompleted += OnWaveFinishedSpawning;
         }
+
+        public int CurrentWaveNumber { get; private set; }
 
         public void Tick()
         {

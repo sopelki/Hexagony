@@ -9,13 +9,6 @@ namespace UI
 {
     public class SlidingNotificationUI : MonoBehaviour
     {
-        private struct NotificationRequest
-        {
-            public string Message;
-            public AudioClip Clip;
-            public float Volume;
-        }
-
         [Header("References")]
         [SerializeField]
         private RectTransform panelRect;
@@ -149,6 +142,13 @@ namespace UI
             }
 
             panelRect.anchoredPosition = end;
+        }
+
+        private struct NotificationRequest
+        {
+            public string Message;
+            public AudioClip Clip;
+            public float Volume;
         }
     }
 }

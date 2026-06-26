@@ -25,7 +25,7 @@ namespace Core
             new Vector2Int(9, -31),
             new Vector2Int(31, -31),
             new Vector2Int(28, -3),
-            new Vector2Int(-3, 30),
+            new Vector2Int(-3, 30)
         };
         [Header("Castle Settings")]
         [SerializeField]

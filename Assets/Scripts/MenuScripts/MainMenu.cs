@@ -9,6 +9,7 @@ namespace MenuScripts
 {
     public class MainMenu : MonoBehaviour
     {
+        public static bool ShouldOpenDifficultyOnStart;
         [SerializeField]
         private MenuAudioData menuAudioData;
         [SerializeField]
@@ -19,8 +20,6 @@ namespace MenuScripts
         private Button continueButton;
         [SerializeField]
         private DifficultyMenu difficultyMenu;
-        
-        public static bool ShouldOpenDifficultyOnStart;
 
         private void Start()
         {
@@ -33,17 +32,17 @@ namespace MenuScripts
                 var hasSession = SessionSaveManager.HasSavedSession();
                 continueButton.interactable = hasSession;
             }
-            
+
             if (difficultyMenu != null)
                 difficultyMenu.gameObject.SetActive(false);
-            
+
             if (ShouldOpenDifficultyOnStart)
             {
                 ShouldOpenDifficultyOnStart = false;
                 PlayGame();
             }
         }
-        
+
         public void PlayGame()
         {
             if (difficultyMenu != null)
@@ -56,7 +55,7 @@ namespace MenuScripts
             {
                 if (gameplaySoundData?.gameStartSound)
                     AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
-                
+
                 SessionSaveManager.IsSaveLoaded = true;
                 SceneTransitions.LoadScene("GameScene");
             }

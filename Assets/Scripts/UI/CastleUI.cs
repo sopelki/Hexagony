@@ -10,14 +10,6 @@ namespace UI
 {
     public class CastleUI : MonoBehaviour
     {
-        [Serializable]
-        public class StatRow
-        {
-            public RectTransform icon;
-            public RectTransform label;
-            public RectTransform value;
-        }
-
         [Header("Stat Rows")]
         [SerializeField]
         private StatRow hpRow;
@@ -58,23 +50,34 @@ namespace UI
         [SerializeField]
         private float flashDuration = 0.16f;
 
+        private readonly Dictionary<RectTransform, Coroutine> activeShakes = new();
+
         private CastleSystem castleSystem;
-        private WaveManager waveManager;
-        private CastleModel model;
 
         private Coroutine flashCoroutine;
-        private Color originalColor;
 
         private int lastGold;
-        private int lastUnits;
         private int lastMaxSupply;
+        private int lastUnits;
         private int lastWave;
-
-        private readonly Dictionary<RectTransform, Coroutine> activeShakes = new();
+        private CastleModel model;
+        private Color originalColor;
+        private WaveManager waveManager;
 
         private void Awake()
         {
             originalColor = hpText.color;
+        }
+
+        private void OnDestroy()
+        {
+            if (model != null)
+            {
+                model.OnChanged -= UpdateUI;
+                model.OnDamaged -= HandleDamage;
+            }
+            if (waveManager != null)
+                waveManager.OnWaveStarting -= UpdateWaveUi;
         }
 
         public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
@@ -233,15 +236,12 @@ namespace UI
             }
         }
 
-        private void OnDestroy()
+        [Serializable]
+        public class StatRow
         {
-            if (model != null)
-            {
-                model.OnChanged -= UpdateUI;
-                model.OnDamaged -= HandleDamage;
-            }
-            if (waveManager != null)
-                waveManager.OnWaveStarting -= UpdateWaveUi;
+            public RectTransform icon;
+            public RectTransform label;
+            public RectTransform value;
         }
     }
 }

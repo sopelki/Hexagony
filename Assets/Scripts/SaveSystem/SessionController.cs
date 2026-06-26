@@ -14,14 +14,14 @@ namespace SaveSystem
     public class SessionController
     {
         private readonly CastleSystem castleSystem;
+        private readonly CastleUI castleUI;
         private readonly InfiniteModeSettings infiniteSettings;
         private readonly TowerSystem towerSystem;
         private readonly TrapSystem trapSystem;
         private readonly WaveManager waveManager;
-        private readonly CastleUI castleUI;
 
         public SessionController(TowerSystem towerSystem, TrapSystem trapSystem, CastleSystem castleSystem,
-            WaveManager waveManager, InfiniteModeSettings infiniteSettings,  CastleUI castleUI)
+            WaveManager waveManager, InfiniteModeSettings infiniteSettings, CastleUI castleUI)
         {
             this.towerSystem = towerSystem;
             this.trapSystem = trapSystem;
@@ -29,7 +29,7 @@ namespace SaveSystem
             this.waveManager = waveManager;
             this.infiniteSettings = infiniteSettings;
             this.castleUI = castleUI;
-            
+
             this.waveManager.OnWaveCleared += SaveCurrentState;
         }
 

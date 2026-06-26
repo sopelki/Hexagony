@@ -14,11 +14,11 @@ namespace Logic.Unit
 
         private const float MinDistanceBetweenUnits = 2.0f;
         private const float SeparationStrength = 2.5f;
+        private readonly Vector2Int baseHex = new(-16, 12);
         private readonly Field.Field field;
         private readonly Vector3 formationOffset;
         private readonly MonsterSystem monsterSystem;
         private readonly HexAStarPathfinder pathfinder;
-        private readonly Vector2Int baseHex = new(-16, 12);
         private readonly Tilemap tilemap;
         private readonly UnitModel unit;
 

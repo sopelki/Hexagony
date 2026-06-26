@@ -64,18 +64,21 @@ namespace MenuScripts
             StartNewGame();
         }
 
-        private void DeactivatePanel() => gameObject.SetActive(false);
+        private void DeactivatePanel()
+        {
+            gameObject.SetActive(false);
+        }
 
         private void StartNewGame()
         {
             if (gameplaySoundData?.gameStartSound)
                 AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
 
-            SessionSaveManager.IsSaveLoaded = false;
-            SessionSaveManager.DeleteSession();
-
             if (gameplaySoundData?.backgroundMusic)
                 AudioManager.Instance.PlayMusic(gameplaySoundData.backgroundMusic);
+
+            SessionSaveManager.IsSaveLoaded = false;
+            SessionSaveManager.DeleteSession();
 
             SceneTransitions.LoadScene(gameSceneName);
         }

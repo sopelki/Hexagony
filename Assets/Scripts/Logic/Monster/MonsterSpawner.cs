@@ -136,7 +136,7 @@ namespace Logic.Monster
 
             MonsterData data;
             float hMult, dMult, sMult;
-            
+
             var diffStatMult = DifficultyManager.GetStatMultiplier();
             var diffGoldMult = DifficultyManager.GetGoldMultiplier();
 
@@ -158,7 +158,7 @@ namespace Logic.Monster
                 dMult = wave.damageMultiplier * Mathf.Pow(infiniteSettings.damageMultiplierStep, extraWaves);
                 sMult = wave.speedMultiplier * Mathf.Pow(infiniteSettings.speedMultiplierStep, extraWaves);
             }
-            
+
             hMult *= diffStatMult;
             dMult *= diffStatMult;
             sMult *= diffStatMult;

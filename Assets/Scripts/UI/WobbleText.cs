@@ -21,9 +21,9 @@ namespace UI
         private float randomness = 1.0f;
         [SerializeField]
         private float breathingPhaseOffset = 1.5f;
+        private Mesh mesh;
 
         private TMP_Text textMesh;
-        private Mesh mesh;
         private Vector3[] vertices;
 
         private void Start()

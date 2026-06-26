@@ -39,7 +39,7 @@ namespace MenuScripts
         public void OpenSettingsFromButton()
         {
             lastPanel = null;
-            
+
             UIBlocker.BlockAll();
 
             if (settingsPanel == null)
@@ -75,10 +75,10 @@ namespace MenuScripts
             else
             {
                 UIBlocker.UnblockAll();
-                
+
                 if (menuBackground != null)
                     menuBackground.Hide();
-                
+
                 Time.timeScale = 1f;
             }
         }

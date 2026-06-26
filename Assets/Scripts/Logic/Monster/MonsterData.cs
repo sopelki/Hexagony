@@ -19,7 +19,7 @@ namespace Logic.Monster
         public float attackRadius = 1f;
         public float attackCooldown = 1f;
         public AttackType attackType = AttackType.Radius;
-        
+
         [Header("Trap Immune")]
         public List<TrapType> immuneTraps;
 

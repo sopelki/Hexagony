@@ -21,9 +21,9 @@ namespace UI
         [Header("Animation")]
         [SerializeField]
         private float fadeDuration = 0.2f;
+        private Coroutine colorCoroutine;
 
         private IPurchasable purchasable;
-        private Coroutine colorCoroutine;
 
         private void Awake()
         {

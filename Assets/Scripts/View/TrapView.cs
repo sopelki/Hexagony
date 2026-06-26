@@ -18,18 +18,6 @@ namespace View
 
         private readonly HashSet<Collider2D> overlappingTowers = new();
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Tower"))
-                overlappingTowers.Add(other);
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Tower"))
-                overlappingTowers.Remove(other);
-        }
-
         private void Update()
         {
             if (overlappingTowers.Count == 0)
@@ -43,6 +31,18 @@ namespace View
             var isOccluded = overlappingTowers.Where(tower => transform.position.y > tower.transform.position.y)
                 .Any(tower => tower.OverlapPoint(centerPoint));
             SetOutlineVisible(isOccluded);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Tower"))
+                overlappingTowers.Add(other);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.CompareTag("Tower"))
+                overlappingTowers.Remove(other);
         }
 
         public void Initialize(Sprite sprite)

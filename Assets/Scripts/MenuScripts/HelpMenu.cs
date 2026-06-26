@@ -10,26 +10,36 @@ namespace MenuScripts
 {
     public class HelpMenu : MonoBehaviour
     {
-        [Header("Панель справки")] [SerializeField]
+        [Header("Панель справки")]
+        [SerializeField]
         private FadePanel helpPanel;
 
-        [SerializeField] private FadePanel menuBackground;
-        [SerializeField] private FadePanel textBackground;
+        [SerializeField]
+        private FadePanel menuBackground;
+        [SerializeField]
+        private FadePanel textBackground;
 
-        [Header("Текстовые поля (TextMeshPro)")] [SerializeField]
+        [Header("Текстовые поля (TextMeshPro)")]
+        [SerializeField]
         private TextMeshProUGUI titleText;
 
-        [SerializeField] private TextMeshProUGUI descriptionText;
+        [SerializeField]
+        private TextMeshProUGUI descriptionText;
 
-        [Header("Кнопки вкладок (Ярлычки)")] [SerializeField]
+        [Header("Кнопки вкладок (Ярлычки)")]
+        [SerializeField]
         private Button tabMechanicsButton;
 
-        [SerializeField] private Button tabCastleButton;
-        [SerializeField] private Button tabFieldButton;
-        [SerializeField] private Button tabMonsterButton;
-        
+        [SerializeField]
+        private Button tabCastleButton;
+        [SerializeField]
+        private Button tabFieldButton;
+        [SerializeField]
+        private Button tabMonsterButton;
+
         [Header("Монстры")]
-        [SerializeField] private List<MonsterData> monstersList;
+        [SerializeField]
+        private List<MonsterData> monstersList;
 
         public bool IsOpen => helpPanel != null && helpPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
@@ -132,15 +142,15 @@ namespace MenuScripts
                 "▪ <color=#dfe88b><b>Колья:</b></color> Наносят стабильный <b>урон </b><nobr>всем, кто</nobr> стоит на них.\n" +
                 "▪ <color=#dfe88b><b>Капкан:</b></color> Наносит <b>критический удар </b><nobr>и исчезает.</nobr>\n";
         }
-        
+
         public void ShowMonsters()
         {
             UpdateTabs(tabMonsterButton);
             textBackground.Show();
             titleText.text = "<color=#EF5350>МОНСТРЫ</color>";
-            
+
             var (hMult, dMult, gMult) = DifficultyManager.GetCurrentMultipliers();
-    
+
             var resultText = "";
 
             foreach (var monster in monstersList)

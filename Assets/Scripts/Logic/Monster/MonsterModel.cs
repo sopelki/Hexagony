@@ -80,11 +80,11 @@ namespace Logic.Monster
             if (currentHealth <= 0)
                 Die();
         }
-        
+
         public bool HasImmunity(TrapType trapType)
         {
             // return Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
-            bool immune = Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
+            var immune = Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
             Debug.Log($"Проверка иммунитета для {Data.name} к {trapType}: {immune}");
             return immune;
         }

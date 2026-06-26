@@ -75,7 +75,7 @@ namespace Audio
         {
             if (musicSource.clip == clip && musicSource.isPlaying)
                 StopMusic();
-            
+
             musicSource.clip = clip;
             musicSource.loop = loop;
             musicSource.Play();

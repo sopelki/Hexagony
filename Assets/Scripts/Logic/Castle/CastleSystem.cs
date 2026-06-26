@@ -19,16 +19,10 @@ namespace Logic.Castle
         private readonly Tilemap tilemap;
         private readonly UnitData unitData;
         private readonly UnitSystem unitSystem;
+        private float currentSpawnInterval = float.PositiveInfinity;
 
         private bool firstBuildingPlaced;
         private float spawnTimer;
-        private float currentSpawnInterval = float.PositiveInfinity;
-
-        public static CastleSystem Instance { get; private set; }
-        public CastleModel CastleModel { get; }
-        public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
-
-        public event Action OnFirstBuildingPlaced;
 
         public CastleSystem(
             CastleModel castleModel,
@@ -49,6 +43,10 @@ namespace Logic.Castle
             this.unitSystem.OnUnitDied += HandleUnitDied;
         }
 
+        public static CastleSystem Instance { get; private set; }
+        public CastleModel CastleModel { get; }
+        public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
+
         public void Tick()
         {
             var dt = TickManager.Instance.tickInterval;
@@ -60,6 +58,8 @@ namespace Logic.Castle
                 TrySpawnSingleUnit();
             }
         }
+
+        public event Action OnFirstBuildingPlaced;
 
         private void RecalculateSpawnInterval()
         {
@@ -88,7 +88,10 @@ namespace Logic.Castle
             CastleModel.WallHexes = hexes;
         }
 
-        public bool CanAfford(int price) => CastleModel.Gold >= price;
+        public bool CanAfford(int price)
+        {
+            return CastleModel.Gold >= price;
+        }
 
         public bool TrySpendGold(int price)
         {

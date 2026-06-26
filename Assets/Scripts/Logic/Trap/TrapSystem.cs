@@ -113,7 +113,7 @@ namespace Logic.Trap
             var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
             if (trap == null || trap.IsTriggered)
                 return;
-            
+
             if (monster.HasImmunity(trap.Data.trapType))
                 return;
 
@@ -192,7 +192,7 @@ namespace Logic.Trap
             var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
             if (weakMonsters.Count >= trap.Data.requiredMonsters)
             {
-                foreach (var m in weakMonsters) 
+                foreach (var m in weakMonsters)
                     m.TakeDamage(trap.Data.criticalDamage);
                 trap.Trigger();
                 Debug.Log("Bear trap triggered.");

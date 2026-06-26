@@ -26,8 +26,6 @@ namespace Core
         private float timeSinceStart;
         private bool waitingToStart;
 
-        public bool IsTutorialActive { get; set; } = true;
-
         public GameFlowManager(
             WaveManager waveManager,
             TowerSystem towerSystem,
@@ -41,6 +39,8 @@ namespace Core
             this.castleSystem = castleSystem;
             this.hintUI = hintUI;
         }
+
+        public bool IsTutorialActive { get; set; } = true;
 
         public void Initialize()
         {

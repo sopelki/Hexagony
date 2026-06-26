@@ -30,12 +30,6 @@ namespace Logic.Castle
         public List<BuildingModel> Buildings { get; private set; } = new();
 
         public bool IsDead => Hp <= 0;
-        
-        public event Action OnCastleDestroyed;
-
-        public event Action OnChanged;
-
-        public event Action<int> OnDamaged;
 
         public void TakeDamage(int damage)
         {
@@ -53,6 +47,12 @@ namespace Logic.Castle
             if (Hp <= 0)
                 OnCastleDestroyed?.Invoke();
         }
+
+        public event Action OnCastleDestroyed;
+
+        public event Action OnChanged;
+
+        public event Action<int> OnDamaged;
 
         public void Changed()
         {
