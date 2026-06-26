@@ -14,27 +14,20 @@ namespace Misc
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            if (tilemap == null)
-                tilemap = GetComponent<Tilemap>();
+            if (tilemap == null) tilemap = GetComponent<Tilemap>();
 
             if (tilemap == null) return;
 
             var style = new GUIStyle
             {
-                normal =
-                {
-                    textColor = Color.white
-                },
-                fontSize = 10,
-                alignment = TextAnchor.MiddleCenter
+                normal = { textColor = Color.white }, fontSize = 10, alignment = TextAnchor.MiddleCenter
             };
 
             var bounds = tilemap.cellBounds;
 
             foreach (var pos in bounds.allPositionsWithin)
             {
-                if (!tilemap.HasTile(pos))
-                    continue;
+                if (!tilemap.HasTile(pos)) continue;
 
                 var axial = HexagonMath.OffsetToAxial(pos.x, pos.y);
 

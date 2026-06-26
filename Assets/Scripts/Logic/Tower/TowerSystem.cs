@@ -13,20 +13,8 @@ namespace Logic.Tower
 {
     public class TowerSystem : ITickable
     {
-        private readonly CastleSystem castleSystem;
-        private readonly MonsterSystem monsterSystem;
-        private readonly ProjectileSystem projectileSystem;
-        private readonly SoundData soundData;
-        private readonly TowersModel towersModel;
-
-        private bool firstTowerPlaced;
-
-        public TowerSystem(
-            CastleSystem castleSystem,
-            TowersModel towersModel,
-            MonsterSystem monsterSystem,
-            ProjectileSystem projectileSystem,
-            SoundData soundData)
+        public TowerSystem(CastleSystem castleSystem, TowersModel towersModel, MonsterSystem monsterSystem,
+            ProjectileSystem projectileSystem, SoundData soundData)
         {
             this.castleSystem = castleSystem;
             this.towersModel = towersModel;
@@ -37,8 +25,46 @@ namespace Logic.Tower
             Instance = this;
         }
 
+        private readonly CastleSystem castleSystem;
+
+        private bool firstTowerPlaced;
+        private readonly MonsterSystem monsterSystem;
+        private readonly ProjectileSystem projectileSystem;
+        private readonly SoundData soundData;
+        private readonly TowersModel towersModel;
+
         public static TowerSystem Instance { get; private set; }
 
+        public event Action OnFirstTowerPlaced;
+
+        public bool CanAffordTower(TowerData data) => castleSystem.CanAfford(data.baseCost);
+
+        public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
+        {
+            if (!CanAffordTower(data)) return false;
+
+            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+
+            return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
+        }
+
+        public void Clear()
+        {
+            towersModel.Clear();
+            firstTowerPlaced = false;
+        }
+
+        public TowerModel GetTowerAt(Vector3Int cellPos)
+        {
+            return towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+        }
+
+        public List<TowerModel> GetTowers() => towersModel.Towers.ToList();
+
+        public bool IsCellOccupied(Vector3Int cellPos)
+        {
+            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
+        }
 
         public void Tick()
         {
@@ -47,11 +73,9 @@ namespace Logic.Tower
 
             foreach (var tower in towersModel.Towers)
             {
-                if (tower.CooldownTimer > 0)
-                    tower.CooldownTimer -= step;
+                if (tower.CooldownTimer > 0) tower.CooldownTimer -= step;
 
-                if (tower.CooldownTimer > 0)
-                    continue;
+                if (tower.CooldownTimer > 0) continue;
 
                 var targets = FindTargets(tower, monsters);
                 if (targets.Count == 0)
@@ -76,37 +100,9 @@ namespace Logic.Tower
             }
         }
 
-        public event Action OnFirstTowerPlaced;
-
-        public bool CanAffordTower(TowerData data)
-        {
-            return castleSystem.CanAfford(data.baseCost);
-        }
-
-        public bool IsCellOccupied(Vector3Int cellPos)
-        {
-            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
-        }
-
-        public TowerModel GetTowerAt(Vector3Int cellPos)
-        {
-            return towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
-        }
-
-        public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
-        {
-            if (!CanAffordTower(data))
-                return false;
-
-            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
-
-            return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
-        }
-
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos, int level = 1)
         {
-            if (!CanAffordTower(data))
-                return false;
+            if (!CanAffordTower(data)) return false;
 
             var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
 
@@ -117,8 +113,7 @@ namespace Logic.Tower
                     castleSystem.TrySpendGold(data.baseCost);
                     existingTower.Upgrade();
 
-                    if (soundData?.towerPlaceSound != null)
-                        AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
+                    if (soundData?.towerPlaceSound != null) AudioManager.Instance.PlaySfx(soundData.towerPlaceSound);
 
                     return true;
                 }
@@ -142,6 +137,41 @@ namespace Logic.Tower
             return true;
         }
 
+        private static Vector3 CalculateInterceptPoint(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVelocity,
+            float projectileSpeed)
+        {
+            var toTarget = targetPos - shooterPos;
+
+            var a = Vector3.Dot(targetVelocity, targetVelocity) - projectileSpeed * projectileSpeed;
+            var b = 2f * Vector3.Dot(targetVelocity, toTarget);
+            var c = Vector3.Dot(toTarget, toTarget);
+
+            var discriminant = b * b - 4f * a * c;
+
+            if (discriminant < 0f || Mathf.Abs(a) < 0.001f) return targetPos;
+
+            var sqrt = Mathf.Sqrt(discriminant);
+
+            var t1 = (-b + sqrt) / (2f * a);
+            var t2 = (-b - sqrt) / (2f * a);
+
+            var t = Mathf.Min(t1, t2);
+
+            if (t < 0f) t = Mathf.Max(t1, t2);
+
+            if (t < 0f) return targetPos;
+
+            return targetPos + targetVelocity * t;
+        }
+
+        private static List<MonsterModel> FindTargets(TowerModel tower, IReadOnlyList<MonsterModel> monsters)
+        {
+            return monsters.Where(m => !m.IsDead)
+                .Select(m => new { Monster = m, Distance = Vector3.Distance(tower.WorldPosition, m.WorldPosition) })
+                .Where(x => x.Distance <= tower.CurrentRange).OrderBy(x => x.Distance).Take(tower.Data.targetsCount)
+                .Select(x => x.Monster).ToList();
+        }
+
         private void Shoot(TowerModel tower, MonsterModel target)
         {
             AudioClip[] sound;
@@ -158,83 +188,21 @@ namespace Logic.Tower
                 volume = soundData.archerShootVolume;
             }
 
-            if (soundData != null && sound is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(sound, volume);
+            if (soundData != null && sound is { Length: > 0 }) AudioManager.Instance.PlayRandomSfx(sound, volume);
 
             var firePoint = tower.WorldPosition +
                             new Vector3(tower.Data.projectileData.xOffset, tower.Data.projectileData.yOffset, 0);
 
-            var interceptPoint = CalculateInterceptPoint(
-                firePoint,
-                target.HitPosition,
-                target.CurrentVelocity,
-                tower.Data.projectileData.speed
-            );
+            var interceptPoint = CalculateInterceptPoint(firePoint, target.HitPosition, target.CurrentVelocity,
+                tower.Data.projectileData.speed);
 
-            var projectile = new ProjectileModel(
-                tower.WorldPosition,
-                target,
-                tower.Data.projectileData,
-                interceptPoint
-            )
-            {
-                Damage = (int)tower.CurrentDamage
-            };
+            var projectile =
+                new ProjectileModel(tower.WorldPosition, target, tower.Data.projectileData, interceptPoint)
+                {
+                    Damage = (int)tower.CurrentDamage
+                };
 
             projectileSystem.CreateProjectile(projectile);
-        }
-
-        private static Vector3 CalculateInterceptPoint(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVelocity,
-            float projectileSpeed)
-        {
-            var toTarget = targetPos - shooterPos;
-
-            var a = Vector3.Dot(targetVelocity, targetVelocity) - projectileSpeed * projectileSpeed;
-            var b = 2f * Vector3.Dot(targetVelocity, toTarget);
-            var c = Vector3.Dot(toTarget, toTarget);
-
-            var discriminant = b * b - 4f * a * c;
-
-            if (discriminant < 0f || Mathf.Abs(a) < 0.001f)
-                return targetPos;
-
-            var sqrt = Mathf.Sqrt(discriminant);
-
-            var t1 = (-b + sqrt) / (2f * a);
-            var t2 = (-b - sqrt) / (2f * a);
-
-            var t = Mathf.Min(t1, t2);
-
-            if (t < 0f)
-                t = Mathf.Max(t1, t2);
-
-            if (t < 0f)
-                return targetPos;
-
-            return targetPos + targetVelocity * t;
-        }
-
-        private static List<MonsterModel> FindTargets(TowerModel tower, IReadOnlyList<MonsterModel> monsters)
-        {
-            return monsters
-                .Where(m => !m.IsDead)
-                .Select(m => new { Monster = m, Distance = Vector3.Distance(tower.WorldPosition, m.WorldPosition) })
-                .Where(x => x.Distance <= tower.CurrentRange)
-                .OrderBy(x => x.Distance)
-                .Take(tower.Data.targetsCount)
-                .Select(x => x.Monster)
-                .ToList();
-        }
-
-        public List<TowerModel> GetTowers()
-        {
-            return towersModel.Towers.ToList();
-        }
-
-        public void Clear()
-        {
-            towersModel.Clear();
-            firstTowerPlaced = false;
         }
     }
 }

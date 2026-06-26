@@ -56,8 +56,7 @@ namespace Misc
         public void RemoveShadow()
         {
             var existing = transform.Find("_Shadow");
-            if (existing != null)
-                DestroyImmediate(existing.gameObject);
+            if (existing != null) DestroyImmediate(existing.gameObject);
 
             EditorUtility.SetDirty(gameObject);
         }

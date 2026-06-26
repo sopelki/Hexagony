@@ -3,8 +3,7 @@ using UnityEngine.Tilemaps;
 
 namespace HexagonScripts
 {
-    [CreateAssetMenu(fileName = "SlotNeighbourHexRuleTile",
-        menuName = "2D/Tiles/Slot Neighbour Hex Rule Tile")]
+    [CreateAssetMenu(fileName = "SlotNeighbourHexRuleTile", menuName = "2D/Tiles/Slot Neighbour Hex Rule Tile")]
     public class SlotNeighbourHexRuleTile : HexagonalRuleTile
     {
         [Tooltip("SlotTile")]

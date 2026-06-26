@@ -13,33 +13,8 @@ namespace Logic.Monster
 {
     public class MonsterSpawner : ITickable
     {
-        private readonly Field.Field field;
-        private readonly MonsterSystem monsterSystem;
-        private readonly SoundData soundData;
-
-        private readonly List<Vector2Int> spawnHexes;
-        private readonly Tilemap tilemap;
-        private readonly TrapSystem trapSystem;
-        private readonly UnitSystem unitSystem;
-        private readonly List<WaveData> waves;
-
-        private int currentWaveIndex = -1;
-
-        private InfiniteModeSettings infiniteSettings;
-        private bool isInfiniteMode;
-        private int spawnedInCurrentWave;
-        private float spawnTimer;
-        private bool waveSpawnFinished;
-
-        public MonsterSpawner(
-            List<Vector2Int> spawnHexes,
-            Field.Field field,
-            MonsterSystem monsterSystem,
-            UnitSystem unitSystem,
-            List<WaveData> waves,
-            Tilemap tilemap,
-            TrapSystem trapSystem,
-            SoundData soundData)
+        public MonsterSpawner(List<Vector2Int> spawnHexes, Field.Field field, MonsterSystem monsterSystem,
+            UnitSystem unitSystem, List<WaveData> waves, Tilemap tilemap, TrapSystem trapSystem, SoundData soundData)
         {
             this.spawnHexes = spawnHexes;
             this.field = field;
@@ -51,9 +26,56 @@ namespace Logic.Monster
             this.soundData = soundData;
         }
 
-        public int NormalWaves => waves.Count;
+        private int currentWaveIndex = -1;
+        private readonly Field.Field field;
+
+        private InfiniteModeSettings infiniteSettings;
+        private bool isInfiniteMode;
+        private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
+        private int spawnedInCurrentWave;
+
+        private readonly List<Vector2Int> spawnHexes;
+        private float spawnTimer;
+        private readonly Tilemap tilemap;
+        private readonly TrapSystem trapSystem;
+        private readonly UnitSystem unitSystem;
+        private readonly List<WaveData> waves;
+        private bool waveSpawnFinished;
 
         public bool IsLastWave => !isInfiniteMode && currentWaveIndex == waves.Count - 1;
+
+        public int NormalWaves => waves.Count;
+
+        public event Action OnWaveSpawnCompleted;
+
+        public void EnableInfiniteMode(InfiniteModeSettings settings)
+        {
+            infiniteSettings = settings;
+            isInfiniteMode = true;
+        }
+
+        public void SetWaveIndex(int index)
+        {
+            currentWaveIndex = index;
+        }
+
+        public void StartNextWave()
+        {
+            currentWaveIndex++;
+
+            if (!isInfiniteMode && currentWaveIndex >= waves.Count)
+            {
+                Debug.Log("MonsterSpawner: All manual waves completed.");
+                return;
+            }
+
+            spawnedInCurrentWave = 0;
+            spawnTimer = 0f;
+            waveSpawnFinished = false;
+
+            Debug.Log($"MonsterSpawner: Wave {currentWaveIndex + 1} started. (Infinite: {isInfiniteMode})");
+        }
 
         public void Tick()
         {
@@ -75,8 +97,7 @@ namespace Logic.Monster
                 spawnInterval = Mathf.Max(infiniteSettings.minSpawnInterval,
                     infiniteSettings.referenceWave.spawnInterval - extraWaves * infiniteSettings.spawnIntervalStep);
             }
-            else
-                return;
+            else return;
 
             if (waveSpawnFinished) return;
 
@@ -94,37 +115,6 @@ namespace Logic.Monster
                 Spawn();
             }
         }
-
-        public event Action OnWaveSpawnCompleted;
-
-        public void SetWaveIndex(int index)
-        {
-            currentWaveIndex = index;
-        }
-
-        public void EnableInfiniteMode(InfiniteModeSettings settings)
-        {
-            infiniteSettings = settings;
-            isInfiniteMode = true;
-        }
-
-        public void StartNextWave()
-        {
-            currentWaveIndex++;
-
-            if (!isInfiniteMode && currentWaveIndex >= waves.Count)
-            {
-                Debug.Log("MonsterSpawner: All manual waves completed.");
-                return;
-            }
-
-            spawnedInCurrentWave = 0;
-            spawnTimer = 0f;
-            waveSpawnFinished = false;
-
-            Debug.Log($"MonsterSpawner: Wave {currentWaveIndex + 1} started. (Infinite: {isInfiniteMode})");
-        }
-
 
         private void Spawn()
         {

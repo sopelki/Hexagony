@@ -6,7 +6,6 @@ namespace UI
 {
     public class DropSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler
     {
-        private static CastleSystem castleSystem;
         [Header("References")]
         [SerializeField]
         private Transform itemContainer;
@@ -16,31 +15,16 @@ namespace UI
         [Range(0.5f, 1f)]
         private float hoverScale = 0.85f;
 
+        private static CastleSystem castleSystem;
+
         private InventoryItem currentOverlappingItem;
 
-        private void Update()
-        {
-            if (!currentOverlappingItem)
-                return;
-
-            if (!EventSystem.current)
-            {
-                ResetSlotState();
-                return;
-            }
-
-            UpdateItemVisualState(currentOverlappingItem);
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
         public void OnDrop(PointerEventData eventData)
         {
             var draggingItem = eventData.pointerDrag?.GetComponent<InventoryItem>();
-            if (draggingItem == null)
-                return;
+            if (draggingItem == null) return;
 
             draggingItem.SetDraggingScale(1.0f);
             draggingItem.SetValidationState(true);
@@ -55,17 +39,14 @@ namespace UI
                     return;
                 }
 
-                if (castleSystem.TryBuyBuilding(draggingItem.BuildingData))
-                    draggingItem.Place(itemContainer);
-                else
-                    Destroy(draggingItem.gameObject);
+                if (castleSystem.TryBuyBuilding(draggingItem.BuildingData)) draggingItem.Place(itemContainer);
+                else Destroy(draggingItem.gameObject);
 
                 ResetSlotState();
                 return;
             }
 
-            if (existingItem != null)
-                existingItem.Place(draggingItem.OriginalParent);
+            if (existingItem != null) existingItem.Place(draggingItem.OriginalParent);
 
             draggingItem.Place(itemContainer);
             ResetSlotState();
@@ -73,12 +54,10 @@ namespace UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerDrag == null)
-                return;
+            if (eventData.pointerDrag == null) return;
 
             var draggingItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-            if (draggingItem == null)
-                return;
+            if (draggingItem == null) return;
 
             currentOverlappingItem = draggingItem;
             UpdateItemVisualState(currentOverlappingItem);
@@ -86,8 +65,7 @@ namespace UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (eventData.pointerDrag == null)
-                return;
+            if (eventData.pointerDrag == null) return;
 
             var draggingItem = eventData.pointerDrag.GetComponent<InventoryItem>();
             if (draggingItem != null && draggingItem == currentOverlappingItem)
@@ -101,6 +79,31 @@ namespace UI
         public void Construct(CastleSystem system)
         {
             castleSystem = system;
+        }
+
+        private void Update()
+        {
+            if (!currentOverlappingItem) return;
+
+            if (!EventSystem.current)
+            {
+                ResetSlotState();
+                return;
+            }
+
+            UpdateItemVisualState(currentOverlappingItem);
+        }
+
+        private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
+        {
+            if (draggingItem.IsFromShop)
+            {
+                var isSlotEmpty = existingItem == null;
+                var canAfford = castleSystem.CanAfford(draggingItem.BuildingData.baseCost);
+                return isSlotEmpty && canAfford;
+            }
+
+            return true;
         }
 
         private void UpdateItemVisualState(InventoryItem draggingItem)
@@ -125,21 +128,6 @@ namespace UI
             currentOverlappingItem = null;
         }
 
-        private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
-        {
-            if (draggingItem.IsFromShop)
-            {
-                var isSlotEmpty = existingItem == null;
-                var canAfford = castleSystem.CanAfford(draggingItem.BuildingData.baseCost);
-                return isSlotEmpty && canAfford;
-            }
-
-            return true;
-        }
-
-        private InventoryItem GetStoredItem()
-        {
-            return itemContainer.GetComponentInChildren<InventoryItem>();
-        }
+        private InventoryItem GetStoredItem() => itemContainer.GetComponentInChildren<InventoryItem>();
     }
 }

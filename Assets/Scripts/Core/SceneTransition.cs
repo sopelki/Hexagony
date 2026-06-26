@@ -8,13 +8,22 @@ namespace Core
 {
     public class SceneTransitions : MonoBehaviour
     {
-        [SerializeField] private float fadeDuration = 0.4f;
-        [SerializeField] private Color fadeColor = Color.black;
+        [SerializeField]
+        private float fadeDuration = 0.4f;
+        [SerializeField]
+        private Color fadeColor = Color.black;
 
         private CanvasGroup canvasGroup;
         private bool isTransitioning;
 
         public static SceneTransitions Instance { get; private set; }
+
+        public static void LoadScene(string sceneName, Action onBlackoutTask = null)
+        {
+            if (Instance == null || Instance.isTransitioning) return;
+
+            Instance.StartCoroutine(Instance.FadeSequence(sceneName, onBlackoutTask));
+        }
 
         private void Awake()
         {
@@ -57,14 +66,6 @@ namespace Core
             rt.offsetMax = Vector2.zero;
         }
 
-        public static void LoadScene(string sceneName, Action onBlackoutTask = null)
-        {
-            if (Instance == null || Instance.isTransitioning)
-                return;
-
-            Instance.StartCoroutine(Instance.FadeSequence(sceneName, onBlackoutTask));
-        }
-
         private IEnumerator FadeSequence(string sceneName, Action onBlackoutTask)
         {
             isTransitioning = true;
@@ -82,17 +83,14 @@ namespace Core
             {
                 asyncLoad.allowSceneActivation = false;
 
-                while (asyncLoad.progress < 0.9f)
-                    yield return null;
+                while (asyncLoad.progress < 0.9f) yield return null;
 
                 asyncLoad.allowSceneActivation = true;
 
-                while (!asyncLoad.isDone)
-                    yield return null;
+                while (!asyncLoad.isDone) yield return null;
             }
 
-            for (var i = 0; i < 5; i++)
-                yield return new WaitForEndOfFrame();
+            for (var i = 0; i < 5; i++) yield return new WaitForEndOfFrame();
 
             yield return new WaitForSecondsRealtime(0.1f);
 

@@ -21,9 +21,20 @@ namespace UI
         [Header("Animation")]
         [SerializeField]
         private float fadeDuration = 0.2f;
+
         private Coroutine colorCoroutine;
 
         private IPurchasable purchasable;
+
+        public void Refresh(int currentGold)
+        {
+            if (purchasable == null) return;
+
+            var targetColor = currentGold >= purchasable.BaseCost ? enoughGoldColor : notEnoughGoldColor;
+
+            if (colorCoroutine != null) StopCoroutine(colorCoroutine);
+            colorCoroutine = StartCoroutine(AnimateColor(targetColor));
+        }
 
         private void Awake()
         {
@@ -37,32 +48,16 @@ namespace UI
             priceText.text = purchasable.BaseCost.ToString();
         }
 
-        public void Refresh(int currentGold)
-        {
-            if (purchasable == null)
-                return;
-
-            var targetColor = currentGold >= purchasable.BaseCost
-                ? enoughGoldColor
-                : notEnoughGoldColor;
-
-            if (colorCoroutine != null)
-                StopCoroutine(colorCoroutine);
-            colorCoroutine = StartCoroutine(AnimateColor(targetColor));
-        }
-
         private IEnumerator AnimateColor(Color targetColor)
         {
             var startColor = priceText.color;
             var elapsed = 0f;
 
-            if (startColor == targetColor)
-                yield break;
+            if (startColor == targetColor) yield break;
 
             while (elapsed < fadeDuration)
             {
-                if (Time.timeScale > 0)
-                    elapsed += Time.unscaledDeltaTime;
+                if (Time.timeScale > 0) elapsed += Time.unscaledDeltaTime;
 
                 var t = elapsed / fadeDuration;
 

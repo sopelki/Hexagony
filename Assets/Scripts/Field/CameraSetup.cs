@@ -14,16 +14,10 @@ namespace Field
 
         private Camera myCamera;
 
-        private void Awake()
-        {
-            myCamera = GetComponent<Camera>();
-        }
-
         [ContextMenu("Fit Camera to Grid")]
         public void FitToGrid()
         {
-            if (myCamera == null)
-                myCamera = GetComponent<Camera>();
+            if (myCamera == null) myCamera = GetComponent<Camera>();
 
             if (tilemap == null)
             {
@@ -50,6 +44,11 @@ namespace Field
 
             var sizeFromWidth = halfWidth / myCamera.aspect;
             myCamera.orthographicSize = Mathf.Max(halfHeight, sizeFromWidth);
+        }
+
+        private void Awake()
+        {
+            myCamera = GetComponent<Camera>();
         }
     }
 }

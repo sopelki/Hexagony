@@ -64,6 +64,7 @@ namespace UI
         private float fadeDuration = 0.1f;
 
         private readonly List<GameObject> highlights = new();
+
         private Vector2 currentGhostPosition;
         private float currentScale;
         private Coroutine fadeCoroutine;
@@ -81,75 +82,16 @@ namespace UI
         private TrapSystem trapSystem;
         private bool wasSnapping;
 
-        private void Awake()
-        {
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
-
-            var trigger = gameObject.AddComponent<TooltipTrigger>();
-            trigger.SetContent(trapData);
-
-            if (iconImage != null)
-            {
-                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-                if (iconCanvasGroup == null)
-                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
-            }
-        }
-
-        private void Update()
-        {
-            if (!ghost)
-                return;
-
-            if (isSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * snapSpeed);
-                wasSnapping = true;
-            }
-            else if (wasSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * unSnapSpeed);
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
-            }
-            else
-                currentGhostPosition = targetGhostPosition;
-
-            ghostRect.localPosition = currentGhostPosition;
-
-            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
-            ghostRect.localScale = Vector3.one * currentScale;
-
-            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
-        }
-
-        private void OnDisable()
-        {
-            if (isDragging)
-            {
-                GlobalCursorManager.Instance.ReleaseHold(null);
-                isDragging = false;
-                CleanupDraggingUI();
-                if (iconCanvasGroup != null)
-                    iconCanvasGroup.alpha = 1f;
-            }
-        }
-
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (trapSystem == null)
-                return;
+            if (trapSystem == null) return;
 
             GlobalCursorManager.Instance.SetHold();
             isDragging = true;
 
             if (iconCanvasGroup != null)
             {
-                if (fadeCoroutine != null)
-                    StopCoroutine(fadeCoroutine);
+                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
 
                 iconCanvasGroup.alpha = 0f;
             }
@@ -172,10 +114,8 @@ namespace UI
             if (Camera.main != null)
             {
                 var pixelsPerUnit = Screen.height / (Camera.main.orthographicSize * 2f);
-                var spriteSize = new Vector2(
-                    sprite.rect.width / sprite.pixelsPerUnit,
-                    sprite.rect.height / sprite.pixelsPerUnit
-                );
+                var spriteSize = new Vector2(sprite.rect.width / sprite.pixelsPerUnit,
+                    sprite.rect.height / sprite.pixelsPerUnit);
 
                 var prefabScale = prefabRenderer.transform.localScale;
                 spriteSize.x *= prefabScale.x;
@@ -190,11 +130,8 @@ namespace UI
             targetScale = startScaleMultiplier;
             targetColor = ghostValidColor;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform, eventData.position,
+                eventData.pressEventCamera, out var localPoint);
 
             currentGhostPosition = localPoint;
             targetGhostPosition = localPoint;
@@ -211,16 +148,14 @@ namespace UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (ghostRect == null || !isDragging)
-                return;
+            if (ghostRect == null || !isDragging) return;
 
             UpdatePlacementFeedback(eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging)
-                return;
+            if (!isDragging) return;
 
             GlobalCursorManager.Instance.ReleaseHold(eventData);
             isDragging = false;
@@ -235,19 +170,10 @@ namespace UI
 
             if (iconCanvasGroup != null)
             {
-                if (fadeCoroutine != null)
-                    StopCoroutine(fadeCoroutine);
+                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
 
                 fadeCoroutine = StartCoroutine(FadeInIcon());
             }
-        }
-
-        private void CleanupDraggingUI()
-        {
-            if (ghost != null)
-                Destroy(ghost);
-
-            ClearHighlights();
         }
 
         public void Construct(TrapSystem trapSystem, Field.Field field)
@@ -256,13 +182,68 @@ namespace UI
             this.field = field;
         }
 
+        private void Awake()
+        {
+            if (canvas == null) canvas = GetComponentInParent<Canvas>();
+
+            var trigger = gameObject.AddComponent<TooltipTrigger>();
+            trigger.SetContent(trapData);
+
+            if (iconImage != null)
+            {
+                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+                if (iconCanvasGroup == null) iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (isDragging)
+            {
+                GlobalCursorManager.Instance.ReleaseHold(null);
+                isDragging = false;
+                CleanupDraggingUI();
+                if (iconCanvasGroup != null) iconCanvasGroup.alpha = 1f;
+            }
+        }
+
+        private void Update()
+        {
+            if (!ghost) return;
+
+            if (isSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition,
+                    Time.unscaledDeltaTime * snapSpeed);
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(currentGhostPosition, targetGhostPosition,
+                    Time.unscaledDeltaTime * unSnapSpeed);
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f) wasSnapping = false;
+            }
+            else currentGhostPosition = targetGhostPosition;
+
+            ghostRect.localPosition = currentGhostPosition;
+
+            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
+            ghostRect.localScale = Vector3.one * currentScale;
+
+            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
+        }
+
+        private void CleanupDraggingUI()
+        {
+            if (ghost != null) Destroy(ghost);
+
+            ClearHighlights();
+        }
+
         private void UpdatePlacementFeedback(PointerEventData eventData)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var mouseLocalPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform, eventData.position,
+                eventData.pressEventCamera, out var mouseLocalPoint);
 
             targetGhostPosition = mouseLocalPoint + ghostOffset;
             isSnapping = false;
@@ -323,8 +304,7 @@ namespace UI
                     if (highlights[i].TryGetComponent<SpriteRenderer>(out var sr))
                         sr.color = isValid ? highlightValidColor : highlightInvalidColor;
                 }
-                else
-                    highlights[i].SetActive(false);
+                else highlights[i].SetActive(false);
             }
         }
 
@@ -332,18 +312,15 @@ namespace UI
         {
             cellPos = Vector3Int.zero;
             var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return false;
+            if (!cam || !mapViewport || !fieldTilemap) return false;
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(mapViewport, eventData.position,
-                    eventData.pressEventCamera, out var local))
-                return false;
+                    eventData.pressEventCamera, out var local)) return false;
 
             var u = local.x / mapViewport.rect.width + 0.5f;
             var v = local.y / mapViewport.rect.height + 0.5f;
 
-            if (u < 0f || u > 1f || v < 0f || v > 1f)
-                return false;
+            if (u < 0f || u > 1f || v < 0f || v > 1f) return false;
 
             var zDist = Mathf.Abs(cam.transform.position.z - fieldTilemap.transform.position.z);
             var worldPos = cam.ViewportToWorldPoint(new Vector3(u, v, zDist));
@@ -369,8 +346,7 @@ namespace UI
 
         private void ClearHighlights()
         {
-            foreach (var h in highlights.Where(h => h != null))
-                Destroy(h);
+            foreach (var h in highlights.Where(h => h != null)) Destroy(h);
 
             highlights.Clear();
         }
@@ -380,25 +356,19 @@ namespace UI
         {
             canvasPosition = Vector2.zero;
             var cam = Camera.main;
-            if (!cam || !mapViewport || !fieldTilemap)
-                return false;
+            if (!cam || !mapViewport || !fieldTilemap) return false;
 
             var slotWorldCenter = fieldTilemap.GetCellCenterWorld(slotCell);
             var slotViewport = cam.WorldToViewportPoint(slotWorldCenter);
 
-            var slotLocalInViewport = new Vector2(
-                (slotViewport.x - 0.5f) * mapViewport.rect.width,
-                (slotViewport.y - 0.5f) * mapViewport.rect.height
-            );
+            var slotLocalInViewport = new Vector2((slotViewport.x - 0.5f) * mapViewport.rect.width,
+                (slotViewport.y - 0.5f) * mapViewport.rect.height);
 
             var slotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera,
                 mapViewport.TransformPoint(slotLocalInViewport));
 
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                slotScreenPos,
-                eventData.pressEventCamera,
-                out canvasPosition);
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform,
+                slotScreenPos, eventData.pressEventCamera, out canvasPosition);
         }
     }
 }

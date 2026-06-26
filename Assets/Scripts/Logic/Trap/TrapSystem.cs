@@ -12,15 +12,6 @@ namespace Logic.Trap
 {
     public class TrapSystem
     {
-        private readonly CastleSystem castleSystem;
-        private readonly Field.Field field;
-
-        private readonly MonsterSystem monsterSystem;
-        private readonly SoundData soundData;
-        private readonly TrapsModel trapsModel;
-
-        private bool firstTrapPlaced;
-
         public TrapSystem(MonsterSystem monsterSystem, TrapsModel trapsModel, Field.Field field,
             CastleSystem castleSystem, SoundData soundData)
         {
@@ -33,23 +24,22 @@ namespace Logic.Trap
             Instance = this;
         }
 
-        public static TrapSystem Instance { get; private set; }
-        public event Action OnFirstTrapPlaced;
+        private readonly CastleSystem castleSystem;
+        private readonly Field.Field field;
 
-        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex)
-        {
-            return new List<Vector2Int>
-            {
-                centerHex,
-                centerHex + new Vector2Int(0, -1),
-                centerHex + new Vector2Int(1, -1)
-            };
-        }
+        private bool firstTrapPlaced;
+
+        private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
+        private readonly TrapsModel trapsModel;
+
+        public static TrapSystem Instance { get; private set; }
+
+        public event Action OnFirstTrapPlaced;
 
         public bool CanPlaceTrap(TrapData data, Vector2Int axial)
         {
-            if (castleSystem.CastleModel.Gold < data.baseCost)
-                return false;
+            if (castleSystem.CastleModel.Gold < data.baseCost) return false;
 
             var hexes = GetTrapOccupiedHexes(axial);
 
@@ -57,28 +47,83 @@ namespace Logic.Trap
             {
                 var hexObj = field.GetHex(h);
 
-                if (hexObj == null)
-                    return false;
+                if (hexObj == null) return false;
 
-                if (hexObj.type != HexagonType.Path)
-                    return false;
+                if (hexObj.type != HexagonType.Path) return false;
 
-                if (trapsModel.Traps.Any(t => t.Hexes.Contains(h)))
-                    return false;
+                if (trapsModel.Traps.Any(t => t.Hexes.Contains(h))) return false;
             }
             return true;
         }
 
+        public void Clear()
+        {
+            trapsModel.Clear();
+            firstTrapPlaced = false;
+        }
+
+        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex) =>
+            new() { centerHex, centerHex + new Vector2Int(0, -1), centerHex + new Vector2Int(1, -1) };
+
+        public List<TrapModel> GetTraps() => (List<TrapModel>)trapsModel.Traps;
+
+        public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
+        {
+            var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
+            if (trap == null || trap.IsTriggered) return;
+
+            if (monster.HasImmunity(trap.Data.trapType)) return;
+
+            if (trap.Data.trapType is TrapType.SlowZone or TrapType.DamageZone)
+            {
+                if (!trap.ActiveSlowDebuffs.ContainsKey(monster))
+                {
+                    var slow = new SlowDebuff(trap.Data.slowPercent);
+                    trap.ActiveSlowDebuffs.Add(monster, slow);
+                    monster.DebuffSystem.AddBuff(slow);
+                }
+            }
+        }
+
+        public void OnMonsterExitedCell(Vector2Int hex, MonsterModel monster)
+        {
+            var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
+
+            if (trap == null) return;
+
+            if (trap.Hexes.Contains(monster.CurrentHex)) return;
+
+            if (trap.Data.trapType == TrapType.SlowZone && trap.ActiveSlowDebuffs.TryGetValue(monster, out var slow))
+            {
+                monster.DebuffSystem.RemoveBuff(slow);
+                trap.ActiveSlowDebuffs.Remove(monster);
+            }
+        }
+
+        public void Tick()
+        {
+            var delta = TickManager.Instance.tickInterval;
+            var monsters = monsterSystem.GetAllMonsters();
+            foreach (var trap in trapsModel.Traps.ToList().Where(trap => !trap.IsTriggered))
+            {
+                switch (trap.Data.trapType)
+                {
+                    case TrapType.DamageZone: HandleDamageZone(trap, monsters, delta); break;
+                    case TrapType.BearTrap: HandleBearTrap(trap, monsters); break;
+                    case TrapType.SlowZone: break;
+                    default: throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public bool TryPlaceTrap(TrapData data, Vector2Int hex)
         {
-            if (!CanPlaceTrap(data, hex))
-                return false;
+            if (!CanPlaceTrap(data, hex)) return false;
 
             var occupied = GetTrapOccupiedHexes(hex);
 
             Debug.Log($"Placing trap at center AXIAL: {hex}");
-            foreach (var h in occupied)
-                Debug.Log($"Trap occupies AXIAL: {h}");
+            foreach (var h in occupied) Debug.Log($"Trap occupies AXIAL: {h}");
 
             if (castleSystem.TrySpendGold(data.baseCost))
             {
@@ -102,113 +147,39 @@ namespace Logic.Trap
             return false;
         }
 
-        private void HandleTrapTriggered(TrapModel trap)
-        {
-            trap.OnTriggered -= HandleTrapTriggered;
-            trapsModel.RemoveTrap(trap);
-        }
-
-        public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
-        {
-            var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
-            if (trap == null || trap.IsTriggered)
-                return;
-
-            if (monster.HasImmunity(trap.Data.trapType))
-                return;
-
-            if (trap.Data.trapType is TrapType.SlowZone or TrapType.DamageZone)
-            {
-                if (!trap.ActiveSlowDebuffs.ContainsKey(monster))
-                {
-                    var slow = new SlowDebuff(trap.Data.slowPercent);
-                    trap.ActiveSlowDebuffs.Add(monster, slow);
-                    monster.DebuffSystem.AddBuff(slow);
-                }
-            }
-        }
-
-        public void OnMonsterExitedCell(Vector2Int hex, MonsterModel monster)
-        {
-            var trap = trapsModel.Traps.FirstOrDefault(t => t.Hexes.Contains(hex));
-
-            if (trap == null)
-                return;
-
-            if (trap.Hexes.Contains(monster.CurrentHex))
-                return;
-
-            if (trap.Data.trapType == TrapType.SlowZone && trap.ActiveSlowDebuffs.TryGetValue(monster, out var slow))
-            {
-                monster.DebuffSystem.RemoveBuff(slow);
-                trap.ActiveSlowDebuffs.Remove(monster);
-            }
-        }
-
-        public void Tick()
-        {
-            var delta = TickManager.Instance.tickInterval;
-            var monsters = monsterSystem.GetAllMonsters();
-            foreach (var trap in trapsModel.Traps.ToList().Where(trap => !trap.IsTriggered))
-            {
-                switch (trap.Data.trapType)
-                {
-                    case TrapType.DamageZone:
-                        HandleDamageZone(trap, monsters, delta);
-                        break;
-                    case TrapType.BearTrap:
-                        HandleBearTrap(trap, monsters);
-                        break;
-                    case TrapType.SlowZone:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        private static void HandleDamageZone(TrapModel trap, IReadOnlyList<MonsterModel> monsters, float delta)
-        {
-            trap.TickTimer += delta;
-            if (trap.TickTimer < trap.Data.tickInterval)
-                return;
-            while (trap.TickTimer >= trap.Data.tickInterval)
-            {
-                trap.TickTimer -= trap.Data.tickInterval;
-                foreach (var monster in monsters)
-                {
-                    if (!monster.IsDead && trap.Hexes.Contains(monster.CurrentHex))
-                    {
-                        if (!monster.HasImmunity(trap.Data.trapType))
-                            monster.TakeDamage(trap.Data.tickDamage);
-                    }
-                }
-            }
-        }
-
         private void HandleBearTrap(TrapModel trap, IReadOnlyList<MonsterModel> monsters)
         {
             var inZone = monsters.Where(m => !m.IsDead && trap.Hexes.Contains(m.CurrentHex)).ToList();
             var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
             if (weakMonsters.Count >= trap.Data.requiredMonsters)
             {
-                foreach (var m in weakMonsters)
-                    m.TakeDamage(trap.Data.criticalDamage);
+                foreach (var m in weakMonsters) m.TakeDamage(trap.Data.criticalDamage);
                 trap.Trigger();
                 Debug.Log("Bear trap triggered.");
                 trapsModel.RemoveTrap(trap);
             }
         }
 
-        public List<TrapModel> GetTraps()
+        private static void HandleDamageZone(TrapModel trap, IReadOnlyList<MonsterModel> monsters, float delta)
         {
-            return (List<TrapModel>)trapsModel.Traps;
+            trap.TickTimer += delta;
+            if (trap.TickTimer < trap.Data.tickInterval) return;
+            while (trap.TickTimer >= trap.Data.tickInterval)
+            {
+                trap.TickTimer -= trap.Data.tickInterval;
+                foreach (var monster in monsters)
+                {
+                    if (!monster.IsDead && trap.Hexes.Contains(monster.CurrentHex))
+                        if (!monster.HasImmunity(trap.Data.trapType))
+                            monster.TakeDamage(trap.Data.tickDamage);
+                }
+            }
         }
 
-        public void Clear()
+        private void HandleTrapTriggered(TrapModel trap)
         {
-            trapsModel.Clear();
-            firstTrapPlaced = false;
+            trap.OnTriggered -= HandleTrapTriggered;
+            trapsModel.RemoveTrap(trap);
         }
     }
 }

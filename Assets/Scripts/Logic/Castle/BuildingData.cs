@@ -28,13 +28,13 @@ namespace Logic.Castle
         [TextArea(2, 5)]
         [SerializeField]
         private string customSpecialInfo;
+
         public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
         {
             string stats;
-            if (!string.IsNullOrWhiteSpace(customSpecialInfo))
-                stats = customSpecialInfo;
+            if (!string.IsNullOrWhiteSpace(customSpecialInfo)) stats = customSpecialInfo;
             else
             {
                 stats = type switch
@@ -46,12 +46,7 @@ namespace Logic.Castle
                 };
             }
 
-            return new TooltipContent
-            {
-                Title = type.GetRussianName(),
-                Description = description,
-                SpecialInfo = stats
-            };
+            return new TooltipContent { Title = type.GetRussianName(), Description = description, SpecialInfo = stats };
         }
     }
 }

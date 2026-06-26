@@ -10,6 +10,7 @@ namespace MenuScripts
     public class MainMenu : MonoBehaviour
     {
         public static bool ShouldOpenDifficultyOnStart;
+
         [SerializeField]
         private MenuAudioData menuAudioData;
         [SerializeField]
@@ -21,32 +22,9 @@ namespace MenuScripts
         [SerializeField]
         private DifficultyMenu difficultyMenu;
 
-        private void Start()
-        {
-            Debug.Log("Save path: " + Application.persistentDataPath);
-            if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
-                AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
-
-            if (continueButton != null)
-            {
-                var hasSession = SessionSaveManager.HasSavedSession();
-                continueButton.interactable = hasSession;
-            }
-
-            if (difficultyMenu != null)
-                difficultyMenu.gameObject.SetActive(false);
-
-            if (ShouldOpenDifficultyOnStart)
-            {
-                ShouldOpenDifficultyOnStart = false;
-                PlayGame();
-            }
-        }
-
         public void PlayGame()
         {
-            if (difficultyMenu != null)
-                difficultyMenu.OpenMenu();
+            if (difficultyMenu != null) difficultyMenu.OpenMenu();
         }
 
         public void ContinueGame()
@@ -72,10 +50,29 @@ namespace MenuScripts
 
         public void OpenSettings()
         {
-            if (settingsMenu != null)
-                settingsMenu.OpenSettings();
-            else
-                Debug.LogError("SettingsMenu reference is missing in MainMenu script!");
+            if (settingsMenu != null) settingsMenu.OpenSettings();
+            else Debug.LogError("SettingsMenu reference is missing in MainMenu script!");
+        }
+
+        private void Start()
+        {
+            Debug.Log("Save path: " + Application.persistentDataPath);
+            if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
+                AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
+
+            if (continueButton != null)
+            {
+                var hasSession = SessionSaveManager.HasSavedSession();
+                continueButton.interactable = hasSession;
+            }
+
+            if (difficultyMenu != null) difficultyMenu.gameObject.SetActive(false);
+
+            if (ShouldOpenDifficultyOnStart)
+            {
+                ShouldOpenDifficultyOnStart = false;
+                PlayGame();
+            }
         }
     }
 }

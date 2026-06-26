@@ -1,4 +1,5 @@
-﻿using Audio;
+﻿using System;
+using Audio;
 using Core;
 using SaveSystem;
 using UnityEngine;
@@ -20,17 +21,11 @@ namespace MenuScripts
         private FadePanel difficultyPanel;
         private FadePanel lastPanel;
 
-        private void Awake()
-        {
-            difficultyPanel = GetComponent<FadePanel>();
-        }
-
         public void OpenMenu()
         {
             lastPanel = mainMenuPanel;
 
-            if (lastPanel != null)
-                lastPanel.Hide(lastPanel.FadeDuration);
+            if (lastPanel != null) lastPanel.Hide(lastPanel.FadeDuration);
 
             gameObject.SetActive(true);
             difficultyPanel.Show();
@@ -40,8 +35,7 @@ namespace MenuScripts
         {
             difficultyPanel.Hide();
 
-            if (lastPanel != null)
-                lastPanel.Show(lastPanel.FadeDuration);
+            if (lastPanel != null) lastPanel.Show(lastPanel.FadeDuration);
 
             Invoke(nameof(DeactivatePanel), difficultyPanel.FadeDuration);
         }
@@ -64,6 +58,11 @@ namespace MenuScripts
             StartNewGame();
         }
 
+        private void Awake()
+        {
+            difficultyPanel = GetComponent<FadePanel>();
+        }
+
         private void DeactivatePanel()
         {
             gameObject.SetActive(false);
@@ -73,7 +72,7 @@ namespace MenuScripts
         {
             if (gameplaySoundData?.gameStartSound)
                 AudioManager.Instance.PlaySfx(gameplaySoundData.gameStartSound, gameplaySoundData.gameStartVolume);
-            
+
             SceneTransitions.LoadScene(gameSceneName, () =>
             {
                 if (gameplaySoundData?.backgroundMusic)
@@ -82,7 +81,7 @@ namespace MenuScripts
                 SessionSaveManager.IsSaveLoaded = false;
                 SessionSaveManager.DeleteSession();
 
-                System.GC.Collect();
+                GC.Collect();
             });
         }
     }

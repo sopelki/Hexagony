@@ -21,10 +21,7 @@ namespace View
             model = monsterModel;
         }
 
-        public bool IsModelDead()
-        {
-            return model == null || model.IsDead;
-        }
+        public bool IsModelDead() => model == null || model.IsDead;
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -40,14 +37,12 @@ namespace View
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (model is { IsDead: false } && GlobalCursorManager.Instance)
-                GlobalCursorManager.Instance.SetAttack();
+            if (model is { IsDead: false } && GlobalCursorManager.Instance) GlobalCursorManager.Instance.SetAttack();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (GlobalCursorManager.Instance != null)
-                GlobalCursorManager.Instance.SetDefault();
+            if (GlobalCursorManager.Instance != null) GlobalCursorManager.Instance.SetDefault();
         }
     }
 }

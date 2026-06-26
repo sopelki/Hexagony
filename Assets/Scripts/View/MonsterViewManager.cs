@@ -12,16 +12,8 @@ namespace View
         private Transform parent;
 
         private readonly Dictionary<MonsterModel, MonsterView> views = new();
+
         private MonsterSystem system;
-
-        private void OnDestroy()
-        {
-            if (system != null)
-                system.OnMonsterCreated -= HandleCreated;
-
-            if (TickManager.Instance != null)
-                TickManager.Instance.OnTick -= HandleTick;
-        }
 
         public void Initialize(MonsterSystem system)
         {
@@ -29,26 +21,14 @@ namespace View
 
             system.OnMonsterCreated += HandleCreated;
 
-            if (TickManager.Instance != null)
-                TickManager.Instance.OnTick += HandleTick;
+            if (TickManager.Instance != null) TickManager.Instance.OnTick += HandleTick;
         }
 
-        private void HandleCreated(MonsterModel model)
+        private void OnDestroy()
         {
-            var prefab = model.Data.prefab;
+            if (system != null) system.OnMonsterCreated -= HandleCreated;
 
-            var go = Instantiate(
-                prefab,
-                model.WorldPosition,
-                Quaternion.identity,
-                parent
-            );
-
-            var view = go.GetComponent<MonsterView>();
-            view.Initialize(model, model.Data.visualOffsetY);
-            view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
-
-            views.Add(model, view);
+            if (TickManager.Instance != null) TickManager.Instance.OnTick -= HandleTick;
         }
 
         private void HandleDeathAnimationFinished(MonsterModel model)
@@ -60,10 +40,22 @@ namespace View
             }
         }
 
+        private void HandleCreated(MonsterModel model)
+        {
+            var prefab = model.Data.prefab;
+
+            var go = Instantiate(prefab, model.WorldPosition, Quaternion.identity, parent);
+
+            var view = go.GetComponent<MonsterView>();
+            view.Initialize(model, model.Data.visualOffsetY);
+            view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
+
+            views.Add(model, view);
+        }
+
         private void HandleTick()
         {
-            foreach (var pair in views.ToList())
-                pair.Value.UpdateView();
+            foreach (var pair in views.ToList()) pair.Value.UpdateView();
         }
     }
 }

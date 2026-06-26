@@ -18,6 +18,17 @@ namespace MenuScripts
 
         private Vector3 originalScale;
 
+        [ContextMenu("Clear High Score")]
+        public void ClearHighScore()
+        {
+            PlayerPrefs.DeleteKey("MaxWaveReached");
+            PlayerPrefs.Save();
+
+            if (splashText != null) splashText.gameObject.SetActive(false);
+
+            Debug.Log("High Score Cleared!");
+        }
+
         private void Start()
         {
             var highScore = PlayerPrefs.GetInt("MaxWaveReached", 0);
@@ -29,8 +40,7 @@ namespace MenuScripts
                 splashText.gameObject.SetActive(true);
                 originalScale = splashText.transform.localScale;
             }
-            else
-                splashText.gameObject.SetActive(false);
+            else splashText.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -40,18 +50,6 @@ namespace MenuScripts
                 var scaleOffset = Mathf.Sin(Time.unscaledTime * pulseSpeed) * pulseAmount;
                 splashText.transform.localScale = originalScale * (1f + scaleOffset);
             }
-        }
-
-        [ContextMenu("Clear High Score")]
-        public void ClearHighScore()
-        {
-            PlayerPrefs.DeleteKey("MaxWaveReached");
-            PlayerPrefs.Save();
-
-            if (splashText != null)
-                splashText.gameObject.SetActive(false);
-
-            Debug.Log("High Score Cleared!");
         }
     }
 }

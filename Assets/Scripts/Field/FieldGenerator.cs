@@ -26,12 +26,6 @@ namespace Field
         private Dictionary<TileBase, HexagonType> tileToTypeDict;
         private Dictionary<HexagonType, TileBase> typeToTileDict;
 
-        private void Awake()
-        {
-            myTilemap = GetComponent<Tilemap>();
-            SetupDictionaries();
-        }
-
         public Field GetFieldFromAsset()
         {
             if (currentLevel == null || currentLevel.jsonFile == null)
@@ -56,12 +50,17 @@ namespace Field
             DrawObjects();
         }
 
+        private void Awake()
+        {
+            myTilemap = GetComponent<Tilemap>();
+            SetupDictionaries();
+        }
+
         private static Field ConvertDataToField(FieldData data)
         {
             var field = new Field();
 
-            foreach (var hex in data.savedHexes)
-                field.AddHexagon(hex.offset.x, hex.offset.y, hex.type);
+            foreach (var hex in data.savedHexes) field.AddHexagon(hex.offset.x, hex.offset.y, hex.type);
 
             field.MapObjects = data.savedObjects ?? new List<MapObjectData>();
             return field;
@@ -70,8 +69,7 @@ namespace Field
 
         private void DrawHexagons()
         {
-            if (myTilemap == null)
-                myTilemap = GetComponent<Tilemap>();
+            if (myTilemap == null) myTilemap = GetComponent<Tilemap>();
 
             SetupDictionaries();
 
@@ -84,8 +82,7 @@ namespace Field
 
         private void DrawObjects()
         {
-            if (objectsContainer == null || currentField.MapObjects == null)
-                return;
+            if (objectsContainer == null || currentField.MapObjects == null) return;
 
             foreach (var objData in currentField.MapObjects)
             {
@@ -101,31 +98,26 @@ namespace Field
 
         private void ClearGrid()
         {
-            if (myTilemap == null)
-                myTilemap = GetComponent<Tilemap>();
+            if (myTilemap == null) myTilemap = GetComponent<Tilemap>();
 
             myTilemap?.ClearAllTiles();
         }
 
         private void ClearDecorations()
         {
-            if (objectsContainer == null)
-                return;
+            if (objectsContainer == null) return;
 
             for (var i = objectsContainer.childCount - 1; i >= 0; i--)
             {
                 var obj = objectsContainer.GetChild(i).gameObject;
-                if (Application.isPlaying)
-                    Destroy(obj);
-                else
-                    DestroyImmediate(obj);
+                if (Application.isPlaying) Destroy(obj);
+                else DestroyImmediate(obj);
             }
         }
 
         private void ReadHexagonsFromBrush()
         {
-            if (myTilemap == null)
-                myTilemap = GetComponent<Tilemap>();
+            if (myTilemap == null) myTilemap = GetComponent<Tilemap>();
 
             SetupDictionaries();
 
@@ -141,8 +133,7 @@ namespace Field
         private void ReadObjectsFromScene()
         {
             currentField.MapObjects.Clear();
-            if (objectsContainer == null)
-                return;
+            if (objectsContainer == null) return;
 
             foreach (Transform child in objectsContainer)
             {
@@ -151,8 +142,7 @@ namespace Field
                 {
                     currentField.MapObjects.Add(new MapObjectData
                     {
-                        position = myTilemap.WorldToCell(child.position),
-                        objectId = mapping.id
+                        position = myTilemap.WorldToCell(child.position), objectId = mapping.id
                     });
                 }
             }
@@ -166,8 +156,7 @@ namespace Field
             foreach (var mapping in tileMappings.Where(m => m.tileAsset != null))
             {
                 typeToTileDict[mapping.type] = mapping.tileAsset;
-                if (!tileToTypeDict.ContainsKey(mapping.tileAsset))
-                    tileToTypeDict.Add(mapping.tileAsset, mapping.type);
+                if (!tileToTypeDict.ContainsKey(mapping.tileAsset)) tileToTypeDict.Add(mapping.tileAsset, mapping.type);
             }
         }
 
@@ -184,8 +173,7 @@ namespace Field
                 Debug.Log(
                     $"Field Loaded: {currentField.Hexagons.Count} tiles, {currentField.MapObjects.Count} objects.");
             }
-            else
-                Debug.LogWarning("Load Field From File: File not found. Generating default grid.");
+            else Debug.LogWarning("Load Field From File: File not found. Generating default grid.");
         }
 
         [ContextMenu("Save Field To File")]
@@ -201,8 +189,7 @@ namespace Field
                 SaveLoadManager.SaveMapToFile(currentField);
                 Debug.Log($"Saved {currentField.Hexagons.Count} tiles and {currentField.MapObjects.Count} objects.");
             }
-            else
-                Debug.LogWarning("Save Field To File: Tilemap is empty.");
+            else Debug.LogWarning("Save Field To File: Tilemap is empty.");
         }
 
         [ContextMenu("Clear Field (Editor Only)")]

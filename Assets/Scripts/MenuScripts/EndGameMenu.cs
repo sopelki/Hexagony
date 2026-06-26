@@ -47,6 +47,7 @@ namespace MenuScripts
         private InfiniteModeSettings infiniteSettings;
 
         public bool endGameSequenceStarted;
+
         private AudioSource audioSource;
 
         private CastleModel model;
@@ -57,23 +58,11 @@ namespace MenuScripts
 
         public bool IsAnyEndGameOpen => IsGameOverOpen || IsGameWonOpen;
 
-        private void Awake()
-        {
-            audioSource = GetComponent<AudioSource>();
-            audioSource.ignoreListenerPause = true;
-        }
-
         public void Initialize(CastleModel castleModel, WaveManager waveManager)
         {
             model = castleModel;
             model.OnChanged += CheckGameOver;
             this.waveManager = waveManager;
-        }
-
-        private void CheckGameOver()
-        {
-            if (model.IsDead)
-                OpenGameOver();
         }
 
         public void OpenGameOver()
@@ -84,38 +73,6 @@ namespace MenuScripts
         public void OpenWinMenu()
         {
             StartCoroutine(EndGameSequence(gameWonPanel, gameWonSound, true));
-        }
-
-        private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip, bool isWin)
-        {
-            if (!panel)
-                yield break;
-
-            endGameSequenceStarted = true;
-            UIBlocker.BlockAll();
-
-            yield return new WaitForSeconds(startDelay);
-
-            if (clip && audioSource)
-            {
-                AudioManager.Instance.StopMusic();
-                audioSource.PlayOneShot(clip, volume);
-            }
-
-            Time.timeScale = 0f;
-
-            if (menuBackground)
-                menuBackground.Show(fadeDuration);
-
-            panel.Show();
-
-            if (isWin && leftWinConfetti && rightWinConfetti)
-            {
-                leftWinConfetti.Play();
-                rightWinConfetti.Play();
-            }
-
-            endGameSequenceStarted = false;
         }
 
         public void RestartGame()
@@ -142,10 +99,50 @@ namespace MenuScripts
             }
 
             gameWonPanel.Hide();
-            if (menuBackground)
-                menuBackground.Hide(fadeDuration);
+            if (menuBackground) menuBackground.Hide(fadeDuration);
 
             waveManager.StartInfiniteMode(infiniteSettings);
+        }
+
+        private void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
+            audioSource.ignoreListenerPause = true;
+        }
+
+        private void CheckGameOver()
+        {
+            if (model.IsDead) OpenGameOver();
+        }
+
+        private IEnumerator EndGameSequence(FadePanel panel, AudioClip clip, bool isWin)
+        {
+            if (!panel) yield break;
+
+            endGameSequenceStarted = true;
+            UIBlocker.BlockAll();
+
+            yield return new WaitForSeconds(startDelay);
+
+            if (clip && audioSource)
+            {
+                AudioManager.Instance.StopMusic();
+                audioSource.PlayOneShot(clip, volume);
+            }
+
+            Time.timeScale = 0f;
+
+            if (menuBackground) menuBackground.Show(fadeDuration);
+
+            panel.Show();
+
+            if (isWin && leftWinConfetti && rightWinConfetti)
+            {
+                leftWinConfetti.Play();
+                rightWinConfetti.Play();
+            }
+
+            endGameSequenceStarted = false;
         }
     }
 }

@@ -32,29 +32,15 @@ namespace Misc
 
         private bool holdLock;
 
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-                SetDefault();
-            }
-            else
-                Destroy(gameObject);
-        }
-
         public void SetDefault()
         {
-            if (holdLock)
-                return;
+            if (holdLock) return;
             Cursor.SetCursor(defaultCursor, defaultHotspot, CursorMode.Auto);
         }
 
         public void SetInteract()
         {
-            if (holdLock)
-                return;
+            if (holdLock) return;
             Cursor.SetCursor(interactCursor, interactHotspot, CursorMode.Auto);
         }
 
@@ -66,8 +52,7 @@ namespace Misc
 
         public void SetAttack()
         {
-            if (holdLock)
-                return;
+            if (holdLock) return;
             Cursor.SetCursor(attackCursor, attackHotspot, CursorMode.Auto);
         }
 
@@ -77,8 +62,18 @@ namespace Misc
 
             if (eventData != null && IsPointerOverInteractiveUI(eventData))
                 Cursor.SetCursor(interactCursor, interactHotspot, CursorMode.Auto);
-            else
+            else SetDefault();
+        }
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
                 SetDefault();
+            }
+            else Destroy(gameObject);
         }
 
         private static bool IsPointerOverInteractiveUI(PointerEventData eventData)

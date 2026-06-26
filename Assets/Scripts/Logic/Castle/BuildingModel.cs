@@ -13,10 +13,7 @@
 
         public int Production => Data.baseProduction * Level;
 
-        public int GetUpgradeCost()
-        {
-            return Data.baseCost * (Level + 1);
-        }
+        public int GetUpgradeCost() => Data.baseCost * (Level + 1);
 
         public void Upgrade()
         {

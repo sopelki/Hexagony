@@ -13,13 +13,6 @@ namespace SaveSystem
 {
     public class SessionController
     {
-        private readonly CastleSystem castleSystem;
-        private readonly CastleUI castleUI;
-        private readonly InfiniteModeSettings infiniteSettings;
-        private readonly TowerSystem towerSystem;
-        private readonly TrapSystem trapSystem;
-        private readonly WaveManager waveManager;
-
         public SessionController(TowerSystem towerSystem, TrapSystem trapSystem, CastleSystem castleSystem,
             WaveManager waveManager, InfiniteModeSettings infiniteSettings, CastleUI castleUI)
         {
@@ -33,41 +26,19 @@ namespace SaveSystem
             this.waveManager.OnWaveCleared += SaveCurrentState;
         }
 
-        private void SaveCurrentState(int currentWave)
-        {
-            var data = new GameSessionData
-            {
-                currentWaveNumber = currentWave,
-                castleHp = castleSystem.CastleModel.Hp,
-                gold = castleSystem.CastleModel.Gold
-            };
-
-            foreach (var tower in towerSystem.GetTowers())
-            {
-                data.towers.Add(new TowerSaveData
-                {
-                    type = tower.Data.type, level = tower.Level, gridPosition = tower.GridPosition,
-                    worldPosition = tower.WorldPosition
-                });
-            }
-
-            foreach (var trap in trapSystem.GetTraps().Where(trap => trap.Hexes.Count > 0))
-                data.traps.Add(new TrapSaveData { type = trap.Data.trapType, centerHex = trap.Hexes[0] });
-
-            foreach (var building in castleSystem.CastleModel.Buildings)
-                data.buildings.Add(new BuildingSaveData { type = building.Data.type });
-
-            SessionSaveManager.SaveSession(data);
-        }
+        private readonly CastleSystem castleSystem;
+        private readonly CastleUI castleUI;
+        private readonly InfiniteModeSettings infiniteSettings;
+        private readonly TowerSystem towerSystem;
+        private readonly TrapSystem trapSystem;
+        private readonly WaveManager waveManager;
 
         public IEnumerator LoadStateRoutine()
         {
             var data = SessionSaveManager.LoadSession();
-            if (data == null)
-                yield break;
+            if (data == null) yield break;
 
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.MuteSfx = true;
+            if (AudioManager.Instance != null) AudioManager.Instance.MuteSfx = true;
 
             castleSystem.CastleModel.Gold = int.MaxValue;
 
@@ -100,10 +71,38 @@ namespace SaveSystem
             yield return null;
             yield return null;
 
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.MuteSfx = false;
+            if (AudioManager.Instance != null) AudioManager.Instance.MuteSfx = false;
 
             Debug.Log("Session loaded. Silence mode finished after 3 frames.");
+        }
+
+        private void SaveCurrentState(int currentWave)
+        {
+            var data = new GameSessionData
+            {
+                currentWaveNumber = currentWave,
+                castleHp = castleSystem.CastleModel.Hp,
+                gold = castleSystem.CastleModel.Gold
+            };
+
+            foreach (var tower in towerSystem.GetTowers())
+            {
+                data.towers.Add(new TowerSaveData
+                {
+                    type = tower.Data.type,
+                    level = tower.Level,
+                    gridPosition = tower.GridPosition,
+                    worldPosition = tower.WorldPosition
+                });
+            }
+
+            foreach (var trap in trapSystem.GetTraps().Where(trap => trap.Hexes.Count > 0))
+                data.traps.Add(new TrapSaveData { type = trap.Data.trapType, centerHex = trap.Hexes[0] });
+
+            foreach (var building in castleSystem.CastleModel.Buildings)
+                data.buildings.Add(new BuildingSaveData { type = building.Data.type });
+
+            SessionSaveManager.SaveSession(data);
         }
     }
 }

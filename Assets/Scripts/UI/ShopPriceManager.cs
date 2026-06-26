@@ -1,15 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Core;
 using Logic.Castle;
 
 namespace UI
 {
     public class ShopPriceManager
     {
-        private readonly CastleModel castleModel;
-        private readonly List<ShopPriceLabel> labels;
-
         public ShopPriceManager(CastleModel castleModel, List<ShopPriceLabel> labels)
         {
             this.castleModel = castleModel;
@@ -18,16 +14,18 @@ namespace UI
             UpdateAllLabels();
         }
 
-        private void UpdateAllLabels()
-        {
-            var gold = castleModel.Gold;
-            foreach (var label in labels.Where(label => label != null))
-                label.Refresh(gold);
-        }
+        private readonly CastleModel castleModel;
+        private readonly List<ShopPriceLabel> labels;
 
         public void Cleanup()
         {
             castleModel.OnChanged -= UpdateAllLabels;
+        }
+
+        private void UpdateAllLabels()
+        {
+            var gold = castleModel.Gold;
+            foreach (var label in labels.Where(label => label != null)) label.Refresh(gold);
         }
     }
 }

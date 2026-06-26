@@ -17,6 +17,12 @@ namespace Misc
         private MonsterInteractionHandler lastHoveredMonster;
         private Canvas parentCanvas;
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            var monster = RaycastAtPosition(eventData.position);
+            if (monster) monster.OnPointerClick(eventData);
+        }
+
         private void Awake()
         {
             parentCanvas = GetComponentInParent<Canvas>();
@@ -39,13 +45,6 @@ namespace Misc
             UpdateMonsterHover(mousePos);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            var monster = RaycastAtPosition(eventData.position);
-            if (monster)
-                monster.OnPointerClick(eventData);
-        }
-
         private bool IsPointerBlockedByUI()
         {
             if (EventSystem.current == null) return false;
@@ -58,8 +57,7 @@ namespace Misc
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
 
-            if (results.Count > 0)
-                return results[0].gameObject != gameObject;
+            if (results.Count > 0) return results[0].gameObject != gameObject;
 
             return false;
         }
@@ -95,15 +93,13 @@ namespace Misc
                 : null;
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewportRect, screenPosition, uiCam,
-                    out var localPoint))
-                return null;
+                    out var localPoint)) return null;
 
             var rect = viewportRect.rect;
             var normX = Mathf.InverseLerp(rect.xMin, rect.xMax, localPoint.x);
             var normY = Mathf.InverseLerp(rect.yMin, rect.yMax, localPoint.y);
 
-            if (normX < 0 || normX > 1 || normY < 0 || normY > 1)
-                return null;
+            if (normX < 0 || normX > 1 || normY < 0 || normY > 1) return null;
 
             var ray = worldCamera.ViewportPointToRay(new Vector3(normX, normY, 0));
             var hit = Physics2D.GetRayIntersection(ray);

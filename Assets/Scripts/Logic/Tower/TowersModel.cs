@@ -6,6 +6,7 @@ namespace Logic.Tower
     public class TowersModel
     {
         private readonly List<TowerModel> towers = new();
+
         public IReadOnlyList<TowerModel> Towers => towers;
 
         public event Action<TowerModel> OnChanged;

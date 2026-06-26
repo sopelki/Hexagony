@@ -44,6 +44,7 @@ namespace UI
         private float infiniteModeNotificationDelay = 2f;
 
         private readonly Queue<NotificationRequest> queue = new();
+
         private bool isProcessing;
         private int totalWavesCount;
 
@@ -58,16 +59,14 @@ namespace UI
 
         public void ShowHint(string message)
         {
-            if (soundData == null)
-                return;
+            if (soundData == null) return;
 
             Enqueue(message, soundData.notificationSound, soundData.notificationVolume);
         }
 
         public void ShowWaveNotification(int waveNumber)
         {
-            if (soundData == null)
-                return;
+            if (soundData == null) return;
 
             var message = waveNumber <= totalWavesCount
                 ? $"Началась волна</color>\n<color=#A10009>{waveNumber} из {totalWavesCount}"
@@ -75,9 +74,6 @@ namespace UI
 
             Enqueue(message, soundData.waveNotificationSound, soundData.waveNotificationVolume);
         }
-
-        private void ShowInfiniteModeNotification() =>
-            ShowHint("Теперь волны\n<color=#A10009><b>не закончатся</b></color>");
 
         public IEnumerator ShowInfiniteDelayed()
         {
@@ -93,20 +89,18 @@ namespace UI
             panelRect.anchoredPosition = hiddenPosition;
         }
 
+        private void ShowInfiniteModeNotification()
+        {
+            ShowHint("Теперь волны\n<color=#A10009><b>не закончатся</b></color>");
+        }
+
         private void Enqueue(string message, AudioClip clip, float volume)
         {
-            if (queue.Any(r => r.Message == message))
-                return;
+            if (queue.Any(r => r.Message == message)) return;
 
-            queue.Enqueue(new NotificationRequest
-            {
-                Message = message,
-                Clip = clip,
-                Volume = volume
-            });
+            queue.Enqueue(new NotificationRequest { Message = message, Clip = clip, Volume = volume });
 
-            if (!isProcessing)
-                StartCoroutine(ProcessQueueRoutine());
+            if (!isProcessing) StartCoroutine(ProcessQueueRoutine());
         }
 
         private IEnumerator ProcessQueueRoutine()
@@ -118,16 +112,14 @@ namespace UI
                 var request = queue.Dequeue();
                 textElement.text = request.Message;
 
-                if (request.Clip)
-                    AudioManager.Instance.PlaySfx(request.Clip, request.Volume);
+                if (request.Clip) AudioManager.Instance.PlaySfx(request.Clip, request.Volume);
 
                 yield return MovePanel(hiddenPosition, visiblePosition, slideInDuration, entranceCurve);
 
                 float timer = 0;
                 while (timer < displayDuration)
                 {
-                    if (Time.timeScale > 0)
-                        timer += Time.unscaledDeltaTime;
+                    if (Time.timeScale > 0) timer += Time.unscaledDeltaTime;
                     yield return null;
                 }
 
@@ -157,8 +149,8 @@ namespace UI
 
         private struct NotificationRequest
         {
-            public string Message;
             public AudioClip Clip;
+            public string Message;
             public float Volume;
         }
     }

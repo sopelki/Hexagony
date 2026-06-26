@@ -8,22 +8,12 @@ namespace MenuScripts
     {
         [SerializeField]
         private float fadeDuration = 0.05f;
+
         private CanvasGroup canvasGroup;
         private Coroutine currentFade;
 
         public float FadeDuration => fadeDuration;
         public float CurrentAlpha => canvasGroup != null ? canvasGroup.alpha : 0f;
-
-        private void Awake()
-        {
-            EnsureCanvasGroup();
-        }
-
-        private void EnsureCanvasGroup()
-        {
-            if (canvasGroup == null)
-                canvasGroup = GetComponent<CanvasGroup>();
-        }
 
         public void Show()
         {
@@ -40,10 +30,8 @@ namespace MenuScripts
 
             if (currentFade != null) StopCoroutine(currentFade);
 
-            if (duration <= 0)
-                canvasGroup.alpha = 1f;
-            else
-                currentFade = StartCoroutine(FadeRoutine(1f, duration));
+            if (duration <= 0) canvasGroup.alpha = 1f;
+            else currentFade = StartCoroutine(FadeRoutine(1f, duration));
         }
 
         public void Hide()
@@ -57,16 +45,22 @@ namespace MenuScripts
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            if (canvasGroup.alpha <= 0f && currentFade == null)
-                return;
+            if (canvasGroup.alpha <= 0f && currentFade == null) return;
 
-            if (currentFade != null)
-                StopCoroutine(currentFade);
+            if (currentFade != null) StopCoroutine(currentFade);
 
-            if (duration <= 0)
-                canvasGroup.alpha = 0f;
-            else
-                currentFade = StartCoroutine(FadeRoutine(0f, duration));
+            if (duration <= 0) canvasGroup.alpha = 0f;
+            else currentFade = StartCoroutine(FadeRoutine(0f, duration));
+        }
+
+        private void Awake()
+        {
+            EnsureCanvasGroup();
+        }
+
+        private void EnsureCanvasGroup()
+        {
+            if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         }
 
         private IEnumerator FadeRoutine(float targetAlpha, float duration)

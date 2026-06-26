@@ -9,28 +9,8 @@ namespace Logic.Monster
 {
     public class MonsterModel : IDamageable
     {
-        private readonly float baseMoveSpeed;
-
-        public readonly MonsterData Data;
-        private readonly SoundData soundData;
-        private IAttackStrategy attackStrategy;
-
-        private int currentHealth;
-
-        private bool deathEventSent;
-
-        private IMovementStrategy movementStrategy;
-        public int TargetedByUnits;
-
-        public MonsterModel(
-            Vector3 startWorldPos,
-            Vector2Int startHex,
-            MonsterData data,
-            float healthMultiplier,
-            float damageMultiplier,
-            float speedMultiplier,
-            float goldMultiplier,
-            SoundData soundData)
+        public MonsterModel(Vector3 startWorldPos, Vector2Int startHex, MonsterData data, float healthMultiplier,
+            float damageMultiplier, float speedMultiplier, float goldMultiplier, SoundData soundData)
         {
             WorldPosition = startWorldPos;
             CurrentHex = startHex;
@@ -50,35 +30,53 @@ namespace Logic.Monster
             this.soundData = soundData;
         }
 
-        public Vector3 WorldPosition { get; private set; }
+        public readonly MonsterData Data;
+
+        public int TargetedByUnits;
+
+        private IAttackStrategy attackStrategy;
+
+        private readonly float baseMoveSpeed;
+
+        private int currentHealth;
+
+        private bool deathEventSent;
+
+        private IMovementStrategy movementStrategy;
+        private readonly SoundData soundData;
+
+        public float AttackCooldown { get; }
+        public float AttackRadius { get; }
         public Vector2Int CurrentHex { get; private set; }
         public Vector3 CurrentVelocity { get; private set; }
-        public MonsterDebuffSystem DebuffSystem { get; }
-
-        public int MaxHealth { get; }
         public int Damage { get; }
-        public float MoveSpeed => DebuffSystem.ModifyMoveSpeed(baseMoveSpeed);
-        public float AttackRadius { get; }
-        public float AttackCooldown { get; }
+        public MonsterDebuffSystem DebuffSystem { get; }
         public int GoldReward { get; }
 
         public Vector3 HitPosition => WorldPosition + new Vector3(0, Data.hitOffsetY, 0);
 
         public bool IsDead => currentHealth <= 0;
 
-        public void TakeDamage(int damage)
+        public int MaxHealth { get; }
+        public float MoveSpeed => DebuffSystem.ModifyMoveSpeed(baseMoveSpeed);
+
+        public Vector3 WorldPosition { get; private set; }
+
+        public event Action OnAttack;
+        public event Action OnDamaged;
+        public event Action OnDied;
+
+        public void Attack()
         {
-            if (IsDead)
-                return;
-            currentHealth -= damage;
+            OnAttack?.Invoke();
+        }
 
-            OnDamaged?.Invoke();
+        public void Die()
+        {
+            if (deathEventSent) return;
 
-            if (soundData != null &&
-                soundData.monsterDamageSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
-            if (currentHealth <= 0)
-                Die();
+            deathEventSent = true;
+            OnDied?.Invoke();
         }
 
         public bool HasImmunity(TrapType trapType)
@@ -87,29 +85,6 @@ namespace Logic.Monster
             var immune = Data.immuneTraps != null && Data.immuneTraps.Contains(trapType);
             Debug.Log($"Проверка иммунитета для {Data.name} к {trapType}: {immune}");
             return immune;
-        }
-
-        public event Action OnAttack;
-        public event Action OnDamaged;
-        public event Action OnDied;
-
-        public void Tick()
-        {
-            if (IsDead)
-            {
-                CurrentVelocity = Vector3.zero;
-                return;
-            }
-
-            CurrentVelocity = Vector3.zero;
-
-            DebuffSystem.Tick(TickManager.Instance.tickInterval);
-            attackStrategy?.Tick();
-
-            if (attackStrategy?.IsAttacking == true)
-                return;
-
-            movementStrategy?.Tick();
         }
 
         public void Move(Vector3 direction)
@@ -125,18 +100,9 @@ namespace Logic.Monster
             CurrentHex = hex;
         }
 
-        public void Attack()
+        public void SetPosition(Vector3 newPosition)
         {
-            OnAttack?.Invoke();
-        }
-
-        public void Die()
-        {
-            if (deathEventSent)
-                return;
-
-            deathEventSent = true;
-            OnDied?.Invoke();
+            WorldPosition = newPosition;
         }
 
         public void SetStrategies(IMovementStrategy movement, IAttackStrategy attack)
@@ -145,16 +111,41 @@ namespace Logic.Monster
             attackStrategy = attack;
         }
 
-        public void SetPosition(Vector3 newPosition)
-        {
-            WorldPosition = newPosition;
-        }
-
         public void StopAndIdle()
         {
             movementStrategy = null;
             attackStrategy = null;
             CurrentVelocity = Vector3.zero;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (IsDead) return;
+            currentHealth -= damage;
+
+            OnDamaged?.Invoke();
+
+            if (soundData != null && soundData.monsterDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.monsterDamageSounds, soundData.monsterDamageVolume);
+            if (currentHealth <= 0) Die();
+        }
+
+        public void Tick()
+        {
+            if (IsDead)
+            {
+                CurrentVelocity = Vector3.zero;
+                return;
+            }
+
+            CurrentVelocity = Vector3.zero;
+
+            DebuffSystem.Tick(TickManager.Instance.tickInterval);
+            attackStrategy?.Tick();
+
+            if (attackStrategy?.IsAttacking == true) return;
+
+            movementStrategy?.Tick();
         }
     }
 }

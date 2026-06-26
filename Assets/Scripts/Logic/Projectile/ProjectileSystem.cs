@@ -9,15 +9,15 @@ namespace Logic.Projectile
 {
     public class ProjectileSystem
     {
-        private readonly MonsterSystem monsterSystem;
-        private readonly List<ProjectileModel> projectiles = new();
-        private readonly SoundData soundData;
-
         public ProjectileSystem(MonsterSystem monsterSystem, SoundData soundData)
         {
             this.monsterSystem = monsterSystem;
             this.soundData = soundData;
         }
+
+        private readonly MonsterSystem monsterSystem;
+        private readonly List<ProjectileModel> projectiles = new();
+        private readonly SoundData soundData;
 
         public event Action<ProjectileModel> OnProjectileCreated;
         public event Action<ProjectileModel> OnProjectileDestroyed;
@@ -36,11 +36,85 @@ namespace Logic.Projectile
             {
                 var p = projectiles[i];
 
-                if (p.Data.isHoming)
-                    UpdateHoming(p, step, i);
-                else
-                    UpdateStraight(p, step, i);
+                if (p.Data.isHoming) UpdateHoming(p, step, i);
+                else UpdateStraight(p, step, i);
             }
+        }
+
+        private void PlayHitSound(bool isHoming)
+        {
+            AudioClip[] sound;
+            float volume;
+
+            if (isHoming)
+            {
+                sound = soundData.mageTowerHitSounds;
+                volume = soundData.mageHitVolume;
+            }
+            else
+            {
+                sound = soundData.archerTowerHitSounds;
+                volume = soundData.archerHitVolume;
+            }
+
+            if (soundData != null && soundData.archerTowerHitSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(sound, volume);
+        }
+
+
+        private void Remove(int index)
+        {
+            var p = projectiles[index];
+            projectiles.RemoveAt(index);
+            OnProjectileDestroyed?.Invoke(p);
+        }
+
+        private void TryApplyDamage(ProjectileModel p)
+        {
+            if (p.Target == null) return;
+
+            if (p.Data.aoeRadius <= 0f)
+            {
+                if (!p.Target.IsDead)
+                {
+                    p.Target.TakeDamage(p.Damage);
+                    PlayHitSound(p.Data.isHoming);
+                }
+
+                return;
+            }
+
+            foreach (var monster in monsterSystem.GetAllMonsters())
+            {
+                if (monster.IsDead) continue;
+
+                var dist = Vector3.Distance(monster.WorldPosition, p.Position);
+
+                if (!(dist <= p.Data.aoeRadius)) continue;
+
+                Debug.Log("ApplyDamage: " + p.Damage);
+                monster.TakeDamage(p.Damage);
+                PlayHitSound(p.Data.isHoming);
+            }
+        }
+
+        private void UpdateHoming(ProjectileModel p, float step, int index)
+        {
+            var dir = (p.Target.HitPosition - p.Position).normalized;
+
+            p.Position += dir * p.Data.speed * step;
+
+            var dist = Vector3.Distance(p.Position, p.Target.HitPosition);
+
+            if (dist <= 0.2f)
+            {
+                TryApplyDamage(p);
+                Remove(index);
+                return;
+            }
+
+            if (p.Data.maxTravelDistance > 0f &&
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance) Remove(index);
         }
 
         private void UpdateStraight(ProjectileModel p, float step, int index)
@@ -67,90 +141,7 @@ namespace Logic.Projectile
             }
 
             if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
-        }
-
-        private void UpdateHoming(ProjectileModel p, float step, int index)
-        {
-            var dir = (p.Target.HitPosition - p.Position).normalized;
-
-            p.Position += dir * p.Data.speed * step;
-
-            var dist = Vector3.Distance(p.Position, p.Target.HitPosition);
-
-            if (dist <= 0.2f)
-            {
-                TryApplyDamage(p);
-                Remove(index);
-                return;
-            }
-
-            if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
-        }
-
-        private void TryApplyDamage(ProjectileModel p)
-        {
-            if (p.Target == null)
-                return;
-
-            if (p.Data.aoeRadius <= 0f)
-            {
-                if (!p.Target.IsDead)
-                {
-                    p.Target.TakeDamage(p.Damage);
-                    PlayHitSound(p.Data.isHoming);
-                }
-
-                return;
-            }
-
-            foreach (var monster in monsterSystem.GetAllMonsters())
-            {
-                if (monster.IsDead)
-                    continue;
-
-                var dist =
-                    Vector3.Distance(monster.WorldPosition, p.Position);
-
-                if (!(dist <= p.Data.aoeRadius))
-                    continue;
-
-                Debug.Log("ApplyDamage: " + p.Damage);
-                monster.TakeDamage(p.Damage);
-                PlayHitSound(p.Data.isHoming);
-            }
-        }
-
-        private void PlayHitSound(bool isHoming)
-        {
-            AudioClip[] sound;
-            float volume;
-
-            if (isHoming)
-            {
-                sound = soundData.mageTowerHitSounds;
-                volume = soundData.mageHitVolume;
-            }
-            else
-            {
-                sound = soundData.archerTowerHitSounds;
-                volume = soundData.archerHitVolume;
-            }
-
-            if (soundData != null &&
-                soundData.archerTowerHitSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(sound, volume);
-        }
-
-
-        private void Remove(int index)
-        {
-            var p = projectiles[index];
-            projectiles.RemoveAt(index);
-            OnProjectileDestroyed?.Invoke(p);
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance) Remove(index);
         }
     }
 }

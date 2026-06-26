@@ -8,8 +8,6 @@ namespace Logic.Castle
 {
     public class CastleModel : IDamageable
     {
-        private readonly SoundData soundData;
-
         public CastleModel(int initialHp, int initialGold, int startSupply, SoundData soundData)
         {
             Hp = initialHp;
@@ -19,34 +17,19 @@ namespace Logic.Castle
             MaxSupply = startSupply;
         }
 
-        public int Hp { get; set; }
-        public int MaxHp { get; set; }
+        private readonly SoundData soundData;
+
+        public List<BuildingModel> Buildings { get; private set; } = new();
         public int Gold { get; set; }
+
+        public int Hp { get; set; }
+
+        public bool IsDead => Hp <= 0;
+        public int MaxHp { get; set; }
         public int MaxSupply { get; set; }
 
         public List<Vector2Int> WallHexes { get; set; } = new();
         public List<Vector3> WallWorldPositions { get; set; } = new();
-
-        public List<BuildingModel> Buildings { get; private set; } = new();
-
-        public bool IsDead => Hp <= 0;
-
-        public void TakeDamage(int damage)
-        {
-            if (IsDead)
-                return;
-            Debug.Log("Castle Damage took " + damage);
-            Hp -= damage;
-            OnDamaged?.Invoke(damage);
-            Changed();
-
-            if (soundData != null &&
-                soundData.castleDamageSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(soundData.castleDamageSounds, soundData.castleDamageVolume);
-
-            if (Hp <= 0)
-                OnCastleDestroyed?.Invoke();
-        }
 
         public event Action OnCastleDestroyed;
 
@@ -65,6 +48,20 @@ namespace Logic.Castle
             OnChanged = null;
             OnDamaged = null;
             OnCastleDestroyed = null;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (IsDead) return;
+            Debug.Log("Castle Damage took " + damage);
+            Hp -= damage;
+            OnDamaged?.Invoke(damage);
+            Changed();
+
+            if (soundData != null && soundData.castleDamageSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(soundData.castleDamageSounds, soundData.castleDamageVolume);
+
+            if (Hp <= 0) OnCastleDestroyed?.Invoke();
         }
     }
 }

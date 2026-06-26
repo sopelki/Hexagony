@@ -18,16 +18,11 @@ namespace Logic.Monster
             OnMonsterCreated?.Invoke(monster);
         }
 
+        public IReadOnlyList<MonsterModel> GetAllMonsters() => monsters;
+
         public void SubscribeToCastle(CastleModel castle)
         {
-            if (castle != null)
-                castle.OnCastleDestroyed += HandleCastleDestroyed;
-        }
-
-        private void HandleCastleDestroyed()
-        {
-            foreach (var monster in monsters.Where(monster => !monster.IsDead))
-                monster.StopAndIdle();
+            if (castle != null) castle.OnCastleDestroyed += HandleCastleDestroyed;
         }
 
         public void Tick()
@@ -38,16 +33,15 @@ namespace Logic.Monster
 
                 monster.Tick();
 
-                if (!monster.IsDead)
-                    continue;
+                if (!monster.IsDead) continue;
                 OnMonsterDied?.Invoke(monster);
                 monsters.RemoveAt(i);
             }
         }
 
-        public IReadOnlyList<MonsterModel> GetAllMonsters()
+        private void HandleCastleDestroyed()
         {
-            return monsters;
+            foreach (var monster in monsters.Where(monster => !monster.IsDead)) monster.StopAndIdle();
         }
     }
 }

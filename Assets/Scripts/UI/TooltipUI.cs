@@ -37,6 +37,7 @@ namespace UI
         private float targetTransparency = 0.7f;
         [SerializeField]
         private Vector3 startScale = new(0.8f, 0.8f, 1f);
+
         private Canvas canvas;
         private CanvasGroup canvasGroup;
 
@@ -45,26 +46,6 @@ namespace UI
         private RectTransform rectTransform;
         private float targetAlpha;
         private Vector3 targetScale;
-
-        private void Awake()
-        {
-            Instance = this;
-            rectTransform = GetComponent<RectTransform>();
-            canvasGroup = GetComponent<CanvasGroup>();
-            canvas = GetComponentInParent<Canvas>().rootCanvas;
-
-            canvasGroup.alpha = 0;
-            rectTransform.localScale = startScale;
-            panel.SetActive(false);
-        }
-
-        private void Update()
-        {
-            Animate();
-
-            if (panel.activeSelf)
-                UpdatePosition();
-        }
 
         public void Show(TooltipContent content)
         {
@@ -89,6 +70,25 @@ namespace UI
             targetScale = startScale;
         }
 
+        private void Awake()
+        {
+            Instance = this;
+            rectTransform = GetComponent<RectTransform>();
+            canvasGroup = GetComponent<CanvasGroup>();
+            canvas = GetComponentInParent<Canvas>().rootCanvas;
+
+            canvasGroup.alpha = 0;
+            rectTransform.localScale = startScale;
+            panel.SetActive(false);
+        }
+
+        private void Update()
+        {
+            Animate();
+
+            if (panel.activeSelf) UpdatePosition();
+        }
+
         private void Animate()
         {
             var currentSpeed = isVisible ? fadeInSpeed : fadeOutSpeed;
@@ -98,19 +98,15 @@ namespace UI
             rectTransform.localScale =
                 Vector3.Lerp(rectTransform.localScale, targetScale, Time.unscaledDeltaTime * currentSpeed);
 
-            if (!isVisible && canvasGroup.alpha < 0.01f)
-                panel.SetActive(false);
+            if (!isVisible && canvasGroup.alpha < 0.01f) panel.SetActive(false);
         }
 
         private void UpdatePosition()
         {
             var mousePos = Mouse.current.position.ReadValue();
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                mousePos,
-                canvas.worldCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, mousePos,
+                canvas.worldCamera, out var localPoint);
 
             var panelWidth = rectTransform.rect.width;
             var panelHeight = rectTransform.rect.height;
@@ -118,11 +114,9 @@ namespace UI
             float finalOffsetX = offsetX;
             float finalOffsetY = offsetY;
 
-            if (mousePos.x + panelWidth + offsetX > Screen.width)
-                finalOffsetX = -panelWidth - offsetX;
+            if (mousePos.x + panelWidth + offsetX > Screen.width) finalOffsetX = -panelWidth - offsetX;
 
-            if (mousePos.y - panelHeight + offsetY < 0)
-                finalOffsetY = panelHeight - offsetY;
+            if (mousePos.y - panelHeight + offsetY < 0) finalOffsetY = panelHeight - offsetY;
 
             rectTransform.anchoredPosition = localPoint + new Vector2(finalOffsetX, finalOffsetY);
         }

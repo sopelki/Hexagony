@@ -20,39 +20,20 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+
         private CanvasGroup iconCanvasGroup;
         private Image sourceImage;
 
-        private void Awake()
-        {
-            if (buildingData != null && buildingData.viewPrefab != null)
-                sourceImage = buildingData.viewPrefab.GetComponentInChildren<Image>();
-
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
-
-            iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-            if (iconCanvasGroup == null)
-                iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
-
-            var trigger = gameObject.AddComponent<TooltipTrigger>();
-            trigger.SetContent(buildingData);
-        }
-
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (inventoryItemPrefab == null || canvas == null)
-                return;
+            if (inventoryItemPrefab == null || canvas == null) return;
 
             iconCanvasGroup.alpha = 0f;
 
             var itemGo = Instantiate(inventoryItemPrefab, canvas.transform);
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out var localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform,
+                eventData.position, eventData.pressEventCamera, out var localPoint);
 
             itemGo.GetComponent<RectTransform>().localPosition = localPoint;
 
@@ -81,12 +62,22 @@ namespace UI
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
-        public void OnEndDrag(PointerEventData eventData)
+        public void OnEndDrag(PointerEventData eventData) { }
+
+        private void Awake()
         {
+            if (buildingData != null && buildingData.viewPrefab != null)
+                sourceImage = buildingData.viewPrefab.GetComponentInChildren<Image>();
+
+            if (canvas == null) canvas = GetComponentInParent<Canvas>();
+
+            iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+            if (iconCanvasGroup == null) iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+
+            var trigger = gameObject.AddComponent<TooltipTrigger>();
+            trigger.SetContent(buildingData);
         }
 
         private void HandleItemDropped()

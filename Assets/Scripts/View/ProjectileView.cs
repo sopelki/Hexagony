@@ -21,6 +21,7 @@ namespace View
         private float referenceDistance = 8f;
         [SerializeField]
         private float minArcHeightFactor = 0.2f;
+
         private float animationTimer;
 
         private float currentDynamicHeight;
@@ -30,10 +31,23 @@ namespace View
 
         private ProjectileModel model;
 
+        public void Initialize(ProjectileModel projectileModel)
+        {
+            model = projectileModel;
+            lastVisualPosition = model.StartPosition;
+            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
+            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
+            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
+
+            if (!spriteRenderer) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            currentFrameIndex = 0;
+            animationTimer = 0f;
+        }
+
         private void Update()
         {
-            if (model == null)
-                return;
+            if (model == null) return;
 
             UpdateAnimation();
 
@@ -66,25 +80,9 @@ namespace View
             spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 1 : 3;
         }
 
-        public void Initialize(ProjectileModel projectileModel)
-        {
-            model = projectileModel;
-            lastVisualPosition = model.StartPosition;
-            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
-            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
-            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
-
-            if (!spriteRenderer)
-                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-            currentFrameIndex = 0;
-            animationTimer = 0f;
-        }
-
         private void UpdateAnimation()
         {
-            if (animationFrames == null || animationFrames.Length == 0)
-                return;
+            if (animationFrames == null || animationFrames.Length == 0) return;
 
             animationTimer += Time.deltaTime;
 
@@ -99,8 +97,7 @@ namespace View
         private void ApplyRotation(Vector3 currentPos)
         {
             var diff = currentPos - lastVisualPosition;
-            if (diff.magnitude < 0.001f)
-                return;
+            if (diff.magnitude < 0.001f) return;
 
             var angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -110,8 +107,7 @@ namespace View
         {
             var dir = targetPosition - transform.position;
 
-            if (dir.sqrMagnitude < 0.01f)
-                return;
+            if (dir.sqrMagnitude < 0.01f) return;
 
             var direction = dir.normalized;
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

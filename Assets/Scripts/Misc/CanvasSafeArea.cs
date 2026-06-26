@@ -22,8 +22,7 @@ namespace Misc
 
         private void ApplySafeArea()
         {
-            if (safeAreaTransform == null)
-                return;
+            if (safeAreaTransform == null) return;
 
             var windowAspect = (float)Screen.width / Screen.height;
             var scaleHeight = windowAspect / targetAspect;

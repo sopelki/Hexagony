@@ -64,22 +64,6 @@ namespace UI
         private Color originalColor;
         private WaveManager waveManager;
 
-        private void Awake()
-        {
-            originalColor = hpText.color;
-        }
-
-        private void OnDestroy()
-        {
-            if (model != null)
-            {
-                model.OnChanged -= UpdateUI;
-                model.OnDamaged -= HandleDamage;
-            }
-            if (waveManager != null)
-                waveManager.OnWaveStarting -= UpdateWaveUi;
-        }
-
         public void Initialize(CastleSystem castleSystem, WaveManager waveManager)
         {
             model = castleSystem.CastleModel;
@@ -98,6 +82,91 @@ namespace UI
             UpdateUI();
         }
 
+        public void UpdateWaveUi(int waveNumber)
+        {
+            if (waveNumber != lastWave)
+            {
+                ShakeGroup(waveRow);
+                lastWave = waveNumber;
+            }
+            waveText.text = $"{waveNumber}";
+        }
+
+        public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
+        {
+            var allSlots = FindObjectsByType<DropSlot>();
+            for (var i = 0; i < savedBuildings.Count; i++)
+            {
+                if (i >= allSlots.Length) break;
+
+                var buildingData = savedBuildings[i].Data;
+                var container = allSlots[i].transform.Find("ItemContainer");
+                if (container == null) continue;
+
+                var itemGo = Instantiate(inventoryItemPrefab, container);
+                var item = itemGo.GetComponent<InventoryItem>();
+
+                if (item != null)
+                {
+                    item.SetData(buildingData, false);
+                    item.ApplyBuildingVisual(buildingData);
+                    item.Place(container);
+                }
+            }
+        }
+
+        private void Awake()
+        {
+            originalColor = hpText.color;
+        }
+
+        private void OnDestroy()
+        {
+            if (model != null)
+            {
+                model.OnChanged -= UpdateUI;
+                model.OnDamaged -= HandleDamage;
+            }
+            if (waveManager != null) waveManager.OnWaveStarting -= UpdateWaveUi;
+        }
+
+        private void UpdateUI()
+        {
+            if (model.Gold != lastGold)
+            {
+                ShakeGroup(goldRow);
+                lastGold = model.Gold;
+            }
+
+            var currentUnits = castleSystem.CurrentUnitsCount;
+            if (currentUnits != lastUnits || model.MaxSupply != lastMaxSupply)
+            {
+                ShakeGroup(foodRow);
+                lastUnits = currentUnits;
+                lastMaxSupply = model.MaxSupply;
+            }
+
+            var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
+            if (hpPercent == 0 && model.Hp > 0) hpPercent = 1;
+
+            hpText.text = $"{hpPercent}%";
+            goldText.text = model.Gold.ToString();
+            foodText.text = $"{currentUnits}/{model.MaxSupply}";
+            waveText.text = $"{waveManager.CurrentWaveNumber}";
+
+            if (model.Hp <= 0) hpText.color = damageColor;
+            else if (flashCoroutine == null) hpText.color = originalColor;
+        }
+
+        private void HandleDamage(int damage)
+        {
+            ShakeGroup(hpRow);
+
+            if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+
+            flashCoroutine = StartCoroutine(FlashHpRoutine());
+        }
+
         private void ShakeGroup(StatRow row)
         {
             if (row == null) return;
@@ -111,8 +180,7 @@ namespace UI
         {
             if (target == null) return;
 
-            if (activeShakes.TryGetValue(target, out var routine) && routine != null)
-                StopCoroutine(routine);
+            if (activeShakes.TryGetValue(target, out var routine) && routine != null) StopCoroutine(routine);
 
             activeShakes[target] = StartCoroutine(SingleElementShakeRoutine(target, punchAmount));
         }
@@ -142,56 +210,6 @@ namespace UI
             activeShakes[target] = null;
         }
 
-        public void UpdateWaveUi(int waveNumber)
-        {
-            if (waveNumber != lastWave)
-            {
-                ShakeGroup(waveRow);
-                lastWave = waveNumber;
-            }
-            waveText.text = $"{waveNumber}";
-        }
-
-        private void UpdateUI()
-        {
-            if (model.Gold != lastGold)
-            {
-                ShakeGroup(goldRow);
-                lastGold = model.Gold;
-            }
-
-            var currentUnits = castleSystem.CurrentUnitsCount;
-            if (currentUnits != lastUnits || model.MaxSupply != lastMaxSupply)
-            {
-                ShakeGroup(foodRow);
-                lastUnits = currentUnits;
-                lastMaxSupply = model.MaxSupply;
-            }
-
-            var hpPercent = model.MaxHp > 0 ? (int)Math.Round((double)Math.Max(0, model.Hp) / model.MaxHp * 100) : 0;
-            if (hpPercent == 0 && model.Hp > 0) hpPercent = 1;
-
-            hpText.text = $"{hpPercent}%";
-            goldText.text = model.Gold.ToString();
-            foodText.text = $"{currentUnits}/{model.MaxSupply}";
-            waveText.text = $"{waveManager.CurrentWaveNumber}";
-
-            if (model.Hp <= 0)
-                hpText.color = damageColor;
-            else if (flashCoroutine == null)
-                hpText.color = originalColor;
-        }
-
-        private void HandleDamage(int damage)
-        {
-            ShakeGroup(hpRow);
-
-            if (flashCoroutine != null)
-                StopCoroutine(flashCoroutine);
-
-            flashCoroutine = StartCoroutine(FlashHpRoutine());
-        }
-
         private IEnumerator FlashHpRoutine()
         {
             var elapsed = 0f;
@@ -211,29 +229,6 @@ namespace UI
             hpText.color = model.Hp <= 0 ? damageColor : originalColor;
             hpText.transform.localScale = originalScale;
             flashCoroutine = null;
-        }
-
-        public void SyncBuildingsUI(List<BuildingModel> savedBuildings)
-        {
-            var allSlots = FindObjectsByType<DropSlot>();
-            for (var i = 0; i < savedBuildings.Count; i++)
-            {
-                if (i >= allSlots.Length) break;
-
-                var buildingData = savedBuildings[i].Data;
-                var container = allSlots[i].transform.Find("ItemContainer");
-                if (container == null) continue;
-
-                var itemGo = Instantiate(inventoryItemPrefab, container);
-                var item = itemGo.GetComponent<InventoryItem>();
-
-                if (item != null)
-                {
-                    item.SetData(buildingData, false);
-                    item.ApplyBuildingVisual(buildingData);
-                    item.Place(container);
-                }
-            }
         }
 
         [Serializable]

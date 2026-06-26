@@ -7,53 +7,35 @@ namespace Logic.Monster
         public float Duration { get; protected set; }
         public bool IsFinished => Duration <= 0f;
 
-        public virtual void OnApply(MonsterModel monster)
-        {
-        }
+        public virtual float ModifyMoveSpeed(float baseValue) => baseValue;
 
-        public virtual void OnRemove(MonsterModel monster)
-        {
-        }
+        public virtual int ModifyOutgoingDamage(int baseValue) => baseValue;
+
+        public virtual void OnApply(MonsterModel monster) { }
+
+        public virtual void OnRemove(MonsterModel monster) { }
 
         public virtual void Tick(MonsterModel monster, float deltaTime)
         {
-            if (!Mathf.Approximately(Duration, float.MaxValue))
-                Duration -= deltaTime;
-        }
-
-        public virtual float ModifyMoveSpeed(float baseValue)
-        {
-            return baseValue;
-        }
-
-        public virtual int ModifyOutgoingDamage(int baseValue)
-        {
-            return baseValue;
+            if (!Mathf.Approximately(Duration, float.MaxValue)) Duration -= deltaTime;
         }
     }
 
     public class SlowDebuff : MonsterDebuff
     {
-        private readonly float slowPercent;
-
         public SlowDebuff(float slowPercent)
         {
             Duration = float.MaxValue;
             this.slowPercent = Mathf.Clamp01(slowPercent);
         }
 
-        public override float ModifyMoveSpeed(float baseValue)
-        {
-            return baseValue * (1f - slowPercent);
-        }
+        private readonly float slowPercent;
+
+        public override float ModifyMoveSpeed(float baseValue) => baseValue * (1f - slowPercent);
     }
 
     public class HealthDebuff : MonsterDebuff
     {
-        private readonly int damagePerTick;
-        private readonly float interval;
-        private float timer;
-
         public HealthDebuff(float duration, float interval, int damagePerTick)
         {
             Duration = duration;
@@ -61,12 +43,16 @@ namespace Logic.Monster
             this.damagePerTick = damagePerTick;
         }
 
+        private readonly int damagePerTick;
+        private readonly float interval;
+
+        private float timer;
+
         public override void Tick(MonsterModel monster, float deltaTime)
         {
             base.Tick(monster, deltaTime);
 
-            if (monster.IsDead)
-                return;
+            if (monster.IsDead) return;
 
             timer += deltaTime;
 

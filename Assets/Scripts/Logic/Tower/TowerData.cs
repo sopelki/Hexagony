@@ -23,6 +23,7 @@ namespace Logic.Tower
         public float rangeMultiplierPerLevel = 1.1f;
         public float fireRateMultiplierPerLevel = 1.25f;
         public int maxLevel = 5;
+
         public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)
@@ -33,12 +34,7 @@ namespace Logic.Tower
                 $"Скорость: <color=#FF7733>{fireRate}с</color> (<color=#FF7733>+{fireRateMultiplierPerLevel * 100 % 100}%</color>)\n" +
                 $"Дальность: <color=#FFA726>{range}</color> (<color=#FFA726>+{rangeMultiplierPerLevel * 100 % 100}%</color>)";
 
-            return new TooltipContent
-            {
-                Title = type.GetRussianName(),
-                Description = description,
-                SpecialInfo = stats
-            };
+            return new TooltipContent { Title = type.GetRussianName(), Description = description, SpecialInfo = stats };
         }
     }
 }

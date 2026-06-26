@@ -38,35 +38,12 @@ namespace UI
         private Color targetColor;
         private Vector3 targetScale;
 
-        public BuildingData BuildingData => buildingData;
+        public event Action OnDropped;
+
         public Transform OriginalParent { get; private set; }
         public bool IsFromShop { get; private set; }
 
-        private void Awake()
-        {
-            dragHandler = GetComponent<CastleDragHandler>();
-            canvasGroup = GetComponent<CanvasGroup>();
-            itemImage = GetComponent<Image>();
-
-            originalScale = transform.localScale;
-            targetScale = originalScale;
-            originalColor = itemImage.color;
-            normalDraggingColor = new Color(originalColor.r, originalColor.g, originalColor.b, draggingAlpha);
-            invalidColor = new Color(1f, 0.6f, 0.6f, draggingAlpha);
-            targetColor = originalColor;
-        }
-
-        private void Update()
-        {
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
-            itemImage.color = Color.Lerp(itemImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
-        }
-
-        private void OnDisable()
-        {
-            if (isDragging)
-                OnEndDrag(null);
-        }
+        public BuildingData BuildingData => buildingData;
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -76,18 +53,14 @@ namespace UI
             canvasGroup.blocksRaycasts = false;
             targetColor = invalidColor;
 
-            if (!IsFromShop)
-                CaptureState();
+            if (!IsFromShop) CaptureState();
         }
 
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
+        public void OnDrag(PointerEventData eventData) { }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging)
-                return;
+            if (!isDragging) return;
 
             GlobalCursorManager.Instance.ReleaseHold(eventData);
             isDragging = false;
@@ -100,10 +73,8 @@ namespace UI
 
             if (transform.parent == dragHandler.MainCanvas.transform)
             {
-                if (IsFromShop)
-                    Destroy(gameObject);
-                else
-                    ReturnToStart();
+                if (IsFromShop) Destroy(gameObject);
+                else ReturnToStart();
             }
         }
 
@@ -122,8 +93,6 @@ namespace UI
                 }
             }
         }
-
-        public event Action OnDropped;
 
         public void SetDraggingScale(float multiplier)
         {
@@ -157,6 +126,31 @@ namespace UI
 
             if (AudioManager.Instance != null && soundData != null)
                 AudioManager.Instance.PlaySfx(soundData.buildingPlaceSound, soundData.buildingPlacementVolume);
+        }
+
+        private void Awake()
+        {
+            dragHandler = GetComponent<CastleDragHandler>();
+            canvasGroup = GetComponent<CanvasGroup>();
+            itemImage = GetComponent<Image>();
+
+            originalScale = transform.localScale;
+            targetScale = originalScale;
+            originalColor = itemImage.color;
+            normalDraggingColor = new Color(originalColor.r, originalColor.g, originalColor.b, draggingAlpha);
+            invalidColor = new Color(1f, 0.6f, 0.6f, draggingAlpha);
+            targetColor = originalColor;
+        }
+
+        private void OnDisable()
+        {
+            if (isDragging) OnEndDrag(null);
+        }
+
+        private void Update()
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
+            itemImage.color = Color.Lerp(itemImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
         }
 
         private void CaptureState()

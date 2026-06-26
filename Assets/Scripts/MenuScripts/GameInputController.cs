@@ -35,8 +35,7 @@ namespace MenuScripts
 
         private void Start()
         {
-            if (speedUpIcon)
-                speedUpIcon.Hide(0);
+            if (speedUpIcon) speedUpIcon.Hide(0);
 
             if (rendererData != null)
                 psxFeature = rendererData.rendererFeatures.OfType<PsxRendererFeature>().FirstOrDefault();
@@ -44,13 +43,16 @@ namespace MenuScripts
             UpdateVfx(0);
         }
 
+        private void OnDisable()
+        {
+            UpdateVfx(0);
+        }
+
         private void Update()
         {
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-                HandleEscape();
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) HandleEscape();
 
-            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-                HandleSpeedToggle();
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) HandleSpeedToggle();
 
             var isAnyMenuOpen = IsAnyMenuOpen();
 
@@ -59,17 +61,10 @@ namespace MenuScripts
                 Time.timeScale = speedUpMultiplier;
                 UpdateVfx(vhsTrackingTarget);
 
-                if (speedUpIcon && speedUpIcon.CurrentAlpha < 0.1f)
-                    speedUpIcon.Show();
+                if (speedUpIcon && speedUpIcon.CurrentAlpha < 0.1f) speedUpIcon.Show();
             }
 
-            if (isAnyMenuOpen)
-                UpdateVfx(0f);
-        }
-
-        private void OnDisable()
-        {
-            UpdateVfx(0);
+            if (isAnyMenuOpen) UpdateVfx(0f);
         }
 
         private void HandleSpeedToggle()
@@ -118,11 +113,9 @@ namespace MenuScripts
                 return;
             }
 
-            if (endGameMenu && endGameMenu.IsAnyEndGameOpen)
-                return;
+            if (endGameMenu && endGameMenu.IsAnyEndGameOpen) return;
 
-            if (pauseMenu)
-                pauseMenu.OpenPause();
+            if (pauseMenu) pauseMenu.OpenPause();
         }
 
         private bool IsAnyMenuOpen()
