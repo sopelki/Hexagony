@@ -25,10 +25,9 @@ namespace MenuScripts
         {
             lastPanel = mainMenuPanel;
 
-            if (lastPanel != null) lastPanel.Hide(lastPanel.FadeDuration);
+            if (lastPanel) lastPanel.Hide(lastPanel.FadeDuration);
 
-            gameObject.SetActive(true);
-            difficultyPanel.Show();
+            if (difficultyPanel) difficultyPanel.Show();
         }
 
         public void CloseMenu()
@@ -36,8 +35,6 @@ namespace MenuScripts
             difficultyPanel.Hide();
 
             if (lastPanel != null) lastPanel.Show(lastPanel.FadeDuration);
-
-            Invoke(nameof(DeactivatePanel), difficultyPanel.FadeDuration);
         }
 
         public void StartEasyGame()
@@ -61,11 +58,6 @@ namespace MenuScripts
         private void Awake()
         {
             difficultyPanel = GetComponent<FadePanel>();
-        }
-
-        private void DeactivatePanel()
-        {
-            gameObject.SetActive(false);
         }
 
         private void StartNewGame()

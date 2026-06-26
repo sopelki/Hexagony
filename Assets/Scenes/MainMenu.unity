@@ -1093,6 +1093,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -188
       objectReference: {fileID: 0}
+    - target: {fileID: 5550843414177878620, guid: fd7a8f8208ef1b544a66272799e33320, type: 3}
+      propertyPath: fadeDuration
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5763004529201731168, guid: fd7a8f8208ef1b544a66272799e33320, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
