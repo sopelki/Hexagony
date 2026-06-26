@@ -1,4 +1,7 @@
-﻿using Misc;
+﻿using System.Collections.Generic;
+using Core;
+using Logic.Monster;
+using Misc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +27,9 @@ namespace MenuScripts
         [SerializeField] private Button tabCastleButton;
         [SerializeField] private Button tabFieldButton;
         [SerializeField] private Button tabMonsterButton;
+        
+        [Header("Монстры")]
+        [SerializeField] private List<MonsterData> monstersList;
 
         public bool IsOpen => helpPanel != null && helpPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
@@ -126,52 +132,34 @@ namespace MenuScripts
                 "▪ <color=#dfe88b><b>Колья:</b></color> Наносят стабильный <b>урон </b><nobr>всем, кто</nobr> стоит на них.\n" +
                 "▪ <color=#dfe88b><b>Капкан:</b></color> Наносит <b>критический удар </b><nobr>и исчезает.</nobr>\n";
         }
-
+        
         public void ShowMonsters()
         {
             UpdateTabs(tabMonsterButton);
             textBackground.Show();
             titleText.text = "<color=#EF5350>МОНСТРЫ</color>";
-            descriptionText.text =
-                "<color=#90CAF9><b>ГОБЛИН</b></color>: Базовый враг и основная ударная сила нечисти." +
-                "<line-height=20px>\n</line-height>" +
-                "<line-height=60%>" +
-                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 55\n" +
-                "▪️ <color=#dfe88b><b>Урон:</b></color> 20\n" +
-                "▪️ <color=#dfe88b><b>Награда:</b></color> 8\n" +
-                "</line-height>" +
-                "<line-height=-15px>\n</line-height>" +
-                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
-                "<line-height=20px>\n</line-height>" +
-                "<line-height=60%>" +
-                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
-                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
-                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
-                "</line-height>" +
-                "<line-height=-15px>\n</line-height>" +
-                "<color=#90CAF9><b>СКЕЛЕТ</b></color>: Тяжеловес и самый опасный <nobr>из врагов.</nobr>" +
-                "<line-height=20px>\n</line-height>" +
-                "<line-height=60%>" +
-                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 65\n" +
-                "▪️ <color=#dfe88b><b>Урон:</b></color> 35\n" +
-                "▪️ <color=#dfe88b><b>Награда:</b></color> 16\n" +
-                "</line-height>" +
-                "<line-height=-15px>\n</line-height>" +
-                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
-                "<line-height=20px>\n</line-height>" +
-                "<line-height=60%>" +
-                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
-                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
-                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
-                "</line-height>" +
-                "<line-height=-15px>\n</line-height>" +
-                "<color=#90CAF9><b>ГОБЛИН С РОГАТКОЙ</b></color>: <nobr>Монстр, который</nobr> будет отвлекать ваших рыцарей." +
-                "<line-height=20px>\n</line-height>" +
-                "<line-height=60%>" +
-                "▪️ <color=#dfe88b><b>Здоровье:</b></color> 45\n" +
-                "▪️ <color=#dfe88b><b>Урон:</b></color> 10\n" +
-                "▪️ <color=#dfe88b><b>Награда:</b></color> 12\n" +
-                "</line-height>";
+            
+            var (hMult, dMult, gMult) = DifficultyManager.GetCurrentMultipliers();
+    
+            var resultText = "";
+
+            foreach (var monster in monstersList)
+            {
+                var hp = Mathf.RoundToInt(monster.maxHealth * hMult);
+                var dmg = Mathf.RoundToInt(monster.damage * dMult);
+                var reward = Mathf.RoundToInt(monster.goldReward * gMult);
+
+                resultText += $"<color=#90CAF9><b>{monster.monsterName.ToUpper()}</b></color>\n" +
+                              $"<b>{monster.monsterDescription}</b>\n" +
+                              $"<line-height=60%>" +
+                              $"▪️ <color=#dfe88b><b>Здоровье:</b></color> {hp}\n" +
+                              $"▪️ <color=#dfe88b><b>Урон:</b></color> {dmg}\n" +
+                              $"▪️ <color=#dfe88b><b>Награда:</b></color> {reward}\n" +
+                              $"</line-height>" +
+                              "<line-height=-15px>\n</line-height>";
+            }
+
+            descriptionText.text = resultText;
             Canvas.ForceUpdateCanvases();
         }
     }

@@ -16,9 +16,14 @@ MonoBehaviour:
   damage: 40
   moveSpeed: 1
   goldReward: 20
+  monsterName: "\u0413\u041E\u0411\u041B\u0418\u041D \u041C\u0423\u0422\u0410\u041D\u0422"
+  monsterDescription: "\u0422\u044F\u0436\u0435\u043B\u043E\u0432\u0435\u0441 \u0438
+    \u0441\u0430\u043C\u044B\u0439 \u043E\u043F\u0430\u0441\u043D\u044B\u0439 <nobr>\u0438\u0437
+    \u0432\u0440\u0430\u0433\u043E\u0432.</nobr>"
   attackRadius: 1
   attackCooldown: 1.5
   attackType: 0
+  immuneTraps: 
   prefab: {fileID: 6346340308779131127, guid: 83faa41ba479eed429f7917e820a69df, type: 3}
   hitOffsetY: 0
   visualOffsetY: 0.6

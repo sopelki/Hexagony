@@ -15,6 +15,16 @@ namespace Core
                 PlayerPrefs.Save();
             }
         }
+        
+        public static (float healthMult, float dmgMult, float goldMult) GetCurrentMultipliers()
+        {
+            return CurrentDifficulty switch
+            {
+                GameDifficulty.Easy   => (0.75f, 0.75f, 1.33f),
+                GameDifficulty.Hard   => (1.25f, 1.25f, 0.8f),
+                _                     => (1.0f, 1.0f, 1.0f)
+            };
+        }
 
         public static float GetStatMultiplier()
         {
