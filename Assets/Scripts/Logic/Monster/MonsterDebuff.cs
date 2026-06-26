@@ -17,7 +17,7 @@ namespace Logic.Monster
 
         public virtual void Tick(MonsterModel monster, float deltaTime)
         {
-            if (Duration != float.MaxValue)
+            if (!Mathf.Approximately(Duration, float.MaxValue))
                 Duration -= deltaTime;
         }
 

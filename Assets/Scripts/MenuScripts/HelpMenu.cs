@@ -10,26 +10,31 @@ namespace MenuScripts
 {
     public class HelpMenu : MonoBehaviour
     {
-        [Header("Панель справки")]
+        private const string CGold = "#FFD54F"; // Заголовки
+        private const string CKey = "#dfe88b"; // Ключевые слова / Подзаголовки
+        private const string CDmg = "#EF5350"; // Урон / Опасность
+        private const string CSpd = "#FF7733"; // Скорость
+        private const string CHlp = "#66BB6A"; // Здоровье / Фермы
+        private const string CMag = "#AB47BC"; // Магия / Область
+        private const string CUpgrade = "#90CAF9"; // Улучшения / Синее
+
+        [Header("Panel")]
         [SerializeField]
         private FadePanel helpPanel;
-
         [SerializeField]
         private FadePanel menuBackground;
         [SerializeField]
         private FadePanel textBackground;
 
-        [Header("Текстовые поля (TextMeshPro)")]
+        [Header("Text")]
         [SerializeField]
         private TextMeshProUGUI titleText;
-
         [SerializeField]
         private TextMeshProUGUI descriptionText;
 
-        [Header("Кнопки вкладок (Ярлычки)")]
+        [Header("Tab buttons")]
         [SerializeField]
         private Button tabMechanicsButton;
-
         [SerializeField]
         private Button tabCastleButton;
         [SerializeField]
@@ -37,7 +42,7 @@ namespace MenuScripts
         [SerializeField]
         private Button tabMonsterButton;
 
-        [Header("Монстры")]
+        [Header("Monsters")]
         [SerializeField]
         private List<MonsterData> monstersList;
 
@@ -45,48 +50,28 @@ namespace MenuScripts
 
         private void Start()
         {
-            if (tabMechanicsButton != null)
-                tabMechanicsButton.onClick.AddListener(ShowMechanics);
-
-            if (tabCastleButton != null)
-                tabCastleButton.onClick.AddListener(ShowCastle);
-
-            if (tabFieldButton != null)
-                tabFieldButton.onClick.AddListener(ShowField);
-
-            if (tabMonsterButton != null)
-                tabMonsterButton.onClick.AddListener(ShowMonsters);
+            tabMechanicsButton?.onClick.AddListener(ShowMechanics);
+            tabCastleButton?.onClick.AddListener(ShowCastle);
+            tabFieldButton?.onClick.AddListener(ShowField);
+            tabMonsterButton?.onClick.AddListener(ShowMonsters);
         }
 
         public void OpenHelp()
         {
             UIBlocker.BlockAll();
-
-            if (helpPanel == null)
-                helpPanel = GetComponent<FadePanel>();
-
-            if (menuBackground != null)
-                menuBackground.Show();
-
-            helpPanel.Show();
+            helpPanel ??= GetComponent<FadePanel>();
+            menuBackground?.Show();
+            helpPanel?.Show();
             ShowMechanics();
-
             Time.timeScale = 0f;
         }
 
         public void CloseHelp()
         {
             UIBlocker.UnblockAll();
-
-            if (menuBackground)
-                menuBackground.Hide();
-
-            if (helpPanel)
-                helpPanel.Hide();
-
-            if (textBackground)
-                textBackground.Hide();
-
+            menuBackground?.Hide();
+            helpPanel?.Hide();
+            textBackground?.Hide();
             UpdateTabs();
             Time.timeScale = 1f;
         }
@@ -97,7 +82,6 @@ namespace MenuScripts
             tabCastleButton.interactable = true;
             tabFieldButton.interactable = true;
             tabMonsterButton.interactable = true;
-
             if (activeButton)
                 activeButton.interactable = false;
         }
@@ -106,52 +90,51 @@ namespace MenuScripts
         {
             UpdateTabs(tabMechanicsButton);
             textBackground.Show();
-            titleText.text = "<color=#FFD54F>ОСНОВЫ ИГРЫ</color>";
+            titleText.text = $"<color={CGold}>ОСНОВЫ ИГРЫ</color>";
             descriptionText.text =
-                "<b>Ваша миссия:</b> Не дать монстрам прорваться к воротам замка.\n" +
-                "▪ <color=#dfe88b><b>Подготовка:</b></color> Время застыло, пока вы <nobr>не разместите</nobr> свою первую постройку.\n" +
-                "▪ <color=#dfe88b><b>Ресурсы:</b></color> <b>Золото</b> добывается <nobr>за уничтожение</nobr> врагов.\n" +
-                "▪ <color=#dfe88b><b>Информация:</b></color> <nobr>Наведите курсор</nobr> <nobr>на объект, чтобы</nobr> увидеть его <color=#EF5350>урон </color><nobr>и <color=#FF7733>скорость</color></nobr>.\n" +
-                "▪ Если захотите  <color=#dfe88b>ускорить игру</color> — нажмите <color=#FFEE58>Пробел</color>. Чтобы вернуть, как было нажмите снова.";
+                $"<b>Ваша миссия:</b> Защитить ворота замка. Каждый прорвавшийся монстр наносит урон стенам. Если прочность упадет до нуля — <color={CDmg}>игра будет окончена</color>.\n\n" +
+                $"▪ <color={CKey}><b>Подготовка:</b></color> В начале игры время застыло. Это ваш шанс обдумать стратегию. Игра начнется автоматически, как только вы <color={CKey}><nobr>разместите первый объект</nobr></color>.\n\n" +
+                $"▪ <color={CKey}><b>Улучшение башен:</b></color> Вы можете повышать уровень ваших башен (макс. 5 уровень). Для этого <color={CKey}>перетащите новую башню</color> из магазина прямо на уже <nobr>установленную того же типа</nobr>. Улучшенная башня получает значительный <nobr>бонус к <color={CDmg}>урону</color></nobr>, <color={CSpd}>скорострельности</color> и дальности.\n\n" +
+                $"▪ <color={CKey}><b>Экономика:</b></color> <b>Золото</b> — ваш главный ресурс. Оно добывается <nobr>за уничтожение</nobr> врагов и необходимо для <nobr>строительства и улучшений</nobr>.\n\n" +
+                $"▪ <color={CKey}><b>Ускорение:</b></color> Если оборона надежна и вы не хотите ждать, нажмите <color={CKey}>Пробел</color>, чтобы <nobr>ускорить течение времени</nobr>. Повторное нажатие вернет обычную скорость.";
         }
 
         public void ShowCastle()
         {
             UpdateTabs(tabCastleButton);
             textBackground.Show();
-            titleText.text = "<color=#66BB6A>ЭКОНОМИКА ЗАМКА</color>";
+            titleText.text = $"<color={CHlp}>ЭКОНОМИКА ЗАМКА</color>";
             descriptionText.text =
-                "Здания во внутреннем дворе (сетка 3х3) определяют мощь вашей армии:\n" +
-                "▪ <color=#dfe88b><b>Казарма:</b></color> Автоматически нанимает рыцарей для защиты стен.\n" +
-                "▪ <color=#dfe88b><b>Ферма:</b></color> Увеличивает <b>лимит населения</b> для содержания армии.\n" +
-                "▪ <color=#dfe88b><b>Кузница:</b></color> Повышает <color=#EF5350>урон</color> ваших войск через улучшение стали.\n" +
-                "▪ <color=#dfe88b><b>Алхимик:</b></color> Увеличивает <color=#ade6a3>максимальное здоровье</color> всех защитников.\n";
+                $"Внутренний двор замка (сетка 4х4) предназначен для тыловых зданий. Они не атакуют сами, но дают <color={CUpgrade}>усиления</color>:\n\n" +
+                $"▪ <color={CKey}><b>Казарма:</b></color> Тренирует рыцарей, которые атакуют врагов. Каждая новая казарма <nobr>сокращает <color={CSpd}>время появления</color></nobr> новых бойцов.\n\n" +
+                $"▪ <color={CKey}><b>Ферма:</b></color> Обеспечивает провизию. Увеличивает <b>лимит населения</b>, позволяя вам <nobr>содержать более многочисленную</nobr> армию.\n\n" +
+                $"▪ <color={CKey}><b>Кузница:</b></color> Улучшает снаряжение. Дает <nobr>постоянную прибавку</nobr> к <color={CDmg}>силе атаки</color> для всех ваших воинов.\n\n" +
+                $"▪ <color={CKey}><b>Алхимик:</b></color> Варит зелья, увеличивающие <color={CHlp}>максимальный запас здоровья</color> <nobr>всех живых защитников</nobr> на поле.";
         }
 
         public void ShowField()
         {
             UpdateTabs(tabFieldButton);
             textBackground.Show();
-            titleText.text = "<color=#EF5350>ОБОРОНА ПОЛЯ</color>";
+            titleText.text = $"<color={CDmg}>ОБОРОНА ПОЛЯ</color>";
             descriptionText.text =
-                "<color=#90CAF9><b>БАШНИ</b></color>:\n" +
-                "▪ <color=#dfe88b><b>Маг:</b></color> Атакует магическими сферами <color=#AB47BC><nobr>по области (AoE)</nobr></color>.\n" +
-                "▪ <color=#dfe88b><b>Лучник:</b></color> Высокая <color=#FF7733>скорострельность </color><nobr>по одиночным</nobr> целям.\n" +
-                "<color=#90CAF9><b>ЛОВУШКИ</b></color>:\n" +
-                "▪ <color=#dfe88b><b>Лоза:</b></color> Оплетает монстров, значительно замедляя их ход.\n" +
-                "▪ <color=#dfe88b><b>Колья:</b></color> Наносят стабильный <b>урон </b><nobr>всем, кто</nobr> стоит на них.\n" +
-                "▪ <color=#dfe88b><b>Капкан:</b></color> Наносит <b>критический удар </b><nobr>и исчезает.</nobr>\n";
+                $"<color={CUpgrade}><b>БАШНИ</b></color> (Можно улучшать до 5 уровня):\n" +
+                $"▪ <color={CKey}><b>Лучник:</b></color> Базовая оборона. Обладает отличной <color={CSpd}>скорострельностью</color> и эффективно <nobr>устраняет одиночные цели</nobr>.\n" +
+                $"▪ <color={CKey}><b>Маг:</b></color> Обрушивает на врагов магические сферы. Наносит <color={CMag}>урон по области (AoE)</color>, что незаменимо против толп мелких монстров.\n\n" +
+                $"<color={CUpgrade}><b>ЛОВУШКИ</b></color> (Размещаются на пути следования):\n" +
+                $"▪ <color={CKey}><b>Лоза:</b></color> Магические растения, которые <nobr>значительно <color={CUpgrade}>замедляют</color></nobr> монстров, подставляя их под стрелы башен.\n" +
+                $"▪ <color={CKey}><b>Колья:</b></color> Преграда, которая наносит урон <nobr>всем противникам</nobr>, пока они находятся на этой клетке.\n" +
+                $"▪ <color={CKey}><b>Капкан:</b></color> Механическая ловушка. Срабатывает один раз, нанося <color={CDmg}>огромный критический урон</color> одиночной цели, после чего исчезает.";
         }
 
         public void ShowMonsters()
         {
             UpdateTabs(tabMonsterButton);
             textBackground.Show();
-            titleText.text = "<color=#EF5350>МОНСТРЫ</color>";
+            titleText.text = $"<color={CDmg}>БЕСТИАРИЙ</color>";
 
             var (hMult, dMult, gMult) = DifficultyManager.GetCurrentMultipliers();
-
-            var resultText = "";
+            var resultText = "<size=80%><i>Показатели монстров адаптированы под текущую сложность:</i></size>\n\n";
 
             foreach (var monster in monstersList)
             {
@@ -159,14 +142,9 @@ namespace MenuScripts
                 var dmg = Mathf.RoundToInt(monster.damage * dMult);
                 var reward = Mathf.RoundToInt(monster.goldReward * gMult);
 
-                resultText += $"<color=#90CAF9><b>{monster.monsterName.ToUpper()}</b></color>\n" +
-                              $"<b>{monster.monsterDescription}</b>\n" +
-                              "<line-height=60%>" +
-                              $"▪️ <color=#dfe88b><b>Здоровье:</b></color> {hp}\n" +
-                              $"▪️ <color=#dfe88b><b>Урон:</b></color> {dmg}\n" +
-                              $"▪️ <color=#dfe88b><b>Награда:</b></color> {reward}\n" +
-                              "</line-height>" +
-                              "<line-height=-15px>\n</line-height>";
+                resultText += $"<color={CUpgrade}><b>{monster.monsterName.ToUpper()}</b></color>\n" +
+                              $"<size=90%>{monster.monsterDescription}</size>\n" +
+                              $"▪️ <color={CKey}>Здоровье:</color> {hp} | <color={CKey}>Урон:</color> {dmg} | <color={CKey}>Награда:</color> {reward}\n\n";
             }
 
             descriptionText.text = resultText;
