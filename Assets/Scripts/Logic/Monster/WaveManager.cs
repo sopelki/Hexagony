@@ -18,6 +18,11 @@ namespace Logic.Monster
         private bool isDelaying;
 
         private bool waitingForNextWave;
+        
+        public event Action<int> OnWaveCleared;
+        public event Action OnGameWon;
+        public event Action<int> OnWaveStarting;
+        public event Action OnInfiniteModeStarted;
 
         public WaveManager(MonsterSpawner spawner, MonsterSystem monsterSystem, float delayBetweenWaves)
         {
@@ -66,10 +71,6 @@ namespace Logic.Monster
                 }
             }
         }
-
-        public event Action<int> OnWaveCleared;
-        public event Action OnGameWon;
-        public event Action<int> OnWaveStarting;
 
         private static void SaveHighScore(int wave)
         {
@@ -125,6 +126,7 @@ namespace Logic.Monster
             waitingForNextWave = false;
             isDelaying = true;
             delayTimer = delayBetweenWaves;
+            OnInfiniteModeStarted?.Invoke();
         }
     }
 }

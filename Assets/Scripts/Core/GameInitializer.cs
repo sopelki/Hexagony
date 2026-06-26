@@ -160,6 +160,7 @@ namespace Core
             {
                 notificationUI.Initialize(waves.Count);
                 waveManager.OnWaveStarting += notificationUI.ShowWaveNotification;
+                waveManager.OnInfiniteModeStarted += () => StartCoroutine(notificationUI.ShowInfiniteDelayed());
             }
 
 

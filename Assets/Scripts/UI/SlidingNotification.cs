@@ -40,6 +40,8 @@ namespace UI
         private float displayDuration = 3f;
         [SerializeField]
         private float queueDelay = 0.3f;
+        [SerializeField]
+        private float infiniteModeNotificationDelay = 2f;
 
         private readonly Queue<NotificationRequest> queue = new();
         private bool isProcessing;
@@ -72,6 +74,15 @@ namespace UI
                 : $"Началась волна\n<color=#A10009>{waveNumber}";
 
             Enqueue(message, soundData.waveNotificationSound, soundData.waveNotificationVolume);
+        }
+
+        private void ShowInfiniteModeNotification() =>
+            ShowHint("Теперь волны\n<color=#A10009><b>не закончатся</b></color>");
+
+        public IEnumerator ShowInfiniteDelayed()
+        {
+            yield return new WaitForSecondsRealtime(infiniteModeNotificationDelay);
+            ShowInfiniteModeNotification();
         }
 
         public void HideHint()

@@ -63,7 +63,7 @@ namespace View
                 yForSorting = groundPosition.y - (model.Target?.Data.hitOffsetY ?? 0) * t;
             }
 
-            spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 0 : 2;
+            spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 1 : 3;
         }
 
         public void Initialize(ProjectileModel projectileModel)
