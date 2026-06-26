@@ -26,12 +26,6 @@ namespace Field
         private Dictionary<TileBase, HexagonType> tileToTypeDict;
         private Dictionary<HexagonType, TileBase> typeToTileDict;
 
-        private void Awake()
-        {
-            myTilemap = GetComponent<Tilemap>();
-            SetupDictionaries();
-        }
-
         public Field GetFieldFromAsset()
         {
             if (currentLevel == null || currentLevel.jsonFile == null)
@@ -54,6 +48,12 @@ namespace Field
             ClearDecorations();
             DrawHexagons();
             DrawObjects();
+        }
+
+        private void Awake()
+        {
+            myTilemap = GetComponent<Tilemap>();
+            SetupDictionaries();
         }
 
         private static Field ConvertDataToField(FieldData data)

@@ -11,13 +11,6 @@ namespace UI
 
         public Canvas MainCanvas { get; private set; }
 
-        private void Awake()
-        {
-            rectTransform = GetComponent<RectTransform>();
-            canvasGroup = GetComponent<CanvasGroup>();
-            MainCanvas = GetComponentInParent<Canvas>();
-        }
-
         public void OnBeginDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = false;
@@ -40,6 +33,13 @@ namespace UI
             rectTransform.anchoredPosition = Vector2.zero;
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
+        }
+
+        private void Awake()
+        {
+            rectTransform = GetComponent<RectTransform>();
+            canvasGroup = GetComponent<CanvasGroup>();
+            MainCanvas = GetComponentInParent<Canvas>();
         }
     }
 }

@@ -17,6 +17,13 @@ namespace Misc
         private MonsterInteractionHandler lastHoveredMonster;
         private Canvas parentCanvas;
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            var monster = RaycastAtPosition(eventData.position);
+            if (monster)
+                monster.OnPointerClick(eventData);
+        }
+
         private void Awake()
         {
             parentCanvas = GetComponentInParent<Canvas>();
@@ -37,13 +44,6 @@ namespace Misc
             }
 
             UpdateMonsterHover(mousePos);
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            var monster = RaycastAtPosition(eventData.position);
-            if (monster)
-                monster.OnPointerClick(eventData);
         }
 
         private bool IsPointerBlockedByUI()

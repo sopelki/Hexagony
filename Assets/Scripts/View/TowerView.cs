@@ -18,16 +18,11 @@ namespace View
         [Header("Animation")]
         [SerializeField]
         private float animationDuration = 0.5f;
+
         private Coroutine levelAnimation;
 
         private Color originalColor;
         private Vector3 originalTextScale;
-
-        private void Awake()
-        {
-            if (levelText != null)
-                originalTextScale = levelText.transform.localScale;
-        }
 
         public void Initialize(Sprite sprite)
         {
@@ -49,6 +44,30 @@ namespace View
         public void SetLevel(int level)
         {
             StartLevelAnimation(level, originalColor);
+        }
+
+        private void Awake()
+        {
+            if (levelText != null)
+                originalTextScale = levelText.transform.localScale;
+        }
+
+        private static string IntToRoman(int number)
+        {
+            return number switch
+            {
+                1 => "I",
+                2 => "II",
+                3 => "III",
+                4 => "IV",
+                5 => "V",
+                6 => "VI",
+                7 => "VII",
+                8 => "VIII",
+                9 => "IX",
+                10 => "X",
+                _ => number.ToString()
+            };
         }
 
         private void StartLevelAnimation(int level, Color targetColor)
@@ -128,24 +147,6 @@ namespace View
                 shadowLevelText.text = roman;
             levelText.color = originalColor;
             levelText.transform.localScale = originalTextScale;
-        }
-
-        private static string IntToRoman(int number)
-        {
-            return number switch
-            {
-                1 => "I",
-                2 => "II",
-                3 => "III",
-                4 => "IV",
-                5 => "V",
-                6 => "VI",
-                7 => "VII",
-                8 => "VIII",
-                9 => "IX",
-                10 => "X",
-                _ => number.ToString()
-            };
         }
     }
 }

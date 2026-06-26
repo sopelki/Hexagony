@@ -12,15 +12,6 @@ namespace Logic.Trap
 {
     public class TrapSystem
     {
-        private readonly CastleSystem castleSystem;
-        private readonly Field.Field field;
-
-        private readonly MonsterSystem monsterSystem;
-        private readonly SoundData soundData;
-        private readonly TrapsModel trapsModel;
-
-        private bool firstTrapPlaced;
-
         public TrapSystem(MonsterSystem monsterSystem, TrapsModel trapsModel, Field.Field field,
             CastleSystem castleSystem, SoundData soundData)
         {
@@ -33,18 +24,18 @@ namespace Logic.Trap
             Instance = this;
         }
 
-        public static TrapSystem Instance { get; private set; }
-        public event Action OnFirstTrapPlaced;
+        private readonly CastleSystem castleSystem;
+        private readonly Field.Field field;
 
-        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex)
-        {
-            return new List<Vector2Int>
-            {
-                centerHex,
-                centerHex + new Vector2Int(0, -1),
-                centerHex + new Vector2Int(1, -1)
-            };
-        }
+        private bool firstTrapPlaced;
+
+        private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
+        private readonly TrapsModel trapsModel;
+
+        public static TrapSystem Instance { get; private set; }
+
+        public event Action OnFirstTrapPlaced;
 
         public bool CanPlaceTrap(TrapData data, Vector2Int axial)
         {
@@ -69,43 +60,25 @@ namespace Logic.Trap
             return true;
         }
 
-        public bool TryPlaceTrap(TrapData data, Vector2Int hex)
+        public void Clear()
         {
-            if (!CanPlaceTrap(data, hex))
-                return false;
-
-            var occupied = GetTrapOccupiedHexes(hex);
-
-            Debug.Log($"Placing trap at center AXIAL: {hex}");
-            foreach (var h in occupied)
-                Debug.Log($"Trap occupies AXIAL: {h}");
-
-            if (castleSystem.TrySpendGold(data.baseCost))
-            {
-                var trap = new TrapModel(data, GetTrapOccupiedHexes(hex));
-                trap.OnTriggered += HandleTrapTriggered;
-                trapsModel.AddTrap(trap);
-
-                if (soundData != null && soundData.trapPlaceSound != null)
-                    AudioManager.Instance.PlaySfx(soundData.trapPlaceSound);
-
-                if (!firstTrapPlaced)
-                {
-                    firstTrapPlaced = true;
-                    OnFirstTrapPlaced?.Invoke();
-                    Debug.Log("First trap placed. Game can start.");
-                }
-
-                return true;
-            }
-
-            return false;
+            trapsModel.Clear();
+            firstTrapPlaced = false;
         }
 
-        private void HandleTrapTriggered(TrapModel trap)
+        public List<Vector2Int> GetTrapOccupiedHexes(Vector2Int centerHex)
         {
-            trap.OnTriggered -= HandleTrapTriggered;
-            trapsModel.RemoveTrap(trap);
+            return new List<Vector2Int>
+            {
+                centerHex,
+                centerHex + new Vector2Int(0, -1),
+                centerHex + new Vector2Int(1, -1)
+            };
+        }
+
+        public List<TrapModel> GetTraps()
+        {
+            return (List<TrapModel>)trapsModel.Traps;
         }
 
         public void OnMonsterEnteredCell(Vector2Int hex, MonsterModel monster)
@@ -167,6 +140,53 @@ namespace Logic.Trap
             }
         }
 
+        public bool TryPlaceTrap(TrapData data, Vector2Int hex)
+        {
+            if (!CanPlaceTrap(data, hex))
+                return false;
+
+            var occupied = GetTrapOccupiedHexes(hex);
+
+            Debug.Log($"Placing trap at center AXIAL: {hex}");
+            foreach (var h in occupied)
+                Debug.Log($"Trap occupies AXIAL: {h}");
+
+            if (castleSystem.TrySpendGold(data.baseCost))
+            {
+                var trap = new TrapModel(data, GetTrapOccupiedHexes(hex));
+                trap.OnTriggered += HandleTrapTriggered;
+                trapsModel.AddTrap(trap);
+
+                if (soundData != null && soundData.trapPlaceSound != null)
+                    AudioManager.Instance.PlaySfx(soundData.trapPlaceSound);
+
+                if (!firstTrapPlaced)
+                {
+                    firstTrapPlaced = true;
+                    OnFirstTrapPlaced?.Invoke();
+                    Debug.Log("First trap placed. Game can start.");
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void HandleBearTrap(TrapModel trap, IReadOnlyList<MonsterModel> monsters)
+        {
+            var inZone = monsters.Where(m => !m.IsDead && trap.Hexes.Contains(m.CurrentHex)).ToList();
+            var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
+            if (weakMonsters.Count >= trap.Data.requiredMonsters)
+            {
+                foreach (var m in weakMonsters)
+                    m.TakeDamage(trap.Data.criticalDamage);
+                trap.Trigger();
+                Debug.Log("Bear trap triggered.");
+                trapsModel.RemoveTrap(trap);
+            }
+        }
+
         private static void HandleDamageZone(TrapModel trap, IReadOnlyList<MonsterModel> monsters, float delta)
         {
             trap.TickTimer += delta;
@@ -186,29 +206,10 @@ namespace Logic.Trap
             }
         }
 
-        private void HandleBearTrap(TrapModel trap, IReadOnlyList<MonsterModel> monsters)
+        private void HandleTrapTriggered(TrapModel trap)
         {
-            var inZone = monsters.Where(m => !m.IsDead && trap.Hexes.Contains(m.CurrentHex)).ToList();
-            var weakMonsters = inZone.Where(m => !m.HasImmunity(trap.Data.trapType)).ToList();
-            if (weakMonsters.Count >= trap.Data.requiredMonsters)
-            {
-                foreach (var m in weakMonsters)
-                    m.TakeDamage(trap.Data.criticalDamage);
-                trap.Trigger();
-                Debug.Log("Bear trap triggered.");
-                trapsModel.RemoveTrap(trap);
-            }
-        }
-
-        public List<TrapModel> GetTraps()
-        {
-            return (List<TrapModel>)trapsModel.Traps;
-        }
-
-        public void Clear()
-        {
-            trapsModel.Clear();
-            firstTrapPlaced = false;
+            trap.OnTriggered -= HandleTrapTriggered;
+            trapsModel.RemoveTrap(trap);
         }
     }
 }

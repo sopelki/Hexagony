@@ -10,29 +10,6 @@ namespace Logic.Unit
 {
     public class UnitAStarMoveStrategy : IMovementStrategy
     {
-        private const float RepathDelay = 0.5f;
-
-        private const float MinDistanceBetweenUnits = 2.0f;
-        private const float SeparationStrength = 2.5f;
-        private readonly Vector2Int baseHex = new(-16, 12);
-        private readonly Field.Field field;
-        private readonly Vector3 formationOffset;
-        private readonly MonsterSystem monsterSystem;
-        private readonly HexAStarPathfinder pathfinder;
-        private readonly Tilemap tilemap;
-        private readonly UnitModel unit;
-
-        private List<Vector2Int> currentPath;
-        private MonsterModel currentTarget;
-
-        private Vector2Int currentTargetHex;
-        private bool isPatrolling;
-        private int pathIndex;
-
-        private float patrolWaitTimer;
-
-        private float repathTimer;
-
         public UnitAStarMoveStrategy(
             UnitModel unit,
             MonsterSystem monsterSystem,
@@ -49,6 +26,28 @@ namespace Logic.Unit
                 Random.Range(-0.15f, 0.15f),
                 0f);
         }
+
+        private readonly Vector2Int baseHex = new(-16, 12);
+
+        private List<Vector2Int> currentPath;
+        private MonsterModel currentTarget;
+
+        private Vector2Int currentTargetHex;
+        private readonly Field.Field field;
+        private readonly Vector3 formationOffset;
+        private bool isPatrolling;
+        private const float MinDistanceBetweenUnits = 2.0f;
+        private readonly MonsterSystem monsterSystem;
+        private readonly HexAStarPathfinder pathfinder;
+        private int pathIndex;
+
+        private float patrolWaitTimer;
+        private const float RepathDelay = 0.5f;
+
+        private float repathTimer;
+        private const float SeparationStrength = 2.5f;
+        private readonly Tilemap tilemap;
+        private readonly UnitModel unit;
 
         public void Tick()
         {
@@ -120,6 +119,51 @@ namespace Logic.Unit
             ApplySeparation(dt);
         }
 
+        private void ApplySeparation(float dt)
+        {
+            var separationForce = Vector3.zero;
+            var allUnits = UnitSystem.Instance.GetAllUnits();
+            var overlapCount = 0;
+
+            foreach (var otherUnit in allUnits)
+            {
+                if (otherUnit == unit || otherUnit.IsDead)
+                    continue;
+
+                var distance = Vector3.Distance(unit.WorldPosition, otherUnit.WorldPosition);
+
+                if (distance < MinDistanceBetweenUnits)
+                {
+                    overlapCount++;
+                    var pushDirection = unit.WorldPosition - otherUnit.WorldPosition;
+
+                    if (pushDirection.sqrMagnitude < 0.001f)
+                        pushDirection = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0f);
+
+                    pushDirection.Normalize();
+                    separationForce += pushDirection * (1f - distance / MinDistanceBetweenUnits);
+                }
+            }
+
+            if (overlapCount > 0)
+            {
+                var newPosition = unit.WorldPosition + separationForce * SeparationStrength * dt;
+                var cellPos = tilemap.WorldToCell(newPosition);
+                var hexAtPos = field.GetHexByOffset(cellPos);
+                if (hexAtPos != null && field.IsWalkable(hexAtPos))
+                {
+                    unit.SetPosition(newPosition);
+                    unit.SetHex(hexAtPos.coordinates);
+                }
+                else
+                {
+                    var currentCell = tilemap.WorldToCell(unit.WorldPosition);
+                    if (cellPos == currentCell)
+                        unit.SetPosition(newPosition);
+                }
+            }
+        }
+
         private void BuildNewPath(MonsterModel target)
         {
             currentTargetHex = GetRandomizedGoal(target.CurrentHex);
@@ -129,34 +173,6 @@ namespace Logic.Unit
 
             if (currentPath == null || currentPath.Count <= 1)
                 currentPath = null;
-        }
-
-        private void MoveAlongPath()
-        {
-            var nextHex = currentPath[pathIndex];
-            var hexObj = field.GetHex(nextHex);
-
-            if (hexObj == null)
-                return;
-
-            var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
-            var currentPosition = unit.WorldPosition;
-
-            var step = unit.GetMoveSpeed() * TickManager.Instance.tickInterval;
-            var distance = Vector3.Distance(currentPosition, targetWorld);
-
-            if (distance <= step)
-            {
-                unit.SetPosition(targetWorld);
-                unit.SetHex(nextHex);
-                pathIndex++;
-            }
-            else
-            {
-                var direction = (targetWorld - currentPosition).normalized;
-                unit.SetPosition(currentPosition + direction * step);
-                unit.CurrentDirection = direction;
-            }
         }
 
         private Vector2Int GetRandomizedGoal(Vector2Int center)
@@ -217,48 +233,31 @@ namespace Logic.Unit
             }
         }
 
-        private void ApplySeparation(float dt)
+        private void MoveAlongPath()
         {
-            var separationForce = Vector3.zero;
-            var allUnits = UnitSystem.Instance.GetAllUnits();
-            var overlapCount = 0;
+            var nextHex = currentPath[pathIndex];
+            var hexObj = field.GetHex(nextHex);
 
-            foreach (var otherUnit in allUnits)
+            if (hexObj == null)
+                return;
+
+            var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
+            var currentPosition = unit.WorldPosition;
+
+            var step = unit.GetMoveSpeed() * TickManager.Instance.tickInterval;
+            var distance = Vector3.Distance(currentPosition, targetWorld);
+
+            if (distance <= step)
             {
-                if (otherUnit == unit || otherUnit.IsDead)
-                    continue;
-
-                var distance = Vector3.Distance(unit.WorldPosition, otherUnit.WorldPosition);
-
-                if (distance < MinDistanceBetweenUnits)
-                {
-                    overlapCount++;
-                    var pushDirection = unit.WorldPosition - otherUnit.WorldPosition;
-
-                    if (pushDirection.sqrMagnitude < 0.001f)
-                        pushDirection = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0f);
-
-                    pushDirection.Normalize();
-                    separationForce += pushDirection * (1f - distance / MinDistanceBetweenUnits);
-                }
+                unit.SetPosition(targetWorld);
+                unit.SetHex(nextHex);
+                pathIndex++;
             }
-
-            if (overlapCount > 0)
+            else
             {
-                var newPosition = unit.WorldPosition + separationForce * SeparationStrength * dt;
-                var cellPos = tilemap.WorldToCell(newPosition);
-                var hexAtPos = field.GetHexByOffset(cellPos);
-                if (hexAtPos != null && field.IsWalkable(hexAtPos))
-                {
-                    unit.SetPosition(newPosition);
-                    unit.SetHex(hexAtPos.coordinates);
-                }
-                else
-                {
-                    var currentCell = tilemap.WorldToCell(unit.WorldPosition);
-                    if (cellPos == currentCell)
-                        unit.SetPosition(newPosition);
-                }
+                var direction = (targetWorld - currentPosition).normalized;
+                unit.SetPosition(currentPosition + direction * step);
+                unit.CurrentDirection = direction;
             }
         }
     }

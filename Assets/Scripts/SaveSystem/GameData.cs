@@ -15,11 +15,6 @@ namespace SaveSystem
         public List<TrapData> allTraps;
         public List<BuildingData> allBuildings;
 
-        private void Awake()
-        {
-            Instance = this;
-        }
-
         public TowerData GetTowerData(TowerType type)
         {
             return allTowers.FirstOrDefault(t => t.type == type);
@@ -33,6 +28,11 @@ namespace SaveSystem
         public BuildingData GetBuildingData(BuildingType type)
         {
             return allBuildings.FirstOrDefault(b => b.type == type);
+        }
+
+        private void Awake()
+        {
+            Instance = this;
         }
     }
 }

@@ -12,7 +12,18 @@ namespace View
         private Transform parent;
 
         private readonly Dictionary<MonsterModel, MonsterView> views = new();
+
         private MonsterSystem system;
+
+        public void Initialize(MonsterSystem system)
+        {
+            this.system = system;
+
+            system.OnMonsterCreated += HandleCreated;
+
+            if (TickManager.Instance != null)
+                TickManager.Instance.OnTick += HandleTick;
+        }
 
         private void OnDestroy()
         {
@@ -23,14 +34,13 @@ namespace View
                 TickManager.Instance.OnTick -= HandleTick;
         }
 
-        public void Initialize(MonsterSystem system)
+        private void HandleDeathAnimationFinished(MonsterModel model)
         {
-            this.system = system;
-
-            system.OnMonsterCreated += HandleCreated;
-
-            if (TickManager.Instance != null)
-                TickManager.Instance.OnTick += HandleTick;
+            if (views.TryGetValue(model, out var view))
+            {
+                view.OnDeathAnimationFinished -= HandleDeathAnimationFinished;
+                views.Remove(model);
+            }
         }
 
         private void HandleCreated(MonsterModel model)
@@ -49,15 +59,6 @@ namespace View
             view.OnDeathAnimationFinished += HandleDeathAnimationFinished;
 
             views.Add(model, view);
-        }
-
-        private void HandleDeathAnimationFinished(MonsterModel model)
-        {
-            if (views.TryGetValue(model, out var view))
-            {
-                view.OnDeathAnimationFinished -= HandleDeathAnimationFinished;
-                views.Remove(model);
-            }
         }
 
         private void HandleTick()

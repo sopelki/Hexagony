@@ -8,13 +8,23 @@ namespace Core
 {
     public class SceneTransitions : MonoBehaviour
     {
-        [SerializeField] private float fadeDuration = 0.4f;
-        [SerializeField] private Color fadeColor = Color.black;
+        [SerializeField]
+        private float fadeDuration = 0.4f;
+        [SerializeField]
+        private Color fadeColor = Color.black;
 
         private CanvasGroup canvasGroup;
         private bool isTransitioning;
 
         public static SceneTransitions Instance { get; private set; }
+
+        public static void LoadScene(string sceneName, Action onBlackoutTask = null)
+        {
+            if (Instance == null || Instance.isTransitioning)
+                return;
+
+            Instance.StartCoroutine(Instance.FadeSequence(sceneName, onBlackoutTask));
+        }
 
         private void Awake()
         {
@@ -55,14 +65,6 @@ namespace Core
             rt.anchorMax = Vector2.one;
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
-        }
-
-        public static void LoadScene(string sceneName, Action onBlackoutTask = null)
-        {
-            if (Instance == null || Instance.isTransitioning)
-                return;
-
-            Instance.StartCoroutine(Instance.FadeSequence(sceneName, onBlackoutTask));
         }
 
         private IEnumerator FadeSequence(string sceneName, Action onBlackoutTask)

@@ -2,9 +2,9 @@ namespace Interfaces
 {
     public struct TooltipContent
     {
-        public string Title;
         public string Description;
         public string SpecialInfo;
+        public string Title;
     }
 
     public interface ITooltipProvider

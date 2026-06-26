@@ -5,15 +5,6 @@ namespace Logic.Projectile
 {
     public class ProjectileModel
     {
-        public ProjectileData Data;
-        public Vector3 Direction;
-        public Vector3 Position;
-        public Vector3 StartPosition;
-
-        public MonsterModel Target;
-        public Vector3 TargetPoint;
-        public float TravelProgress;
-
         public ProjectileModel(
             Vector3 startPos,
             MonsterModel target,
@@ -34,6 +25,15 @@ namespace Logic.Projectile
 
             TravelProgress = 0f;
         }
+
+        public ProjectileData Data;
+        public Vector3 Direction;
+        public Vector3 Position;
+        public Vector3 StartPosition;
+
+        public MonsterModel Target;
+        public Vector3 TargetPoint;
+        public float TravelProgress;
 
         public int Damage { get; set; }
 

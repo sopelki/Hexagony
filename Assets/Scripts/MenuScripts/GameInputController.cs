@@ -44,6 +44,11 @@ namespace MenuScripts
             UpdateVfx(0);
         }
 
+        private void OnDisable()
+        {
+            UpdateVfx(0);
+        }
+
         private void Update()
         {
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -65,11 +70,6 @@ namespace MenuScripts
 
             if (isAnyMenuOpen)
                 UpdateVfx(0f);
-        }
-
-        private void OnDisable()
-        {
-            UpdateVfx(0);
         }
 
         private void HandleSpeedToggle()

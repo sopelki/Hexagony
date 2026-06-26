@@ -12,24 +12,6 @@ namespace Logic.Monster
 {
     public class HexMoveToTargetStrategy : IMovementStrategy
     {
-        private const float RepathDelay = 0.7f;
-
-        private const float MinDistanceBetweenMonsters = 2.0f;
-        private const float SeparationStrength = 2.5f;
-        private readonly Field.Field field;
-
-        private readonly Vector3 formationOffset;
-        private readonly MonsterModel monster;
-        private readonly MonsterSystem monsterSystem;
-        private readonly HexAStarPathfinder pathfinder;
-        private readonly Tilemap tilemap;
-        private readonly TrapSystem trapSystem;
-
-        private List<Vector2Int> currentPath;
-        private int pathIndex;
-
-        private float repathTimer;
-
         public HexMoveToTargetStrategy(
             MonsterModel monster,
             Field.Field field,
@@ -50,6 +32,23 @@ namespace Logic.Monster
                 Random.Range(-0.2f, 0.2f),
                 0f);
         }
+
+        private List<Vector2Int> currentPath;
+
+        private readonly Field.Field field;
+
+        private readonly Vector3 formationOffset;
+        private const float MinDistanceBetweenMonsters = 2.0f;
+        private readonly MonsterModel monster;
+        private readonly MonsterSystem monsterSystem;
+        private readonly HexAStarPathfinder pathfinder;
+        private int pathIndex;
+        private const float RepathDelay = 0.7f;
+
+        private float repathTimer;
+        private const float SeparationStrength = 2.5f;
+        private readonly Tilemap tilemap;
+        private readonly TrapSystem trapSystem;
 
         public void Tick()
         {
@@ -77,101 +76,6 @@ namespace Logic.Monster
                 MoveAlongPath();
 
             ApplySeparation(dt);
-        }
-
-        private void BuildPath()
-        {
-            var castle = CastleSystem.Instance;
-
-            if (IsAdjacentToWall(monster.CurrentHex))
-            {
-                currentPath = null;
-                return;
-            }
-
-            var goal = GetBestSiegePosition();
-
-            if (goal == monster.CurrentHex)
-            {
-                currentPath = null;
-                return;
-            }
-
-            currentPath = pathfinder.FindPath(monster.CurrentHex, goal.Value);
-            pathIndex = 1;
-
-            if (currentPath is not { Count: > 1 })
-                currentPath = null;
-        }
-
-        private void MoveAlongPath()
-        {
-            var nextHex = currentPath[pathIndex];
-            var hexObj = field.GetHex(nextHex);
-
-            if (hexObj == null)
-                return;
-
-            var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
-            var directionVector = targetWorld - monster.WorldPosition;
-            var maxStep = monster.MoveSpeed * TickManager.Instance.tickInterval;
-
-            if (directionVector.magnitude <= maxStep)
-            {
-                monster.Move(directionVector / maxStep);
-                var previousHex = monster.CurrentHex;
-
-                monster.SetHex(nextHex);
-
-                trapSystem.OnMonsterExitedCell(previousHex, monster);
-                trapSystem.OnMonsterEnteredCell(nextHex, monster);
-
-                pathIndex++;
-            }
-            else
-                monster.Move(directionVector.normalized);
-        }
-
-        private Vector2Int? GetBestSiegePosition()
-        {
-            var castle = CastleSystem.Instance;
-            if (castle == null || castle.CastleModel.WallHexes.Count == 0) return null;
-
-            var validSiegePositions = new HashSet<Vector2Int>();
-
-            foreach (var wallCoord in castle.CastleModel.WallHexes)
-            {
-                var wallHex = field.GetHex(wallCoord);
-                if (wallHex == null) continue;
-
-                var walkableNeighbours = field.GetNeighbours(wallHex)
-                    .Where(n => field.IsWalkable(n))
-                    .Select(n => n.coordinates);
-
-                foreach (var pos in walkableNeighbours)
-                    validSiegePositions.Add(pos);
-            }
-
-            if (validSiegePositions.Count == 0)
-                return null;
-
-            var topPositions = validSiegePositions
-                .OrderBy(p => Vector2Int.Distance(monster.CurrentHex, p))
-                .Take(4)
-                .ToList();
-            return topPositions[Random.Range(0, topPositions.Count)];
-        }
-
-        private bool IsAdjacentToWall(Vector2Int hexCoord)
-        {
-            var hex = field.GetHex(hexCoord);
-            if (hex == null) return false;
-
-            var castle = CastleSystem.Instance;
-            if (castle == null) return false;
-
-            var neighbours = field.GetNeighbours(hex);
-            return neighbours.Any(n => castle.CastleModel.WallHexes.Contains(n.coordinates));
         }
 
         private void ApplySeparation(float dt)
@@ -225,6 +129,101 @@ namespace Logic.Monster
                         monster.SetPosition(newPosition);
                 }
             }
+        }
+
+        private void BuildPath()
+        {
+            var castle = CastleSystem.Instance;
+
+            if (IsAdjacentToWall(monster.CurrentHex))
+            {
+                currentPath = null;
+                return;
+            }
+
+            var goal = GetBestSiegePosition();
+
+            if (goal == monster.CurrentHex)
+            {
+                currentPath = null;
+                return;
+            }
+
+            currentPath = pathfinder.FindPath(monster.CurrentHex, goal.Value);
+            pathIndex = 1;
+
+            if (currentPath is not { Count: > 1 })
+                currentPath = null;
+        }
+
+        private Vector2Int? GetBestSiegePosition()
+        {
+            var castle = CastleSystem.Instance;
+            if (castle == null || castle.CastleModel.WallHexes.Count == 0) return null;
+
+            var validSiegePositions = new HashSet<Vector2Int>();
+
+            foreach (var wallCoord in castle.CastleModel.WallHexes)
+            {
+                var wallHex = field.GetHex(wallCoord);
+                if (wallHex == null) continue;
+
+                var walkableNeighbours = field.GetNeighbours(wallHex)
+                    .Where(n => field.IsWalkable(n))
+                    .Select(n => n.coordinates);
+
+                foreach (var pos in walkableNeighbours)
+                    validSiegePositions.Add(pos);
+            }
+
+            if (validSiegePositions.Count == 0)
+                return null;
+
+            var topPositions = validSiegePositions
+                .OrderBy(p => Vector2Int.Distance(monster.CurrentHex, p))
+                .Take(4)
+                .ToList();
+            return topPositions[Random.Range(0, topPositions.Count)];
+        }
+
+        private bool IsAdjacentToWall(Vector2Int hexCoord)
+        {
+            var hex = field.GetHex(hexCoord);
+            if (hex == null) return false;
+
+            var castle = CastleSystem.Instance;
+            if (castle == null) return false;
+
+            var neighbours = field.GetNeighbours(hex);
+            return neighbours.Any(n => castle.CastleModel.WallHexes.Contains(n.coordinates));
+        }
+
+        private void MoveAlongPath()
+        {
+            var nextHex = currentPath[pathIndex];
+            var hexObj = field.GetHex(nextHex);
+
+            if (hexObj == null)
+                return;
+
+            var targetWorld = tilemap.GetCellCenterWorld(hexObj.offset) + formationOffset;
+            var directionVector = targetWorld - monster.WorldPosition;
+            var maxStep = monster.MoveSpeed * TickManager.Instance.tickInterval;
+
+            if (directionVector.magnitude <= maxStep)
+            {
+                monster.Move(directionVector / maxStep);
+                var previousHex = monster.CurrentHex;
+
+                monster.SetHex(nextHex);
+
+                trapSystem.OnMonsterExitedCell(previousHex, monster);
+                trapSystem.OnMonsterEnteredCell(nextHex, monster);
+
+                pathIndex++;
+            }
+            else
+                monster.Move(directionVector.normalized);
         }
     }
 }

@@ -7,7 +7,9 @@ namespace Logic.Trap
     public class TrapsModel
     {
         private readonly List<TrapModel> traps = new();
+
         public IReadOnlyList<TrapModel> Traps => traps;
+
         public event Action<TrapModel> OnTrapAdded;
         public event Action<TrapModel> OnTrapRemoved;
 
@@ -17,6 +19,11 @@ namespace Logic.Trap
             OnTrapAdded?.Invoke(trap);
         }
 
+        public void Clear()
+        {
+            traps.Clear();
+        }
+
         public void RemoveTrap(TrapModel trap)
         {
             if (traps.Remove(trap))
@@ -24,11 +31,6 @@ namespace Logic.Trap
                 Debug.Log("2. МОДЕЛЬ: Капкан успешно удален из списка. Рассылаю событие!");
                 OnTrapRemoved?.Invoke(trap);
             }
-        }
-
-        public void Clear()
-        {
-            traps.Clear();
         }
     }
 }

@@ -32,49 +32,6 @@ namespace MenuScripts
 
         private CrtRendererFeature crtFeature;
 
-        private void Start()
-        {
-            if (rendererData != null)
-            {
-                crtFeature = rendererData.rendererFeatures
-                    .OfType<CrtRendererFeature>()
-                    .FirstOrDefault();
-            }
-
-            LoadUIValues();
-        }
-
-        private void LoadUIValues()
-        {
-            masterSlider.SetValueWithoutNotify(LoadAndApply("MasterVol", 0.75f));
-            musicSlider.SetValueWithoutNotify(LoadAndApply("MusicVol", 0.75f));
-            sfxSlider.SetValueWithoutNotify(LoadAndApply("SfxVol", 0.75f));
-            uiSlider.SetValueWithoutNotify(LoadAndApply("UiVol", 0.75f));
-
-            if (tutorialToggle)
-                tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
-
-            if (fullscreenToggle)
-                fullscreenToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("Fullscreen", 1) == 1);
-
-            if (crtToggle)
-            {
-                var savedState = PlayerPrefs.GetInt("CRTEnabled", 1) == 1;
-                crtToggle.SetIsOnWithoutNotify(savedState);
-                SetCrtEffect(savedState);
-            }
-        }
-
-        private static float LoadAndApply(string key, float defaultValue)
-        {
-            var val = PlayerPrefs.GetFloat(key, defaultValue);
-
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.SetMixerVolume(key, val);
-
-            return val;
-        }
-
         public void SetMasterVolume(float val)
         {
             UpdateVolume("MasterVol", val);
@@ -93,15 +50,6 @@ namespace MenuScripts
         public void SetUiVolume(float val)
         {
             UpdateVolume("UiVol", val);
-        }
-
-        private static void UpdateVolume(string key, float val)
-        {
-            if (!AudioManager.Instance)
-                return;
-
-            AudioManager.Instance.SetMixerVolume(key, val);
-            PlayerPrefs.SetFloat(key, val);
         }
 
         public void SetFullscreen(bool isFullscreen)
@@ -132,6 +80,58 @@ namespace MenuScripts
             }
             PlayerPrefs.SetInt("CRTEnabled", isEnabled ? 1 : 0);
             PlayerPrefs.Save();
+        }
+
+        private void Start()
+        {
+            if (rendererData != null)
+            {
+                crtFeature = rendererData.rendererFeatures
+                    .OfType<CrtRendererFeature>()
+                    .FirstOrDefault();
+            }
+
+            LoadUIValues();
+        }
+
+        private static float LoadAndApply(string key, float defaultValue)
+        {
+            var val = PlayerPrefs.GetFloat(key, defaultValue);
+
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.SetMixerVolume(key, val);
+
+            return val;
+        }
+
+        private static void UpdateVolume(string key, float val)
+        {
+            if (!AudioManager.Instance)
+                return;
+
+            AudioManager.Instance.SetMixerVolume(key, val);
+            PlayerPrefs.SetFloat(key, val);
+        }
+
+        private void LoadUIValues()
+        {
+            masterSlider.SetValueWithoutNotify(LoadAndApply("MasterVol", 0.75f));
+            musicSlider.SetValueWithoutNotify(LoadAndApply("MusicVol", 0.75f));
+            sfxSlider.SetValueWithoutNotify(LoadAndApply("SfxVol", 0.75f));
+            uiSlider.SetValueWithoutNotify(LoadAndApply("UiVol", 0.75f));
+
+            if (tutorialToggle)
+                tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("ShowTutorial", 1) == 1);
+
+            if (fullscreenToggle)
+                fullscreenToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("Fullscreen", 1) == 1);
+
+            if (crtToggle)
+            {
+                var savedState = PlayerPrefs.GetInt("CRTEnabled", 1) == 1;
+                crtToggle.SetIsOnWithoutNotify(savedState);
+                SetCrtEffect(savedState);
+            }
         }
     }
 }

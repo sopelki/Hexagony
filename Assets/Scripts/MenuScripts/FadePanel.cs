@@ -8,22 +8,12 @@ namespace MenuScripts
     {
         [SerializeField]
         private float fadeDuration = 0.05f;
+
         private CanvasGroup canvasGroup;
         private Coroutine currentFade;
 
         public float FadeDuration => fadeDuration;
         public float CurrentAlpha => canvasGroup != null ? canvasGroup.alpha : 0f;
-
-        private void Awake()
-        {
-            EnsureCanvasGroup();
-        }
-
-        private void EnsureCanvasGroup()
-        {
-            if (canvasGroup == null)
-                canvasGroup = GetComponent<CanvasGroup>();
-        }
 
         public void Show()
         {
@@ -67,6 +57,17 @@ namespace MenuScripts
                 canvasGroup.alpha = 0f;
             else
                 currentFade = StartCoroutine(FadeRoutine(0f, duration));
+        }
+
+        private void Awake()
+        {
+            EnsureCanvasGroup();
+        }
+
+        private void EnsureCanvasGroup()
+        {
+            if (canvasGroup == null)
+                canvasGroup = GetComponent<CanvasGroup>();
         }
 
         private IEnumerator FadeRoutine(float targetAlpha, float duration)

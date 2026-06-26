@@ -8,14 +8,10 @@ namespace UI
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         private const float Delay = 0.5f;
+
         private Coroutine delayCoroutine;
         private bool isBought;
         private ITooltipProvider provider;
-
-        private void OnDisable()
-        {
-            StopDisplay();
-        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -39,12 +35,6 @@ namespace UI
             isBought = bought;
         }
 
-        private IEnumerator ShowWithDelay()
-        {
-            yield return new WaitForSecondsRealtime(Delay);
-            TooltipUI.Instance.Show(provider.GetTooltipContent(isBought));
-        }
-
         public void StopDisplay()
         {
             if (delayCoroutine != null)
@@ -52,6 +42,17 @@ namespace UI
 
             if (TooltipUI.Instance != null)
                 TooltipUI.Instance.Hide();
+        }
+
+        private void OnDisable()
+        {
+            StopDisplay();
+        }
+
+        private IEnumerator ShowWithDelay()
+        {
+            yield return new WaitForSecondsRealtime(Delay);
+            TooltipUI.Instance.Show(provider.GetTooltipContent(isBought));
         }
     }
 }

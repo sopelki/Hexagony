@@ -10,18 +10,6 @@ namespace MenuScripts
 {
     public class HelpMenu : MonoBehaviour
     {
-        private const string CGold = "#FFD54F";
-        private const string CKey = "#dfe88b";
-        private const string CDmg = "#EF5350";
-        private const string CSpd = "#FF7733";
-        private const string CHlp = "#66BB6A";
-        private const string CMag = "#AB47BC";
-        private const string CUpgrade = "#90CAF9";
-
-        private const string StartLh = "<line-height=115%>";
-        private const string EndLh = "</line-height>";
-        private const string ParaGap = "\n\n";
-
         [Header("Panel")]
         [SerializeField]
         private FadePanel helpPanel;
@@ -50,15 +38,19 @@ namespace MenuScripts
         [SerializeField]
         private List<MonsterData> monstersList;
 
-        public bool IsOpen => helpPanel != null && helpPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
+        private const string CGold = "#FFD54F";
+        private const string CKey = "#dfe88b";
+        private const string CDmg = "#EF5350";
+        private const string CSpd = "#FF7733";
+        private const string CHlp = "#66BB6A";
+        private const string CMag = "#AB47BC";
+        private const string CUpgrade = "#90CAF9";
 
-        private void Start()
-        {
-            tabMechanicsButton?.onClick.AddListener(ShowMechanics);
-            tabCastleButton?.onClick.AddListener(ShowCastle);
-            tabFieldButton?.onClick.AddListener(ShowField);
-            tabMonsterButton?.onClick.AddListener(ShowMonsters);
-        }
+        private const string StartLh = "<line-height=115%>";
+        private const string EndLh = "</line-height>";
+        private const string ParaGap = "\n\n";
+
+        public bool IsOpen => helpPanel != null && helpPanel.GetComponent<CanvasGroup>().alpha > 0.5f;
 
         public void OpenHelp()
         {
@@ -78,15 +70,6 @@ namespace MenuScripts
             textBackground?.Hide();
             UpdateTabs();
             Time.timeScale = 1f;
-        }
-
-        private void UpdateTabs(Button activeButton = null)
-        {
-            tabMechanicsButton.interactable = true;
-            tabCastleButton.interactable = true;
-            tabFieldButton.interactable = true;
-            tabMonsterButton.interactable = true;
-            if (activeButton) activeButton.interactable = false;
         }
 
         public void ShowMechanics()
@@ -115,7 +98,7 @@ namespace MenuScripts
             titleText.text = $"<color={CHlp}>ЭКОНОМИКА ЗАМКА</color>";
 
             descriptionText.text = StartLh +
-                                   $"Здания во внутреннем дворе (сетка 4х4) обеспечивают вашу армию пассивными бонусами и подкреплением" +
+                                   "Здания во внутреннем дворе (сетка 4х4) обеспечивают вашу армию пассивными бонусами и подкреплением" +
                                    ParaGap +
                                    $"▪ <color={CKey}><b>Казарма:\n</b></color> Автоматически призывает рыцарей. Каждая новая казарма значительно <color={CSpd}>ускоряет время появления</color> новых воинов." +
                                    ParaGap +
@@ -171,6 +154,23 @@ namespace MenuScripts
 
             descriptionText.text = resultText + EndLh;
             Canvas.ForceUpdateCanvases();
+        }
+
+        private void Start()
+        {
+            tabMechanicsButton?.onClick.AddListener(ShowMechanics);
+            tabCastleButton?.onClick.AddListener(ShowCastle);
+            tabFieldButton?.onClick.AddListener(ShowField);
+            tabMonsterButton?.onClick.AddListener(ShowMonsters);
+        }
+
+        private void UpdateTabs(Button activeButton = null)
+        {
+            tabMechanicsButton.interactable = true;
+            tabCastleButton.interactable = true;
+            tabFieldButton.interactable = true;
+            tabMonsterButton.interactable = true;
+            if (activeButton) activeButton.interactable = false;
         }
     }
 }

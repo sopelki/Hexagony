@@ -10,13 +10,6 @@ namespace Logic.Monster
 {
     public class MonsterAttackStrategy : IAttackStrategy
     {
-        private readonly MonsterModel monsterModel;
-        private readonly SoundData soundData;
-        private readonly UnitSystem unitSystem;
-
-        private float currentCooldown;
-        private IDamageable currentTarget;
-
         public MonsterAttackStrategy(
             MonsterModel monsterModel,
             UnitSystem unitSystem,
@@ -26,6 +19,12 @@ namespace Logic.Monster
             this.unitSystem = unitSystem;
             this.soundData = soundData;
         }
+
+        private float currentCooldown;
+        private IDamageable currentTarget;
+        private readonly MonsterModel monsterModel;
+        private readonly SoundData soundData;
+        private readonly UnitSystem unitSystem;
 
         public bool IsAttacking => currentTarget != null;
 

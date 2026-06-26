@@ -48,7 +48,156 @@ namespace Misc
         private Image highlightImage;
         private float lastClickTime;
         private List<GameObject> towerSlots;
+
+        private enum TutorialStep
+        {
+            Greeting,
+            BuildBarrack,
+            BarrackSuccess,
+            BuildTower,
+            TowerSuccess,
+            UpgradeTower,
+            UpgradeTowerSuccess,
+            BuildTrap,
+            HelpExplanation,
+            PauseExplanation,
+            SpeedExplanation,
+            ClickExplanation,
+            Finish
+        }
+
         private bool IsRunning { get; set; }
+
+        public static bool IsTutorialActive()
+        {
+            var tutorial = FindAnyObjectByType<TutorialManager>();
+            return tutorial != null && tutorial.IsRunning;
+        }
+
+        public void Setup(GameFlowManager flowManager)
+        {
+            gameFlowManager = flowManager;
+        }
+
+        public void OnActionButtonClick()
+        {
+            if (Time.time - lastClickTime < clickCooldown)
+                return;
+
+            lastClickTime = Time.time;
+
+            switch (currentStep)
+            {
+                case TutorialStep.Greeting:
+                    currentStep = TutorialStep.BuildBarrack;
+                    break;
+
+                case TutorialStep.BarrackSuccess:
+                    currentStep = TutorialStep.BuildTower;
+                    break;
+
+                case TutorialStep.TowerSuccess:
+                    currentStep = TutorialStep.UpgradeTower;
+                    break;
+
+                case TutorialStep.UpgradeTowerSuccess:
+                    currentStep = TutorialStep.BuildTrap;
+                    break;
+
+                case TutorialStep.HelpExplanation:
+                    currentStep = TutorialStep.ClickExplanation;
+                    break;
+
+                case TutorialStep.ClickExplanation:
+                    currentStep = TutorialStep.PauseExplanation;
+                    break;
+
+                case TutorialStep.PauseExplanation:
+                    currentStep = TutorialStep.SpeedExplanation;
+                    break;
+
+                case TutorialStep.SpeedExplanation:
+                    currentStep = TutorialStep.Finish;
+                    break;
+
+                case TutorialStep.Finish:
+                    FinishTutorialAndStartRealGame();
+                    return;
+
+                case TutorialStep.BuildBarrack:
+                case TutorialStep.BuildTower:
+                case TutorialStep.UpgradeTower:
+                case TutorialStep.BuildTrap:
+                    return;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            UpdateTutorialState();
+        }
+
+        public void ForceStopTutorial()
+        {
+            IsRunning = false;
+
+            CancelInvoke(nameof(BeginTutorialDisplay));
+
+            if (gameFlowManager is { IsTutorialActive: true })
+            {
+                ClearAllTutorialBuildings();
+                gameFlowManager.IsTutorialActive = false;
+                gameFlowManager?.ResetToStandardMode();
+            }
+
+            if (dialogueAnimator)
+                dialogueAnimator.StopDialogue();
+
+            if (tutorialFadePanel)
+                tutorialFadePanel.Hide();
+
+            if (highlightEffect)
+                highlightEffect.SetActive(false);
+
+            if (highlightEffectCastle)
+                highlightEffectCastle.SetActive(false);
+
+            ClearHexHighlights();
+        }
+
+        public void TryStartTutorialFromScratch()
+        {
+            if (CastleSystem.Instance == null)
+                return;
+
+            var hasBuildings = CastleSystem.Instance != null && CastleSystem.Instance.CastleModel.Buildings.Count > 0 ||
+                               TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0 ||
+                               TrapSystem.Instance != null && TrapSystem.Instance.GetTraps().Count > 0;
+
+            if (hasBuildings)
+            {
+                Debug.Log("Нельзя запустить туториал: на поле уже есть постройки!");
+                return;
+            }
+
+            IsRunning = true;
+
+            if (gameFlowManager != null)
+            {
+                gameFlowManager.ResetToStandardMode();
+                gameFlowManager.IsTutorialActive = true;
+
+                currentStep = TutorialStep.Greeting;
+
+                if (transform.parent != null)
+                    transform.parent.gameObject.SetActive(true);
+
+                gameObject.SetActive(true);
+
+                CancelInvoke(nameof(BeginTutorialDisplay));
+                Invoke(nameof(BeginTutorialDisplay), startDelay);
+            }
+        }
 
         private void Start()
         {
@@ -93,7 +242,7 @@ namespace Misc
                         UpdateTutorialState();
                     }
                     break;
-                
+
                 case TutorialStep.UpgradeTower:
                     if (TowerSystem.Instance != null &&
                         TowerSystem.Instance.GetTowers().Any(t => t.Level >= 2))
@@ -115,73 +264,46 @@ namespace Misc
             }
         }
 
-        public void Setup(GameFlowManager flowManager)
+        private static void ApplyHexHighlight(List<GameObject> slots)
         {
-            gameFlowManager = flowManager;
-        }
-
-        public static bool IsTutorialActive()
-        {
-            var tutorial = FindAnyObjectByType<TutorialManager>();
-            return tutorial != null && tutorial.IsRunning;
-        }
-
-        public void OnActionButtonClick()
-        {
-            if (Time.time - lastClickTime < clickCooldown)
+            if (slots == null || slots.Count == 0)
                 return;
 
-            lastClickTime = Time.time;
-
-            switch (currentStep)
+            foreach (var slot in slots)
             {
-                case TutorialStep.Greeting:
-                    currentStep = TutorialStep.BuildBarrack;
-                    break;
+                if (slot == null)
+                    continue;
 
-                case TutorialStep.BarrackSuccess:
-                    currentStep = TutorialStep.BuildTower;
-                    break;
+                var highlight = slot.transform.Find("Highlight");
 
-                case TutorialStep.TowerSuccess:
-                    currentStep = TutorialStep.UpgradeTower;
-                    break;
-                
-                case TutorialStep.UpgradeTowerSuccess:
-                    currentStep = TutorialStep.BuildTrap;
-                    break;
-
-                case TutorialStep.HelpExplanation:
-                    currentStep = TutorialStep.ClickExplanation;
-                    break;
-
-                case TutorialStep.ClickExplanation:
-                    currentStep = TutorialStep.PauseExplanation;
-                    break;
-
-                case TutorialStep.PauseExplanation:
-                    currentStep = TutorialStep.SpeedExplanation;
-                    break;
-
-                case TutorialStep.SpeedExplanation:
-                    currentStep = TutorialStep.Finish;
-                    break;
-
-                case TutorialStep.Finish:
-                    FinishTutorialAndStartRealGame();
-                    return;
-
-                case TutorialStep.BuildBarrack:
-                case TutorialStep.BuildTower:
-                case TutorialStep.UpgradeTower:
-                case TutorialStep.BuildTrap:
-                    return;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
+                if (highlight != null)
+                    highlight.gameObject.SetActive(true);
             }
+        }
 
-            UpdateTutorialState();
+        private static void ClearAllTutorialBuildings()
+        {
+            if (TowerSystem.Instance != null)
+            {
+                FindAnyObjectByType<TowerViewManager>()?.DestroyAllTowers();
+                TowerSystem.Instance.Clear();
+            }
+            if (TrapSystem.Instance != null)
+            {
+                FindAnyObjectByType<TrapViewManager>()?.DestroyAllTraps();
+                TrapSystem.Instance.Clear();
+            }
+            if (UnitSystem.Instance != null)
+            {
+                FindAnyObjectByType<UnitViewManager>()?.DestroyAllUnits();
+                UnitSystem.Instance.Clear();
+            }
+            if (CastleSystem.Instance != null)
+            {
+                CastleSystem.Instance.Clear();
+                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude))
+                    Destroy(b.gameObject);
+            }
         }
 
         private void UpdateTutorialState()
@@ -225,14 +347,15 @@ namespace Misc
                     ConfigureButton(true, "Далее");
                     PrintPhrase("Защита установлена! Милорд,\u00A0вы отлично справляетесь.");
                     break;
-                
+
                 case TutorialStep.UpgradeTower:
                     ConfigureButton(false);
                     //PrintPhrase("Перетяните <color=#FFEE58>Башню</color> на то же самое место, чтобы повысить её уровень.");
-                    PrintPhrase("Чтобы повысить уровень <color=#FFEE58>Башни</color>, перетяните ещё одну на\u00A0то\u00A0же место.");
+                    PrintPhrase(
+                        "Чтобы повысить уровень <color=#FFEE58>Башни</color>, перетяните ещё одну на\u00A0то\u00A0же место.");
                     ApplyHighlight(towerSlot);
                     break;
-                
+
                 case TutorialStep.UpgradeTowerSuccess:
                     ConfigureButton(true, "Далее");
                     PrintPhrase("Отлично! Теперь эта башня стреляет дальше и быстрее и наносит больше урона.");
@@ -334,23 +457,6 @@ namespace Misc
             }
         }
 
-        private static void ApplyHexHighlight(List<GameObject> slots)
-        {
-            if (slots == null || slots.Count == 0)
-                return;
-
-            foreach (var slot in slots)
-            {
-                if (slot == null)
-                    continue;
-
-                var highlight = slot.transform.Find("Highlight");
-
-                if (highlight != null)
-                    highlight.gameObject.SetActive(true);
-            }
-        }
-
         private void ClearHexHighlights()
         {
             if (towerSlots == null)
@@ -367,31 +473,6 @@ namespace Misc
             }
         }
 
-        private static void ClearAllTutorialBuildings()
-        {
-            if (TowerSystem.Instance != null)
-            {
-                FindAnyObjectByType<TowerViewManager>()?.DestroyAllTowers();
-                TowerSystem.Instance.Clear();
-            }
-            if (TrapSystem.Instance != null)
-            {
-                FindAnyObjectByType<TrapViewManager>()?.DestroyAllTraps();
-                TrapSystem.Instance.Clear();
-            }
-            if (UnitSystem.Instance != null)
-            {
-                FindAnyObjectByType<UnitViewManager>()?.DestroyAllUnits();
-                UnitSystem.Instance.Clear();
-            }
-            if (CastleSystem.Instance != null)
-            {
-                CastleSystem.Instance.Clear();
-                foreach (var b in FindObjectsByType<InventoryItem>(FindObjectsInactive.Exclude))
-                    Destroy(b.gameObject);
-            }
-        }
-
         private void FinishTutorialAndStartRealGame()
         {
             ClearAllTutorialBuildings();
@@ -401,91 +482,12 @@ namespace Misc
             PlayerPrefs.Save();
         }
 
-        public void ForceStopTutorial()
-        {
-            IsRunning = false;
-
-            CancelInvoke(nameof(BeginTutorialDisplay));
-
-            if (gameFlowManager is { IsTutorialActive: true })
-            {
-                ClearAllTutorialBuildings();
-                gameFlowManager.IsTutorialActive = false;
-                gameFlowManager?.ResetToStandardMode();
-            }
-
-            if (dialogueAnimator)
-                dialogueAnimator.StopDialogue();
-
-            if (tutorialFadePanel)
-                tutorialFadePanel.Hide();
-
-            if (highlightEffect)
-                highlightEffect.SetActive(false);
-
-            if (highlightEffectCastle)
-                highlightEffectCastle.SetActive(false);
-
-            ClearHexHighlights();
-        }
-
-        public void TryStartTutorialFromScratch()
-        {
-            if (CastleSystem.Instance == null)
-                return;
-
-            var hasBuildings = CastleSystem.Instance != null && CastleSystem.Instance.CastleModel.Buildings.Count > 0 ||
-                               TowerSystem.Instance != null && TowerSystem.Instance.GetTowers().Count > 0 ||
-                               TrapSystem.Instance != null && TrapSystem.Instance.GetTraps().Count > 0;
-
-            if (hasBuildings)
-            {
-                Debug.Log("Нельзя запустить туториал: на поле уже есть постройки!");
-                return;
-            }
-
-            IsRunning = true;
-
-            if (gameFlowManager != null)
-            {
-                gameFlowManager.ResetToStandardMode();
-                gameFlowManager.IsTutorialActive = true;
-
-                currentStep = TutorialStep.Greeting;
-
-                if (transform.parent != null)
-                    transform.parent.gameObject.SetActive(true);
-
-                gameObject.SetActive(true);
-
-                CancelInvoke(nameof(BeginTutorialDisplay));
-                Invoke(nameof(BeginTutorialDisplay), startDelay);
-            }
-        }
-
         private void BeginTutorialDisplay()
         {
             if (tutorialFadePanel)
                 tutorialFadePanel.Show();
 
             UpdateTutorialState();
-        }
-
-        private enum TutorialStep
-        {
-            Greeting,
-            BuildBarrack,
-            BarrackSuccess,
-            BuildTower,
-            TowerSuccess,
-            UpgradeTower,
-            UpgradeTowerSuccess,
-            BuildTrap,
-            HelpExplanation,
-            PauseExplanation,
-            SpeedExplanation,
-            ClickExplanation,
-            Finish
         }
     }
 }

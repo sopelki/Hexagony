@@ -7,23 +7,6 @@ namespace Logic.Monster
 {
     public class WaveManager : ITickable
     {
-        private const string HighScoreKey = "MaxWaveReached";
-        private readonly float delayBetweenWaves;
-        private readonly MonsterSystem monsterSystem;
-
-        private readonly MonsterSpawner spawner;
-        private float delayTimer;
-
-        private bool gameStarted;
-        private bool isDelaying;
-
-        private bool waitingForNextWave;
-        
-        public event Action<int> OnWaveCleared;
-        public event Action OnGameWon;
-        public event Action<int> OnWaveStarting;
-        public event Action OnInfiniteModeStarted;
-
         public WaveManager(MonsterSpawner spawner, MonsterSystem monsterSystem, float delayBetweenWaves)
         {
             this.spawner = spawner;
@@ -33,7 +16,68 @@ namespace Logic.Monster
             this.spawner.OnWaveSpawnCompleted += OnWaveFinishedSpawning;
         }
 
+        private readonly float delayBetweenWaves;
+
+        private float delayTimer;
+
+        private bool gameStarted;
+        private const string HighScoreKey = "MaxWaveReached";
+        private bool isDelaying;
+        private readonly MonsterSystem monsterSystem;
+
+        private readonly MonsterSpawner spawner;
+
+        private bool waitingForNextWave;
+
         public int CurrentWaveNumber { get; private set; }
+
+        public event Action OnGameWon;
+        public event Action OnInfiniteModeStarted;
+
+        public event Action<int> OnWaveCleared;
+        public event Action<int> OnWaveStarting;
+
+        public void StartGame()
+        {
+            if (gameStarted)
+            {
+                Debug.LogWarning("Game already started!");
+                return;
+            }
+
+            gameStarted = true;
+            CurrentWaveNumber = 1;
+            SaveHighScore(CurrentWaveNumber);
+            OnWaveStarting?.Invoke(CurrentWaveNumber);
+            spawner.StartNextWave();
+            Debug.Log("Game started! First wave incoming...");
+        }
+
+        public void StartInfiniteMode(InfiniteModeSettings settings)
+        {
+            spawner.EnableInfiniteMode(settings);
+            waitingForNextWave = false;
+            isDelaying = true;
+            delayTimer = delayBetweenWaves;
+            OnInfiniteModeStarted?.Invoke();
+        }
+
+        public void StartSavedGame(int savedWaveNumber, InfiniteModeSettings infiniteSettings)
+        {
+            if (gameStarted) return;
+
+            gameStarted = true;
+            CurrentWaveNumber = savedWaveNumber;
+            var maxNormalWaves = spawner.NormalWaves;
+
+            if (savedWaveNumber >= maxNormalWaves)
+                spawner.EnableInfiniteMode(infiniteSettings);
+            spawner.SetWaveIndex(savedWaveNumber - 1);
+
+            waitingForNextWave = false;
+            isDelaying = true;
+            delayTimer = delayBetweenWaves;
+        }
 
         public void Tick()
         {
@@ -72,6 +116,11 @@ namespace Logic.Monster
             }
         }
 
+        private void OnWaveFinishedSpawning()
+        {
+            waitingForNextWave = true;
+        }
+
         private static void SaveHighScore(int wave)
         {
             var currentBest = PlayerPrefs.GetInt(HighScoreKey, 0);
@@ -80,53 +129,6 @@ namespace Logic.Monster
                 PlayerPrefs.SetInt(HighScoreKey, wave);
                 PlayerPrefs.Save();
             }
-        }
-
-        public void StartSavedGame(int savedWaveNumber, InfiniteModeSettings infiniteSettings)
-        {
-            if (gameStarted) return;
-
-            gameStarted = true;
-            CurrentWaveNumber = savedWaveNumber;
-            var maxNormalWaves = spawner.NormalWaves;
-
-            if (savedWaveNumber >= maxNormalWaves)
-                spawner.EnableInfiniteMode(infiniteSettings);
-            spawner.SetWaveIndex(savedWaveNumber - 1);
-
-            waitingForNextWave = false;
-            isDelaying = true;
-            delayTimer = delayBetweenWaves;
-        }
-
-        public void StartGame()
-        {
-            if (gameStarted)
-            {
-                Debug.LogWarning("Game already started!");
-                return;
-            }
-
-            gameStarted = true;
-            CurrentWaveNumber = 1;
-            SaveHighScore(CurrentWaveNumber);
-            OnWaveStarting?.Invoke(CurrentWaveNumber);
-            spawner.StartNextWave();
-            Debug.Log("Game started! First wave incoming...");
-        }
-
-        private void OnWaveFinishedSpawning()
-        {
-            waitingForNextWave = true;
-        }
-
-        public void StartInfiniteMode(InfiniteModeSettings settings)
-        {
-            spawner.EnableInfiniteMode(settings);
-            waitingForNextWave = false;
-            isDelaying = true;
-            delayTimer = delayBetweenWaves;
-            OnInfiniteModeStarted?.Invoke();
         }
     }
 }

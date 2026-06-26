@@ -59,6 +59,7 @@ namespace UI
         private Image iconImage;
         [SerializeField]
         private float fadeDuration = 0.1f;
+
         private Vector2 currentGhostPosition;
         private Vector3Int currentHoveredSlot;
         private float currentScale;
@@ -82,76 +83,6 @@ namespace UI
 
         private TowerSystem towerSystem;
         private bool wasSnapping;
-
-        private void Awake()
-        {
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
-
-            var trigger = gameObject.AddComponent<TooltipTrigger>();
-            trigger.SetContent(towerData);
-
-            if (iconImage != null)
-            {
-                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-                if (iconCanvasGroup == null)
-                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
-            }
-        }
-
-        private void Update()
-        {
-            if (!ghostRect)
-                return;
-
-            if (isSnapping)
-            {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.unscaledDeltaTime * snapSpeed
-                );
-                wasSnapping = true;
-            }
-            else if (wasSnapping)
-            {
-                currentGhostPosition = Vector2.Lerp(
-                    currentGhostPosition,
-                    targetGhostPosition,
-                    Time.unscaledDeltaTime * unSnapSpeed
-                );
-
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
-            }
-            else
-                currentGhostPosition = targetGhostPosition;
-
-            ghostRect.localPosition = currentGhostPosition;
-
-            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
-            ghostRect.localScale = Vector3.one * currentScale;
-
-            ghostImage.color = Color.Lerp(
-                ghostImage.color,
-                targetColor,
-                Time.unscaledDeltaTime * colorLerpSpeed
-            );
-        }
-
-        private void OnDisable()
-        {
-            if (isDragging)
-            {
-                isDragging = false;
-                ResetCurrentPreview();
-                CleanupGhost();
-                GlobalCursorManager.Instance.ReleaseHold(null);
-
-                if (iconCanvasGroup != null)
-                    iconCanvasGroup.alpha = 1f;
-            }
-        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -226,6 +157,81 @@ namespace UI
             }
         }
 
+        public void Construct(TowerSystem system)
+        {
+            towerSystem = system;
+        }
+
+        private void Awake()
+        {
+            if (canvas == null)
+                canvas = GetComponentInParent<Canvas>();
+
+            var trigger = gameObject.AddComponent<TooltipTrigger>();
+            trigger.SetContent(towerData);
+
+            if (iconImage != null)
+            {
+                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+                if (iconCanvasGroup == null)
+                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                ResetCurrentPreview();
+                CleanupGhost();
+                GlobalCursorManager.Instance.ReleaseHold(null);
+
+                if (iconCanvasGroup != null)
+                    iconCanvasGroup.alpha = 1f;
+            }
+        }
+
+        private void Update()
+        {
+            if (!ghostRect)
+                return;
+
+            if (isSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.unscaledDeltaTime * snapSpeed
+                );
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition = Vector2.Lerp(
+                    currentGhostPosition,
+                    targetGhostPosition,
+                    Time.unscaledDeltaTime * unSnapSpeed
+                );
+
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
+                    wasSnapping = false;
+            }
+            else
+                currentGhostPosition = targetGhostPosition;
+
+            ghostRect.localPosition = currentGhostPosition;
+
+            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
+            ghostRect.localScale = Vector3.one * currentScale;
+
+            ghostImage.color = Color.Lerp(
+                ghostImage.color,
+                targetColor,
+                Time.unscaledDeltaTime * colorLerpSpeed
+            );
+        }
+
         private void UpdateLevelPreview(bool isSnapping, Vector3Int slotPos)
         {
             if (isSnapping)
@@ -264,11 +270,6 @@ namespace UI
         {
             if (ghost != null)
                 Destroy(ghost);
-        }
-
-        public void Construct(TowerSystem system)
-        {
-            towerSystem = system;
         }
 
         private bool TryPlaceTower(PointerEventData eventData)

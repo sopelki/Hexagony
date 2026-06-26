@@ -21,6 +21,7 @@ namespace View
         private float referenceDistance = 8f;
         [SerializeField]
         private float minArcHeightFactor = 0.2f;
+
         private float animationTimer;
 
         private float currentDynamicHeight;
@@ -29,6 +30,21 @@ namespace View
         private Vector3 lastVisualPosition;
 
         private ProjectileModel model;
+
+        public void Initialize(ProjectileModel projectileModel)
+        {
+            model = projectileModel;
+            lastVisualPosition = model.StartPosition;
+            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
+            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
+            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
+
+            if (!spriteRenderer)
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            currentFrameIndex = 0;
+            animationTimer = 0f;
+        }
 
         private void Update()
         {
@@ -64,21 +80,6 @@ namespace View
             }
 
             spriteRenderer.sortingOrder = yForSorting > model.TowerBaseY ? 1 : 3;
-        }
-
-        public void Initialize(ProjectileModel projectileModel)
-        {
-            model = projectileModel;
-            lastVisualPosition = model.StartPosition;
-            var distance = Vector3.Distance(model.StartPosition, model.TargetPoint);
-            var distanceFactor = Mathf.Clamp01(distance / referenceDistance);
-            currentDynamicHeight = maxArcHeight * Mathf.Max(distanceFactor, minArcHeightFactor);
-
-            if (!spriteRenderer)
-                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-            currentFrameIndex = 0;
-            animationTimer = 0f;
         }
 
         private void UpdateAnimation()

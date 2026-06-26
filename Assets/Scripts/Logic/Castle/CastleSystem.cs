@@ -13,17 +13,6 @@ namespace Logic.Castle
 {
     public class CastleSystem : ITickable
     {
-        private static readonly Vector2Int spawnHex = new(-26, 19);
-        private readonly Field.Field field;
-        private readonly SoundData soundData;
-        private readonly Tilemap tilemap;
-        private readonly UnitData unitData;
-        private readonly UnitSystem unitSystem;
-        private float currentSpawnInterval = float.PositiveInfinity;
-
-        private bool firstBuildingPlaced;
-        private float spawnTimer;
-
         public CastleSystem(
             CastleModel castleModel,
             UnitSystem unitSystem,
@@ -43,9 +32,50 @@ namespace Logic.Castle
             this.unitSystem.OnUnitDied += HandleUnitDied;
         }
 
-        public static CastleSystem Instance { get; private set; }
+        private float currentSpawnInterval = float.PositiveInfinity;
+        private readonly Field.Field field;
+
+        private bool firstBuildingPlaced;
+        private readonly SoundData soundData;
+        private static readonly Vector2Int spawnHex = new(-26, 19);
+        private float spawnTimer;
+        private readonly Tilemap tilemap;
+        private readonly UnitData unitData;
+        private readonly UnitSystem unitSystem;
         public CastleModel CastleModel { get; }
         public int CurrentUnitsCount => unitSystem?.GetAllUnits().Count ?? 0;
+
+        public static CastleSystem Instance { get; private set; }
+
+        public event Action OnFirstBuildingPlaced;
+
+        public void AddGold(int amount)
+        {
+            CastleModel.Gold += amount;
+            CastleModel.Changed();
+        }
+
+        public bool CanAfford(int price)
+        {
+            return CastleModel.Gold >= price;
+        }
+
+        public void Clear()
+        {
+            CastleModel.Buildings.Clear();
+            firstBuildingPlaced = false;
+            unitSystem?.ClearBuffs();
+
+            currentSpawnInterval = 999f;
+
+            CastleModel.Changed();
+        }
+
+        public void RegisterCastleData(List<Vector3> worldPositions, List<Vector2Int> hexes)
+        {
+            CastleModel.WallWorldPositions = worldPositions;
+            CastleModel.WallHexes = hexes;
+        }
 
         public void Tick()
         {
@@ -57,56 +87,6 @@ namespace Logic.Castle
                 spawnTimer = 0f;
                 TrySpawnSingleUnit();
             }
-        }
-
-        public event Action OnFirstBuildingPlaced;
-
-        private void RecalculateSpawnInterval()
-        {
-            var barracksCount = CastleModel.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
-
-            if (barracksCount == 0)
-            {
-                currentSpawnInterval = 999f;
-                Debug.Log("[SpawnInterval] No barracks, spawn disabled");
-                return;
-            }
-
-            currentSpawnInterval = unitData.baseSpawnInterval * Mathf.Pow(0.8f, barracksCount - 1);
-
-            Debug.Log($"[SpawnInterval] Barracks: {barracksCount}, Interval: {currentSpawnInterval:F2}s");
-        }
-
-        private void HandleUnitDied(UnitModel unit)
-        {
-            CastleModel.Changed();
-        }
-
-        public void RegisterCastleData(List<Vector3> worldPositions, List<Vector2Int> hexes)
-        {
-            CastleModel.WallWorldPositions = worldPositions;
-            CastleModel.WallHexes = hexes;
-        }
-
-        public bool CanAfford(int price)
-        {
-            return CastleModel.Gold >= price;
-        }
-
-        public bool TrySpendGold(int price)
-        {
-            if (TutorialManager.IsTutorialActive()) return true;
-            if (CastleModel.Gold < price) return false;
-
-            CastleModel.Gold -= price;
-            CastleModel.Changed();
-            return true;
-        }
-
-        public void AddGold(int amount)
-        {
-            CastleModel.Gold += amount;
-            CastleModel.Changed();
         }
 
         public bool TryBuyBuilding(BuildingData data)
@@ -137,24 +117,14 @@ namespace Logic.Castle
             return true;
         }
 
-        private void TrySpawnSingleUnit()
+        public bool TrySpendGold(int price)
         {
-            var barracksCount = CastleModel.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
-            if (barracksCount == 0) return;
+            if (TutorialManager.IsTutorialActive()) return true;
+            if (CastleModel.Gold < price) return false;
 
-            if (unitSystem.GetAllUnits().Count >= CastleModel.MaxSupply) return;
-
-            SpawnUnit();
-        }
-
-        private void SpawnUnit()
-        {
-            var hex = field.GetHex(spawnHex);
-            if (hex == null) return;
-
-            var worldPos = tilemap.GetCellCenterWorld(hex.offset);
-            unitSystem.SpawnUnit(worldPos, spawnHex, unitData);
+            CastleModel.Gold -= price;
             CastleModel.Changed();
+            return true;
         }
 
         private void ApplyBuff(BuildingData data)
@@ -175,15 +145,45 @@ namespace Logic.Castle
             }
         }
 
-        public void Clear()
+        private void HandleUnitDied(UnitModel unit)
         {
-            CastleModel.Buildings.Clear();
-            firstBuildingPlaced = false;
-            unitSystem?.ClearBuffs();
-
-            currentSpawnInterval = 999f;
-
             CastleModel.Changed();
+        }
+
+        private void RecalculateSpawnInterval()
+        {
+            var barracksCount = CastleModel.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
+
+            if (barracksCount == 0)
+            {
+                currentSpawnInterval = 999f;
+                Debug.Log("[SpawnInterval] No barracks, spawn disabled");
+                return;
+            }
+
+            currentSpawnInterval = unitData.baseSpawnInterval * Mathf.Pow(0.8f, barracksCount - 1);
+
+            Debug.Log($"[SpawnInterval] Barracks: {barracksCount}, Interval: {currentSpawnInterval:F2}s");
+        }
+
+        private void SpawnUnit()
+        {
+            var hex = field.GetHex(spawnHex);
+            if (hex == null) return;
+
+            var worldPos = tilemap.GetCellCenterWorld(hex.offset);
+            unitSystem.SpawnUnit(worldPos, spawnHex, unitData);
+            CastleModel.Changed();
+        }
+
+        private void TrySpawnSingleUnit()
+        {
+            var barracksCount = CastleModel.Buildings.Count(b => b.Data.type == BuildingType.Barracks);
+            if (barracksCount == 0) return;
+
+            if (unitSystem.GetAllUnits().Count >= CastleModel.MaxSupply) return;
+
+            SpawnUnit();
         }
     }
 }

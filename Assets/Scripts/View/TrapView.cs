@@ -7,7 +7,6 @@ namespace View
 {
     public class TrapView : MonoBehaviour
     {
-        private static readonly int close = Animator.StringToHash("Close");
         [SerializeField]
         private SpriteRenderer spriteRenderer;
         [Header("X-Ray Settings")]
@@ -16,7 +15,32 @@ namespace View
         [SerializeField]
         private Animator animator;
 
+        private static readonly int close = Animator.StringToHash("Close");
+
         private readonly HashSet<Collider2D> overlappingTowers = new();
+
+        public void Initialize(Sprite sprite)
+        {
+            spriteRenderer.sprite = sprite;
+            SetOutlineVisible(false);
+        }
+
+        public void SetOutlineVisible(bool value)
+        {
+            if (outline != null)
+                outline.SetActive(value);
+        }
+
+        public void AnimateAndDestroy()
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger(close);
+                StartCoroutine(WaitAnimationAndDestroyRoutine());
+            }
+            else
+                Destroy(gameObject);
+        }
 
         private void Update()
         {
@@ -43,29 +67,6 @@ namespace View
         {
             if (other.CompareTag("Tower"))
                 overlappingTowers.Remove(other);
-        }
-
-        public void Initialize(Sprite sprite)
-        {
-            spriteRenderer.sprite = sprite;
-            SetOutlineVisible(false);
-        }
-
-        public void SetOutlineVisible(bool value)
-        {
-            if (outline != null)
-                outline.SetActive(value);
-        }
-
-        public void AnimateAndDestroy()
-        {
-            if (animator != null)
-            {
-                animator.SetTrigger(close);
-                StartCoroutine(WaitAnimationAndDestroyRoutine());
-            }
-            else
-                Destroy(gameObject);
         }
 
         private IEnumerator WaitAnimationAndDestroyRoutine()

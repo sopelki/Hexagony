@@ -31,6 +31,7 @@ namespace Logic.Trap
         [Header("Tooltip")]
         [TextArea]
         public string description;
+
         public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)

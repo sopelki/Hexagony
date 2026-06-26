@@ -21,21 +21,10 @@ namespace UI
         [Header("Animation")]
         [SerializeField]
         private float fadeDuration = 0.2f;
+
         private Coroutine colorCoroutine;
 
         private IPurchasable purchasable;
-
-        private void Awake()
-        {
-            purchasable = data as IPurchasable;
-            if (purchasable == null)
-            {
-                Debug.LogError($"Object {data.name} does not implement IPurchasable!");
-                return;
-            }
-
-            priceText.text = purchasable.BaseCost.ToString();
-        }
 
         public void Refresh(int currentGold)
         {
@@ -49,6 +38,18 @@ namespace UI
             if (colorCoroutine != null)
                 StopCoroutine(colorCoroutine);
             colorCoroutine = StartCoroutine(AnimateColor(targetColor));
+        }
+
+        private void Awake()
+        {
+            purchasable = data as IPurchasable;
+            if (purchasable == null)
+            {
+                Debug.LogError($"Object {data.name} does not implement IPurchasable!");
+                return;
+            }
+
+            priceText.text = purchasable.BaseCost.ToString();
         }
 
         private IEnumerator AnimateColor(Color targetColor)

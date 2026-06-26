@@ -5,13 +5,13 @@ namespace Logic.Monster
 {
     public class MonsterDebuffSystem
     {
-        private readonly List<MonsterDebuff> buffs = new();
-        private readonly MonsterModel monster;
-
         public MonsterDebuffSystem(MonsterModel monster)
         {
             this.monster = monster;
         }
+
+        private readonly List<MonsterDebuff> buffs = new();
+        private readonly MonsterModel monster;
 
         public void AddBuff(MonsterDebuff buff)
         {
@@ -20,6 +20,18 @@ namespace Logic.Monster
 
             buffs.Add(buff);
             buff.OnApply(monster);
+        }
+
+        public float ModifyMoveSpeed(float baseSpeed)
+        {
+            return buffs.Aggregate(baseSpeed,
+                (current, buff) => buff.ModifyMoveSpeed(current));
+        }
+
+        public int ModifyOutgoingDamage(int baseValue)
+        {
+            return buffs.Aggregate(baseValue,
+                (current, buff) => buff.ModifyOutgoingDamage(current));
         }
 
         public void RemoveBuff(MonsterDebuff buff)
@@ -43,18 +55,6 @@ namespace Logic.Monster
                     buffs.Remove(buff);
                 }
             }
-        }
-
-        public float ModifyMoveSpeed(float baseSpeed)
-        {
-            return buffs.Aggregate(baseSpeed,
-                (current, buff) => buff.ModifyMoveSpeed(current));
-        }
-
-        public int ModifyOutgoingDamage(int baseValue)
-        {
-            return buffs.Aggregate(baseValue,
-                (current, buff) => buff.ModifyOutgoingDamage(current));
         }
     }
 }

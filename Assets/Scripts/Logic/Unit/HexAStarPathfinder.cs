@@ -7,16 +7,17 @@ namespace Logic.Unit
 {
     public class HexAStarPathfinder
     {
-        private const int BaseMoveCost = 10;
-        private const int RandomCostRange = 5;
-        private readonly Field.Field field;
-        private readonly Random randomGenerator;
-
         public HexAStarPathfinder(Field.Field field)
         {
             this.field = field;
             randomGenerator = new Random();
         }
+
+        private const int BaseMoveCost = 10;
+
+        private readonly Field.Field field;
+        private const int RandomCostRange = 5;
+        private readonly Random randomGenerator;
 
         public List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
         {

@@ -8,11 +8,21 @@ namespace Core
         public static TickManager Instance;
 
         public float tickInterval = 0.02f;
+
         private float timer;
+
+        public event Action OnTick;
 
         private void Awake()
         {
             Instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            OnTick = null;
+            if (Instance == this)
+                Instance = null;
         }
 
         private void Update()
@@ -25,14 +35,5 @@ namespace Core
                 OnTick?.Invoke();
             }
         }
-
-        private void OnDestroy()
-        {
-            OnTick = null;
-            if (Instance == this)
-                Instance = null;
-        }
-
-        public event Action OnTick;
     }
 }

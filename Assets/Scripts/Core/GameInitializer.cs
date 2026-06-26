@@ -19,14 +19,6 @@ namespace Core
 {
     public class GameInitializer : MonoBehaviour
     {
-        private static readonly List<Vector2Int> spawnHexes = new()
-        {
-            new Vector2Int(-17, -16),
-            new Vector2Int(9, -31),
-            new Vector2Int(31, -31),
-            new Vector2Int(28, -3),
-            new Vector2Int(-3, 30)
-        };
         [Header("Castle Settings")]
         [SerializeField]
         private int startGold = 300;
@@ -94,6 +86,16 @@ namespace Core
         private float magnitudeScale = 20f;
         [SerializeField]
         private CameraShaker cameraShaker;
+
+        private static readonly List<Vector2Int> spawnHexes = new()
+        {
+            new Vector2Int(-17, -16),
+            new Vector2Int(9, -31),
+            new Vector2Int(31, -31),
+            new Vector2Int(28, -3),
+            new Vector2Int(-3, 30)
+        };
+
         private CastleModel castleModel;
         private CastleSystem castleSystem;
         private CastleView castleView;

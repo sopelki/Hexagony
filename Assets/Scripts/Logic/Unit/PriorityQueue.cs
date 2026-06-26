@@ -9,6 +9,16 @@ namespace Logic.Unit
 
         public int Count { get; private set; }
 
+        public T Dequeue()
+        {
+            var first = queues.First();
+            var item = first.Value.Dequeue();
+            if (first.Value.Count == 0)
+                queues.Remove(first.Key);
+            Count--;
+            return item;
+        }
+
         public void Enqueue(T item, float priority)
         {
             if (!queues.TryGetValue(priority, out var queue))
@@ -18,16 +28,6 @@ namespace Logic.Unit
             }
             queue.Enqueue(item);
             Count++;
-        }
-
-        public T Dequeue()
-        {
-            var first = queues.First();
-            var item = first.Value.Dequeue();
-            if (first.Value.Count == 0)
-                queues.Remove(first.Key);
-            Count--;
-            return item;
         }
     }
 }

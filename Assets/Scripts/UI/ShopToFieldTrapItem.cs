@@ -64,6 +64,7 @@ namespace UI
         private float fadeDuration = 0.1f;
 
         private readonly List<GameObject> highlights = new();
+
         private Vector2 currentGhostPosition;
         private float currentScale;
         private Coroutine fadeCoroutine;
@@ -80,63 +81,6 @@ namespace UI
         private float targetScale;
         private TrapSystem trapSystem;
         private bool wasSnapping;
-
-        private void Awake()
-        {
-            if (canvas == null)
-                canvas = GetComponentInParent<Canvas>();
-
-            var trigger = gameObject.AddComponent<TooltipTrigger>();
-            trigger.SetContent(trapData);
-
-            if (iconImage != null)
-            {
-                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
-                if (iconCanvasGroup == null)
-                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
-            }
-        }
-
-        private void Update()
-        {
-            if (!ghost)
-                return;
-
-            if (isSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * snapSpeed);
-                wasSnapping = true;
-            }
-            else if (wasSnapping)
-            {
-                currentGhostPosition =
-                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * unSnapSpeed);
-                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
-                    wasSnapping = false;
-            }
-            else
-                currentGhostPosition = targetGhostPosition;
-
-            ghostRect.localPosition = currentGhostPosition;
-
-            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
-            ghostRect.localScale = Vector3.one * currentScale;
-
-            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
-        }
-
-        private void OnDisable()
-        {
-            if (isDragging)
-            {
-                GlobalCursorManager.Instance.ReleaseHold(null);
-                isDragging = false;
-                CleanupDraggingUI();
-                if (iconCanvasGroup != null)
-                    iconCanvasGroup.alpha = 1f;
-            }
-        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -242,18 +186,75 @@ namespace UI
             }
         }
 
+        public void Construct(TrapSystem trapSystem, Field.Field field)
+        {
+            this.trapSystem = trapSystem;
+            this.field = field;
+        }
+
+        private void Awake()
+        {
+            if (canvas == null)
+                canvas = GetComponentInParent<Canvas>();
+
+            var trigger = gameObject.AddComponent<TooltipTrigger>();
+            trigger.SetContent(trapData);
+
+            if (iconImage != null)
+            {
+                iconCanvasGroup = iconImage.GetComponent<CanvasGroup>();
+                if (iconCanvasGroup == null)
+                    iconCanvasGroup = iconImage.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (isDragging)
+            {
+                GlobalCursorManager.Instance.ReleaseHold(null);
+                isDragging = false;
+                CleanupDraggingUI();
+                if (iconCanvasGroup != null)
+                    iconCanvasGroup.alpha = 1f;
+            }
+        }
+
+        private void Update()
+        {
+            if (!ghost)
+                return;
+
+            if (isSnapping)
+            {
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * snapSpeed);
+                wasSnapping = true;
+            }
+            else if (wasSnapping)
+            {
+                currentGhostPosition =
+                    Vector2.Lerp(currentGhostPosition, targetGhostPosition, Time.unscaledDeltaTime * unSnapSpeed);
+                if (Vector2.Distance(currentGhostPosition, targetGhostPosition) < 1f)
+                    wasSnapping = false;
+            }
+            else
+                currentGhostPosition = targetGhostPosition;
+
+            ghostRect.localPosition = currentGhostPosition;
+
+            currentScale = Mathf.Lerp(currentScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
+            ghostRect.localScale = Vector3.one * currentScale;
+
+            ghostImage.color = Color.Lerp(ghostImage.color, targetColor, Time.unscaledDeltaTime * colorLerpSpeed);
+        }
+
         private void CleanupDraggingUI()
         {
             if (ghost != null)
                 Destroy(ghost);
 
             ClearHighlights();
-        }
-
-        public void Construct(TrapSystem trapSystem, Field.Field field)
-        {
-            this.trapSystem = trapSystem;
-            this.field = field;
         }
 
         private void UpdatePlacementFeedback(PointerEventData eventData)

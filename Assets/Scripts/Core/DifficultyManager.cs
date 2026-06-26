@@ -26,22 +26,22 @@ namespace Core
             };
         }
 
-        public static float GetStatMultiplier()
-        {
-            return CurrentDifficulty switch
-            {
-                GameDifficulty.Easy => 0.75f,
-                GameDifficulty.Hard => 1.25f,
-                _ => 1f
-            };
-        }
-
         public static float GetGoldMultiplier()
         {
             return CurrentDifficulty switch
             {
                 GameDifficulty.Easy => 1.33f,
                 GameDifficulty.Hard => 0.8f,
+                _ => 1f
+            };
+        }
+
+        public static float GetStatMultiplier()
+        {
+            return CurrentDifficulty switch
+            {
+                GameDifficulty.Easy => 0.75f,
+                GameDifficulty.Hard => 1.25f,
                 _ => 1f
             };
         }

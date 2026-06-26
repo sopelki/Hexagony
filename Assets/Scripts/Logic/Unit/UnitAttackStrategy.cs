@@ -9,12 +9,6 @@ namespace Logic.Unit
 {
     public class UnitAttackStrategy : IAttackStrategy
     {
-        private readonly MonsterSystem monsterSystem;
-        private readonly SoundData soundData;
-        private readonly UnitModel unit;
-
-        private float currentCooldown;
-
         public UnitAttackStrategy(
             UnitModel unit,
             MonsterSystem monsterSystem,
@@ -24,6 +18,11 @@ namespace Logic.Unit
             this.monsterSystem = monsterSystem;
             this.soundData = soundData;
         }
+
+        private float currentCooldown;
+        private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
+        private readonly UnitModel unit;
 
         public bool IsAttacking { get; private set; }
 

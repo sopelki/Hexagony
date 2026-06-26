@@ -44,6 +44,7 @@ namespace UI
         private float infiniteModeNotificationDelay = 2f;
 
         private readonly Queue<NotificationRequest> queue = new();
+
         private bool isProcessing;
         private int totalWavesCount;
 
@@ -76,9 +77,6 @@ namespace UI
             Enqueue(message, soundData.waveNotificationSound, soundData.waveNotificationVolume);
         }
 
-        private void ShowInfiniteModeNotification() =>
-            ShowHint("Теперь волны\n<color=#A10009><b>не закончатся</b></color>");
-
         public IEnumerator ShowInfiniteDelayed()
         {
             yield return new WaitForSecondsRealtime(infiniteModeNotificationDelay);
@@ -91,6 +89,11 @@ namespace UI
             queue.Clear();
             isProcessing = false;
             panelRect.anchoredPosition = hiddenPosition;
+        }
+
+        private void ShowInfiniteModeNotification()
+        {
+            ShowHint("Теперь волны\n<color=#A10009><b>не закончатся</b></color>");
         }
 
         private void Enqueue(string message, AudioClip clip, float volume)
@@ -157,8 +160,8 @@ namespace UI
 
         private struct NotificationRequest
         {
-            public string Message;
             public AudioClip Clip;
+            public string Message;
             public float Volume;
         }
     }

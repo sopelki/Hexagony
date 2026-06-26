@@ -6,7 +6,6 @@ namespace UI
 {
     public class DropSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler
     {
-        private static CastleSystem castleSystem;
         [Header("References")]
         [SerializeField]
         private Transform itemContainer;
@@ -16,21 +15,9 @@ namespace UI
         [Range(0.5f, 1f)]
         private float hoverScale = 0.85f;
 
+        private static CastleSystem castleSystem;
+
         private InventoryItem currentOverlappingItem;
-
-        private void Update()
-        {
-            if (!currentOverlappingItem)
-                return;
-
-            if (!EventSystem.current)
-            {
-                ResetSlotState();
-                return;
-            }
-
-            UpdateItemVisualState(currentOverlappingItem);
-        }
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -103,6 +90,32 @@ namespace UI
             castleSystem = system;
         }
 
+        private void Update()
+        {
+            if (!currentOverlappingItem)
+                return;
+
+            if (!EventSystem.current)
+            {
+                ResetSlotState();
+                return;
+            }
+
+            UpdateItemVisualState(currentOverlappingItem);
+        }
+
+        private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
+        {
+            if (draggingItem.IsFromShop)
+            {
+                var isSlotEmpty = existingItem == null;
+                var canAfford = castleSystem.CanAfford(draggingItem.BuildingData.baseCost);
+                return isSlotEmpty && canAfford;
+            }
+
+            return true;
+        }
+
         private void UpdateItemVisualState(InventoryItem draggingItem)
         {
             var existingItem = GetStoredItem();
@@ -123,18 +136,6 @@ namespace UI
         private void ResetSlotState()
         {
             currentOverlappingItem = null;
-        }
-
-        private static bool CanPlaceItem(InventoryItem draggingItem, InventoryItem existingItem)
-        {
-            if (draggingItem.IsFromShop)
-            {
-                var isSlotEmpty = existingItem == null;
-                var canAfford = castleSystem.CanAfford(draggingItem.BuildingData.baseCost);
-                return isSlotEmpty && canAfford;
-            }
-
-            return true;
         }
 
         private InventoryItem GetStoredItem()

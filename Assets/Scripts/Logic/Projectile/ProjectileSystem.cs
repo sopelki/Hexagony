@@ -9,15 +9,15 @@ namespace Logic.Projectile
 {
     public class ProjectileSystem
     {
-        private readonly MonsterSystem monsterSystem;
-        private readonly List<ProjectileModel> projectiles = new();
-        private readonly SoundData soundData;
-
         public ProjectileSystem(MonsterSystem monsterSystem, SoundData soundData)
         {
             this.monsterSystem = monsterSystem;
             this.soundData = soundData;
         }
+
+        private readonly MonsterSystem monsterSystem;
+        private readonly List<ProjectileModel> projectiles = new();
+        private readonly SoundData soundData;
 
         public event Action<ProjectileModel> OnProjectileCreated;
         public event Action<ProjectileModel> OnProjectileDestroyed;
@@ -43,52 +43,33 @@ namespace Logic.Projectile
             }
         }
 
-        private void UpdateStraight(ProjectileModel p, float step, int index)
+        private void PlayHitSound(bool isHoming)
         {
-            var toTargetBefore = p.TargetPoint - p.Position;
-            p.Position += p.Direction * p.Data.speed * step;
-            var toTargetAfter = p.TargetPoint - p.Position;
+            AudioClip[] sound;
+            float volume;
 
-            var totalDistance = Vector3.Distance(p.StartPosition, p.TargetPoint);
-            var currentDistance = Vector3.Distance(p.StartPosition, p.Position);
-            p.TravelProgress = Mathf.Clamp01(currentDistance / totalDistance);
-
-            if (toTargetAfter.magnitude <= 0.3f)
+            if (isHoming)
             {
-                TryApplyDamage(p);
-                Remove(index);
-                return;
+                sound = soundData.mageTowerHitSounds;
+                volume = soundData.mageHitVolume;
+            }
+            else
+            {
+                sound = soundData.archerTowerHitSounds;
+                volume = soundData.archerHitVolume;
             }
 
-            if (Vector3.Dot(toTargetBefore, toTargetAfter) < 0f)
-            {
-                Remove(index);
-                return;
-            }
-
-            if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
+            if (soundData != null &&
+                soundData.archerTowerHitSounds is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(sound, volume);
         }
 
-        private void UpdateHoming(ProjectileModel p, float step, int index)
+
+        private void Remove(int index)
         {
-            var dir = (p.Target.HitPosition - p.Position).normalized;
-
-            p.Position += dir * p.Data.speed * step;
-
-            var dist = Vector3.Distance(p.Position, p.Target.HitPosition);
-
-            if (dist <= 0.2f)
-            {
-                TryApplyDamage(p);
-                Remove(index);
-                return;
-            }
-
-            if (p.Data.maxTravelDistance > 0f &&
-                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
-                Remove(index);
+            var p = projectiles[index];
+            projectiles.RemoveAt(index);
+            OnProjectileDestroyed?.Invoke(p);
         }
 
         private void TryApplyDamage(ProjectileModel p)
@@ -124,33 +105,52 @@ namespace Logic.Projectile
             }
         }
 
-        private void PlayHitSound(bool isHoming)
+        private void UpdateHoming(ProjectileModel p, float step, int index)
         {
-            AudioClip[] sound;
-            float volume;
+            var dir = (p.Target.HitPosition - p.Position).normalized;
 
-            if (isHoming)
+            p.Position += dir * p.Data.speed * step;
+
+            var dist = Vector3.Distance(p.Position, p.Target.HitPosition);
+
+            if (dist <= 0.2f)
             {
-                sound = soundData.mageTowerHitSounds;
-                volume = soundData.mageHitVolume;
-            }
-            else
-            {
-                sound = soundData.archerTowerHitSounds;
-                volume = soundData.archerHitVolume;
+                TryApplyDamage(p);
+                Remove(index);
+                return;
             }
 
-            if (soundData != null &&
-                soundData.archerTowerHitSounds is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(sound, volume);
+            if (p.Data.maxTravelDistance > 0f &&
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
+                Remove(index);
         }
 
-
-        private void Remove(int index)
+        private void UpdateStraight(ProjectileModel p, float step, int index)
         {
-            var p = projectiles[index];
-            projectiles.RemoveAt(index);
-            OnProjectileDestroyed?.Invoke(p);
+            var toTargetBefore = p.TargetPoint - p.Position;
+            p.Position += p.Direction * p.Data.speed * step;
+            var toTargetAfter = p.TargetPoint - p.Position;
+
+            var totalDistance = Vector3.Distance(p.StartPosition, p.TargetPoint);
+            var currentDistance = Vector3.Distance(p.StartPosition, p.Position);
+            p.TravelProgress = Mathf.Clamp01(currentDistance / totalDistance);
+
+            if (toTargetAfter.magnitude <= 0.3f)
+            {
+                TryApplyDamage(p);
+                Remove(index);
+                return;
+            }
+
+            if (Vector3.Dot(toTargetBefore, toTargetAfter) < 0f)
+            {
+                Remove(index);
+                return;
+            }
+
+            if (p.Data.maxTravelDistance > 0f &&
+                Vector3.Distance(p.StartPosition, p.Position) >= p.Data.maxTravelDistance)
+                Remove(index);
         }
     }
 }

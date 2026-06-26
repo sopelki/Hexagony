@@ -9,16 +9,6 @@ namespace Field
             .Combine(Application.dataPath, "Scripts", "Levels", "MyLevel.json")
             .Replace(Path.DirectorySeparatorChar, '/');
 
-        public static void SaveMapToFile(Field fieldToSave)
-        {
-            var data = fieldToSave.ExportToSaveData();
-            var json = JsonUtility.ToJson(data, true);
-
-            File.WriteAllText(saveFilePath, json);
-
-            Debug.Log($"Field is saved\nPath: {saveFilePath}");
-        }
-
         public static Field LoadMapFromFile()
         {
             if (File.Exists(saveFilePath))
@@ -34,6 +24,16 @@ namespace Field
             }
             Debug.LogError("File not found.");
             return null;
+        }
+
+        public static void SaveMapToFile(Field fieldToSave)
+        {
+            var data = fieldToSave.ExportToSaveData();
+            var json = JsonUtility.ToJson(data, true);
+
+            File.WriteAllText(saveFilePath, json);
+
+            Debug.Log($"Field is saved\nPath: {saveFilePath}");
         }
     }
 }

@@ -24,44 +24,6 @@ namespace Audio
         public static AudioManager Instance { get; private set; }
         public bool MuteSfx { get; set; }
 
-        private void Awake()
-        {
-            if (Instance && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            InitializeSources();
-        }
-
-        private void Start()
-        {
-            SyncVolumesWithPrefs();
-        }
-
-        private void SyncVolumesWithPrefs()
-        {
-            SetMixerVolume("MasterVol", PlayerPrefs.GetFloat("MasterVol", 0.75f));
-            SetMixerVolume("MusicVol", PlayerPrefs.GetFloat("MusicVol", 0.75f));
-            SetMixerVolume("SfxVol", PlayerPrefs.GetFloat("SfxVol", 0.75f));
-            SetMixerVolume("UiVol", PlayerPrefs.GetFloat("UiVol", 0.75f));
-        }
-
-        private void InitializeSources()
-        {
-            if (!musicSource)
-                musicSource = gameObject.AddComponent<AudioSource>();
-            if (!sfxSource)
-                sfxSource = gameObject.AddComponent<AudioSource>();
-
-            musicSource.volume = musicMasterScale;
-            sfxSource.volume = sfxMasterScale;
-        }
-
         public void SetMixerVolume(string parameterName, float sliderValue)
         {
             if (!audioMixer)
@@ -100,6 +62,44 @@ namespace Audio
                 return;
 
             PlaySfx(clips[Random.Range(0, clips.Length)], volumeMultiplier);
+        }
+
+        private void Awake()
+        {
+            if (Instance && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            InitializeSources();
+        }
+
+        private void Start()
+        {
+            SyncVolumesWithPrefs();
+        }
+
+        private void SyncVolumesWithPrefs()
+        {
+            SetMixerVolume("MasterVol", PlayerPrefs.GetFloat("MasterVol", 0.75f));
+            SetMixerVolume("MusicVol", PlayerPrefs.GetFloat("MusicVol", 0.75f));
+            SetMixerVolume("SfxVol", PlayerPrefs.GetFloat("SfxVol", 0.75f));
+            SetMixerVolume("UiVol", PlayerPrefs.GetFloat("UiVol", 0.75f));
+        }
+
+        private void InitializeSources()
+        {
+            if (!musicSource)
+                musicSource = gameObject.AddComponent<AudioSource>();
+            if (!sfxSource)
+                sfxSource = gameObject.AddComponent<AudioSource>();
+
+            musicSource.volume = musicMasterScale;
+            sfxSource.volume = sfxMasterScale;
         }
     }
 }

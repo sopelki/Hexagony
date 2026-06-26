@@ -22,12 +22,12 @@ namespace Logic.Unit
 
     public class AttackPercentBuff : Buff
     {
-        private readonly float multiplier;
-
         public AttackPercentBuff(float percent)
         {
             multiplier = percent;
         }
+
+        private readonly float multiplier;
 
         public override int ModifyAttack(int baseValue)
         {
@@ -37,12 +37,12 @@ namespace Logic.Unit
 
     public class HealthPercentBuff : Buff
     {
-        private readonly float multiplier;
-
         public HealthPercentBuff(float percent)
         {
             multiplier = percent;
         }
+
+        private readonly float multiplier;
 
         public override int ModifyMaxHealth(int baseValue)
         {

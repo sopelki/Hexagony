@@ -30,16 +30,6 @@ namespace View
         public CastleModel Model { get; private set; }
         public Field.Field Field { get; private set; }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            if (WallWorldPositions != null)
-            {
-                foreach (var pos in WallWorldPositions)
-                    Gizmos.DrawSphere(pos, 0.3f);
-            }
-        }
-
         public void Initialize(CastleModel model, Tilemap tilemap, Field.Field field)
         {
             Model = model;
@@ -60,6 +50,16 @@ namespace View
 
             if (CastleSystem.Instance != null)
                 CastleSystem.Instance.RegisterCastleData(WallWorldPositions, castleHexes);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            if (WallWorldPositions != null)
+            {
+                foreach (var pos in WallWorldPositions)
+                    Gizmos.DrawSphere(pos, 0.3f);
+            }
         }
     }
 }

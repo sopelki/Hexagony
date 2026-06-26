@@ -13,14 +13,6 @@ namespace Logic.Tower
 {
     public class TowerSystem : ITickable
     {
-        private readonly CastleSystem castleSystem;
-        private readonly MonsterSystem monsterSystem;
-        private readonly ProjectileSystem projectileSystem;
-        private readonly SoundData soundData;
-        private readonly TowersModel towersModel;
-
-        private bool firstTowerPlaced;
-
         public TowerSystem(
             CastleSystem castleSystem,
             TowersModel towersModel,
@@ -37,8 +29,53 @@ namespace Logic.Tower
             Instance = this;
         }
 
+        private readonly CastleSystem castleSystem;
+
+        private bool firstTowerPlaced;
+        private readonly MonsterSystem monsterSystem;
+        private readonly ProjectileSystem projectileSystem;
+        private readonly SoundData soundData;
+        private readonly TowersModel towersModel;
+
         public static TowerSystem Instance { get; private set; }
 
+        public event Action OnFirstTowerPlaced;
+
+        public bool CanAffordTower(TowerData data)
+        {
+            return castleSystem.CanAfford(data.baseCost);
+        }
+
+        public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
+        {
+            if (!CanAffordTower(data))
+                return false;
+
+            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+
+            return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
+        }
+
+        public void Clear()
+        {
+            towersModel.Clear();
+            firstTowerPlaced = false;
+        }
+
+        public TowerModel GetTowerAt(Vector3Int cellPos)
+        {
+            return towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
+        }
+
+        public List<TowerModel> GetTowers()
+        {
+            return towersModel.Towers.ToList();
+        }
+
+        public bool IsCellOccupied(Vector3Int cellPos)
+        {
+            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
+        }
 
         public void Tick()
         {
@@ -74,33 +111,6 @@ namespace Logic.Tower
                     tower.CooldownTimer = 1f / tower.CurrentFireRate;
                 }
             }
-        }
-
-        public event Action OnFirstTowerPlaced;
-
-        public bool CanAffordTower(TowerData data)
-        {
-            return castleSystem.CanAfford(data.baseCost);
-        }
-
-        public bool IsCellOccupied(Vector3Int cellPos)
-        {
-            return towersModel.Towers.Any(t => t.GridPosition == cellPos);
-        }
-
-        public TowerModel GetTowerAt(Vector3Int cellPos)
-        {
-            return towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
-        }
-
-        public bool CanPlaceTower(TowerData data, Vector3Int cellPos)
-        {
-            if (!CanAffordTower(data))
-                return false;
-
-            var existingTower = towersModel.Towers.FirstOrDefault(t => t.GridPosition == cellPos);
-
-            return existingTower == null || existingTower.Data.type == data.type && existingTower.Level < data.maxLevel;
         }
 
         public bool TryPlaceTower(TowerData data, Vector3Int cellPos, Vector3 worldPos, int level = 1)
@@ -140,48 +150,6 @@ namespace Logic.Tower
             }
 
             return true;
-        }
-
-        private void Shoot(TowerModel tower, MonsterModel target)
-        {
-            AudioClip[] sound;
-            float volume;
-
-            if (tower.Data.type == TowerType.Mage)
-            {
-                sound = soundData.mageTowerShootSounds;
-                volume = soundData.mageShootVolume;
-            }
-            else
-            {
-                sound = soundData.archerTowerShootSounds;
-                volume = soundData.archerShootVolume;
-            }
-
-            if (soundData != null && sound is { Length: > 0 })
-                AudioManager.Instance.PlayRandomSfx(sound, volume);
-
-            var firePoint = tower.WorldPosition +
-                            new Vector3(tower.Data.projectileData.xOffset, tower.Data.projectileData.yOffset, 0);
-
-            var interceptPoint = CalculateInterceptPoint(
-                firePoint,
-                target.HitPosition,
-                target.CurrentVelocity,
-                tower.Data.projectileData.speed
-            );
-
-            var projectile = new ProjectileModel(
-                tower.WorldPosition,
-                target,
-                tower.Data.projectileData,
-                interceptPoint
-            )
-            {
-                Damage = (int)tower.CurrentDamage
-            };
-
-            projectileSystem.CreateProjectile(projectile);
         }
 
         private static Vector3 CalculateInterceptPoint(Vector3 shooterPos, Vector3 targetPos, Vector3 targetVelocity,
@@ -226,15 +194,46 @@ namespace Logic.Tower
                 .ToList();
         }
 
-        public List<TowerModel> GetTowers()
+        private void Shoot(TowerModel tower, MonsterModel target)
         {
-            return towersModel.Towers.ToList();
-        }
+            AudioClip[] sound;
+            float volume;
 
-        public void Clear()
-        {
-            towersModel.Clear();
-            firstTowerPlaced = false;
+            if (tower.Data.type == TowerType.Mage)
+            {
+                sound = soundData.mageTowerShootSounds;
+                volume = soundData.mageShootVolume;
+            }
+            else
+            {
+                sound = soundData.archerTowerShootSounds;
+                volume = soundData.archerShootVolume;
+            }
+
+            if (soundData != null && sound is { Length: > 0 })
+                AudioManager.Instance.PlayRandomSfx(sound, volume);
+
+            var firePoint = tower.WorldPosition +
+                            new Vector3(tower.Data.projectileData.xOffset, tower.Data.projectileData.yOffset, 0);
+
+            var interceptPoint = CalculateInterceptPoint(
+                firePoint,
+                target.HitPosition,
+                target.CurrentVelocity,
+                tower.Data.projectileData.speed
+            );
+
+            var projectile = new ProjectileModel(
+                tower.WorldPosition,
+                target,
+                tower.Data.projectileData,
+                interceptPoint
+            )
+            {
+                Damage = (int)tower.CurrentDamage
+            };
+
+            projectileSystem.CreateProjectile(projectile);
         }
     }
 }

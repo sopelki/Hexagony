@@ -10,13 +10,6 @@ namespace Logic.Unit
 {
     public class UnitSystem
     {
-        private readonly List<Buff> buffs = new();
-        private readonly Field.Field field;
-        private readonly MonsterSystem monsterSystem;
-        private readonly SoundData soundData;
-        private readonly Tilemap tilemap;
-        private readonly List<UnitModel> units = new();
-
         public UnitSystem(
             MonsterSystem monsterSystem,
             Field.Field field,
@@ -31,6 +24,13 @@ namespace Logic.Unit
             Instance = this;
         }
 
+        private readonly List<Buff> buffs = new();
+        private readonly Field.Field field;
+        private readonly MonsterSystem monsterSystem;
+        private readonly SoundData soundData;
+        private readonly Tilemap tilemap;
+        private readonly List<UnitModel> units = new();
+
         public static UnitSystem Instance { get; private set; }
 
         public event Action<UnitModel> OnUnitCreated;
@@ -39,6 +39,30 @@ namespace Logic.Unit
         public void AddBuff(Buff buff)
         {
             buffs.Add(buff);
+        }
+
+        public void Clear()
+        {
+            units.Clear();
+        }
+
+        public void ClearBuffs()
+        {
+            buffs.Clear();
+        }
+
+        public IReadOnlyList<UnitModel> GetAllUnits()
+        {
+            return units;
+        }
+
+        public void RemoveUnit(UnitModel unit)
+        {
+            if (units.Contains(unit))
+            {
+                units.Remove(unit);
+                OnUnitDied?.Invoke(unit);
+            }
         }
 
         public void SpawnUnit(Vector3 worldPos, Vector2Int hexPos, UnitData stats)
@@ -71,30 +95,6 @@ namespace Logic.Unit
         {
             foreach (var unit in units.Where(unit => !unit.IsDead))
                 unit.Tick();
-        }
-
-        public void RemoveUnit(UnitModel unit)
-        {
-            if (units.Contains(unit))
-            {
-                units.Remove(unit);
-                OnUnitDied?.Invoke(unit);
-            }
-        }
-
-        public IReadOnlyList<UnitModel> GetAllUnits()
-        {
-            return units;
-        }
-
-        public void Clear()
-        {
-            units.Clear();
-        }
-
-        public void ClearBuffs()
-        {
-            buffs.Clear();
         }
     }
 }

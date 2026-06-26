@@ -16,10 +16,21 @@ namespace View
 
         private UnitSystem unitSystem;
 
-        private void Update()
+        public void Initialize(UnitSystem system)
         {
-            foreach (var pair in views.ToList())
-                pair.Value.UpdateView();
+            unitSystem = system;
+
+            unitSystem.OnUnitCreated += HandleUnitCreated;
+        }
+
+        public void DestroyAllUnits()
+        {
+            foreach (var view in views.Values)
+            {
+                if (view != null)
+                    Destroy(view.gameObject);
+            }
+            views.Clear();
         }
 
         private void OnDestroy()
@@ -29,11 +40,10 @@ namespace View
             unitSystem.OnUnitCreated -= HandleUnitCreated;
         }
 
-        public void Initialize(UnitSystem system)
+        private void Update()
         {
-            unitSystem = system;
-
-            unitSystem.OnUnitCreated += HandleUnitCreated;
+            foreach (var pair in views.ToList())
+                pair.Value.UpdateView();
         }
 
         private void HandleUnitCreated(UnitModel model)
@@ -58,16 +68,6 @@ namespace View
             }
 
             unitSystem.RemoveUnit(model);
-        }
-
-        public void DestroyAllUnits()
-        {
-            foreach (var view in views.Values)
-            {
-                if (view != null)
-                    Destroy(view.gameObject);
-            }
-            views.Clear();
         }
     }
 }

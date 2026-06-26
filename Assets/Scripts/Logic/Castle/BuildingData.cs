@@ -28,6 +28,7 @@ namespace Logic.Castle
         [TextArea(2, 5)]
         [SerializeField]
         private string customSpecialInfo;
+
         public int BaseCost => baseCost;
 
         public TooltipContent GetTooltipContent(bool isBought = false)

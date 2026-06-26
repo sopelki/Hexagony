@@ -6,6 +6,11 @@ namespace View
 {
     public class MonsterView : MonoBehaviour
     {
+        [SerializeField]
+        private Animator animator;
+        [SerializeField]
+        private float smoothingSpeed = 10f;
+
         private static readonly int moveX = Animator.StringToHash("MoveX");
         private static readonly int moveY = Animator.StringToHash("MoveY");
         private static readonly int lastMoveX = Animator.StringToHash("LastMoveX");
@@ -15,10 +20,6 @@ namespace View
         private static readonly int isDamaged = Animator.StringToHash("IsDamaged");
         private static readonly int isDead = Animator.StringToHash("IsDead");
 
-        [SerializeField]
-        private Animator animator;
-        [SerializeField]
-        private float smoothingSpeed = 10f;
         private Vector2 currentSmoothDirection;
         private bool isDeadAnimationPlaying;
         private MonsterModel model;
@@ -26,32 +27,6 @@ namespace View
         private Vector3 previousPosition;
         private Vector2 targetDirection;
         private Vector3 visualOffset;
-
-
-        private void Update()
-        {
-            if (!animator || isDeadAnimationPlaying) return;
-
-            currentSmoothDirection = Vector2.Lerp(
-                currentSmoothDirection,
-                targetDirection,
-                Time.deltaTime * smoothingSpeed
-            );
-
-            animator.SetFloat(moveX, currentSmoothDirection.x);
-            animator.SetFloat(moveY, currentSmoothDirection.y);
-        }
-
-        private void OnDestroy()
-        {
-            if (model != null)
-            {
-                model.OnAttack -= HandleAttack;
-                model.OnDamaged -= HandleDamaged;
-                model.OnDied -= HandleDeath;
-            }
-        }
-
 
         public void Initialize(MonsterModel monsterModel, float visualOffset)
         {
@@ -98,6 +73,37 @@ namespace View
             }
         }
 
+
+        public void OnDeathAnimationEnd()
+        {
+            OnDeathAnimationFinished?.Invoke(model);
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            if (model != null)
+            {
+                model.OnAttack -= HandleAttack;
+                model.OnDamaged -= HandleDamaged;
+                model.OnDied -= HandleDeath;
+            }
+        }
+
+        private void Update()
+        {
+            if (!animator || isDeadAnimationPlaying) return;
+
+            currentSmoothDirection = Vector2.Lerp(
+                currentSmoothDirection,
+                targetDirection,
+                Time.deltaTime * smoothingSpeed
+            );
+
+            animator.SetFloat(moveX, currentSmoothDirection.x);
+            animator.SetFloat(moveY, currentSmoothDirection.y);
+        }
+
         private static Vector2 SnapTo4Directions(Vector3 direction)
         {
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -124,13 +130,6 @@ namespace View
         private void HandleDeath()
         {
             animator.SetBool(isDead, true);
-        }
-
-
-        public void OnDeathAnimationEnd()
-        {
-            OnDeathAnimationFinished?.Invoke(model);
-            Destroy(gameObject);
         }
     }
 }
