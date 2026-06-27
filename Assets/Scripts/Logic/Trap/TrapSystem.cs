@@ -49,7 +49,8 @@ namespace Logic.Trap
 
                 if (hexObj == null) return false;
 
-                if (hexObj.type != HexagonType.Path) return false;
+                if (hexObj.type != HexagonType.Path && hexObj.type != HexagonType.PathWithStones &&
+                    hexObj.type != HexagonType.PathExtra) return false;
 
                 if (trapsModel.Traps.Any(t => t.Hexes.Contains(h))) return false;
             }

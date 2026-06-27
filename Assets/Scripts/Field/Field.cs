@@ -62,6 +62,7 @@ namespace Field
                 : new List<MapObjectData>();
         }
 
-        public bool IsWalkable(Hexagon hex) => hex.type == HexagonType.Path;
+        public bool IsWalkable(Hexagon hex) =>
+            hex.type is HexagonType.Path or HexagonType.PathWithStones or HexagonType.PathExtra;
     }
 }

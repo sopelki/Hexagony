@@ -6,6 +6,8 @@
         GrassWithMushroom,
         HighGrass,
         Path,
+        PathWithStones,
+        PathExtra,
         Slot,
         SlotNeighbour,
         Castle
