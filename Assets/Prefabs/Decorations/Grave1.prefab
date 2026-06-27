@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3000768424147904908}
   - component: {fileID: 5009503110199557753}
   m_Layer: 0
-  m_Name: Grave Broken Rip
+  m_Name: Grave1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -4488575808739061890, guid: 711a59d67a1d0084f83d2022ca5e3e19, type: 3}
+  m_Sprite: {fileID: 3532992451535655517, guid: c95a034cb3f1d3f46a7a7277a55e49f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
