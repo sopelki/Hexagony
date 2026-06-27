@@ -150,7 +150,7 @@ namespace UI
             if (hpPercent == 0 && model.Hp > 0) hpPercent = 1;
 
             hpText.text = $"{hpPercent}%";
-            goldText.text = model.Gold.ToString();
+            goldText.text = model.Gold > 9999 ? "9999" : model.Gold.ToString();
             foodText.text = $"{currentUnits}/{model.MaxSupply}";
             waveText.text = $"{waveManager.CurrentWaveNumber}";
 

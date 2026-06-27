@@ -57,8 +57,6 @@ namespace MenuScripts
         private void Start()
         {
             Debug.Log("Save path: " + Application.persistentDataPath);
-            if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
-                AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
 
             if (continueButton != null)
             {
@@ -71,6 +69,9 @@ namespace MenuScripts
                 ShouldOpenDifficultyOnStart = false;
                 PlayGame();
             }
+            
+            if (menuAudioData != null && menuAudioData.mainMenuMusic != null)
+                AudioManager.Instance.PlayMusic(menuAudioData.mainMenuMusic);
         }
     }
 }
