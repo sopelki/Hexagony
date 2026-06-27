@@ -112,11 +112,11 @@ namespace Logic.Monster
             if (spawnTimer >= spawnInterval)
             {
                 spawnTimer = 0f;
-                Spawn();
+                Spawn(totalMonsters);
             }
         }
 
-        private void Spawn()
+        private void Spawn(int totalMonsters)
         {
             var hex = spawnHexes[Random.Range(0, spawnHexes.Count)];
             var hexObj = field.GetHex(hex);
@@ -129,11 +129,16 @@ namespace Logic.Monster
 
             var diffStatMult = DifficultyManager.GetStatMultiplier();
             var diffGoldMult = DifficultyManager.GetGoldMultiplier();
+            
+            var isLastSpawn = (spawnedInCurrentWave == totalMonsters - 1);
 
             if (currentWaveIndex < NormalWaves)
             {
                 var wave = waves[currentWaveIndex];
-                data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
+                if (isLastSpawn && wave.bossMonster != null)
+                    data = wave.bossMonster;
+                else
+                    data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
                 hMult = wave.healthMultiplier;
                 dMult = wave.damageMultiplier;
                 sMult = wave.speedMultiplier;
@@ -142,7 +147,10 @@ namespace Logic.Monster
             {
                 var extraWaves = currentWaveIndex - NormalWaves + 1;
                 var wave = infiniteSettings.referenceWave;
-                data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
+                if (isLastSpawn && wave.bossMonster != null)
+                    data = wave.bossMonster;
+                else
+                    data = wave.monsterPool[Random.Range(0, wave.monsterPool.Count)];
 
                 hMult = wave.healthMultiplier * Mathf.Pow(infiniteSettings.healthMultiplierStep, extraWaves);
                 dMult = wave.damageMultiplier * Mathf.Pow(infiniteSettings.damageMultiplierStep, extraWaves);

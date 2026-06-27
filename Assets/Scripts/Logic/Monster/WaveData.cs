@@ -7,6 +7,7 @@ namespace Logic.Monster
     public class WaveData : ScriptableObject
     {
         public List<MonsterData> monsterPool;
+        public MonsterData bossMonster;
 
         public int totalMonsters = 10;
         public float spawnInterval = 2f;

@@ -17,8 +17,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5954e1eb0b7b920469221f137f5954fa, type: 2}
   - {fileID: 11400000, guid: da2be5bd7bd17d34283390c93fb813a3, type: 2}
   - {fileID: 11400000, guid: bd0b7b9a953aa384f8c2e0062fe4b878, type: 2}
-  - {fileID: 11400000, guid: 7346e77628aaa9040a4e46f05eb46a21, type: 2}
   - {fileID: 11400000, guid: cf778f71d43ef1142845b4d4cdc04b41, type: 2}
+  bossMonster: {fileID: 11400000, guid: 7346e77628aaa9040a4e46f05eb46a21, type: 2}
   totalMonsters: 14
   spawnInterval: 1.8
   healthMultiplier: 1.8
