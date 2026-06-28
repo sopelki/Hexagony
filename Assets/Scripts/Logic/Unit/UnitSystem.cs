@@ -46,6 +46,16 @@ namespace Logic.Unit
         {
             buffs.Clear();
         }
+        
+        public int GetPreviewAttack(UnitData stats)
+        {
+            return buffs.Aggregate(stats.attack, (current, buff) => buff.ModifyAttack(current));
+        }
+
+        public int GetPreviewHealth(UnitData stats)
+        {
+            return buffs.Aggregate(stats.maxHealth, (current, buff) => buff.ModifyMaxHealth(current));
+        }
 
         public IReadOnlyList<UnitModel> GetAllUnits() => units;
 

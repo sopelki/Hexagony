@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core;
 using Logic.Monster;
+using Logic.Unit;
 using Misc;
 using TMPro;
 using UnityEngine;
@@ -52,6 +53,10 @@ namespace MenuScripts
         [Header("Monsters")]
         [SerializeField]
         private List<MonsterData> monstersList;
+        
+        [Header("Player Units")]
+        [SerializeField]
+        private UnitData knightData;
         
         [Header("Scroll")]
         [SerializeField]
@@ -124,11 +129,23 @@ namespace MenuScripts
             UpdateTabs(tabCastleButton);
             textBackground.Show();
             titleText.text = $"<color={CHlp}>ЭКОНОМИКА ЗАМКА</color>";
+            
+            var currentAtk = knightData != null ? knightData.attack : 0;
+            var currentHp = knightData != null ? knightData.maxHealth : 0;
+            
+            if (UnitSystem.Instance != null && knightData != null)
+            {
+                currentAtk = UnitSystem.Instance.GetPreviewAttack(knightData);
+                currentHp = UnitSystem.Instance.GetPreviewHealth(knightData);
+            }
+            var knightStats = $"<color={CUpgrade}><b>РЫЦАРЬ (Текущие характеристики):</b></color>\n" +
+                                 $"▪️ <color={CKey}>HP:</color> {currentHp} | <color={CKey}>ATK:</color> {currentAtk}";
         
             descriptionText.text = StartLh +
                                    $"Здания во внутреннем дворе <nobr>(сетка 4х4)</nobr> обеспечивают <nobr>вашу армию</nobr> пассивными <nobr>бонусами и подкреплением</nobr>" +
                                    ParaGap +
-                                   $"▪ <color={CKey}><b>Казарма:\n</b></color>Автоматически призывает рыцарей. Каждая новая казарма значительно <color={CSpd}>ускоряет время появления</color> новых воинов." +
+                                   $"▪ <color={CKey}><b>Казарма:\n</b></color>Автоматически призывает рыцарей. Каждая новая казарма значительно <color={CSpd}>ускоряет время появления</color> новых воинов." + "\n" +
+                                   knightStats+
                                    ParaGap +
                                    $"▪ <color={CKey}><b>Ферма:\n</b></color>Поставляет провизию. Каждая ферма <nobr>увеличивает <b>лимит населения. Это</b></nobr> позволет содержать больше рыцарей <nobr>на поле</nobr>." +
                                    ParaGap +
