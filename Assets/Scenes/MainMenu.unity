@@ -1348,7 +1348,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1031919943}
   - component: {fileID: 1031919944}
-  - component: {fileID: 1031919945}
   m_Layer: 5
   m_Name: Buttons
   m_TagString: Untagged
@@ -1373,10 +1372,10 @@ RectTransform:
   - {fileID: 1186671887}
   m_Father: {fileID: 1323814494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 171, y: 0}
-  m_SizeDelta: {x: 342, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 342, y: 330}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1031919944
 MonoBehaviour:
@@ -1402,20 +1401,6 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 18}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &1031919945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1031919942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!1001 &1154081376
 PrefabInstance:
   m_ObjectHideFlags: 0
